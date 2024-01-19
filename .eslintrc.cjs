@@ -5,7 +5,11 @@ module.exports = {
         browser: true,
         es2021: true,
     },
-    extends: ["prettier", "plugin:prettier/recommended"],
+    extends: [
+        "prettier",
+        "plugin:prettier/recommended",
+        "plugin:react/recommended",
+    ],
     plugins: ["prettier"],
     overrides: [
         {
