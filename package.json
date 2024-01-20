@@ -29,7 +29,7 @@
     "webpack-dev-server": "^4.15.1"
   },
   "scripts": {
-    "start": "webpack serve --mode development",
+    "start": "webpack serve --mode development --history-api-fallback",
     "build": "webpack --mode production",
     "prepare": "git config --local commit.template .gitmessage.txt",
     "postinstall": "husky install",
