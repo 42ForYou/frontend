@@ -1,0 +1,15 @@
+.PageContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.NavigationBar {
+  border: 1px solid #000;
+  padding: 10px;
+}
+
+.ContentContainer {
+  border: 1px solid #000;
+  padding: 10px;
+}
