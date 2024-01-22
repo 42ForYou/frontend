@@ -22,10 +22,7 @@ const NavigationBar = () => {
           <li>
             <Link to={"/users"}>USERS</Link>
           </li>
-          <li>
-            {/* 알람은 페이지가 아님 차후 알맞게 수정 */}
-            <Link to={"/unknown"}>NOTIFICATION</Link>
-          </li>
+          <li>NOTIFICATION</li>
           <li>
             <Link to={"/profile"}>PROFILE</Link>
           </li>
