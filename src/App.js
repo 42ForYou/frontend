@@ -11,7 +11,7 @@ import ProfilePage from "./pages/ProfilePage";
 import RoomListPage from "./pages/RoomListPage";
 import ChatPage from "./pages/ChatPage";
 import UsersPage from "./pages/UsersPage";
-import NotFoundPage from "./pages/NotFoundPage";
+import NotFoundPage from "./pages/error/NotFoundPage";
 import RoomPage from "./pages/game/RoomPage";
 
 export const GlobalContext = createContext(); // 정보가 많아질시 차후 별도 context 파일들로 분리
