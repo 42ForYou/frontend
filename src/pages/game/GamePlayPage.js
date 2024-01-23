@@ -5,9 +5,7 @@ import PageContainer from "../../components/PageContainer";
 const GamePlayPage = () => {
   return (
     <div className="GamePlayPage">
-      <PageContainer hasNavigationBar={true}>
-        This is GamePlayPage
-      </PageContainer>
+      <PageContainer hasNavigationBar={true}>This is GamePlayPage</PageContainer>
     </div>
   );
 };

@@ -1,5 +1,6 @@
 import React from "react";
 import PageContainer from "../components/PageContainer";
+import withAuthProtection from "../withAuthProtection";
 
 const UsersPage = () => {
   return (
@@ -9,4 +10,4 @@ const UsersPage = () => {
   );
 };
 
-export default UsersPage;
+export default withAuthProtection(UsersPage);

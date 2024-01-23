@@ -1,7 +1,17 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import AuthContext from "../AuthContext";
 
 const NavigationBar = () => {
+  const { removeAuthToken } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    removeAuthToken();
+    alert("로그아웃 되었습니다. 토큰이 삭제되었습니다");
+    navigate("/");
+  };
+
   return (
     <div className="NavigationBar">
       <nav>
@@ -27,6 +37,7 @@ const NavigationBar = () => {
             <Link to={"/profile"}>PROFILE</Link>
           </li>
         </ul>
+        <button onClick={handleLogout}>로그아웃하기</button>
       </nav>
     </div>
   );
