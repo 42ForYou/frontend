@@ -1,5 +1,6 @@
 import React from "react";
 import PageContainer from "../components/PageContainer";
+import withAuthProtection from "../withAuthProtection";
 
 const ChatPage = () => {
   return (
@@ -9,4 +10,4 @@ const ChatPage = () => {
   );
 };
 
-export default ChatPage;
+export default withAuthProtection(ChatPage);

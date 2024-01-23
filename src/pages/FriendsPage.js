@@ -1,5 +1,6 @@
 import React from "react";
 import PageContainer from "../components/PageContainer";
+import withAuthProtection from "../withAuthProtection";
 
 const FriendsPage = () => {
   return (
@@ -9,4 +10,4 @@ const FriendsPage = () => {
   );
 };
 
-export default FriendsPage;
+export default withAuthProtection(FriendsPage);

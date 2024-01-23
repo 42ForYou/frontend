@@ -1,5 +1,6 @@
 import React from "react";
 import PageContainer from "../components/PageContainer";
+import withAuthProtection from "../withAuthProtection";
 
 const HomePage = () => {
   return (
@@ -9,4 +10,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default withAuthProtection(HomePage);

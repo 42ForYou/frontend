@@ -1,5 +1,6 @@
 import React from "react";
 import PageContainer from "../components/PageContainer";
+import withAuthProtection from "../withAuthProtection";
 
 // todo: 더미 룸 생성
 const RoomListPage = () => {
@@ -10,4 +11,4 @@ const RoomListPage = () => {
   );
 };
 
-export default RoomListPage;
+export default withAuthProtection(RoomListPage);
