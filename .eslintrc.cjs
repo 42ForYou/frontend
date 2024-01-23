@@ -37,5 +37,6 @@ module.exports = {
     "prefer-rest-params": "error", // Rest 파라미터 사용 권장
     "prefer-spread": "error", // spread 연산자 사용 권장
     "react/prop-types": "off",
+    "react/display-name": "off",
   },
 };
