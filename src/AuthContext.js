@@ -1,10 +1,8 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
-// AuthContext 생성
 const AuthContext = createContext();
 
-// AuthProvider 컴포넌트
 export const AuthProvider = ({ children }) => {
   const [authToken, setAuthToken] = useState(localStorage.getItem("authToken"));
   const location = useLocation();
