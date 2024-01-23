@@ -16,7 +16,7 @@ const withAuthProtection = (WrappedComponent) => {
       }
     }, [authToken, isValidToken, navigate]);
 
-    return <WrappedComponent {...props} />;
+    return isValidToken(authToken) ? <WrappedComponent {...props} /> : null;
   };
 };
 

@@ -27,16 +27,6 @@ const App = () => {
 };
 
 const AppContent = () => {
-  const location = useLocation();
-  const { setAuthToken } = useContext(AuthContext);
-
-  useEffect(() => {
-    console.log("Loading started");
-    const token = localStorage.getItem("authToken");
-    setAuthToken(token);
-    console.log("Loading finished");
-  }, [location]);
-
   return (
     <div className="App">
       <Routes>

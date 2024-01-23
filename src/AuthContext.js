@@ -1,4 +1,5 @@
-import React, { createContext, useState, useContext } from "react";
+import React, { createContext, useState, useContext, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 
 // AuthContext 생성
 const AuthContext = createContext();
@@ -6,15 +7,20 @@ const AuthContext = createContext();
 // AuthProvider 컴포넌트
 export const AuthProvider = ({ children }) => {
   const [authToken, setAuthToken] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const location = useLocation();
 
-  // 토큰 설정 함수
+  useEffect(() => {
+    console.log("Fetching token from web storage...");
+    const token = localStorage.getItem("authToken");
+    setAuthToken(token);
+    console.log("Token fetched: ", token);
+  }, [location]);
+
   const handleSetAuthToken = (token) => {
     localStorage.setItem("authToken", token);
     setAuthToken(token);
   };
 
-  // 토큰 제거 함수
   const handleRemoveAuthToken = () => {
     localStorage.removeItem("authToken");
     setAuthToken(null);
@@ -32,8 +38,6 @@ export const AuthProvider = ({ children }) => {
         setAuthToken: handleSetAuthToken,
         removeAuthToken: handleRemoveAuthToken,
         isValidToken,
-        isLoading,
-        setIsLoading,
       }}>
       {children}
     </AuthContext.Provider>
