@@ -4,9 +4,7 @@ import PageContainer from "../components/PageContainer";
 const HomePage = () => {
   return (
     <div className="HomePage">
-      <PageContainer hasNavigationBar={true}>
-        Welcome to the Pongdom.
-      </PageContainer>
+      <PageContainer hasNavigationBar={true}>Welcome to the Pongdom.</PageContainer>
     </div>
   );
 };

@@ -5,9 +5,7 @@ import PageContainer from "../components/PageContainer";
 const RoomListPage = () => {
   return (
     <div className="RoomListPage">
-      <PageContainer hasNavigationBar={true}>
-        This is RoomListPage
-      </PageContainer>
+      <PageContainer hasNavigationBar={true}>This is RoomListPage</PageContainer>
     </div>
   );
 };
