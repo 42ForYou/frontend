@@ -6,7 +6,7 @@ const AuthContext = createContext();
 
 // AuthProvider 컴포넌트
 export const AuthProvider = ({ children }) => {
-  const [authToken, setAuthToken] = useState(null);
+  const [authToken, setAuthToken] = useState(localStorage.getItem("authToken"));
   const location = useLocation();
 
   useEffect(() => {
