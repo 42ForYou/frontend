@@ -34,7 +34,10 @@ const NavigationBar = () => {
           </li>
           <li>NOTIFICATION</li>
           <li>
-            <Link to={"/profile"}>PROFILE</Link>
+            <Link to={"/profile"}>PROFILE (MY)</Link>
+          </li>
+          <li>
+            <Link to={"/profile/users/someone"}>PROFILE (USER)</Link>
           </li>
         </ul>
         <button onClick={handleLogout}>로그아웃하기</button>
