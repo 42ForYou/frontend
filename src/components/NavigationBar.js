@@ -36,11 +36,21 @@ const NavigationBar = () => {
           <li>
             <Link to={"/profile"}>PROFILE (MY)</Link>
           </li>
-          <li>
-            <Link to={"/profile/users/someone"}>PROFILE (USER)</Link>
-          </li>
         </ul>
         <button onClick={handleLogout}>로그아웃하기</button>
+        <div>
+          <br />
+          ---- 프로필 테스트용 ----
+          <li>
+            <Link to={"/profile/users/pikachu"}>PROFILE (Valid 1)</Link>
+          </li>
+          <li>
+            <Link to={"/profile/users/jgo"}>PROFILE (Valid 2)</Link>
+          </li>
+          <li>
+            <Link to={"/profile/users/someone"}>PROFILE (Invalid)</Link>
+          </li>
+        </div>
       </nav>
     </div>
   );
