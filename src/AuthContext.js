@@ -8,10 +8,8 @@ export const AuthProvider = ({ children }) => {
   const location = useLocation();
 
   useEffect(() => {
-    console.log("Fetching token from web storage...");
     const token = localStorage.getItem("authToken");
     setAuthToken(token);
-    console.log("Token fetched: ", token);
   }, [location]);
 
   const handleSetAuthToken = (token) => {
