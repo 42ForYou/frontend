@@ -1,15 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Avatar from "./Avatar";
 import ToggleButton from "../components/ToggleButton";
 
 import FooterBar from "./FooterBar";
 
-const TextBar = ({ label, initialValue, onSaveClick, isConstant }) => {
+const TextBar = ({ label, value, onSaveClick, isConstant }) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [value, setValue] = useState(initialValue);
+  const [inputValue, setInputValue] = useState("");
+
+  useEffect(() => {
+    setInputValue(value);
+  }, [value]);
 
   const handleChange = (e) => {
-    setValue(e.target.value);
+    setInputValue(e.target.value);
   };
 
   const handleEditClick = () => {
@@ -21,7 +25,7 @@ const TextBar = ({ label, initialValue, onSaveClick, isConstant }) => {
     // 닉네임 -> 중복 검사
     // 이메일 -> 형식 검사, 중복 검사
     setIsEditing(false);
-    onSaveClick(value);
+    onSaveClick(inputValue);
   };
 
   if (isConstant)
@@ -39,12 +43,12 @@ const TextBar = ({ label, initialValue, onSaveClick, isConstant }) => {
       <label>{label}: </label>
       {isEditing ? (
         <span>
-          <input type="text" value={value} onChange={handleChange} />
+          <input type="text" value={inputValue} onChange={handleChange} />
           <button onClick={handleSaveClick}>Save</button>
         </span>
       ) : (
         <span>
-          <span>{value}</span>
+          <span>{inputValue}</span>
           <button onClick={handleEditClick}>Edit</button>
         </span>
       )}
@@ -76,13 +80,13 @@ const ProfileBox = ({ isMine, profileData }) => {
       <div className="profile-info">
         {isMine ? (
           <div className="profile-info-text">
-            <TextBar label="ID" initialValue={id} isConstant={true} />
-            <TextBar label="Nickname" initialValue={nickname} onSaveClick={handleNicknameSave} />
-            <TextBar label="Email" initialValue={email} onSaveClick={handleEmailSave} />
+            <TextBar label="ID" value={id} isConstant={true} />
+            <TextBar label="Nickname" value={nickname} onSaveClick={handleNicknameSave} />
+            <TextBar label="Email" value={email} onSaveClick={handleEmailSave} />
           </div>
         ) : (
           <div className="profile-info-text">
-            <TextBar label="Nickname" initialValue={nickname} isConstant={true} />
+            <TextBar label="Nickname" value={nickname} isConstant={true} />
           </div>
         )}
         <Avatar src={avatar} alt={`${id}'s avatar`} />
