@@ -48,3 +48,6 @@ package-lock.json
 
 # 테스트 파일
 /coverage
+
+# eslint
+.eslintcache
