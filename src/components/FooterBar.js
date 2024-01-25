@@ -2,7 +2,7 @@ import React from "react";
 
 const FooterBar = ({ leftChild, rightChild }) => {
   return (
-    <footer>
+    <footer className="row">
       <div className="footer-left">{leftChild}</div>
       <div className="footer-right">{rightChild}</div>
     </footer>

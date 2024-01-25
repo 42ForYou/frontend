@@ -8,11 +8,11 @@ const PageContainer = ({ hasNavigationBar, children }) => {
     <div className="PageContainer">
       <div className="row">
         {hasNavigationBar && (
-          <div className="col-4">
+          <div className="col-md-2">
             <NavigationBar />
           </div>
         )}
-        <div className="col container border-p3-box">
+        <div className="col container border-p4-box">
           <ContentContainer>{children}</ContentContainer>
         </div>
       </div>
