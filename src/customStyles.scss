@@ -10,6 +10,11 @@
   @extend .p-4;
 }
 
+.border-p5-box {
+  @extend .border;
+  @extend .p-5;
+}
+
 .overflow-hidden {
   overflow: hidden;
 }
@@ -24,4 +29,19 @@
 	display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+li {
+  margin-bottom: 5px;
+}
+
+.icon {
+	width: 24px;
+	height: 24px;
 }

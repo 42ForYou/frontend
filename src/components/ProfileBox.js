@@ -73,45 +73,49 @@ const ProfileBox = ({ isMine, profileData }) => {
   };
 
   return (
-    <div className="profile-box">
+    <div className="profile-box d-flex flex-column justify-content-between h-100">
       <div className="row">
-        <div className="col-10">
-          <div className="profile-info">
-            {isMine ? (
-              <div className="profile-info-text">
-                <TextBar label="ID" value={id} isConstant={true} />
-                <TextBar label="Nickname" value={nickname} onSaveClick={handleNicknameSave} />
-                <TextBar label="Email" value={email} onSaveClick={handleEmailSave} />
-              </div>
-            ) : (
-              <div className="profile-info-text">
-                <TextBar label="Nickname" value={nickname} isConstant={true} />
-              </div>
-            )}
+        <div className="row">
+          <div className="col-10">
+            <div className="profile-info">
+              {isMine ? (
+                <div className="profile-info-text">
+                  <TextBar label="ID" value={id} isConstant={true} />
+                  <TextBar label="Nickname" value={nickname} onSaveClick={handleNicknameSave} />
+                  <TextBar label="Email" value={email} onSaveClick={handleEmailSave} />
+                </div>
+              ) : (
+                <div className="profile-info-text">
+                  <TextBar label="Nickname" value={nickname} isConstant={true} />
+                </div>
+              )}
+            </div>
+          </div>
+          <div className="col text-center">
+            <Avatar src={avatar} alt={`${id}\'s avatar`} />
           </div>
         </div>
-        <div className="col text-center">
-          <Avatar src={avatar} alt={`${id}\'s avatar`} />
+        <div className="row">
+          <div className="profile-history d-flex flex-column justify-content-center mt-3">
+            History
+            <div className="history-box w-100 border bg-body-secondary mt-2 p-3" style={{ minHeight: "300px" }}>
+              <p>이 사람의 역사는...... </p>
+            </div>
+          </div>
         </div>
       </div>
       <div className="row">
-        <div className="profile-history d-flex flex-column justify-content-center mt-3">
-          History
-          <div className="history-box w-100 border mt-2 p-3" style={{ height: "200px" }}>
-            <p>이 사람의 역사는...... </p>
+        {isMine && (
+          <div className="row mt-3">
+            <div className="col-11">
+              <ToggleButton title="2FA" initIsToggled={is2FA} />
+            </div>
+            <div className="col">
+              <button onClick={handleDeleteUser}>Delete</button>
+            </div>
           </div>
-        </div>
+        )}
       </div>
-      {isMine && (
-        <div className="row mt-3">
-          <div className="col-11">
-            <ToggleButton title="2FA" initIsToggled={is2FA} />
-          </div>
-          <div className="col">
-            <button onClick={handleDeleteUser}>Delete</button>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
