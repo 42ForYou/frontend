@@ -1,10 +1,10 @@
-import React, { useContext, useState, useEffect } from "react";
-import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
-import "./App.css";
+import React from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import AuthContext, { AuthProvider } from "./AuthContext";
+// context
+import { AuthProvider } from "./AuthContext";
 
-// pages
+// page
 import HomePage from "./pages/HomePage";
 import GamePlayPage from "./pages/game/GamePlayPage";
 import FriendsPage from "./pages/FriendsPage";
