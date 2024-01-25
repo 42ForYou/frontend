@@ -16,6 +16,7 @@ import ChatPage from "./pages/ChatPage";
 import UsersPage from "./pages/UsersPage";
 import NotFoundPage from "./pages/error/NotFoundPage";
 import RoomPage from "./pages/game/RoomPage";
+import TestPage from "./pages/TestPage";
 
 const App = () => {
   return (
@@ -42,6 +43,7 @@ const AppContent = () => {
         <Route path="/play/:game_id" element={<GamePlayPage />} />
         <Route path="/games/onevsone/:room_id" element={<RoomPage />} />
         <Route path="/games/tournament/:room_id" element={<RoomPage />} />
+        <Route path="/test" element={<TestPage />} />
         {/* fallback page */}
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
