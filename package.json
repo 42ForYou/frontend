@@ -4,6 +4,7 @@
   "description": "PongDom frontend",
   "main": "index.js",
   "dependencies": {
+    "bootstrap": "^5.3.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.21.3"
@@ -25,6 +26,8 @@
     "jira-prepare-commit-msg": "^1.7.2",
     "jsdoc": "^4.0.2",
     "lint-staged": "^15.2.0",
+    "sass": "^1.70.0",
+    "sass-loader": "^14.0.0",
     "style-loader": "^3.3.4",
     "webpack": "^5.89.0",
     "webpack-cli": "^5.1.4",
