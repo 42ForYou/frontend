@@ -1,0 +1,6 @@
+@import 'bootstrap/scss/bootstrap';
+
+.border-p3-box {
+  @extend .border;
+  @extend .p-3;
+}

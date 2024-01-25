@@ -13,7 +13,7 @@ const NavigationBar = () => {
   };
 
   return (
-    <div className="NavigationBar">
+    <div className="NavigationBar border-p3-box">
       <nav>
         <div>LOGO</div>
         <ul>
