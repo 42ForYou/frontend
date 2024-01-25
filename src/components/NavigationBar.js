@@ -2,15 +2,14 @@ import React, { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AuthContext from "../AuthContext";
 
-const NavItem = ({ to, label }) => (
-  <li className="nav-item ms-3">
-    {to ? (
-      <Link to={to} className="nav-link">
-        {label}
-      </Link>
-    ) : (
-      <span>{label}</span>
-    )}
+import Avatar from "./Avatar";
+
+const NavItem = ({ icon, label, to }) => (
+  <li className="nav-item mb-2">
+    <div className="row">
+      <div className="col-3">{icon && <img src={icon} alt={label} className="icon" />}</div>
+      <div className="col">{to ? <Link to={to}>{label}</Link> : <span>{label}</span>}</div>
+    </div>
   </li>
 );
 
@@ -25,26 +24,58 @@ const NavigationBar = () => {
   };
 
   return (
-    <div className="NavigationBar border-p4-box">
-      <nav className="bg-light p-3">
-        <div>LOGO</div>
-        <ul className="navbar-nav">
-          <NavItem to={"/"} label="HOME" />
-          <NavItem to={"/games"} label="GAMES" />
-          <NavItem to={"/chat"} label="CHAT" />
-          <NavItem to={"/friends"} label="FRIENDS" />
-          <NavItem to={"/users"} label="USERS" />
-          <NavItem label="NOTIFICATION" />
-          <NavItem to={"/profile"} label="PROFILE (MY)" />
-        </ul>
-        <div className="mt-2 mx-auto text-center align-vertical">
-          <button className="btn btn-primary" onClick={handleLogout}>
+    <div className="NavigationBar border-p4-box vh-100">
+      <nav className="bg-light p-3 d-flex flex-column justify-content-between h-100">
+        <div className="row">
+          <div className="row mb-4 text-center">
+            <div>LOGO</div>
+          </div>
+          <div className="row">
+            <ul className>
+              <NavItem
+                to={"/"}
+                label="HOME"
+                icon={"https://cdn0.iconfinder.com/data/icons/typicons-2/24/home-48.png"}
+              />
+              <NavItem
+                to={"/games"}
+                label="GAMES"
+                icon={"https://cdn3.iconfinder.com/data/icons/remixicon-others/24/ping-pong-fill-48.png"}
+              />
+              <NavItem
+                to={"/chat"}
+                label="CHAT"
+                icon={"https://cdn0.iconfinder.com/data/icons/picons-social/57/65-fb_messenger-48.png"}
+              />
+              <NavItem
+                to={"/friends"}
+                label="FRIENDS"
+                icon={"https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-ios7-heart-512.png"}
+              />
+              <NavItem
+                to={"/users"}
+                label="USERS"
+                icon={"https://cdn4.iconfinder.com/data/icons/pictype-free-vector-icons/16/group-48.png"}
+              />
+              <NavItem
+                label="NOTICE"
+                icon={"https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-ios7-bell-48.png"}
+              />
+            </ul>
+          </div>
+        </div>
+        <div className="row text-center d-flex flex-column">
+          Profile
+          <Avatar to={"/profile"} />
+          <button className="btn btn-primary mt-2 w-40" onClick={handleLogout}>
             로그아웃하기
           </button>
+        </div>
+        {/* <div className="mt-2 mx-auto text-center d-flex flex-column">
           <button className="btn btn-secondary mt-2" onClick={() => navigate("/test")}>
             테스트용
           </button>
-        </div>
+        </div> */}
       </nav>
     </div>
   );
