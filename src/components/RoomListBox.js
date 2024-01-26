@@ -4,11 +4,23 @@ import RoomItem from "./RoomItem";
 import PaginationButtons from "./PaginationButtons";
 import "../App.css";
 
-const RoomListHeader = ({}) => {
+const RoomListHeader = ({ onFilterClick }) => {
   return (
     <header className="row mt-1 mb-1">
-      <div className="col">1vs1 | Tournament</div>
-      <div className="col d-flex justify-content-end">필터</div>
+      <div className="col">
+        <button className="btn btn-link" onClick={() => onFilterClick("all")}>
+          ALL
+        </button>{" "}
+        |{" "}
+        <button className="btn btn-link" onClick={() => onFilterClick("1vs1")}>
+          1vs1
+        </button>{" "}
+        |{" "}
+        <button className="btn btn-link" onClick={() => onFilterClick("Tournament")}>
+          Tournament
+        </button>
+      </div>
+      <div className="col d-flex justify-content-end"></div>
     </header>
   );
 };
@@ -32,7 +44,7 @@ const RoomListBody = ({ roomsData }) => {
   const splitDataIntoRows = (data, itemsPerRow) => {
     const rows = [];
     if (data) {
-      for (let i = 0; i < data.length; i += itemsPerRow) {
+      for (let i = 0; i < Math.min(9, data.length); i += itemsPerRow) {
         rows.push(data.slice(i, i + itemsPerRow));
       }
     }
@@ -54,15 +66,22 @@ const RoomListBody = ({ roomsData }) => {
           ))}
         </div>
       ))}
+      {roomsData && roomsData.length === 0 && (
+        <div className="row mb-3">
+          <div className="col-12 text-center">방 데이터가 없습니다. 텅~</div>
+        </div>
+      )}
     </div>
   );
 };
 
 const generateDummyRoomsData = (count) => {
   const dummyDataArray = [];
+  if (count === 0) return [];
   dummyDataArray.push({
     title: "맞장 뜰 1인 구한다",
     host: "yeonhkim",
+    isTournament: false,
     nPlayers: 2,
     timeLimit: 77,
     gamePoint: 1,
@@ -70,6 +89,7 @@ const generateDummyRoomsData = (count) => {
   dummyDataArray.push({
     title: "맞장 뜰 3인 구한다",
     host: "jgo",
+    isTournament: true,
     nPlayers: 4,
     timeLimit: 42,
     gamePoint: 1,
@@ -78,6 +98,7 @@ const generateDummyRoomsData = (count) => {
     const room = {
       title: "도리도리 팽도리",
       host: "pengdori",
+      isTournament: true,
       nPlayers: 8,
       timeLimit: i + 3,
       gamePoint: 10,
@@ -90,19 +111,26 @@ const generateDummyRoomsData = (count) => {
 const RoomListBox = ({ totalPages }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [roomsData, setRoomsData] = useState(null);
+  const [roomType, setRoomType] = useState("all");
 
-  const fetchDataForPage = (page) => {
+  useEffect(() => {
+    fetchDataForPage(currentPage, roomType);
+  }, [currentPage, roomType]);
+
+  useEffect(() => {
+    setRoomsData(generateDummyRoomsData(0));
+  }, []);
+
+  const fetchDataForPage = (page, type) => {
     console.log(`서버로부터 ${page}페이지에 해당하는 데이터를 갖고 옴`);
     // 서버로부터 페이지에 해당하는 데이터를 갖고오고 roomsData에 세팅
   };
 
-  useEffect(() => {
-    fetchDataForPage(currentPage);
-  }, [currentPage]);
-
-  useEffect(() => {
-    setRoomsData(generateDummyRoomsData(7));
-  }, []);
+  const handleFilterClick = (type) => {
+    setRoomType(type);
+    fetchDataForPage(currentPage, type);
+    setCurrentPage(1);
+  };
 
   const onPrevPageClick = () => {
     if (currentPage > 1) {
@@ -120,7 +148,7 @@ const RoomListBox = ({ totalPages }) => {
     <div className="RoomListBox bordered-box">
       <div className="row">
         <div className="col">
-          <RoomListHeader />
+          <RoomListHeader onFilterClick={handleFilterClick} />
         </div>
       </div>
       <div className="row flex-fill">
