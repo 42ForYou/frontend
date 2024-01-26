@@ -2,8 +2,6 @@ import React, { useState, useEffect } from "react";
 import Avatar from "./Avatar";
 import ToggleButton from "../components/ToggleButton";
 
-import FooterBar from "./FooterBar";
-
 const TextBar = ({ label, value, onSaveClick, isConstant }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [inputValue, setInputValue] = useState("");
@@ -30,28 +28,27 @@ const TextBar = ({ label, value, onSaveClick, isConstant }) => {
 
   if (isConstant)
     return (
-      <div>
-        <label>{label}: </label>
-        <span>
+      <div className="row">
+        <div className="col-2">
+          <label>{label}: </label>
+        </div>
+        <div className="col">
           <span>{value}</span>
-        </span>
+        </div>
       </div>
     );
 
   return (
-    <div>
-      <label>{label}: </label>
-      {isEditing ? (
-        <span>
-          <input type="text" value={inputValue} onChange={handleChange} />
-          <button onClick={handleSaveClick}>Save</button>
-        </span>
-      ) : (
-        <span>
-          <span>{inputValue}</span>
-          <button onClick={handleEditClick}>Edit</button>
-        </span>
-      )}
+    <div className="row">
+      <div className="col-2">
+        <label>{label}: </label>
+      </div>
+      <div className="col-8">
+        {isEditing ? <input type="text" value={inputValue} onChange={handleChange} /> : <span>{inputValue}</span>}
+      </div>
+      <div className="col">
+        {isEditing ? <button onClick={handleSaveClick}>Save</button> : <button onClick={handleEditClick}>Edit</button>}
+      </div>
     </div>
   );
 };
@@ -76,29 +73,46 @@ const ProfileBox = ({ isMine, profileData }) => {
   };
 
   return (
-    <div className="profile-box">
-      <div className="profile-info">
-        {isMine ? (
-          <div className="profile-info-text">
-            <TextBar label="ID" value={id} isConstant={true} />
-            <TextBar label="Nickname" value={nickname} onSaveClick={handleNicknameSave} />
-            <TextBar label="Email" value={email} onSaveClick={handleEmailSave} />
+    <div className="profile-box d-flex flex-column justify-content-between h-100">
+      <div className="row">
+        <div className="row">
+          <div className="col-10">
+            <div className="profile-info">
+              {isMine ? (
+                <div className="profile-info-text">
+                  <TextBar label="ID" value={id} isConstant={true} />
+                  <TextBar label="Nickname" value={nickname} onSaveClick={handleNicknameSave} />
+                  <TextBar label="Email" value={email} onSaveClick={handleEmailSave} />
+                </div>
+              ) : (
+                <div className="profile-info-text">
+                  <TextBar label="Nickname" value={nickname} isConstant={true} />
+                </div>
+              )}
+            </div>
           </div>
-        ) : (
-          <div className="profile-info-text">
-            <TextBar label="Nickname" value={nickname} isConstant={true} />
+          <div className="col text-center">
+            <Avatar src={avatar} alt={`${id}\'s avatar`} />
           </div>
-        )}
-        <Avatar src={avatar} alt={`${id}'s avatar`} />
-      </div>
-      <div className="profile-history">
-        History<div className="history-box"></div>
+        </div>
+        <div className="row">
+          <div className="profile-history d-flex flex-column justify-content-center mt-3">
+            History
+            <div className="history-box w-100 border bg-body-secondary mt-2 p-3" style={{ minHeight: "300px" }}>
+              <p>이 사람의 역사는...... </p>
+            </div>
+          </div>
+        </div>
       </div>
       {isMine && (
-        <FooterBar
-          leftChild={<ToggleButton title="2FA" initIsToggled={is2FA} />}
-          rightChild={<button onClick={handleDeleteUser}>Delete</button>}
-        />
+        <div className="row container-fluid mt-3">
+          <div className="col">
+            <ToggleButton title="2FA" initIsToggled={is2FA} />
+          </div>
+          <div className="col d-flex justify-content-end">
+            <button onClick={handleDeleteUser}>Delete</button>
+          </div>
+        </div>
       )}
     </div>
   );

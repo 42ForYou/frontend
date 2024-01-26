@@ -5,7 +5,7 @@ const ContentContainer = ({ children }) => {
   //   console.log(`Child ${index + 1}: `, child);
   // });
 
-  return <div className="ContentContainer">{children}</div>;
+  return <div className="ContentContainer h-100">{children}</div>;
 };
 
 export default ContentContainer;

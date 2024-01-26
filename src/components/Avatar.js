@@ -1,22 +1,39 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
-const Avatar = ({ src, alt }) => {
+const Avatar = ({ src, alt, to }) => {
   const defaultImage =
     "https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg";
 
   return (
     <div className="Avatar">
-      <img
-        src={src || defaultImage}
-        alt={alt || "프로필 이미지"}
-        style={{
-          width: "100px", // 원하는 크기로 조정 가능
-          height: "100px", // 원하는 크기로 조정 가능
-          borderRadius: "50%", // 원형으로 만들기
-          objectFit: "cover", // 이미지 비율 유지
-          border: "2px solid #f000f0",
-        }}
-      />
+      {to ? (
+        <Link to={to}>
+          <img
+            src={src || defaultImage}
+            alt={alt || "프로필 이미지"}
+            style={{
+              width: "100px",
+              height: "100px",
+              borderRadius: "50%",
+              objectFit: "cover",
+              border: "2px solid #f000f0",
+            }}
+          />
+        </Link>
+      ) : (
+        <img
+          src={src || defaultImage}
+          alt={alt || "프로필 이미지"}
+          style={{
+            width: "100px",
+            height: "100px",
+            borderRadius: "50%",
+            objectFit: "cover",
+            border: "2px solid #f000f0",
+          }}
+        />
+      )}
     </div>
   );
 };

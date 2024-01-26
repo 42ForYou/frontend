@@ -1,10 +1,10 @@
-import React, { useContext, useState, useEffect } from "react";
-import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
-import "./App.css";
+import React from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import AuthContext, { AuthProvider } from "./AuthContext";
+// context
+import { AuthProvider } from "./AuthContext";
 
-// pages
+// page
 import HomePage from "./pages/HomePage";
 import GamePlayPage from "./pages/game/GamePlayPage";
 import FriendsPage from "./pages/FriendsPage";
@@ -16,6 +16,7 @@ import ChatPage from "./pages/ChatPage";
 import UsersPage from "./pages/UsersPage";
 import NotFoundPage from "./pages/error/NotFoundPage";
 import RoomPage from "./pages/game/RoomPage";
+import TestPage from "./pages/TestPage";
 
 const App = () => {
   return (
@@ -42,6 +43,7 @@ const AppContent = () => {
         <Route path="/play/:game_id" element={<GamePlayPage />} />
         <Route path="/games/onevsone/:room_id" element={<RoomPage />} />
         <Route path="/games/tournament/:room_id" element={<RoomPage />} />
+        <Route path="/test" element={<TestPage />} />
         {/* fallback page */}
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
