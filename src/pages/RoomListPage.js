@@ -1,12 +1,16 @@
 import React from "react";
 import PageContainer from "../components/PageContainer";
 import withAuthProtection from "../withAuthProtection";
+import RoomListBox from "../components/RoomListBox";
+import SearchBar from "../components/SearchBar";
 
-// todo: 더미 룸 생성
 const RoomListPage = () => {
   return (
     <div className="RoomListPage">
-      <PageContainer hasNavigationBar={true}>This is RoomListPage</PageContainer>
+      <PageContainer hasNavigationBar={true}>
+        <SearchBar />
+        <RoomListBox totalPages={42} />
+      </PageContainer>
     </div>
   );
 };
