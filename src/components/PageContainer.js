@@ -12,7 +12,7 @@ const PageContainer = ({ hasNavigationBar, children }) => {
             <NavigationBar />
           </div>
         )}
-        <div className="col container border-p5-box">
+        <div className="col container">
           <ContentContainer>{children}</ContentContainer>
         </div>
       </div>
