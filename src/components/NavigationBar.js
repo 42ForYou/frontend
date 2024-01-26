@@ -61,6 +61,7 @@ const NavigationBar = () => {
                 label="NOTICE"
                 icon={"https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-ios7-bell-48.png"}
               />
+              <NavItem to={"/test"} label="테스트용" />
             </ul>
           </div>
         </div>
