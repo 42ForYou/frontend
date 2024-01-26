@@ -24,7 +24,7 @@ const NavigationBar = () => {
   };
 
   return (
-    <div className="NavigationBar border-p4-box vh-100">
+    <div className="NavigationBar border-p3-box h-100">
       <nav className="bg-light p-3 d-flex flex-column justify-content-between h-100">
         <div className="row">
           <div className="row mb-4 text-center">

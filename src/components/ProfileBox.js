@@ -43,7 +43,7 @@ const TextBar = ({ label, value, onSaveClick, isConstant }) => {
       <div className="col-2">
         <label>{label}: </label>
       </div>
-      <div className="col-9">
+      <div className="col-8">
         {isEditing ? <input type="text" value={inputValue} onChange={handleChange} /> : <span>{inputValue}</span>}
       </div>
       <div className="col">

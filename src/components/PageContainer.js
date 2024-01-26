@@ -6,7 +6,7 @@ import ContentContainer from "./ContentContainer";
 const PageContainer = ({ hasNavigationBar, children }) => {
   return (
     <div className="PageContainer">
-      <div className="row">
+      <div className="row container-fluid vh-100">
         {hasNavigationBar && (
           <div className="col-md-2">
             <NavigationBar />
