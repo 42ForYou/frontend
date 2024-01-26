@@ -43,11 +43,6 @@ const NavigationBar = () => {
                 icon={"https://cdn3.iconfinder.com/data/icons/remixicon-others/24/ping-pong-fill-48.png"}
               />
               <NavItem
-                to={"/chat"}
-                label="CHAT"
-                icon={"https://cdn0.iconfinder.com/data/icons/picons-social/57/65-fb_messenger-48.png"}
-              />
-              <NavItem
                 to={"/friends"}
                 label="FRIENDS"
                 icon={"https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-ios7-heart-512.png"}
