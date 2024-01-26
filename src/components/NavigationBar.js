@@ -31,7 +31,7 @@ const NavigationBar = () => {
             <div>LOGO</div>
           </div>
           <div className="row">
-            <ul className>
+            <ul>
               <NavItem
                 to={"/"}
                 label="HOME"
