@@ -104,18 +104,16 @@ const ProfileBox = ({ isMine, profileData }) => {
           </div>
         </div>
       </div>
-      <div className="row">
-        {isMine && (
-          <div className="row mt-3">
-            <div className="col-11">
-              <ToggleButton title="2FA" initIsToggled={is2FA} />
-            </div>
-            <div className="col">
-              <button onClick={handleDeleteUser}>Delete</button>
-            </div>
+      {isMine && (
+        <div className="row container-fluid mt-3">
+          <div className="col">
+            <ToggleButton title="2FA" initIsToggled={is2FA} />
           </div>
-        )}
-      </div>
+          <div className="col d-flex justify-content-end">
+            <button onClick={handleDeleteUser}>Delete</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
