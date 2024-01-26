@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 
 import RoomItem from "./RoomItem";
 import PaginationButtons from "./PaginationButtons";
-import "../App.css";
 
 const RoomListHeader = ({ onFilterClick }) => {
   return (
@@ -26,10 +25,15 @@ const RoomListHeader = ({ onFilterClick }) => {
 };
 
 const RoomListFooter = ({ currentPage, totalPages, paginationButtons }) => {
+  const handleCreateRoomClick = () => {
+    console.log("방 생성");
+    // 모달 띄우기
+  };
+
   return (
     <div className="row container-fluid mt-3">
       <div className="col">
-        <button>방 생성</button>
+        <button onClick={handleCreateRoomClick}>방 생성</button>
       </div>
       <div className="col d-flex justify-content-end">
         {currentPage} / {totalPages}
@@ -80,6 +84,7 @@ const generateDummyRoomsData = (count) => {
   if (count === 0) return [];
   dummyDataArray.push({
     title: "맞장 뜰 1인 구한다",
+    roomId: 1,
     host: "yeonhkim",
     isTournament: false,
     nPlayers: 2,
@@ -88,6 +93,7 @@ const generateDummyRoomsData = (count) => {
   });
   dummyDataArray.push({
     title: "맞장 뜰 3인 구한다",
+    roomId: 2,
     host: "jgo",
     isTournament: true,
     nPlayers: 4,
@@ -97,6 +103,7 @@ const generateDummyRoomsData = (count) => {
   for (let i = 0; i < count - 2; i++) {
     const room = {
       title: "도리도리 팽도리",
+      roomId: i + 3,
       host: "pengdori",
       isTournament: true,
       nPlayers: 8,
@@ -118,7 +125,7 @@ const RoomListBox = ({ totalPages }) => {
   }, [currentPage, roomType]);
 
   useEffect(() => {
-    setRoomsData(generateDummyRoomsData(0));
+    setRoomsData(generateDummyRoomsData(12));
   }, []);
 
   const fetchDataForPage = (page, type) => {
