@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 
 import RoomItem from "./RoomItem";
 import PaginationButtons from "./PaginationButtons";
+import CreateRoomModal from "./CreateRoomModal";
 
 const RoomListHeader = ({ onFilterClick }) => {
   return (
@@ -25,20 +26,21 @@ const RoomListHeader = ({ onFilterClick }) => {
 };
 
 const RoomListFooter = ({ currentPage, totalPages, paginationButtons }) => {
-  const handleCreateRoomClick = () => {
-    console.log("방 생성");
-    // 모달 띄우기
-  };
+  const [showModal, setShowModal] = useState(false);
+
+  const handleShowModal = () => setShowModal(true);
+  const handleCloseModal = () => setShowModal(false);
 
   return (
     <div className="row container-fluid mt-3">
       <div className="col">
-        <button onClick={handleCreateRoomClick}>방 생성</button>
+        <button onClick={handleShowModal}>방 생성</button>
       </div>
       <div className="col d-flex justify-content-end">
         {currentPage} / {totalPages}
         {paginationButtons}
       </div>
+      {showModal && <CreateRoomModal handleClose={handleCloseModal} />}
     </div>
   );
 };
