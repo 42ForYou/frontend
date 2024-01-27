@@ -129,7 +129,7 @@ const RoomListBox = ({ totalPages }) => {
   }, []);
 
   const fetchDataForPage = (page, type) => {
-    console.log(`서버로부터 ${page}페이지에 해당하는 데이터를 갖고 옴`);
+    console.log(`서버로부터 방 타입 ${type}의 ${page}페이지에 해당하는 데이터를 갖고 옴`);
     // 서버로부터 페이지에 해당하는 데이터를 갖고오고 roomsData에 세팅
   };
 
