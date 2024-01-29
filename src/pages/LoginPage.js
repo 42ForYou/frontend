@@ -59,6 +59,7 @@ const LoginPage = () => {
           <button onClick={checkToken}>토큰 확인</button>
           {storedToken ? <p>현재 토큰: {storedToken}</p> : <p>현재 토큰:</p>}
           <button onClick={() => navigate("/")}>홈으로 가기</button>
+          <button onClick={() => navigate("/callback")}>콜백페이지</button>
         </div>
       </PageContainer>
     </div>
