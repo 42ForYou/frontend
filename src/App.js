@@ -12,7 +12,6 @@ import LoginPage from "./pages/LoginPage";
 import UserProfilePage from "./pages/UserProfilePage";
 import MyProfilePage from "./pages/MyProfilePage";
 import RoomListPage from "./pages/RoomListPage";
-import ChatPage from "./pages/ChatPage";
 import UsersPage from "./pages/UsersPage";
 import NotFoundPage from "./pages/error/NotFoundPage";
 import RoomPage from "./pages/game/RoomPage";
@@ -38,7 +37,6 @@ const AppContent = () => {
         <Route path="/profile/users/:user_id" element={<UserProfilePage />} />
         <Route path="/users" element={<UsersPage />} />
         <Route path="/friends" element={<FriendsPage />} />
-        <Route path="/chat" element={<ChatPage />} />
         <Route path="/games" element={<RoomListPage />} />
         <Route path="/play/:game_id" element={<GamePlayPage />} />
         <Route path="/games/onevsone/:room_id" element={<RoomPage />} />
