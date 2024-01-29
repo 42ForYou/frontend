@@ -1,34 +1,38 @@
 import React, { useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import PageContainer from "../components/PageContainer";
 import AuthContext from "../AuthContext";
 
 const LoginPage = () => {
+  const location = useLocation();
+  console.log(location.pathname);
+
   const { setAuthToken, removeAuthToken } = useContext(AuthContext);
   const navigate = useNavigate();
   const [storedToken, setStoredToken] = useState("");
+  const [authCode, setAuthCode] = useState("");
   const serverURL = "http://localhost:8000"; // 서버 URL
 
-  // 로그인 토큰 발급
-  const issueToken = async () => {
+  // OAuth 인증 요청 시작
+  const startOAuthFlow = async () => {
     try {
-      const response = await fetch(`${serverURL}/login`, {
+      const res = await fetch(`${serverURL}/login`, {
         method: "GET",
-        headers: {
-          // 필요한 헤더 추가 (예: 인증 정보)
-        },
       });
-      if (response.ok) {
-        const token = await response.text();
-        setAuthToken(token);
-        localStorage.setItem("authToken", token);
-        alert("토큰 발급 및 저장 완료");
-      } else {
-        alert("토큰 발급 실패");
-      }
+      const data = await res.json();
+      const authorizationURL = data.data.url;
+      console.log(authorizationURL);
+      window.location.href = authorizationURL;
     } catch (error) {
-      console.error("토큰 발급 오류:", error);
+      console.log(error);
     }
+  };
+
+  // 로그인 토큰 발급
+  const issueToken = () => {
+    const token = "dev-token";
+    setAuthToken(token);
+    alert("토큰 발급: " + token);
   };
 
   // 로그인 토큰 삭제
@@ -49,6 +53,7 @@ const LoginPage = () => {
       <PageContainer hasNavigationBar={false}>
         <div>
           <h1>개발용 로그인 페이지</h1>
+          <button onClick={startOAuthFlow}>42인증 시작</button>
           <button onClick={issueToken}>토큰 발급</button>
           <button onClick={removeToken}>토큰 삭제</button>
           <button onClick={checkToken}>토큰 확인</button>
