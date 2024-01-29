@@ -6,17 +6,20 @@ import AuthContext from "./AuthContext";
 // 인증 상태에 따라 페이지 접근을 제어함
 const withAuthProtection = (WrappedComponent) => {
   return (props) => {
-    const { authToken, isValidToken } = useContext(AuthContext);
+    const { accessToken, getAccessTokenFromCookie, isValidToken } = useContext(AuthContext);
     const navigate = useNavigate();
 
     useEffect(() => {
-      if (!isValidToken(authToken)) {
-        navigate("/login");
-        alert("인증 토큰이 유효하지 않습니다. 로그인 페이지로 돌아갑니다");
+      if (!isValidToken(accessToken)) {
+        console.log(getAccessTokenFromCookie());
+        if (!getAccessTokenFromCookie()) {
+          navigate("/login");
+          alert("인증 토큰이 유효하지 않습니다. 로그인 페이지로 돌아갑니다");
+        }
       }
-    }, [authToken, isValidToken, navigate]);
+    }, [accessToken, isValidToken, navigate]);
 
-    return isValidToken(authToken) ? <WrappedComponent {...props} /> : null;
+    return <WrappedComponent {...props} />;
   };
 };
 

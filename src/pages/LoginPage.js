@@ -5,12 +5,10 @@ import AuthContext from "../AuthContext";
 
 const LoginPage = () => {
   const location = useLocation();
-  console.log(location.pathname);
 
-  const { setAuthToken, removeAuthToken } = useContext(AuthContext);
+  const { setAccessToken, removeAccessTokenCookie } = useContext(AuthContext);
   const navigate = useNavigate();
   const [storedToken, setStoredToken] = useState("");
-  const [authCode, setAuthCode] = useState("");
   const serverURL = "http://localhost:8000"; // 서버 URL
 
   // OAuth 인증 요청 시작
@@ -21,7 +19,6 @@ const LoginPage = () => {
       });
       const data = await res.json();
       const authorizationURL = data.data.url;
-      console.log(authorizationURL);
       window.location.href = authorizationURL;
     } catch (error) {
       console.log(error);
@@ -31,19 +28,19 @@ const LoginPage = () => {
   // 로그인 토큰 발급
   const issueToken = () => {
     const token = "dev-token";
-    setAuthToken(token);
+    setAccessToken(token);
     alert("토큰 발급: " + token);
   };
 
   // 로그인 토큰 삭제
   const removeToken = () => {
-    removeAuthToken();
+    removeAccessTokenCookie();
     alert("토큰 삭제됨");
   };
 
   // 로그인 토큰 확인
   const checkToken = () => {
-    const token = localStorage.getItem("authToken");
+    const token = localStorage.getItem("accessToken");
     setStoredToken(token);
   };
 
