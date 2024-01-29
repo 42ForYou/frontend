@@ -7,12 +7,28 @@ const LoginPage = () => {
   const { setAuthToken, removeAuthToken } = useContext(AuthContext);
   const navigate = useNavigate();
   const [storedToken, setStoredToken] = useState("");
+  const serverURL = "http://localhost:8000"; // 서버 URL
 
   // 로그인 토큰 발급
-  const issueToken = () => {
-    const token = "dev-token";
-    setAuthToken(token);
-    alert("토큰 발급: " + token);
+  const issueToken = async () => {
+    try {
+      const response = await fetch(`${serverURL}/login`, {
+        method: "GET",
+        headers: {
+          // 필요한 헤더 추가 (예: 인증 정보)
+        },
+      });
+      if (response.ok) {
+        const token = await response.text();
+        setAuthToken(token);
+        localStorage.setItem("authToken", token);
+        alert("토큰 발급 및 저장 완료");
+      } else {
+        alert("토큰 발급 실패");
+      }
+    } catch (error) {
+      console.error("토큰 발급 오류:", error);
+    }
   };
 
   // 로그인 토큰 삭제
