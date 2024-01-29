@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
-import PageContainer from "../components/PageContainer";
-import withAuthProtection from "../withAuthProtection";
+import React, { useContext, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import AuthContext from "../AuthContext";
 
 const LoginCallbackPage = () => {
   const navigate = useNavigate();
@@ -10,6 +9,7 @@ const LoginCallbackPage = () => {
   const paramValue = queryParams.get("code");
   const hasQueryParam = queryParams.has("code");
   const serverURL = "http://localhost:8000"; // 서버 URL
+  const { setAccessToken, setAccessTokenCookie } = useContext(AuthContext);
 
   useEffect(() => {
     const fetchFunc = async () => {
@@ -22,6 +22,8 @@ const LoginCallbackPage = () => {
           const token = data.data.token;
           console.log("백 서버로부터 받은 데이터: ", data);
           console.log("issued token: ", token);
+          setAccessToken(token);
+          setAccessTokenCookie(token);
           navigate("/");
         } catch (error) {
           console.log(error);
@@ -38,7 +40,7 @@ const LoginCallbackPage = () => {
       <div>
         <h1>OAuth 콜백 페이지</h1>
         {authCode ? <p>인증 코드: {authCode}</p> : <p>리다이렉션 후 인증 코드를 기다립니다.</p>}
-        <button onClick={() => navigate("/")}>홈으로 가기</button>
+        {/* <button onClick={() => navigate("/")}>홈으로 가기</button> */}
       </div>
     </div>
   );
