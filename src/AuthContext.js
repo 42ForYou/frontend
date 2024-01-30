@@ -1,66 +1,54 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import Cookies from "js-cookie";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [accessToken, setAccessToken] = useState(localStorage.getItem("accessToken"));
-  const location = useLocation();
+  const [token, setToken] = useState("");
+  const serverURL = "http://localhost:8000"; // 서버 URL
 
-  useEffect(() => {
-    const token = localStorage.getItem("accessToken");
-    setAccessToken(token);
-  }, [location]);
-
-  const setAccessTokenCookie = (accessToken) => {
-    const expirationDate = new Date();
-    expirationDate.setDate(expirationDate.getDate() + 7);
-    document.cookie = `access_token=${accessToken}; expires=${expirationDate.toUTCString()}; path=/`;
+  const getTokenFromCookies = () => {
+    return Cookies.get("token");
   };
 
-  const getAccessTokenFromCookie = () => {
-    const cookies = document.cookie.split("; ");
-    for (const cookie of cookies) {
-      const [name, value] = cookie.split("=");
-      if (name === "access_token") {
-        return value;
+  const setTokenToCookies = (token) => {
+    Cookies.set("token", token, { expires: 7, path: "/" });
+  };
+
+  const removeTokenFromCookies = () => {
+    setToken("");
+    Cookies.remove("token", { path: "/" });
+  };
+
+  const validateToken = async (token) => {
+    try {
+      const response = await fetch(`${serverURL}/accounts/profiles/yeonhkim`, {
+        method: "GET",
+        headers: {
+          Authorization: `Token ${token}`,
+        },
+      });
+      if (response.ok) {
+        const responseData = await response.json();
+        console.log("responseData: ", responseData);
+        return true;
       }
+    } catch (error) {
+      console.log("error: ", error);
     }
-    return null; // 쿠키에서 액세스 토큰을 찾지 못한 경우
-  };
-
-  const removeAccessTokenCookie = () => {
-    document.cookie = "access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-  };
-
-  const setAccessTokenLocal = (token) => {
-    localStorage.setItem("accessToken", token);
-    setAccessToken(token);
-  };
-
-  const removeAccessTokenLocal = () => {
-    localStorage.removeItem("accessToken");
-    setAccessToken(null);
-  };
-
-  // todo: 토큰 유효성 검사 로직 구현
-  const isValidToken = (token) => {
-    return token;
-    // return true;
-    // return token === "dev-token";
+    return false;
   };
 
   return (
     <AuthContext.Provider
       value={{
-        accessToken,
-        setAccessToken,
-        setAccessTokenLocal,
-        removeAccessTokenLocal,
-        setAccessTokenCookie,
-        getAccessTokenFromCookie,
-        removeAccessTokenCookie,
-        isValidToken,
+        token,
+        setToken,
+        setTokenToCookies,
+        getTokenFromCookies,
+        removeTokenFromCookies,
+        validateToken,
       }}>
       {children}
     </AuthContext.Provider>

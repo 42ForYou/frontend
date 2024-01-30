@@ -14,13 +14,13 @@ const NavItem = ({ icon, label, to }) => (
 );
 
 const NavigationBar = () => {
-  const { removeAccessTokenCookie } = useContext(AuthContext);
+  const { removeTokenFromCookies } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    removeAccessTokenCookie();
-    alert("로그아웃 되었습니다. 토큰이 삭제되었습니다");
-    navigate("/");
+    removeTokenFromCookies();
+    alert("로그아웃 되었습니다. 로그인 페이지로 돌아갑니다");
+    navigate("/login");
   };
 
   return (

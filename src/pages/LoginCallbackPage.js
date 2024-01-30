@@ -9,7 +9,7 @@ const LoginCallbackPage = () => {
   const paramValue = queryParams.get("code");
   const hasQueryParam = queryParams.has("code");
   const serverURL = "http://localhost:8000"; // 서버 URL
-  const { setAccessToken, setAccessTokenCookie } = useContext(AuthContext);
+  const { setToken, setTokenToCookies } = useContext(AuthContext);
 
   useEffect(() => {
     const fetchFunc = async () => {
@@ -22,8 +22,8 @@ const LoginCallbackPage = () => {
           const token = data.data.token;
           console.log("백 서버로부터 받은 데이터: ", data);
           console.log("issued token: ", token);
-          setAccessToken(token);
-          setAccessTokenCookie(token);
+          setToken(token);
+          setTokenToCookies(token);
           navigate("/");
         } catch (error) {
           console.log(error);
