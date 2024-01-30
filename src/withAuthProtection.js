@@ -7,36 +7,34 @@ import AuthContext from "./AuthContext";
 const withAuthProtection = (WrappedComponent) => {
   return (props) => {
     const { token, setToken, validateToken, getTokenFromCookies } = useContext(AuthContext);
-    const [hasValidToken, setHasValidToken] = useState(false);
+    const [isAuthorized, setIsAuthorized] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();
 
     useEffect(() => {
-      const checkTokenValidity = async () => {
-        if (token) {
-          const isValid = await validateToken(token);
-          setHasValidToken(isValid);
-        } else {
+      const authCheck = async () => {
+        const isStateTokenValid = await validateToken(token);
+        // console.log("token(state): ", isStateTokenValid);
+
+        if (isStateTokenValid) setIsAuthorized(true);
+        else {
           const tokenFromCookie = getTokenFromCookies();
-          if (tokenFromCookie) {
-            const isValid = await validateToken(tokenFromCookie);
-            if (isValid) {
-              setToken(tokenFromCookie);
-              setHasValidToken(true);
-            } else {
-              alert("토큰이 유효하지 않습니다.");
-              navigate("/login");
-            }
+          const isCookiesTokenValid = await validateToken(tokenFromCookie);
+          // console.log("token(cookies): ", isCookiesTokenValid);
+
+          if (isCookiesTokenValid) {
+            setToken(tokenFromCookie);
+            setIsAuthorized(true);
           } else {
-            alert("토큰이 유효하지 않습니다.");
             navigate("/login");
+            alert("토큰이 유효하지 않습니다. 로그인 페이지로 돌아갑니다");
           }
         }
       };
-      checkTokenValidity();
+      authCheck();
     }, [token, location]);
 
-    return hasValidToken ? <WrappedComponent {...props} /> : null;
+    return isAuthorized ? <WrappedComponent {...props} /> : null;
   };
 };
 
