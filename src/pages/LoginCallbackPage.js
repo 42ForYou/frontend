@@ -18,9 +18,7 @@ const LoginCallbackPage = () => {
           const res = await fetch(`${serverURL}/oauth/?code=${paramValue}`, {
             method: "GET",
           });
-          const data = await res.json();
-          const token = data.data.token;
-          console.log("백 서버로부터 받은 데이터: ", data);
+          const token = (await res.json()).data.token;
           console.log("issued token: ", token);
           setToken(token);
           setTokenToCookies(token);

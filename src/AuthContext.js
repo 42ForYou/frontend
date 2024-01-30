@@ -23,15 +23,15 @@ export const AuthProvider = ({ children }) => {
 
   const validateToken = async (token) => {
     try {
-      const response = await fetch(`${serverURL}/accounts/profiles/yeonhkim`, {
+      const res = await fetch(`${serverURL}/accounts/profiles/yeonhkim`, {
         method: "GET",
         headers: {
           Authorization: `Token ${token}`,
         },
       });
-      if (response.ok) {
-        const responseData = await response.json();
-        console.log("responseData: ", responseData);
+      if (res.ok) {
+        const { user } = (await res.json()).data;
+        setUserProfile(user);
         return true;
       }
     } catch (error) {

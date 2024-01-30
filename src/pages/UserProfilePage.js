@@ -59,9 +59,9 @@ const UserProfilePage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fakeFetch(userId);
-        if (response.ok) {
-          const data = await response.json();
+        const res = await fakeFetch(userId);
+        if (res.ok) {
+          const data = await res.json();
           setProfileData(data);
         }
       } catch (isInvalidUserId) {
