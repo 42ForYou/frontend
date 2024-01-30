@@ -24,7 +24,7 @@ module.exports = {
   },
   rules: {
     strict: ["error", "global"], // "use strict"
-    camelcase: "error", // camelCase 사용
+    camelcase: ["error", { properties: "never" }], // camelCase 사용
     "no-var": "error", // var is not allowed
     indent: ["error", 2], // 2 spaces
     "linebreak-style": ["error", "unix"], // LF
