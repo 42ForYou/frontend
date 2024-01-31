@@ -9,6 +9,8 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (codeValue) => {
     try {
+      console.log(codeValue);
+
       const res = await fetch(`${serverURL}/oauth/?code=${codeValue}`, {
         method: "GET",
         credentials: "include",
@@ -44,7 +46,7 @@ export const AuthProvider = ({ children }) => {
     try {
       console.log("유효성 검사");
       // todo: 차후 유효성 검사용 API 엔드포인트로 요청 변경
-      const res = await fetch(`${serverURL}/accounts/profiles/yeonhkim`, {
+      const res = await fetch(`${serverURL}/valid`, {
         method: "GET",
         credentials: "include", // HttpOnly 쿠키를 포함하여 요청 보내기
       });
