@@ -1,5 +1,4 @@
 import React, { createContext, useState, useContext } from "react";
-import Cookies from "js-cookie";
 
 const AuthContext = createContext();
 
@@ -12,7 +11,7 @@ export const AuthProvider = ({ children }) => {
     try {
       const res = await fetch(`${serverURL}/oauth/?code=${codeValue}`, {
         method: "GET",
-        // 차후 HttpOnly 쿠키를 받기 위해 credentials: 'include' 추가
+        credentials: "include",
       });
 
       if (res.ok) {
@@ -22,9 +21,6 @@ export const AuthProvider = ({ children }) => {
 
         console.log("유저 정보 세팅");
         setUserProfile(user);
-
-        console.log("수동으로 쿠키에 토큰 세팅");
-        Cookies.set("token", token, { domain: "localhost" });
 
         return true;
       } else {
@@ -46,14 +42,11 @@ export const AuthProvider = ({ children }) => {
   // 현재 쿠키에 저장되어 있는 토큰의 유효성을 검사
   const validateTokenInCookies = async () => {
     try {
-      // todo: 차후 API 요청 URL변경
-      const token = Cookies.get("token");
-      const res = await fetch(`${serverURL}/accounts/profiles/${userProfile.intra_id}`, {
+      console.log("유효성 검사");
+      // todo: 차후 유효성 검사용 API 엔드포인트로 요청 변경
+      const res = await fetch(`${serverURL}/accounts/profiles/yeonhkim`, {
         method: "GET",
-        headers: {
-          Authorization: `Token ${token}`,
-          // credentials: "include", // HttpOnly 쿠키를 포함하여 요청 보내기
-        },
+        credentials: "include", // HttpOnly 쿠키를 포함하여 요청 보내기
       });
       if (res.ok) {
         return true;
