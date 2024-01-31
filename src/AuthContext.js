@@ -1,39 +1,61 @@
-import React, { createContext, useState, useContext, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import React, { createContext, useState, useContext } from "react";
 import Cookies from "js-cookie";
 
 const AuthContext = createContext();
 
+// todo: 백엔드 코드 수정 이후 직접 쿠키를 건드는 로직 제외
 export const AuthProvider = ({ children }) => {
   const [userProfile, setUserProfile] = useState(null);
-  const [token, setToken] = useState("");
   const serverURL = "http://localhost:8000"; // 서버 URL
 
-  const getTokenFromCookies = () => {
-    return Cookies.get("token");
-  };
-
-  const setTokenToCookies = (token) => {
-    Cookies.set("token", token, { expires: 7, path: "/" });
-  };
-
-  const removeTokenFromCookies = () => {
-    Cookies.remove("token", { path: "/" });
-  };
-
-  const validateToken = async (token) => {
+  const login = async (codeValue) => {
     try {
-      const res = await fetch(`${serverURL}/accounts/profiles/yeonhkim`, {
+      const res = await fetch(`${serverURL}/oauth/?code=${codeValue}`, {
+        method: "GET",
+        // 차후 HttpOnly 쿠키를 받기 위해 credentials: 'include' 추가
+      });
+
+      if (res.ok) {
+        // 로그인 성공 처리
+        console.log("로그인 성공");
+        const { user, token } = (await res.json()).data;
+
+        console.log("유저 정보 세팅");
+        setUserProfile(user);
+
+        console.log("수동으로 쿠키에 토큰 세팅");
+        Cookies.set("token", token, { domain: "localhost" });
+
+        return true;
+      } else {
+        // 로그인 실패 처리
+        console.log("로그인 실패");
+      }
+    } catch (error) {
+      console.error("로그인 중 에러 발생: ", error);
+    }
+    return false;
+  };
+
+  const logout = async () => {
+    Cookies.remove("token", { path: "/" });
+    setUserProfile(null);
+    alert("로그아웃 되었습니다. 로그인 페이지로 돌아갑니다");
+  };
+
+  // 현재 쿠키에 저장되어 있는 토큰의 유효성을 검사
+  const validateTokenInCookies = async () => {
+    try {
+      // todo: 차후 API 요청 URL변경
+      const token = Cookies.get("token");
+      const res = await fetch(`${serverURL}/accounts/profiles/${userProfile.intra_id}`, {
         method: "GET",
         headers: {
           Authorization: `Token ${token}`,
+          // credentials: "include", // HttpOnly 쿠키를 포함하여 요청 보내기
         },
       });
       if (res.ok) {
-        const { user } = (await res.json()).data;
-        setUserProfile(user);
-        console.log("유저 정보 세팅");
-        console.log(userProfile);
         return true;
       }
     } catch (error) {
@@ -46,12 +68,9 @@ export const AuthProvider = ({ children }) => {
   return (
     <AuthContext.Provider
       value={{
-        token,
-        setToken,
-        setTokenToCookies,
-        getTokenFromCookies,
-        removeTokenFromCookies,
-        validateToken,
+        login,
+        logout,
+        validateTokenInCookies,
         userProfile,
         setUserProfile,
       }}>
@@ -61,7 +80,6 @@ export const AuthProvider = ({ children }) => {
 };
 
 // AuthContext를 사용하기 위한 커스텀 훅
-// 차후 코드 간결화 시 적용 고려
 export const useAuth = () => useContext(AuthContext);
 
 export default AuthContext;

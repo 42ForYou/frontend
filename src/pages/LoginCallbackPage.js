@@ -3,42 +3,27 @@ import { useLocation, useNavigate } from "react-router-dom";
 import AuthContext from "../AuthContext";
 
 const LoginCallbackPage = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const queryParams = new URLSearchParams(location.search);
+  const queryParams = new URLSearchParams(useLocation().search);
   const paramValue = queryParams.get("code");
   const hasQueryParam = queryParams.has("code");
-  const serverURL = "http://localhost:8000"; // 서버 URL
-  const { setToken, setTokenToCookies } = useContext(AuthContext);
+  const { login } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchFunc = async () => {
+    const authCodeRedirection = async () => {
       if (hasQueryParam) {
-        try {
-          const res = await fetch(`${serverURL}/oauth/?code=${paramValue}`, {
-            method: "GET",
-          });
-          const token = (await res.json()).data.token;
-          console.log("issued token: ", token);
-          setToken(token);
-          setTokenToCookies(token);
-          navigate("/");
-        } catch (error) {
-          console.log(error);
-        }
+        await login(paramValue);
+        navigate("/");
       }
     };
-    fetchFunc();
+    authCodeRedirection();
   }, [paramValue, hasQueryParam]);
-
-  const [authCode, setAuthCode] = useState("");
 
   return (
     <div className="CallbackPage">
       <div>
         <h1>OAuth 콜백 페이지</h1>
-        {authCode ? <p>인증 코드: {authCode}</p> : <p>리다이렉션 후 인증 코드를 기다립니다.</p>}
-        {/* <button onClick={() => navigate("/")}>홈으로 가기</button> */}
+        서버로부터 응답을 기다리고 있습니다...
       </div>
     </div>
   );
