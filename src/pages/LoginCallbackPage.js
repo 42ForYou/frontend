@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import AuthContext from "../AuthContext";
+import AuthContext from "../context/AuthContext";
 
 const LoginCallbackPage = () => {
   const queryParams = new URLSearchParams(useLocation().search);

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import PageContainer from "../components/PageContainer";
-import withAuthProtection from "../withAuthProtection";
+import withAuthProtection from "../common/withAuthProtection";
 import ProfileBox from "../components/ProfileBox";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import LoadingPage from "./LoadingPage";
@@ -53,9 +53,9 @@ const UserProfilePage = () => {
   const userId = location.pathname.split("/").pop(); // useParams를 사용할 수 없어 대체제로 사용
   const navigate = useNavigate();
   const [profileData, setProfileData] = useState(null);
-  const [isInvalidUserId, setIsInvalidUserId] = useState(false);
 
   // 백엔드 서버에 요청을 보내 유효한 user_id인지 판별
+  // todo:
   useEffect(() => {
     const fetchData = async () => {
       try {

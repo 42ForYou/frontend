@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import PageContainer from "../components/PageContainer";
-import AuthContext from "../AuthContext";
+import AuthContext from "../context/AuthContext";
 
 const LoginPage = () => {
   const navigate = useNavigate();
