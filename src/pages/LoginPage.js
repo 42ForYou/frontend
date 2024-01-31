@@ -1,21 +1,21 @@
 import React, { useContext, useState } from "react";
+import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
 import PageContainer from "../components/PageContainer";
-import AuthContext from "../context/AuthContext";
+import { API_ENDPOINTS } from "../common/apiEndPoints";
+import { getWithoutCredentials } from "../common/apiBase";
 
 const LoginPage = () => {
   const navigate = useNavigate();
-  const serverURL = "http://localhost:8000"; // 서버 URL
 
   // OAuth 인증 요청 시작
   const startOAuthFlow = async () => {
     try {
-      const res = await fetch(`${serverURL}/login`, {
-        method: "GET",
-      });
-      const data = await res.json();
-      const authorizationURL = data.data.url;
+      const resData = await getWithoutCredentials(API_ENDPOINTS.LOGIN);
+      const authorizationURL = resData.data.url;
       window.location.href = authorizationURL;
+      // 42intra의 인증 페이지로 리다이렉팅
+      // 외부 페이지이므로 navigate를 사용하지 않고 location을 직접 수정하는 것이 일반적
     } catch (error) {
       console.log(error);
     }
