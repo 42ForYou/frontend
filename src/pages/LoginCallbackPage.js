@@ -13,7 +13,7 @@ const LoginCallbackPage = () => {
     const authCodeRedirection = async () => {
       if (hasQueryParam) {
         await login(paramValue);
-        // navigate("/");
+        navigate("/");
       }
     };
     authCodeRedirection();
