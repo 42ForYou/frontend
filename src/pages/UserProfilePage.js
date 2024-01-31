@@ -17,9 +17,7 @@ const UserProfilePage = () => {
   useEffect(() => {
     const getDataAndSet = async () => {
       try {
-        // const resData = await get(API_ENDPOINTS.USER_PROFILE(userId));
-        const resData = await get(API_ENDPOINTS.USER_PROFILE("sanghwal"));
-        console.log(resData);
+        const resData = await get(API_ENDPOINTS.USER_PROFILE(userId));
         if (resData) {
           setProfileData(resData.data);
           console.log("프로필 데이터 세팅 완료");
