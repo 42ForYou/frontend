@@ -55,7 +55,7 @@ const TextBar = ({ label, value, onSaveClick, isConstant }) => {
 
 // todo: 대전 기록, 아바타 띄우는 방식 결정
 const ProfileBox = ({ isMine, profileData }) => {
-  const { intra_id, nickname, email, history, avatar, two_factor_auth: is2FA } = profileData;
+  const { intra_id, nickname, email, history, avatar, two_factor_auth: is2FA } = profileData.user;
 
   const handleDeleteUser = () => {
     window.confirm("정말 탈퇴하시겠습니까?");

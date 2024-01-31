@@ -4,48 +4,8 @@ import withAuthProtection from "../common/withAuthProtection";
 import ProfileBox from "../components/ProfileBox";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import LoadingPage from "./LoadingPage";
-
-const fakeFetch = (userId) => {
-  const dummyDataArray = [
-    {
-      id: "yeonhkim",
-      nickname: "pengdori",
-      email: "doridori@uknown.com",
-      avatar: "https://pbs.twimg.com/media/Ez57aWWUYAUm8jS.jpg",
-      is2FA: true,
-    },
-    {
-      id: "jgo",
-      nickname: "JGO",
-      avatar: "https://cdn.britannica.com/95/156695-131-FF89C9FA/oak-tree.jpg?w=200&h=200&c=crop",
-    },
-    {
-      id: "pikachu",
-      nickname: "Chu",
-      email: "pikapika@uknown.com",
-      avatar: "https://assets.pokemon.com/assets/cms2/img/pokedex/full/025.png",
-      is2FA: true,
-    },
-  ];
-
-  const dummyData = dummyDataArray.find((data) => data.id === userId) || null;
-  if (dummyData) {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve({
-          ok: true,
-          json: () => Promise.resolve(dummyData),
-        });
-      }, 100);
-    });
-  } else {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        reject(new Error("API 요청이 실패했습니다."));
-      }, 100);
-    });
-  }
-};
+import { get } from "../common/apiBase";
+import { API_ENDPOINTS } from "../common/apiEndPoints";
 
 // 유저프로필 URL: /profile/users/:user_id
 const UserProfilePage = () => {
@@ -54,26 +14,23 @@ const UserProfilePage = () => {
   const navigate = useNavigate();
   const [profileData, setProfileData] = useState(null);
 
-  // 백엔드 서버에 요청을 보내 유효한 user_id인지 판별
-  // todo:
   useEffect(() => {
-    const fetchData = async () => {
+    const getDataAndSet = async () => {
       try {
-        const res = await fakeFetch(userId);
-        if (res.ok) {
-          const data = await res.json();
-          setProfileData(data);
+        // const resData = await get(API_ENDPOINTS.USER_PROFILE(userId));
+        const resData = await get(API_ENDPOINTS.USER_PROFILE("sanghwal"));
+        console.log(resData);
+        if (resData) {
+          setProfileData(resData.data);
+          console.log("프로필 데이터 세팅 완료");
         }
-      } catch (isInvalidUserId) {
-        setIsInvalidUserId(true);
+      } catch (error) {
         alert("유효하지 않은 유저 프로필 페이지입니다.");
         navigate(-1);
       }
     };
-    fetchData();
+    getDataAndSet();
   }, [userId, navigate]);
-
-  if (!profileData) return <LoadingPage hasNavigationBar={true} />;
 
   return (
     <div className="UserProfilePage">
