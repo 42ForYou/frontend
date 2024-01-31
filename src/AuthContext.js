@@ -5,6 +5,7 @@ import Cookies from "js-cookie";
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
+  const [userProfile, setUserProfile] = useState(null);
   const [token, setToken] = useState("");
   const serverURL = "http://localhost:8000"; // 서버 URL
 
@@ -17,7 +18,6 @@ export const AuthProvider = ({ children }) => {
   };
 
   const removeTokenFromCookies = () => {
-    setToken("");
     Cookies.remove("token", { path: "/" });
   };
 
@@ -32,11 +32,14 @@ export const AuthProvider = ({ children }) => {
       if (res.ok) {
         const { user } = (await res.json()).data;
         setUserProfile(user);
+        console.log("유저 정보 세팅");
+        console.log(userProfile);
         return true;
       }
     } catch (error) {
       console.log("error: ", error);
     }
+    setUserProfile(null);
     return false;
   };
 
@@ -49,6 +52,8 @@ export const AuthProvider = ({ children }) => {
         getTokenFromCookies,
         removeTokenFromCookies,
         validateToken,
+        userProfile,
+        setUserProfile,
       }}>
       {children}
     </AuthContext.Provider>

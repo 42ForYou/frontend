@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import PageContainer from "../components/PageContainer";
 import withAuthProtection from "../withAuthProtection";
 import ProfileBox from "../components/ProfileBox";
-import { useLocation, useParams, useNavigate } from "react-router-dom";
 import LoadingPage from "./LoadingPage";
+import AuthContext from "../AuthContext";
 
 const dummyProfileData = {
   id: "yeonhkim",
@@ -15,18 +15,22 @@ const dummyProfileData = {
 
 // 마이프로필 URL: /profile
 const MyProfilePage = () => {
-  const location = useLocation();
-  const [profileData, setProfileData] = useState(dummyProfileData);
+  const { userProfile } = useContext(AuthContext);
+  const [profileData, setProfileData] = useState(null);
+
+  useEffect(() => {
+    setProfileData(userProfile);
+  }, [userProfile]);
 
   return (
     <div className="MyProfilePage">
-      <PageContainer hasNavigationBar={true}>
-        {profileData === null ? (
-          <LoadingPage hasNavigationBar={true} />
-        ) : (
+      {profileData === null ? (
+        <LoadingPage hasNavigationBar={true} />
+      ) : (
+        <PageContainer hasNavigationBar={true}>
           <ProfileBox isMine={true} profileData={profileData} />
-        )}
-      </PageContainer>
+        </PageContainer>
+      )}
     </div>
   );
 };

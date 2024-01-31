@@ -14,11 +14,13 @@ const NavItem = ({ icon, label, to }) => (
 );
 
 const NavigationBar = () => {
-  const { removeTokenFromCookies } = useContext(AuthContext);
+  const { setToken, setUserProfile, removeTokenFromCookies, userProfile } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleLogout = () => {
     removeTokenFromCookies();
+    setToken("");
+    setUserProfile(null);
     alert("로그아웃 되었습니다. 로그인 페이지로 돌아갑니다");
     navigate("/login");
   };
@@ -61,7 +63,7 @@ const NavigationBar = () => {
           </div>
         </div>
         <div className="row text-center d-flex flex-column">
-          Profile
+          {userProfile ? userProfile.nickname : "로그인하지 않은 사용자"}
           <Avatar to={"/profile"} />
           <button className="btn btn-primary mt-2 w-40" onClick={handleLogout}>
             로그아웃하기
