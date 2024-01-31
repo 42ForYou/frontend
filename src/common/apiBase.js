@@ -19,6 +19,16 @@ const get = async (url) => {
   }
 };
 
+const getWithoutCredentials = async (url) => {
+  try {
+    const response = await axiosInstance.get(url, { withCredentials: false });
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
 const post = async (url, data) => {
   try {
     const response = await axiosInstance.post(url, data);
@@ -49,4 +59,4 @@ const del = async (url) => {
   }
 };
 
-export { get, post, put, del };
+export { get, getWithoutCredentials, post, put, del };
