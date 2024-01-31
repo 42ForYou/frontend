@@ -15,12 +15,12 @@ const dummyProfileData = {
 
 // 마이프로필 URL: /profile
 const MyProfilePage = () => {
-  const { userProfile } = useContext(AuthContext);
+  const { loggedInUser } = useContext(AuthContext);
   const [profileData, setProfileData] = useState(null);
 
   useEffect(() => {
-    setProfileData(userProfile);
-  }, [userProfile]);
+    setProfileData(loggedInUser);
+  }, [loggedInUser]);
 
   return (
     <div className="MyProfilePage">

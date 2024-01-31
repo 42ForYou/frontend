@@ -4,7 +4,7 @@ import Cookies from "js-cookie";
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [userProfile, setUserProfile] = useState(null);
+  const [loggedInUser, setLoggedInUser] = useState(null);
   const serverURL = "http://localhost:8000"; // 서버 URL
 
   const login = async (codeValue) => {
@@ -20,7 +20,7 @@ export const AuthProvider = ({ children }) => {
         // 로그인 성공 처리
         console.log("로그인 성공");
         const { user } = (await res.json()).data;
-        setUserProfile(user);
+        setLoggedInUser(user);
         return true;
       } else {
         // 로그인 실패 처리
@@ -34,26 +34,25 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     // todo: 쿠키 삭제 API 구현 후 변경
-    setUserProfile(null);
+    setLoggedInUser(null);
   };
 
   // 현재 쿠키에 저장되어 있는 토큰의 유효성을 검사
   const validateTokenInCookies = async () => {
     try {
-      console.log("유효성 검사");
       const res = await fetch(`${serverURL}/valid`, {
         method: "GET",
         credentials: "include", // HttpOnly 쿠키를 포함하여 요청 보내기
       });
       if (res.ok) {
         const { user } = (await res.json()).data;
-        setUserProfile(user);
+        setLoggedInUser(user);
         return true;
       }
     } catch (error) {
       console.log("error: ", error);
     }
-    setUserProfile(null);
+    setLoggedInUser(null);
     return false;
   };
 
@@ -63,8 +62,8 @@ export const AuthProvider = ({ children }) => {
         login,
         logout,
         validateTokenInCookies,
-        userProfile,
-        setUserProfile,
+        loggedInUser,
+        setLoggedInUser,
       }}>
       {children}
     </AuthContext.Provider>

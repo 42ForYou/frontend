@@ -39,7 +39,7 @@ const NavItems = () => {
 };
 
 const NavUser = () => {
-  const { userProfile, logout } = useContext(AuthContext);
+  const { loggedInUser, logout } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -50,7 +50,7 @@ const NavUser = () => {
 
   return (
     <div className="text-center d-flex flex-column">
-      {userProfile ? userProfile.nickname : "로그인하지 않은 사용자"}
+      {loggedInUser ? loggedInUser.nickname : "로그인하지 않은 사용자"}
       <Avatar to={"/profile"} />
       <button className="btn btn-primary mt-2 w-40" onClick={handleLogout}>
         로그아웃하기
