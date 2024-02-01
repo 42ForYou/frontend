@@ -32,13 +32,13 @@ const UserProfilePage = () => {
 
   return (
     <div className="UserProfilePage">
-      <PageContainer hasNavigationBar={true}>
-        {profileData === null ? (
-          <LoadingPage hasNavigationBar={true} />
-        ) : (
+      {profileData === null ? (
+        <LoadingPage hasNavigationBar={true} />
+      ) : (
+        <PageContainer hasNavigationBar={true}>
           <ProfileBox isMine={false} profileData={profileData} />
-        )}
-      </PageContainer>
+        </PageContainer>
+      )}
     </div>
   );
 };
