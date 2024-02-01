@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import Avatar from "./Avatar";
 import ToggleButton from "../components/ToggleButton";
 
+import { patch } from "../common/apiBase";
+import { API_ENDPOINTS } from "../common/apiEndPoints";
+
 const TextBar = ({ label, value, onSaveClick, isConstant }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [inputValue, setInputValue] = useState("");
@@ -57,19 +60,27 @@ const TextBar = ({ label, value, onSaveClick, isConstant }) => {
 const ProfileBox = ({ isMine, profileData }) => {
   const { intra_id, nickname, email, history, avatar, two_factor_auth: is2FA } = profileData;
 
+  const updateUserData = async (dataToUpdate) => {
+    try {
+      const updatedUser = await patch(API_ENDPOINTS.USER_PROFILE(intra_id));
+      console.log("updatedUser: ", updatedUser);
+    } catch (error) {
+      console.log("Error occured during update user data");
+    }
+  };
+
   const handleDeleteUser = () => {
     window.confirm("정말 탈퇴하시겠습니까?");
     // 탈퇴 요청을 백엔드 서버로 보내 반영
   };
 
   const handleNicknameSave = (newNickname) => {
-    // 수정된 닉네임을 백엔드 서버로 보내 반영
-    console.log(`New Nickname: ${newNickname}`);
+    alert("닉네임 변경");
+    updateUserData({ nickname: newNickname });
   };
 
   const handleEmailSave = (newEmail) => {
-    // 수정된 이메일을 백엔드 서버로 보내 반영
-    console.log(`New Email: ${newEmail}`);
+    updateUserData({ email: newEmail });
   };
 
   return (
@@ -99,7 +110,7 @@ const ProfileBox = ({ isMine, profileData }) => {
           <div className="profile-history d-flex flex-column justify-content-center mt-3">
             History
             <div className="history-box w-100 border bg-body-secondary mt-2 p-3" style={{ minHeight: "300px" }}>
-              <p>이 사람의 역사는...... </p>
+              <p>{nickname}님의 전적은 ... </p>
             </div>
           </div>
         </div>
