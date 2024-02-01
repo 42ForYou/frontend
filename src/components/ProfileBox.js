@@ -55,7 +55,7 @@ const TextBar = ({ label, value, onSaveClick, isConstant }) => {
 
 // todo: 대전 기록, 아바타 띄우는 방식 결정
 const ProfileBox = ({ isMine, profileData }) => {
-  const { id, nickname, email, history, avatar, is2FA } = profileData;
+  const { intra_id, nickname, email, history, avatar, two_factor_auth: is2FA } = profileData;
 
   const handleDeleteUser = () => {
     window.confirm("정말 탈퇴하시겠습니까?");
@@ -80,7 +80,7 @@ const ProfileBox = ({ isMine, profileData }) => {
             <div className="profile-info">
               {isMine ? (
                 <div className="profile-info-text">
-                  <TextBar label="ID" value={id} isConstant={true} />
+                  <TextBar label="ID" value={intra_id} isConstant={true} />
                   <TextBar label="Nickname" value={nickname} onSaveClick={handleNicknameSave} />
                   <TextBar label="Email" value={email} onSaveClick={handleEmailSave} />
                 </div>
@@ -92,7 +92,7 @@ const ProfileBox = ({ isMine, profileData }) => {
             </div>
           </div>
           <div className="col text-center">
-            <Avatar src={avatar} alt={`${id}\'s avatar`} />
+            <Avatar src={avatar} alt={`${intra_id}\'s avatar`} />
           </div>
         </div>
         <div className="row">
