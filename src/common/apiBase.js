@@ -61,7 +61,7 @@ const del = async (url) => {
 
 const patch = async (url, data) => {
   try {
-    const response = await axiosInstance.patch(url, data);
+    const response = await axiosInstance.patch(url, { data });
     return response.data;
   } catch (error) {
     console.log(error);

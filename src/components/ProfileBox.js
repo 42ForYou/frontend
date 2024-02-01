@@ -62,9 +62,8 @@ const ProfileBox = ({ isMine, profileData }) => {
 
   const updateUserData = async (dataToUpdate) => {
     try {
-      console.log("URL: ", API_ENDPOINTS.USER_PROFILE());
-      const updatedUser = await patch(API_ENDPOINTS.USER_PROFILE());
-      // console.log("updatedUser: ", updatedUser);
+      const updatedUser = await patch(API_ENDPOINTS.USER_PROFILE(intra_id), dataToUpdate);
+      console.log("updatedUser: ", updatedUser);
     } catch (error) {
       console.log("Error occured during update user data");
     }
