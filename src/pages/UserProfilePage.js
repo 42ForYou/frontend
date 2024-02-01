@@ -19,8 +19,7 @@ const UserProfilePage = () => {
       try {
         const resData = await get(API_ENDPOINTS.USER_PROFILE(userId));
         if (resData) {
-          setProfileData(resData.data);
-          console.log("프로필 데이터 세팅 완료");
+          setProfileData(resData.data.user);
         }
       } catch (error) {
         alert("유효하지 않은 유저 프로필 페이지입니다.");
