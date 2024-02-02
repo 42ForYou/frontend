@@ -3,6 +3,5 @@ export const API_ENDPOINTS = {
   OAUTH_REDIRECT: (code) => `/oauth/?code=${code}`,
   VALID: "/valid",
   USER_PROFILE: (nickname) => `/accounts/profiles/${nickname}`,
-  ROOM_LIST: (is_tournament, page, page_size) =>
-    `/game/game_rooms/?is_tournament=${is_tournament}&page=${page}&page_size=${page_size}`,
+  ROOM_LIST: (type, page, page_size) => `/game/game_rooms/?filter=${type}&page=${page}&page_size=${page_size}`,
 };
