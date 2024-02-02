@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import Avatar from "./Avatar";
-import ToggleButton from "../components/ToggleButton";
+import ToggleButton from "./ToggleButton";
+import ImageUpload from "./ImageUpload";
 
-import { patch } from "../common/apiBase";
+import { patch, patchImage } from "../common/apiBase";
 import { API_ENDPOINTS } from "../common/apiEndPoints";
 
 const TextBar = ({ label, value, onSaveClick, isConstant }) => {
@@ -104,6 +105,8 @@ const ProfileBox = ({ isMine, profileData }) => {
           </div>
           <div className="col text-center">
             <Avatar src={avatar} alt={`${intra_id}\'s avatar`} />
+            <button onClick={handleDeleteUser}>Delete</button>
+            <ImageUpload apiUrl={API_ENDPOINTS.USER_PROFILE(intra_id)} />
           </div>
         </div>
         <div className="row">
