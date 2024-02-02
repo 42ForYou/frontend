@@ -69,4 +69,14 @@ const patch = async (url, data) => {
   }
 };
 
-export { get, getWithoutCredentials, post, put, del, patch };
+const patchImage = async (url, imageData) => {
+  try {
+    const response = await axiosInstance.patch(url, imageData, { headers: { "Content-Type": "image/jpeg" } });
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+export { get, getWithoutCredentials, post, put, del, patch, patchImage };
