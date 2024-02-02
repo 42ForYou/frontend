@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { get } from "../common/apiBase";
-import PaginationButtons from "./PaginationButtons";
 
 const ListFilter = ({ filterTypes, currentFilter, onFilterClick }) => {
   // todo: currentFilter는 다른 스타일 적용
@@ -48,28 +47,74 @@ const ListItems = ({ itemsData, ItemComponent, itemsPerRow }) => {
       ))}
       {itemsData && itemsData.length === 0 && (
         <div className="row mb-3">
-          <div className="col-12 text-center">방 데이터가 없습니다. 텅~</div>
+          <div className="col-12 text-center">데이터가 없습니다. 텅~</div>
         </div>
       )}
     </div>
   );
 };
 
+const buttonStyle = {
+  fontSize: "20px",
+  backgroundColor: "#fff",
+  border: "2px solid #ccc",
+  borderRadius: "50%",
+  width: "50px",
+  height: "50px",
+  margin: "0 5px",
+  cursor: "pointer",
+};
+
 const ListPagination = ({ totalPage, currentPage, onPaginationClick }) => {
+  const [viewPrevButton, setViewPrevButton] = useState(true);
+  const [viewNextButton, setViewNextButton] = useState(true);
+
+  console.log("total", totalPage === currentPage);
+
+  const onPrevClick = () => {
+    if (currentPage > 1) {
+      onPaginationClick(currentPage - 1);
+    } else {
+      alert("이전 페이지가 존재하지 않습니다.");
+      setViewPrevButton(false);
+    }
+  };
+  const onNextClick = () => {
+    if (currentPage < totalPage) {
+      onPaginationClick(currentPage + 1);
+    } else {
+      alert("다음 페이지가 존재하지 않습니다.");
+      setViewNextButton(false);
+    }
+  };
+
+  useEffect(() => {
+    if (currentPage === 1) setViewPrevButton(false);
+    if (currentPage === totalPage) setViewNextButton(false);
+  }, [currentPage, totalPage]);
+
   return (
-    <div>
-      {currentPage} / {totalPage}
-      {
-        <PaginationButtons
-          onPrevClick={() => onPaginationClick(currentPage - 1)}
-          onNextClick={() => onPaginationClick(currentPage + 1)}
-        />
-      }
+    <div className="text-center">
+      <div className="row justify-content-center">
+        {currentPage} / {totalPage}
+      </div>
+      <div className="row justify-content-center">
+        {viewPrevButton && (
+          <button onClick={onPrevClick} style={buttonStyle}>
+            &lt;
+          </button>
+        )}
+        {viewNextButton && (
+          <button onClick={onNextClick} style={buttonStyle}>
+            &gt;
+          </button>
+        )}
+      </div>
     </div>
   );
 };
 
-const ListBox = ({ apiEndpoint, ItemComponent, filterTypes }) => {
+const ListBox = ({ apiEndpoint, ItemComponent, filterTypes, bottomLeftButton }) => {
   const [itemsData, setItemsData] = useState(null);
   const [totalPage, setTotalPage] = useState(42);
   const [currentPage, setCurrentPage] = useState(1);
@@ -105,9 +150,11 @@ const ListBox = ({ apiEndpoint, ItemComponent, filterTypes }) => {
       <div className="row">
         <ListItems itemsData={itemsData} ItemComponent={ItemComponent} itemsPerRow={itemsPerRow} />
       </div>
-      <div className="row">
-        <ListPagination totalPage={totalPage} currentPage={currentPage} onPaginationClick={handleChangePage} />
-      </div>
+      {itemsData && (
+        <div className="row d-flex flex-column justify-content-center">
+          <ListPagination totalPage={totalPage} currentPage={currentPage} onPaginationClick={handleChangePage} />
+        </div>
+      )}
     </div>
   );
 };
