@@ -85,13 +85,16 @@ const ListBox = ({ apiEndpoint, ItemComponent, filterTypes }) => {
   };
 
   useEffect(() => {
-    try {
-      const resData = get(apiEndpoint(currentFilter, currentPage, itemCountPerPage));
-      setItemsData(resData.data);
-      setTotalPage(resData.pages.total_pages);
-    } catch (error) {
-      console.log(`API 요청 ${apiEndpoint(currentFilter, currentPage, itemCountPerPage)}에 실패했습니다.`);
-    }
+    const fetchItemsData = async () => {
+      try {
+        const resData = await get(apiEndpoint(currentFilter, currentPage, itemCountPerPage));
+        setItemsData(resData.data);
+        setTotalPage(resData.pages.total_pages);
+      } catch (error) {
+        console.log(`API 요청 ${apiEndpoint(currentFilter, currentPage, itemCountPerPage)}에 실패했습니다.`);
+      }
+    };
+    fetchItemsData();
   }, [apiEndpoint, currentFilter, currentPage]);
 
   return (
