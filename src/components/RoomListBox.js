@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from "react";
 
 import RoomItem from "./RoomItem";
-import PaginationButtons from "./PaginationButtons";
-import CreateRoomModal from "./CreateRoomModal";
-
 import ListBox from "./ListBox";
 import { API_ENDPOINTS } from "../common/apiEndPoints";
 

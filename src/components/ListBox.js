@@ -69,8 +69,6 @@ const ListPagination = ({ totalPage, currentPage, onPaginationClick }) => {
   const [viewPrevButton, setViewPrevButton] = useState(true);
   const [viewNextButton, setViewNextButton] = useState(true);
 
-  console.log("total", totalPage === currentPage);
-
   const onPrevClick = () => {
     if (currentPage > 1) {
       onPaginationClick(currentPage - 1);
