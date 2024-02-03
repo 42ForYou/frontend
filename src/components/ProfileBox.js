@@ -8,6 +8,10 @@ import { API_ENDPOINTS } from "../common/apiEndPoints";
 const ProfileInfoText = ({ label, value, onChange, isEditing = false }) => {
   const [inputValue, setInputValue] = useState(value);
 
+  useEffect(() => {
+    setInputValue(value);
+  }, [isEditing]);
+
   const handleChange = (e) => {
     const newValue = e.target.value;
     setInputValue(newValue);
@@ -65,33 +69,43 @@ const ProfileBox = ({ isMine, profileData }) => {
     setEditStatus(null);
   };
 
-  const handleEndEditClick = () => {
-    const isChangeExist = !(newNickname === nickname && newEmail === newEmail);
-    const message = ["", "", ""];
+  const handleExitEditClick = () => {
+    setIsEditing(false);
+    setEditStatus(null);
+    setNewNickname(nickname);
+    setNewEmail(email);
+  };
+
+  const handleEditSubmitClick = () => {
+    const isChangeExist = !(newNickname === nickname && newEmail === email);
+    const editStatusMsg = ["", "", "", ""];
 
     const patchProfile = async () => {
       try {
         const formData = new FormData();
         const newProfile = { nickname: newNickname, email: newEmail };
-
         formData.append("data", JSON.stringify(newProfile));
         const resData = await patchForm(API_ENDPOINTS.USER_PROFILE(intra_id), formData);
-        message[PROFILE_STATUS_INDEX] = "프로필 정보가 성공적으로 업데이트 되었습니다.";
+        editStatusMsg[PROFILE_STATUS_INDEX] = "프로필 정보가 성공적으로 업데이트 되었습니다.";
+        setIsEditing(false);
+        fetchProfileData();
       } catch (error) {
         const errorCode = error.response.status;
         const errorData = error.response.data;
 
-        message[PROFILE_STATUS_INDEX] = "프로필 정보 업데이트에 실패하였습니다.";
+        editStatusMsg[PROFILE_STATUS_INDEX] = "프로필 정보 업데이트에 실패하였습니다.";
+
         // todo: HTTP 요청 에러코드 상수로 변경
         if (errorCode !== 409) return;
-        if ("nickname" in errorData) message[NICKNAME_STATUS_INDEX] = "이미 사용 중인 닉네임입니다.";
-        if ("email" in errorData) message[EMAIL_STATUS_INDEX] = "이미 사용 중인 이메일입니다.";
+        if ("nickname" in errorData) editStatusMsg[NICKNAME_STATUS_INDEX] = "이미 사용 중인 닉네임입니다.";
+        if ("email" in errorData) editStatusMsg[EMAIL_STATUS_INDEX] = "이미 사용 중인 이메일입니다.";
       }
-      setEditStatus(message);
+      setNewNickname(nickname);
+      setNewEmail(email);
+      setEditStatus(editStatusMsg);
     };
 
     if (isChangeExist) patchProfile();
-    setIsEditing(false);
   };
 
   const handleDeleteUser = () => {
@@ -135,15 +149,20 @@ const ProfileBox = ({ isMine, profileData }) => {
           </div>
           <div className="d-flex justify-content-center">
             <div className="d-flex flex-column">
-              <div className="text-center">
+              <div className="text-center mb-2">
                 {isMine && isEditing && (
-                  <button className="btn btn-primary" onClick={handleEndEditClick}>
-                    수정 끝내기
-                  </button>
+                  <>
+                    <button className="btn btn-danger me-2" onClick={handleExitEditClick}>
+                      취소
+                    </button>
+                    <button className="btn btn-primary" onClick={handleEditSubmitClick}>
+                      확인
+                    </button>
+                  </>
                 )}
                 {isMine && !isEditing && (
                   <button className="btn btn-primary" onClick={handleStartEditClick}>
-                    내 정보 수정하기
+                    정보 수정하기
                   </button>
                 )}
               </div>
