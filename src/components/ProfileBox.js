@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Avatar from "./Avatar";
 import ToggleButton from "./ToggleButton";
-import ImageUpload from "./ImageUpload";
 
-import { patch, patchImage } from "../common/apiBase";
+import { patchForm } from "../common/apiBase";
 import { API_ENDPOINTS } from "../common/apiEndPoints";
 
 const ProfileInfoText = ({ label, value, onChange, isEditing = false }) => {
@@ -33,21 +32,48 @@ const ProfileBox = ({ isMine, profileData }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [newNickname, setNewNickname] = useState(nickname);
   const [newEmail, setNewEmail] = useState(email);
-  const [editReqStat, setEditReqStat] = useState("");
+  const [editStatus, setEditStatus] = useState("");
+  const imgInputRef = useRef(null);
+
+  const handleAvatarUploadClick = () => {
+    if (imgInputRef.current) {
+      imgInputRef.current.click();
+    }
+  };
+
+  const handleAvatarChange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) {
+      alert("선택한 파일이 없습니다");
+      return;
+    }
+    const formData = new FormData();
+    formData.append("image", file);
+
+    try {
+      const resData = await Form(API_ENDPOINTS.USER_PROFILE(intra_id), formData);
+      console.log(resData);
+    } catch (error) {}
+  };
 
   const handleStartEditClick = () => {
     setIsEditing(true);
+    setEditStatus("");
   };
 
   const handleEndEditClick = () => {
     const isChangeExist = !(newNickname === nickname && newEmail === newEmail);
     const patchProfile = async () => {
       try {
+        const formData = new FormData();
         const newProfile = { nickname: newNickname, email: newEmail };
-        const resData = await patch(API_ENDPOINTS.USER_PROFILE(intra_id), newProfile);
-        console.log(resData);
+        formData.append("data", JSON.stringify(newProfile));
+        const resData = await patchForm(API_ENDPOINTS.USER_PROFILE(intra_id), formData);
+        console.log("프로필 정보 업데이트 성공");
+        setEditStatus("프로필 정보가 성공적으로 업데이트 되었습니다.");
       } catch (error) {
-        console.log("프로필 정보 업데이트 실패: ", error);
+        console.log("프로필 정보 업데이트 실패: ", JSON.stringify(error.response.data.error, null, 2));
+        setEditStatus("프로필 정보 업데이트가 실패하였습니다.");
       }
     };
     if (isChangeExist) patchProfile();
@@ -79,7 +105,6 @@ const ProfileBox = ({ isMine, profileData }) => {
                 onChange={handleAvatarChange}
               />
             )}
-            {/* <ImageUpload apiUrl={API_ENDPOINTS.USER_PROFILE(intra_id)} /> */}
           </div>
           <div className="profile-info-text d-flex justify-content-center mt-4 mb-4">
             {isMine ? (
@@ -94,19 +119,22 @@ const ProfileBox = ({ isMine, profileData }) => {
               </div>
             )}
           </div>
-          {isMine && isEditing ? (
-            <div className="d-flex justify-content-center w-24">
-              <button className="btn btn-primary" onClick={handleEndEditClick}>
-                수정 끝내기
-              </button>
+          <div className="d-flex justify-content-center">
+            <div className="d-flex flex-column">
+              <div className="text-center">
+                {isMine && isEditing ? (
+                  <button className="btn btn-primary" onClick={handleEndEditClick}>
+                    수정 끝내기
+                  </button>
+                ) : (
+                  <button className="btn btn-primary" onClick={handleStartEditClick}>
+                    내 정보 수정하기
+                  </button>
+                )}
+              </div>
+              <div>{editStatus}</div>
             </div>
-          ) : (
-            <div className="d-flex justify-content-center w-24">
-              <button className="btn btn-primary" onClick={handleStartEditClick}>
-                내 정보 수정하기
-              </button>
-            </div>
-          )}
+          </div>
         </div>
         <div className="row">
           <div className="profile-history d-flex flex-column justify-content-center mt-3">
