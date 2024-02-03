@@ -129,7 +129,7 @@ const MyProfileInfo = ({ intraId, nickname, email, avatar, fetchProfileData }) =
     const editStatusMsg = ["", "", "", ""];
 
     const isValidNewProfile = (newNickname, newEmail) => {
-      const isValidNickname = checkNicknameStr(newNickname, /^(?=.*[a-z0-9가-힣])[a-z0-9가-힣]{2,16}$/);
+      const isValidNickname = checkRegex(newNickname, /^[a-zA-Z0-9가-힣]{2,16}$/);
       const isValidEmail = checkRegex(newEmail, /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i);
 
       if (!isValidNickname)
@@ -168,7 +168,7 @@ const MyProfileInfo = ({ intraId, nickname, email, avatar, fetchProfileData }) =
   };
 
   return (
-    <div className="d-flex justify-content-center mt-4 mb-4">
+    <div className="d-flex flex-column align-items-center">
       <ProfileInfoAvatar
         src={avatar}
         nickname={nickname}
@@ -177,12 +177,12 @@ const MyProfileInfo = ({ intraId, nickname, email, avatar, fetchProfileData }) =
         setEditStatus={setEditStatus}
       />
       <div>
-        <div className="d-flex justify-content-center">
+        <div className="d-flex flex-column mt-4 mb-4">
           <ProfileInfoTextItem label="ID" value={intraId} />
           <ProfileInfoTextItem label="Nickname" value={nickname} onChange={setNewNickname} isEditing={isEditing} />
           <ProfileInfoTextItem label="Email" value={email} onChange={setNewEmail} isEditing={isEditing} />
         </div>
-        <div className="d-flex justify-content-center">
+        <div className="d-flex flex-column justify-content-center">
           <ProfileInfoEditButtons
             isEditing={isEditing}
             onEntryClick={handleEntryEditClick}
@@ -209,9 +209,9 @@ const UserProfileInfo = ({ avatar, nickname }) => {
 
 const ProfileHistory = ({ nickname }) => {
   return (
-    <div className="profile-history d-flex flex-column justify-content-center mt-3">
+    <div className="mt-3">
       History
-      <div className="history-box w-100 border bg-body-secondary mt-2 p-3" style={{ minHeight: "300px" }}>
+      <div className="border bg-body-secondary mt-2 p-3" style={{ minHeight: "300px" }}>
         <p>{nickname}님의 전적은 ... </p>
       </div>
     </div>
@@ -225,13 +225,9 @@ const ProfileSecurity = (is2FA) => {
   };
 
   return (
-    <div>
-      <div className="col">
-        <ToggleButton title="2FA" initIsToggled={is2FA} />
-      </div>
-      <div className="col d-flex justify-content-end">
-        <button onClick={handleDeleteUser}>Delete</button>
-      </div>
+    <div className="d-flex justify-content-between mt-4">
+      <ToggleButton title="2FA" initIsToggled={is2FA} />
+      <button onClick={handleDeleteUser}>Delete</button>
     </div>
   );
 };
