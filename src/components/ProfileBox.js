@@ -16,7 +16,7 @@ const ProfileInfoText = ({ label, value, onChange, isEditing = false }) => {
 
   return (
     <div className="row">
-      <div className="col-2">
+      <div className="col">
         <label>{label}: </label>
       </div>
       <div className="col">
@@ -30,25 +30,26 @@ const ProfileInfoText = ({ label, value, onChange, isEditing = false }) => {
 const ProfileBox = ({ isMine, profileData }) => {
   const { intra_id, nickname, email, history, avatar, two_factor_auth: is2FA } = profileData;
   const [isEditing, setIsEditing] = useState(false);
-  const [editingnNickname, setEditingNickname] = useState(nickname);
-  const [editingEmail, setEditingEmail] = useState(email);
-
-  const updateUserData = async (dataToUpdate) => {
-    try {
-      const updatedUser = await patch(API_ENDPOINTS.USER_PROFILE(intra_id), dataToUpdate);
-      console.log("updatedUser: ", updatedUser);
-    } catch (error) {
-      console.log("Error occured during update user data");
-    }
-  };
+  const [newNickname, setNewNickname] = useState(nickname);
+  const [newEmail, setNewEmail] = useState(email);
+  const [editReqStat, setEditReqStat] = useState("");
 
   const handleStartEditClick = () => {
     setIsEditing(true);
   };
 
   const handleEndEditClick = () => {
-    // 백엔드 서버에 제출
-    setIsEditing(false);
+    const newProfile = { nickname: newNickname, email: newEmail };
+    const patchProfile = async () => {
+      try {
+        const resData = await patch(API_ENDPOINTS.USER_PROFILE(intra_id), newProfile);
+        console.log(resData);
+        setIsEditing(false);
+      } catch (error) {
+        console.log("프로필 정보 업데이트 실패");
+      }
+    };
+    patchProfile();
   };
 
   const handleDeleteUser = () => {
@@ -64,17 +65,12 @@ const ProfileBox = ({ isMine, profileData }) => {
             <Avatar src={avatar} alt={`${intra_id}\'s avatar`} isEditable={true} />
             {/* <ImageUpload apiUrl={API_ENDPOINTS.USER_PROFILE(intra_id)} /> */}
           </div>
-          <div className="profile-info-text mt-4">
+          <div className="profile-info-text d-flex justify-content-center mt-4 mb-4">
             {isMine ? (
               <div>
                 <ProfileInfoText label="ID" value={intra_id} isConstant={true} />
-                <ProfileInfoText
-                  label="Nickname"
-                  value={nickname}
-                  onChange={setEditingNickname}
-                  isEditing={isEditing}
-                />
-                <ProfileInfoText label="Email" value={email} onChange={setEditingEmail} isEditing={isEditing} />
+                <ProfileInfoText label="Nickname" value={nickname} onChange={setNewNickname} isEditing={isEditing} />
+                <ProfileInfoText label="Email" value={email} onChange={setNewEmail} isEditing={isEditing} />
               </div>
             ) : (
               <div>
