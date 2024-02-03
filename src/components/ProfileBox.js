@@ -47,7 +47,7 @@ const TextBar = ({ label, value, onSaveClick, isConstant }) => {
       <div className="col-2">
         <label>{label}: </label>
       </div>
-      <div className="col-8">
+      <div className="col">
         {isEditing ? <input type="text" value={inputValue} onChange={handleChange} /> : <span>{inputValue}</span>}
       </div>
       <div className="col">
@@ -88,9 +88,9 @@ const ProfileBox = ({ isMine, profileData }) => {
     <div className="profile-box d-flex flex-column justify-content-between h-100">
       <div className="row">
         <div className="row">
-          <div className="profile-avatar text-center">
-            <Avatar src={avatar} alt={`${intra_id}\'s avatar`} />
-            <ImageUpload apiUrl={API_ENDPOINTS.USER_PROFILE(intra_id)} />
+          <div className="profile-avatar d-flex justify-content-center">
+            <Avatar src={avatar} alt={`${intra_id}\'s avatar`} isEditable={true} />
+            {/* <ImageUpload apiUrl={API_ENDPOINTS.USER_PROFILE(intra_id)} /> */}
           </div>
           <div className="profile-info mt-4">
             {isMine ? (
