@@ -31,17 +31,18 @@ const ProfileInfoText = ({ label, value, onChange, isEditing = false }) => {
 };
 
 // todo: MyProfileBox, UserProfileBox로 분리
-const ProfileBox = ({ isMine, profileData }) => {
+const ProfileBox = ({ isMine, profileData, fetchProfileData }) => {
   const { intra_id, nickname, email, history, avatar, two_factor_auth: is2FA } = profileData;
+  const imgInputRef = useRef(null);
   const [isEditing, setIsEditing] = useState(false);
   const [newNickname, setNewNickname] = useState(nickname);
   const [newEmail, setNewEmail] = useState(email);
-  const [editStatus, setEditStatus] = useState(null);
-  const imgInputRef = useRef(null);
 
+  const [editStatus, setEditStatus] = useState(null);
   const PROFILE_STATUS_INDEX = 0;
   const NICKNAME_STATUS_INDEX = 1;
   const EMAIL_STATUS_INDEX = 2;
+  const AVATAR_STATUS_INDEX = 3;
 
   const handleAvatarUploadClick = () => {
     if (imgInputRef.current) {
@@ -57,11 +58,15 @@ const ProfileBox = ({ isMine, profileData }) => {
     }
     const formData = new FormData();
     formData.append("image", file);
+    const editStatusMsg = ["", "", "", ""];
 
     try {
-      const resData = await Form(API_ENDPOINTS.USER_PROFILE(intra_id), formData);
-      console.log(resData);
-    } catch (error) {}
+      const resData = await patchForm(API_ENDPOINTS.USER_PROFILE(intra_id), formData);
+      editStatusMsg[AVATAR_STATUS_INDEX] = "아바타가 성공적으로 업로드 되었습니다.";
+    } catch (error) {
+      editStatusMsg[AVATAR_STATUS_INDEX] = "아바타 업로드가 실패하였습니다.";
+    }
+    setEditStatus(editStatusMsg);
   };
 
   const handleStartEditClick = () => {
