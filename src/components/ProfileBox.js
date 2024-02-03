@@ -10,8 +10,9 @@ const ProfileInfoText = ({ label, value, onChange, isEditing = false }) => {
   const [inputValue, setInputValue] = useState(value);
 
   const handleChange = (e) => {
-    onChange(inputValue);
-    setInputValue(e.target.value);
+    const newValue = e.target.value;
+    setInputValue(newValue);
+    onChange(newValue);
   };
 
   return (
@@ -39,14 +40,14 @@ const ProfileBox = ({ isMine, profileData }) => {
   };
 
   const handleEndEditClick = () => {
-    const newProfile = { nickname: newNickname, email: newEmail };
     const patchProfile = async () => {
       try {
+        const newProfile = { nickname: newNickname, email: newEmail };
         const resData = await patch(API_ENDPOINTS.USER_PROFILE(intra_id), newProfile);
         console.log(resData);
         setIsEditing(false);
       } catch (error) {
-        console.log("프로필 정보 업데이트 실패");
+        console.log("프로필 정보 업데이트 실패: ", error);
       }
     };
     patchProfile();
