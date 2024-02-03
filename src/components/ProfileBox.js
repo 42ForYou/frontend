@@ -26,14 +26,18 @@ const ProfileInfoText = ({ label, value, onChange, isEditing = false }) => {
   );
 };
 
-// todo: 대전 기록, 아바타 띄우는 방식 결정
+// todo: MyProfileBox, UserProfileBox로 분리
 const ProfileBox = ({ isMine, profileData }) => {
   const { intra_id, nickname, email, history, avatar, two_factor_auth: is2FA } = profileData;
   const [isEditing, setIsEditing] = useState(false);
   const [newNickname, setNewNickname] = useState(nickname);
   const [newEmail, setNewEmail] = useState(email);
-  const [editStatus, setEditStatus] = useState("");
+  const [editStatus, setEditStatus] = useState(null);
   const imgInputRef = useRef(null);
+
+  const PROFILE_STATUS_INDEX = 0;
+  const NICKNAME_STATUS_INDEX = 1;
+  const EMAIL_STATUS_INDEX = 2;
 
   const handleAvatarUploadClick = () => {
     if (imgInputRef.current) {
@@ -58,24 +62,34 @@ const ProfileBox = ({ isMine, profileData }) => {
 
   const handleStartEditClick = () => {
     setIsEditing(true);
-    setEditStatus("");
+    setEditStatus(null);
   };
 
   const handleEndEditClick = () => {
     const isChangeExist = !(newNickname === nickname && newEmail === newEmail);
+    const message = ["", "", ""];
+
     const patchProfile = async () => {
       try {
         const formData = new FormData();
         const newProfile = { nickname: newNickname, email: newEmail };
+
         formData.append("data", JSON.stringify(newProfile));
         const resData = await patchForm(API_ENDPOINTS.USER_PROFILE(intra_id), formData);
-        console.log("프로필 정보 업데이트 성공");
-        setEditStatus("프로필 정보가 성공적으로 업데이트 되었습니다.");
+        message[PROFILE_STATUS_INDEX] = "프로필 정보가 성공적으로 업데이트 되었습니다.";
       } catch (error) {
-        console.log("프로필 정보 업데이트 실패: ", JSON.stringify(error.response.data.error, null, 2));
-        setEditStatus("프로필 정보 업데이트가 실패하였습니다.");
+        const errorCode = error.response.status;
+        const errorData = error.response.data;
+
+        message[PROFILE_STATUS_INDEX] = "프로필 정보 업데이트에 실패하였습니다.";
+        // todo: HTTP 요청 에러코드 상수로 변경
+        if (errorCode !== 409) return;
+        if ("nickname" in errorData) message[NICKNAME_STATUS_INDEX] = "이미 사용 중인 닉네임입니다.";
+        if ("email" in errorData) message[EMAIL_STATUS_INDEX] = "이미 사용 중인 이메일입니다.";
       }
+      setEditStatus(message);
     };
+
     if (isChangeExist) patchProfile();
     setIsEditing(false);
   };
@@ -133,7 +147,9 @@ const ProfileBox = ({ isMine, profileData }) => {
                   </button>
                 )}
               </div>
-              <div>{editStatus}</div>
+              <div className="text-center">
+                {editStatus && editStatus.map((status, i) => <div key={i}>{status}</div>)}
+              </div>
             </div>
           </div>
         </div>
