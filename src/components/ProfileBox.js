@@ -88,25 +88,22 @@ const ProfileBox = ({ isMine, profileData }) => {
     <div className="profile-box d-flex flex-column justify-content-between h-100">
       <div className="row">
         <div className="row">
-          <div className="col-10">
-            <div className="profile-info">
-              {isMine ? (
-                <div className="profile-info-text">
-                  <TextBar label="ID" value={intra_id} isConstant={true} />
-                  <TextBar label="Nickname" value={nickname} onSaveClick={handleNicknameSave} />
-                  <TextBar label="Email" value={email} onSaveClick={handleEmailSave} />
-                </div>
-              ) : (
-                <div className="profile-info-text">
-                  <TextBar label="Nickname" value={nickname} isConstant={true} />
-                </div>
-              )}
-            </div>
-          </div>
-          <div className="col text-center">
+          <div className="profile-avatar text-center">
             <Avatar src={avatar} alt={`${intra_id}\'s avatar`} />
-            <button onClick={handleDeleteUser}>Delete</button>
             <ImageUpload apiUrl={API_ENDPOINTS.USER_PROFILE(intra_id)} />
+          </div>
+          <div className="profile-info mt-4">
+            {isMine ? (
+              <div className="profile-info-text">
+                <TextBar label="ID" value={intra_id} isConstant={true} />
+                <TextBar label="Nickname" value={nickname} onSaveClick={handleNicknameSave} />
+                <TextBar label="Email" value={email} onSaveClick={handleEmailSave} />
+              </div>
+            ) : (
+              <div className="profile-info-text">
+                <TextBar label="Nickname" value={nickname} isConstant={true} />
+              </div>
+            )}
           </div>
         </div>
         <div className="row">
