@@ -11,8 +11,6 @@ FROM nginx:1.25
 
 WORKDIR /var/www/html
 
-RUN mkdir -p images && mkdir -p images/avatar
-
 COPY ./nginx/nginx.conf /etc/nginx/nginx.conf
 
 RUN mkdir -p /etc/nginx/ssl
