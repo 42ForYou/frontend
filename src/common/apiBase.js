@@ -59,9 +59,9 @@ const del = async (url) => {
   }
 };
 
-const patch = async (url, data) => {
+const patchForm = async (url, formData) => {
   try {
-    const response = await axiosInstance.patch(url, { data });
+    const response = await axiosInstance.patch(url, formData);
     return response.data;
   } catch (error) {
     console.log(error);
@@ -69,14 +69,4 @@ const patch = async (url, data) => {
   }
 };
 
-const patchImage = async (url, imageData) => {
-  try {
-    const response = await axiosInstance.patch(url, imageData, { headers: { "Content-Type": "image/jpeg" } });
-    return response.data;
-  } catch (error) {
-    console.log(error);
-    throw error;
-  }
-};
-
-export { get, getWithoutCredentials, post, put, del, patch, patchImage };
+export { get, getWithoutCredentials, post, put, del, patchForm };
