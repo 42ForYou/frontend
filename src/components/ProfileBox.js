@@ -10,7 +10,7 @@ const ProfileInfoText = ({ label, value, onChange, isEditing = false }) => {
 
   useEffect(() => {
     setInputValue(value);
-  }, [isEditing]);
+  }, [value, isEditing]);
 
   const handleChange = (e) => {
     const newValue = e.target.value;
@@ -85,6 +85,7 @@ const ProfileBox = ({ isMine, profileData, fetchProfileData }) => {
     const isChangeExist = !(newNickname === nickname && newEmail === email);
     const editStatusMsg = ["", "", "", ""];
 
+    // todo: 닉네임 검증 (정규표현식 사용)
     const patchProfile = async () => {
       try {
         const formData = new FormData();
