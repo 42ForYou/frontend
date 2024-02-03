@@ -122,11 +122,12 @@ const ProfileBox = ({ isMine, profileData }) => {
           <div className="d-flex justify-content-center">
             <div className="d-flex flex-column">
               <div className="text-center">
-                {isMine && isEditing ? (
+                {isMine && isEditing && (
                   <button className="btn btn-primary" onClick={handleEndEditClick}>
                     수정 끝내기
                   </button>
-                ) : (
+                )}
+                {isMine && !isEditing && (
                   <button className="btn btn-primary" onClick={handleStartEditClick}>
                     내 정보 수정하기
                   </button>
