@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from "react";
 import ToggleButton from "./ToggleButton";
 import Avatar from "./Avatar";
 import { checkRegex } from "../common/checkRegex";
+import { patchForm } from "../common/apiBase";
+import { API_ENDPOINTS } from "../common/apiEndPoints";
 
 const STATUS = {
   PROFILE: 0,
