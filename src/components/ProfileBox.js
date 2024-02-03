@@ -85,7 +85,26 @@ const ProfileBox = ({ isMine, profileData, fetchProfileData }) => {
     const isChangeExist = !(newNickname === nickname && newEmail === email);
     const editStatusMsg = ["", "", "", ""];
 
-    // todo: 닉네임 검증 (정규표현식 사용)
+    const isValidNewProfile = (newNickname, newEmail) => {
+      const checkEmailStr = (str) => {
+        const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i;
+        return regex.test(str);
+      };
+      const checkNicknameStr = (str) => {
+        const regex = /^(?=.*[a-z0-9가-힣])[a-z0-9가-힣]{2,16}$/;
+        return regex.test(str);
+      };
+
+      const isValidEmail = checkEmailStr(newEmail);
+      const isValidNickname = checkNicknameStr(newNickname);
+
+      if (!isValidNickname)
+        editStatusMsg[NICKNAME_STATUS_INDEX] =
+          "유효하지 않은 형식의 닉네임입니다. (알파벳, 숫자, 한글을 포함하는 2~16자의 문자열)";
+      if (!isValidEmail) editStatusMsg[EMAIL_STATUS_INDEX] = "유효하지 않은 형식의 이메일입니다.";
+      return isValidNickname && isValidEmail;
+    };
+
     const patchProfile = async () => {
       try {
         const formData = new FormData();
@@ -108,10 +127,10 @@ const ProfileBox = ({ isMine, profileData, fetchProfileData }) => {
       }
       setNewNickname(nickname);
       setNewEmail(email);
-      setEditStatus(editStatusMsg);
     };
 
-    if (isChangeExist) patchProfile();
+    if (isChangeExist && isValidNewProfile(newNickname, newEmail)) patchProfile();
+    setEditStatus(editStatusMsg);
   };
 
   const handleDeleteUser = () => {
