@@ -40,17 +40,18 @@ const ProfileBox = ({ isMine, profileData }) => {
   };
 
   const handleEndEditClick = () => {
+    const isChangeExist = !(newNickname === nickname && newEmail === newEmail);
     const patchProfile = async () => {
       try {
         const newProfile = { nickname: newNickname, email: newEmail };
         const resData = await patch(API_ENDPOINTS.USER_PROFILE(intra_id), newProfile);
         console.log(resData);
-        setIsEditing(false);
       } catch (error) {
         console.log("프로필 정보 업데이트 실패: ", error);
       }
     };
-    patchProfile();
+    if (isChangeExist) patchProfile();
+    setIsEditing(false);
   };
 
   const handleDeleteUser = () => {
