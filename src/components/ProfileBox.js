@@ -1,11 +1,15 @@
 import React, { useState, useEffect, useRef } from "react";
-import Avatar from "./Avatar";
 import ToggleButton from "./ToggleButton";
+import Avatar from "./Avatar";
+import { checkRegex } from "../common/checkRegex";
 
-import { patchForm } from "../common/apiBase";
-import { API_ENDPOINTS } from "../common/apiEndPoints";
+const STATUS = {
+  PROFILE: 0,
+  NICKNAME: 1,
+  EMAIL: 2,
+};
 
-const ProfileInfoText = ({ label, value, onChange, isEditing = false }) => {
+const ProfileInfoTextItem = ({ label, value, isEditing = false, onChange }) => {
   const [inputValue, setInputValue] = useState(value);
 
   useEffect(() => {
@@ -30,19 +34,8 @@ const ProfileInfoText = ({ label, value, onChange, isEditing = false }) => {
   );
 };
 
-// todo: MyProfileBox, UserProfileBox로 분리
-const ProfileBox = ({ isMine, profileData, fetchProfileData }) => {
-  const { intra_id, nickname, email, history, avatar, two_factor_auth: is2FA } = profileData;
+const ProfileInfoAvatar = ({ src, nickname, intraId, isEditing = false, setEditStatus }) => {
   const imgInputRef = useRef(null);
-  const [isEditing, setIsEditing] = useState(false);
-  const [newNickname, setNewNickname] = useState(nickname);
-  const [newEmail, setNewEmail] = useState(email);
-
-  const [editStatus, setEditStatus] = useState(null);
-  const PROFILE_STATUS_INDEX = 0;
-  const NICKNAME_STATUS_INDEX = 1;
-  const EMAIL_STATUS_INDEX = 2;
-  const AVATAR_STATUS_INDEX = 3;
 
   const handleAvatarUploadClick = () => {
     if (imgInputRef.current) {
@@ -53,23 +46,71 @@ const ProfileBox = ({ isMine, profileData, fetchProfileData }) => {
   const handleAvatarChange = async (e) => {
     const file = e.target.files[0];
     if (!file) {
-      alert("선택한 파일이 없습니다");
+      alert("파일을 선택해주세요");
       return;
     }
     const formData = new FormData();
     formData.append("image", file);
-    const editStatusMsg = ["", "", "", ""];
 
+    const editStatusMsg = ["", "", "", ""];
     try {
-      const resData = await patchForm(API_ENDPOINTS.USER_PROFILE(intra_id), formData);
-      editStatusMsg[AVATAR_STATUS_INDEX] = "아바타가 성공적으로 업로드 되었습니다.";
+      const resData = await patchForm(API_ENDPOINTS.USER_PROFILE(intraId), formData);
+      editStatusMsg[STATUS.PROFILE] = "아바타가 성공적으로 업로드 되었습니다.";
     } catch (error) {
-      editStatusMsg[AVATAR_STATUS_INDEX] = "아바타 업로드가 실패하였습니다.";
+      editStatusMsg[STATUS.PROFILE] = "아바타 업로드가 실패하였습니다.";
     }
     setEditStatus(editStatusMsg);
   };
 
-  const handleStartEditClick = () => {
+  return (
+    <>
+      <Avatar
+        src={src}
+        alt={`${nickname}\'s avatar`}
+        isEditing={isEditing}
+        onImageUploadClick={handleAvatarUploadClick}
+      />
+      {isEditing && (
+        <input
+          type="file"
+          ref={imgInputRef}
+          style={{ display: "none" }}
+          accept="image/*"
+          onChange={handleAvatarChange}
+        />
+      )}
+    </>
+  );
+};
+
+const ProfileInfoEditButtons = ({ isEditing, onExitClick, onSubmitClick, onEntryClick }) => {
+  return (
+    <div className="text-center mb-2">
+      {isEditing ? (
+        <>
+          <button className="btn btn-danger me-2" onClick={onExitClick}>
+            취소
+          </button>
+          <button className="btn btn-primary" onClick={onSubmitClick}>
+            확인
+          </button>
+        </>
+      ) : (
+        <button className="btn btn-primary" onClick={onEntryClick}>
+          정보 수정하기
+        </button>
+      )}
+    </div>
+  );
+};
+
+const MyProfileInfo = ({ intraId, nickname, email, avatar, fetchProfileData }) => {
+  const [isEditing, setIsEditing] = useState(false);
+  const [newNickname, setNewNickname] = useState(nickname);
+  const [newEmail, setNewEmail] = useState(email);
+  const [editStatus, setEditStatus] = useState(null);
+
+  const handleEntryEditClick = () => {
     setIsEditing(true);
     setEditStatus(null);
   };
@@ -81,27 +122,18 @@ const ProfileBox = ({ isMine, profileData, fetchProfileData }) => {
     setNewEmail(email);
   };
 
-  const handleEditSubmitClick = () => {
+  const handleSubmitEditClick = () => {
     const isChangeExist = !(newNickname === nickname && newEmail === email);
     const editStatusMsg = ["", "", "", ""];
 
     const isValidNewProfile = (newNickname, newEmail) => {
-      const checkEmailStr = (str) => {
-        const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i;
-        return regex.test(str);
-      };
-      const checkNicknameStr = (str) => {
-        const regex = /^(?=.*[a-z0-9가-힣])[a-z0-9가-힣]{2,16}$/;
-        return regex.test(str);
-      };
-
-      const isValidEmail = checkEmailStr(newEmail);
-      const isValidNickname = checkNicknameStr(newNickname);
+      const isValidNickname = checkNicknameStr(newNickname, /^(?=.*[a-z0-9가-힣])[a-z0-9가-힣]{2,16}$/);
+      const isValidEmail = checkRegex(newEmail, /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i);
 
       if (!isValidNickname)
-        editStatusMsg[NICKNAME_STATUS_INDEX] =
-          "유효하지 않은 형식의 닉네임입니다. (알파벳, 숫자, 한글을 포함하는 2~16자의 문자열)";
-      if (!isValidEmail) editStatusMsg[EMAIL_STATUS_INDEX] = "유효하지 않은 형식의 이메일입니다.";
+        editStatusMsg[STATUS.NICKNAME] =
+          "유효하지 않은 형식의 닉네임입니다. (한글, 영어, 숫자로 이루어진 2~16자의 문자열이어야 함)";
+      if (!isValidEmail) editStatusMsg[STATUS.EMAIL] = "유효하지 않은 형식의 이메일입니다.";
       return isValidNickname && isValidEmail;
     };
 
@@ -110,20 +142,20 @@ const ProfileBox = ({ isMine, profileData, fetchProfileData }) => {
         const formData = new FormData();
         const newProfile = { nickname: newNickname, email: newEmail };
         formData.append("data", JSON.stringify(newProfile));
-        const resData = await patchForm(API_ENDPOINTS.USER_PROFILE(intra_id), formData);
-        editStatusMsg[PROFILE_STATUS_INDEX] = "프로필 정보가 성공적으로 업데이트 되었습니다.";
+        const resData = await patchForm(API_ENDPOINTS.USER_PROFILE(intraId), formData);
+        editStatusMsg[STATUS.AVATAR] = "프로필 정보가 성공적으로 업데이트 되었습니다.";
         setIsEditing(false);
         fetchProfileData();
       } catch (error) {
         const errorCode = error.response.status;
         const errorData = error.response.data;
 
-        editStatusMsg[PROFILE_STATUS_INDEX] = "프로필 정보 업데이트에 실패하였습니다.";
+        editStatusMsg[STATUS.PROFILE] = "프로필 정보 업데이트에 실패하였습니다.";
 
         // todo: HTTP 요청 에러코드 상수로 변경
         if (errorCode !== 409) return;
-        if ("nickname" in errorData) editStatusMsg[NICKNAME_STATUS_INDEX] = "이미 사용 중인 닉네임입니다.";
-        if ("email" in errorData) editStatusMsg[EMAIL_STATUS_INDEX] = "이미 사용 중인 이메일입니다.";
+        if ("nickname" in errorData) editStatusMsg[STATUS.NICKNAME] = "이미 사용 중인 닉네임입니다.";
+        if ("email" in errorData) editStatusMsg[STATUS.EMAIL] = "이미 사용 중인 이메일입니다.";
       }
       setNewNickname(nickname);
       setNewEmail(email);
@@ -133,102 +165,99 @@ const ProfileBox = ({ isMine, profileData, fetchProfileData }) => {
     setEditStatus(editStatusMsg);
   };
 
-  const handleDeleteUser = () => {
-    window.confirm("정말 탈퇴하시겠습니까?");
-    // 탈퇴 요청을 백엔드 서버로 보내 반영
-  };
-
   return (
-    <div className="profile-box d-flex flex-column justify-content-between h-100">
-      <div className="row">
-        <div className="row profile-info border-p3-box border-3">
-          <div className="profile-info-avatar d-flex justify-content-center">
-            <Avatar
-              src={avatar}
-              alt={`${intra_id}\'s avatar`}
-              isEditing={isEditing}
-              onImageUploadClick={handleAvatarUploadClick}
-            />
-            {isMine && (
-              <input
-                type="file"
-                ref={imgInputRef}
-                style={{ display: "none" }}
-                accept="image/*"
-                onChange={handleAvatarChange}
-              />
-            )}
-          </div>
-          <div className="profile-info-text d-flex justify-content-center mt-4 mb-4">
-            {isMine ? (
-              <div>
-                <ProfileInfoText label="ID" value={intra_id} isConstant={true} />
-                <ProfileInfoText label="Nickname" value={nickname} onChange={setNewNickname} isEditing={isEditing} />
-                <ProfileInfoText label="Email" value={email} onChange={setNewEmail} isEditing={isEditing} />
-              </div>
-            ) : (
-              <div>
-                <ProfileInfoText label="Nickname" value={nickname} isConstant={true} />
-              </div>
-            )}
-          </div>
-          <div className="d-flex justify-content-center">
-            <div className="d-flex flex-column">
-              <div className="text-center mb-2">
-                {isMine && isEditing && (
-                  <>
-                    <button className="btn btn-danger me-2" onClick={handleExitEditClick}>
-                      취소
-                    </button>
-                    <button className="btn btn-primary" onClick={handleEditSubmitClick}>
-                      확인
-                    </button>
-                  </>
-                )}
-                {isMine && !isEditing && (
-                  <button className="btn btn-primary" onClick={handleStartEditClick}>
-                    정보 수정하기
-                  </button>
-                )}
-              </div>
-              <div className="text-center">
-                {editStatus && editStatus.map((status, i) => <div key={i}>{status}</div>)}
-              </div>
-            </div>
-          </div>
+    <div className="d-flex justify-content-center mt-4 mb-4">
+      <ProfileInfoAvatar
+        src={avatar}
+        nickname={nickname}
+        intraId={intraId}
+        isEditing={isEditing}
+        setEditStatus={setEditStatus}
+      />
+      <div>
+        <div className="d-flex justify-content-center">
+          <ProfileInfoTextItem label="ID" value={intraId} />
+          <ProfileInfoTextItem label="Nickname" value={nickname} onChange={setNewNickname} isEditing={isEditing} />
+          <ProfileInfoTextItem label="Email" value={email} onChange={setNewEmail} isEditing={isEditing} />
         </div>
-        <div className="row">
-          <div className="profile-history d-flex flex-column justify-content-center mt-3">
-            History
-            <div className="history-box w-100 border bg-body-secondary mt-2 p-3" style={{ minHeight: "300px" }}>
-              <p>{nickname}님의 전적은 ... </p>
-            </div>
-          </div>
+        <div className="d-flex justify-content-center">
+          <ProfileInfoEditButtons
+            isEditing={isEditing}
+            onEntryClick={handleEntryEditClick}
+            onExitClick={handleExitEditClick}
+            onSubmitClick={handleSubmitEditClick}
+          />
+          <div className="text-center">{editStatus && editStatus.map((status, i) => <div key={i}>{status}</div>)}</div>
         </div>
       </div>
-      {isMine && (
-        <div className="row container-fluid mt-3">
-          <div className="col">
-            <ToggleButton title="2FA" initIsToggled={is2FA} />
-          </div>
-          <div className="col d-flex justify-content-end">
-            <button onClick={handleDeleteUser}>Delete</button>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
 
-ProfileBox.defaultProps = {
-  isMine: true,
-  profileData: {
-    id: "default",
-    nickname: "default",
-    email: "default@unknown.com",
-    history: "default",
-    is2FA: false,
-  },
+const UserProfileInfo = ({ avatar, nickname }) => {
+  return (
+    <div className="d-flex justify-content-center mt-4 mb-4">
+      <ProfileInfoAvatar src={avatar} nickname={nickname} />
+      <div>
+        <ProfileInfoTextItem label="Nickname" value={nickname} />
+      </div>
+    </div>
+  );
+};
+
+const ProfileHistory = ({ nickname }) => {
+  return (
+    <div className="profile-history d-flex flex-column justify-content-center mt-3">
+      History
+      <div className="history-box w-100 border bg-body-secondary mt-2 p-3" style={{ minHeight: "300px" }}>
+        <p>{nickname}님의 전적은 ... </p>
+      </div>
+    </div>
+  );
+};
+
+const ProfileSecurity = (is2FA) => {
+  const handleDeleteUser = () => {
+    if (window.confirm("정말 탈퇴하시겠습니까?")) alert("탈퇴 기능은 아직 구현되지 않음");
+    // 탈퇴 요청을 백엔드 서버로 보내 반영
+  };
+
+  return (
+    <div>
+      <div className="col">
+        <ToggleButton title="2FA" initIsToggled={is2FA} />
+      </div>
+      <div className="col d-flex justify-content-end">
+        <button onClick={handleDeleteUser}>Delete</button>
+      </div>
+    </div>
+  );
+};
+
+const ProfileBox = ({ isMine, profileData, fetchProfileData }) => {
+  const { intra_id: intraId, nickname, email, history, avatar, two_factor_auth: is2FA } = profileData;
+
+  return (
+    <div className="container-fluid">
+      <div className="row">
+        {isMine ? (
+          <MyProfileInfo
+            intraId={intraId}
+            nickname={nickname}
+            email={email}
+            avatar={avatar}
+            fetchProfileData={fetchProfileData}
+          />
+        ) : (
+          <UserProfileInfo nickname={nickname} />
+        )}
+      </div>
+      <div className="row">
+        <ProfileHistory nickname={nickname} />
+      </div>
+      <div className="row">{isMine && <ProfileSecurity is2FA={is2FA} />}</div>
+    </div>
+  );
 };
 
 export default ProfileBox;
