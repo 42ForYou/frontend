@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const Avatar = ({ src, alt, to, isEditable = false }) => {
+const Avatar = ({ src, alt, to, isEditing = false, onImageUploadClick }) => {
   const defaultImage =
     "https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg";
   const imageSrc = src || defaultImage;
@@ -15,7 +15,7 @@ const Avatar = ({ src, alt, to, isEditable = false }) => {
     <img
       src={imageSrc}
       alt={imageAlt}
-      className="rounded-circle" // 부트스트랩 클래스
+      className="rounded-circle"
       style={{ objectFit: "cover", border: "2px solid #f000f0", width: "100px" }}
       onError={handleImageLoadFailed}
     />
@@ -24,10 +24,19 @@ const Avatar = ({ src, alt, to, isEditable = false }) => {
   return (
     <div className="Avatar position-relative" style={{ width: "100px", height: "100px" }}>
       {to ? <Link to={to}>{renderImage()}</Link> : renderImage()}
-      {isEditable && (
-        <i
-          className="fas fa-edit position-absolute"
-          style={{ top: "0", right: "0", fontSize: "24px", color: "#000", cursor: "pointer" }}></i>
+      {isEditing && (
+        <button
+          onClick={onImageUploadClick}
+          style={{
+            border: "none",
+            background: "none",
+            cursor: "pointer",
+            position: "absolute",
+            top: "0",
+            right: "0",
+          }}>
+          <i className="fas fa-edit" style={{ fontSize: "24px", color: "#000" }}></i>
+        </button>
       )}
     </div>
   );

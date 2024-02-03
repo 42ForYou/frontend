@@ -63,7 +63,21 @@ const ProfileBox = ({ isMine, profileData }) => {
       <div className="row">
         <div className="row profile-info border-p3-box border-3">
           <div className="profile-info-avatar d-flex justify-content-center">
-            <Avatar src={avatar} alt={`${intra_id}\'s avatar`} isEditable={true} />
+            <Avatar
+              src={avatar}
+              alt={`${intra_id}\'s avatar`}
+              isEditing={isEditing}
+              onImageUploadClick={handleAvatarUploadClick}
+            />
+            {isMine && (
+              <input
+                type="file"
+                ref={imgInputRef}
+                style={{ display: "none" }}
+                accept="image/*"
+                onChange={handleAvatarChange}
+              />
+            )}
             {/* <ImageUpload apiUrl={API_ENDPOINTS.USER_PROFILE(intra_id)} /> */}
           </div>
           <div className="profile-info-text d-flex justify-content-center mt-4 mb-4">
