@@ -198,9 +198,9 @@ const MyProfileInfo = ({ intraId, nickname, email, avatar, fetchProfileData }) =
 
 const UserProfileInfo = ({ avatar, nickname }) => {
   return (
-    <div className="d-flex justify-content-center mt-4 mb-4">
+    <div className="d-flex flex-column align-items-center">
       <ProfileInfoAvatar src={avatar} nickname={nickname} />
-      <div>
+      <div className="d-flex flex-column mt-4 mb-4">
         <ProfileInfoTextItem label="Nickname" value={nickname} />
       </div>
     </div>
