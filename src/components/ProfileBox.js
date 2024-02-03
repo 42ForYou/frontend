@@ -6,41 +6,13 @@ import ImageUpload from "./ImageUpload";
 import { patch, patchImage } from "../common/apiBase";
 import { API_ENDPOINTS } from "../common/apiEndPoints";
 
-const TextBar = ({ label, value, onSaveClick, isConstant }) => {
-  const [isEditing, setIsEditing] = useState(false);
-  const [inputValue, setInputValue] = useState("");
-
-  useEffect(() => {
-    setInputValue(value);
-  }, [value]);
+const ProfileInfoText = ({ label, value, onChange, isEditing = false }) => {
+  const [inputValue, setInputValue] = useState(value);
 
   const handleChange = (e) => {
+    onChange(inputValue);
     setInputValue(e.target.value);
   };
-
-  const handleEditClick = () => {
-    setIsEditing(true);
-  };
-
-  const handleSaveClick = () => {
-    // todo: 새로 입력한 value의 유효성 검사
-    // 닉네임 -> 중복 검사
-    // 이메일 -> 형식 검사, 중복 검사
-    setIsEditing(false);
-    onSaveClick(inputValue);
-  };
-
-  if (isConstant)
-    return (
-      <div className="row">
-        <div className="col-2">
-          <label>{label}: </label>
-        </div>
-        <div className="col">
-          <span>{value}</span>
-        </div>
-      </div>
-    );
 
   return (
     <div className="row">
@@ -50,9 +22,6 @@ const TextBar = ({ label, value, onSaveClick, isConstant }) => {
       <div className="col">
         {isEditing ? <input type="text" value={inputValue} onChange={handleChange} /> : <span>{inputValue}</span>}
       </div>
-      <div className="col">
-        {isEditing ? <button onClick={handleSaveClick}>Save</button> : <button onClick={handleEditClick}>Edit</button>}
-      </div>
     </div>
   );
 };
@@ -60,6 +29,9 @@ const TextBar = ({ label, value, onSaveClick, isConstant }) => {
 // todo: 대전 기록, 아바타 띄우는 방식 결정
 const ProfileBox = ({ isMine, profileData }) => {
   const { intra_id, nickname, email, history, avatar, two_factor_auth: is2FA } = profileData;
+  const [isEditing, setIsEditing] = useState(false);
+  const [editingnNickname, setEditingNickname] = useState(nickname);
+  const [editingEmail, setEditingEmail] = useState(email);
 
   const updateUserData = async (dataToUpdate) => {
     try {
@@ -70,41 +42,59 @@ const ProfileBox = ({ isMine, profileData }) => {
     }
   };
 
+  const handleStartEditClick = () => {
+    setIsEditing(true);
+  };
+
+  const handleEndEditClick = () => {
+    // 백엔드 서버에 제출
+    setIsEditing(false);
+  };
+
   const handleDeleteUser = () => {
     window.confirm("정말 탈퇴하시겠습니까?");
     // 탈퇴 요청을 백엔드 서버로 보내 반영
   };
 
-  const handleNicknameSave = (newNickname) => {
-    alert("닉네임 변경");
-    updateUserData({ nickname: newNickname });
-  };
-
-  const handleEmailSave = (newEmail) => {
-    updateUserData({ email: newEmail });
-  };
-
   return (
     <div className="profile-box d-flex flex-column justify-content-between h-100">
       <div className="row">
-        <div className="row">
-          <div className="profile-avatar d-flex justify-content-center">
+        <div className="row profile-info border-p3-box border-3">
+          <div className="profile-info-avatar d-flex justify-content-center">
             <Avatar src={avatar} alt={`${intra_id}\'s avatar`} isEditable={true} />
             {/* <ImageUpload apiUrl={API_ENDPOINTS.USER_PROFILE(intra_id)} /> */}
           </div>
-          <div className="profile-info mt-4">
+          <div className="profile-info-text mt-4">
             {isMine ? (
-              <div className="profile-info-text">
-                <TextBar label="ID" value={intra_id} isConstant={true} />
-                <TextBar label="Nickname" value={nickname} onSaveClick={handleNicknameSave} />
-                <TextBar label="Email" value={email} onSaveClick={handleEmailSave} />
+              <div>
+                <ProfileInfoText label="ID" value={intra_id} isConstant={true} />
+                <ProfileInfoText
+                  label="Nickname"
+                  value={nickname}
+                  onChange={setEditingNickname}
+                  isEditing={isEditing}
+                />
+                <ProfileInfoText label="Email" value={email} onChange={setEditingEmail} isEditing={isEditing} />
               </div>
             ) : (
-              <div className="profile-info-text">
-                <TextBar label="Nickname" value={nickname} isConstant={true} />
+              <div>
+                <ProfileInfoText label="Nickname" value={nickname} isConstant={true} />
               </div>
             )}
           </div>
+          {isMine && isEditing ? (
+            <div className="d-flex justify-content-center w-24">
+              <button className="btn btn-primary" onClick={handleEndEditClick}>
+                수정 끝내기
+              </button>
+            </div>
+          ) : (
+            <div className="d-flex justify-content-center w-24">
+              <button className="btn btn-primary" onClick={handleStartEditClick}>
+                내 정보 수정하기
+              </button>
+            </div>
+          )}
         </div>
         <div className="row">
           <div className="profile-history d-flex flex-column justify-content-center mt-3">
