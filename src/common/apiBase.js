@@ -50,7 +50,7 @@ const put = async (url, data) => {
 
 const del = async (url) => {
   try {
-    const response = await axiosInstance.delete(url);
+    const response = await axiosInstance.del(url);
     return response.data;
   } catch (error) {
     console.log(error);
@@ -58,4 +58,14 @@ const del = async (url) => {
   }
 };
 
-export { get, getWithoutCredentials, post, put, del };
+const patchForm = async (url, formData) => {
+  try {
+    const response = await axiosInstance.patch(url, formData);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+export { get, getWithoutCredentials, post, put, del, patchForm };
