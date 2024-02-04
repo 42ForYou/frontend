@@ -33,7 +33,7 @@ const getWithoutCredentials = async (url) => {
 
 const post = async (url, data) => {
   try {
-    const response = await axiosInstance.post(url, data);
+    const response = await axiosInstance.post(url, { data });
     return response.data;
   } catch (error) {
     console.log(error);
