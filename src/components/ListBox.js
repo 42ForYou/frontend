@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { get } from "../common/apiBase";
 
-const ListFilter = ({ filterTypes, currentFilter, onFilterClick }) => {
+const ListFilter = ({ filterTypes, currentFilter, onFilterClick, rightButton }) => {
   // todo: currentFilter는 다른 스타일 적용
   return (
     <header className="row mt-1 mb-1">
@@ -15,7 +15,7 @@ const ListFilter = ({ filterTypes, currentFilter, onFilterClick }) => {
           </React.Fragment>
         ))}
       </div>
-      <div className="col d-flex justify-content-end"></div>
+      <div className="col d-flex justify-content-end">{rightButton}</div>
     </header>
   );
 };
@@ -112,7 +112,7 @@ const ListPagination = ({ totalPage, currentPage, onPaginationClick }) => {
   );
 };
 
-const ListBox = ({ apiEndpoint, ItemComponent, filterTypes, bottomLeftButton }) => {
+const ListBox = ({ apiEndpoint, ItemComponent, filterTypes, additionalButton }) => {
   const [itemsData, setItemsData] = useState(null);
   const [totalPage, setTotalPage] = useState(42);
   const [currentPage, setCurrentPage] = useState(1);
@@ -133,9 +133,7 @@ const ListBox = ({ apiEndpoint, ItemComponent, filterTypes, bottomLeftButton }) 
         const resData = await get(apiEndpoint(currentFilter, currentPage, itemCountPerPage));
         setItemsData(resData.data);
         setTotalPage(resData.pages.total_pages);
-      } catch (error) {
-        console.log(`API 요청 ${apiEndpoint(currentFilter, currentPage, itemCountPerPage)}에 실패했습니다.`);
-      }
+      } catch (error) {}
     };
     fetchItemsData();
   }, [apiEndpoint, currentFilter, currentPage]);
@@ -143,7 +141,7 @@ const ListBox = ({ apiEndpoint, ItemComponent, filterTypes, bottomLeftButton }) 
   return (
     <div>
       <div className="row">
-        <ListFilter filterTypes={filterTypes} onFilterClick={handleChangeFilter} />
+        <ListFilter filterTypes={filterTypes} onFilterClick={handleChangeFilter} rightButton={additionalButton} />
       </div>
       <div className="row">
         <ListItems itemsData={itemsData} ItemComponent={ItemComponent} itemsPerRow={itemsPerRow} />
