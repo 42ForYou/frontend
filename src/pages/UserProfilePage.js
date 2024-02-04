@@ -19,8 +19,7 @@ const UserProfilePage = () => {
       try {
         const resData = await get(API_ENDPOINTS.USER_PROFILE(userId));
         if (resData) {
-          setProfileData(resData.data);
-          console.log("프로필 데이터 세팅 완료");
+          setProfileData(resData.data.user);
         }
       } catch (error) {
         alert("유효하지 않은 유저 프로필 페이지입니다.");
@@ -32,13 +31,13 @@ const UserProfilePage = () => {
 
   return (
     <div className="UserProfilePage">
-      <PageContainer hasNavigationBar={true}>
-        {profileData === null ? (
-          <LoadingPage hasNavigationBar={true} />
-        ) : (
+      {profileData === null ? (
+        <LoadingPage hasNavigationBar={true} />
+      ) : (
+        <PageContainer hasNavigationBar={true}>
           <ProfileBox isMine={false} profileData={profileData} />
-        )}
-      </PageContainer>
+        </PageContainer>
+      )}
     </div>
   );
 };
