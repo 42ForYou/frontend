@@ -15,6 +15,7 @@ const get = async (url) => {
     return response.data;
   } catch (error) {
     console.log(error);
+    console.log(`GET 요청 ${url} 실패`);
     throw error;
   }
 };
@@ -25,6 +26,7 @@ const getWithoutCredentials = async (url) => {
     return response.data;
   } catch (error) {
     console.log(error);
+    console.log(`GET 요청 ${url} 실패`);
     throw error;
   }
 };
@@ -35,6 +37,7 @@ const post = async (url, data) => {
     return response.data;
   } catch (error) {
     console.log(error);
+    console.log(`POST 요청 ${url} 실패`);
     throw error;
   }
 };
@@ -45,6 +48,7 @@ const put = async (url, data) => {
     return response.data;
   } catch (error) {
     console.log(error);
+    console.log(`PUT 요청 ${url} 실패`);
     throw error;
   }
 };
@@ -55,6 +59,7 @@ const del = async (url) => {
     return response.data;
   } catch (error) {
     console.log(error);
+    console.log(`DELETE 요청 ${url} 실패`);
     throw error;
   }
 };
