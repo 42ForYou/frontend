@@ -1,34 +1,49 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import CustomModal from "./CustomModal";
+import AuthContext from "../context/AuthContext";
+import { post } from "../common/apiBase";
+import { API_ENDPOINTS } from "../common/apiEndpoints";
 
 const CreateRoomModal = ({ handleClose }) => {
-  const [roomName, setRoomName] = useState(""); // 추후 호스트 닉네임으로 기본값 설정 예정
+  const { loggedInUser } = useContext(AuthContext);
+  const initialRoomTitle = loggedInUser ? `${loggedInUser.nickname}의 게임 방` : "";
+  const [roomTitle, setRoomTitle] = useState(initialRoomTitle);
   const [selectedMode, setSelectedMode] = useState("1vs1");
   const [timeOption, setTimeOption] = useState("시간 옵션1");
   const [scoreOption, setScoreOption] = useState("스코어 옵션1");
-  const [selectedRound, setSelectedRound] = useState("2");
 
-  // todo: 백엔드 서버로 방 생성 요청 보내는 함수 구현
-  const sendCreateRoomRequest = () => {};
+  const postRoomData = async () => {
+    const roomData = {
+      game: {
+        is_tournament: selectedMode === "tournament",
+        time_limit: timeOption,
+        game_point: scoreOption,
+        n_players: selectedMode === "tournament" ? 4 : 2,
+      },
+      room: {
+        title: roomTitle,
+      },
+    };
+
+    try {
+      const resData = await post(API_ENDPOINTS.ROOM_LIST(), roomData);
+      console.log(resData);
+      alert("방이 성공적으로 생성되었습니다.");
+    } catch (error) {
+      alert("방 생성에 실패하였습니다.");
+    }
+  };
 
   const handleModeChange = (e) => {
     setSelectedMode(e.target.value);
-    console.log({ roomName, selectedMode, timeOption, scoreOption, selectedRound });
-  };
-
-  const handleRoundChange = (e) => {
-    setSelectedRound(e.target.value);
   };
 
   const handleSubmit = () => {
-    if (!roomName || !timeOption || !scoreOption || (selectedMode === "tournament" && !selectedRound)) {
+    if (!roomTitle || !timeOption || !scoreOption) {
       alert("모든 필드를 입력해주세요.");
       return;
     }
-
-    // 백엔드 서버로 방 생성 요청 보내기
-    console.log("방 생성 요청: ", { roomName, selectedMode, timeOption, scoreOption, selectedRound });
-    // sendCreateRoomRequest({ roomName, selectedMode, timeOption, scoreOption, selectedRound });
+    postRoomData();
   };
 
   return (
@@ -49,16 +64,16 @@ const CreateRoomModal = ({ handleClose }) => {
       <form>
         {/* 방 이름 입력 */}
         <div className="form-group row mb-3">
-          <label htmlFor="roomName">
+          <label htmlFor="roomTitle">
             <b>방 이름</b>
           </label>
           <input
             type="text"
             className="form-control"
-            id="roomName"
+            id="roomTitle"
             placeholder="방 이름 입력"
-            value={roomName}
-            onChange={(e) => setRoomName(e.target.value)}
+            value={roomTitle}
+            onChange={(e) => setRoomTitle(e.target.value)}
           />
         </div>
 
