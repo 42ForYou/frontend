@@ -20,7 +20,7 @@ const ListFilter = ({ filterTypes, currentFilter, onFilterClick, rightButton }) 
   );
 };
 
-const ListItems = ({ itemsData, ItemComponent, itemsPerRow }) => {
+const ListItems = ({ itemsData, ItemComponent, itemsPerRow, emptyMsg }) => {
   // 1차 배열을 행 단위로 나눠 2차 배열로 반환
   const divideArrayInto2DRows = (data, itemsPerRow) => {
     const rows = [];
@@ -48,7 +48,7 @@ const ListItems = ({ itemsData, ItemComponent, itemsPerRow }) => {
       <div className="row mb-3">
         <div className="d-flex justify-content-center align-items-center text-center">
           {!itemsData && "데이터 로드에 실패했습니다."}
-          {itemsData && itemsData.length === 0 && "데이터가 없습니다. 텅~"}
+          {itemsData && itemsData.length === 0 && emptyMsg}
         </div>
       </div>
     </div>
@@ -113,7 +113,7 @@ const ListPagination = ({ totalPage, currentPage, onPaginationClick }) => {
   );
 };
 
-const ListBox = ({ apiEndpoint, ItemComponent, filterTypes, additionalButton }) => {
+const ListBox = ({ apiEndpoint, ItemComponent, filterTypes, additionalButton, emptyMsg }) => {
   const [itemsData, setItemsData] = useState(null);
   const [totalPage, setTotalPage] = useState(42);
   const [currentPage, setCurrentPage] = useState(1);
@@ -147,7 +147,7 @@ const ListBox = ({ apiEndpoint, ItemComponent, filterTypes, additionalButton }) 
         <ListFilter filterTypes={filterTypes} onFilterClick={handleChangeFilter} rightButton={additionalButton} />
       </div>
       <div className="row">
-        <ListItems itemsData={itemsData} ItemComponent={ItemComponent} itemsPerRow={itemsPerRow} />
+        <ListItems itemsData={itemsData} ItemComponent={ItemComponent} itemsPerRow={itemsPerRow} emptyMsg={emptyMsg} />
       </div>
       {itemsData && (
         <div className="row d-flex flex-column justify-content-center">

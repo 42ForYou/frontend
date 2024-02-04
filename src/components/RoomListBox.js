@@ -26,6 +26,7 @@ const RoomListBox = () => {
             방 생성
           </button>
         }
+        emptyMsg={"일치하는 게임 방이 없습니다."}
       />
       {showModal && <CreateRoomModal handleClose={handleCloseModal} />}
     </>
