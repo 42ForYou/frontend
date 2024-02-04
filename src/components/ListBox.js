@@ -7,9 +7,9 @@ const ListFilter = ({ filterTypes, currentFilter, onFilterClick, rightButton }) 
     <header className="row mt-1 mb-1">
       <div className="col">
         {filterTypes.map((type, index) => (
-          <React.Fragment key={type}>
+          <React.Fragment key={type.value}>
             <button className="btn btn-link" onClick={() => onFilterClick(type)}>
-              {type}
+              {type.label}
             </button>
             {index < filterTypes.length - 1 && " | "}
           </React.Fragment>
@@ -131,7 +131,7 @@ const ListBox = ({ apiEndpoint, ItemComponent, filterTypes, additionalButton }) 
   useEffect(() => {
     const fetchItemsData = async () => {
       try {
-        const resData = await get(apiEndpoint(currentFilter, currentPage, itemCountPerPage));
+        const resData = await get(apiEndpoint(currentFilter.value, currentPage, itemCountPerPage));
         setItemsData(resData.data);
         setTotalPage(resData.pages.total_pages);
       } catch (error) {

@@ -9,13 +9,18 @@ const RoomListBox = () => {
   const [showModal, setShowModal] = useState(false);
   const handleCreateRoomClick = () => setShowModal(true);
   const handleCloseModal = () => setShowModal(false);
+  const filterTypes = [
+    { value: "all", label: "All" },
+    { value: "dual", label: "1vs1" },
+    { value: "tournament", label: "토너먼트" },
+  ];
 
   return (
     <>
       <ListBox
         apiEndpoint={API_ENDPOINTS.ROOM_LIST}
         ItemComponent={RoomItem}
-        filterTypes={["All", "1vs1", "Tournament"]}
+        filterTypes={filterTypes}
         additionalButton={
           <button className="btn btn-primary" onClick={handleCreateRoomClick}>
             방 생성
