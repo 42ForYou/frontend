@@ -127,55 +127,6 @@ const CreateRoomModal = ({ handleClose }) => {
             </div>
           </div>
         </div>
-
-        {/* 라운드 수 선택 (토너먼트 모드 선택시에만 표시) */}
-        {selectedMode === "tournament" && (
-          <div className="form-group">
-            <label>라운드 수</label>
-            <div className="form-check">
-              <input
-                className="form-check-input"
-                type="radio"
-                name="roundOptions"
-                id="rounds2"
-                value="2"
-                checked={selectedRound === "2"}
-                onChange={handleRoundChange}
-              />
-              <label className="form-check-label" htmlFor="rounds2">
-                2 Round
-              </label>
-            </div>
-            <div className="form-check">
-              <input
-                className="form-check-input"
-                type="radio"
-                name="roundOptions"
-                id="rounds3"
-                value="3"
-                checked={selectedRound === "3"}
-                onChange={handleRoundChange}
-              />
-              <label className="form-check-label" htmlFor="rounds3">
-                3 Round
-              </label>
-            </div>
-            <div className="form-check">
-              <input
-                className="form-check-input"
-                type="radio"
-                name="roundOptions"
-                id="rounds4"
-                value="4"
-                checked={selectedRound === "4"}
-                onChange={handleRoundChange}
-              />
-              <label className="form-check-label" htmlFor="rounds4">
-                4 Round
-              </label>
-            </div>
-          </div>
-        )}
       </form>
     </CustomModal>
   );
