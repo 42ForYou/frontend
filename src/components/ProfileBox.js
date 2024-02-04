@@ -90,11 +90,11 @@ const ProfileInfoEditButtons = ({ isEditing, onExitClick, onSubmitClick, onEntry
     <div className="text-center mb-2">
       {isEditing ? (
         <>
-          <button className="btn btn-danger me-2" onClick={onExitClick}>
-            취소
-          </button>
           <button className="btn btn-primary" onClick={onSubmitClick}>
             확인
+          </button>
+          <button className="btn btn-danger me-2" onClick={onExitClick}>
+            취소
           </button>
         </>
       ) : (

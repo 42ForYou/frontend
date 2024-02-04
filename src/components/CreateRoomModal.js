@@ -38,11 +38,11 @@ const CreateRoomModal = ({ handleClose }) => {
       title={"방 생성 모달"}
       footerButtons={
         <div>
-          <button className="btn btn-secondary" onClick={handleClose}>
-            취소
-          </button>
           <button className="btn btn-primary" onClick={handleSubmit}>
             확인
+          </button>
+          <button className="btn btn-secondary" onClick={handleClose}>
+            취소
           </button>
         </div>
       }>
