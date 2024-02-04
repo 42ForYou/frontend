@@ -1,6 +1,6 @@
 import React, { createContext, useState, useContext } from "react";
 import { get } from "../common/apiBase";
-import { API_ENDPOINTS } from "../common/apiEndPoints";
+import { API_ENDPOINTS } from "../common/apiEndpoints";
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
