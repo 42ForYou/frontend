@@ -45,11 +45,12 @@ const ListItems = ({ itemsData, ItemComponent, itemsPerRow }) => {
           ))}
         </div>
       ))}
-      {itemsData && itemsData.length === 0 && (
-        <div className="row mb-3">
-          <div className="col-12 text-center">데이터가 없습니다. 텅~</div>
+      <div className="row mb-3">
+        <div className="d-flex justify-content-center align-items-center text-center">
+          {!itemsData && "데이터 로드에 실패했습니다."}
+          {itemsData && itemsData.length === 0 && "데이터가 없습니다. 텅~"}
         </div>
-      )}
+      </div>
     </div>
   );
 };
@@ -133,7 +134,9 @@ const ListBox = ({ apiEndpoint, ItemComponent, filterTypes, additionalButton }) 
         const resData = await get(apiEndpoint(currentFilter, currentPage, itemCountPerPage));
         setItemsData(resData.data);
         setTotalPage(resData.pages.total_pages);
-      } catch (error) {}
+      } catch (error) {
+        setItemsData(null);
+      }
     };
     fetchItemsData();
   }, [apiEndpoint, currentFilter, currentPage]);
