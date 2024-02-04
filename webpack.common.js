@@ -1,13 +1,18 @@
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const path = require("path");
+const DotenvWebpackPlugin = require("dotenv-webpack");
 
 module.exports = {
-  mode: "development",
-  entry: "./src/index.js",
-  output: {
-    filename: "bundle.js",
-    publicPath: "/",
+  entry: {
+    app: "./src/index.js",
   },
+  plugins: [
+    new HtmlWebpackPlugin({
+      title: "Production",
+      template: "./public/index.html",
+    }),
+    new DotenvWebpackPlugin(),
+  ],
   module: {
     rules: [
       {
@@ -34,18 +39,10 @@ module.exports = {
   resolve: {
     extensions: [".js", ".jsx"],
   },
-  plugins: [
-    new HtmlWebpackPlugin({
-      template: "./public/index.html",
-    }),
-  ],
-  devServer: {
-    port: 4242,
-    static: {
-      directory: path.join(__dirname, "dist"),
-    },
-    hot: true,
-    open: true,
+  output: {
+    filename: "[name].bundle.js",
+    publicPath: "/",
+    path: path.resolve(__dirname, "dist"),
+    clean: true,
   },
-  stats: "minimal", // 출력되는 로그 메세지는 최소한으로 (차후 'none'으로 변경 고려)
 };
