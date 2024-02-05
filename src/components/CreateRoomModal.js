@@ -6,6 +6,7 @@ import { API_ENDPOINTS } from "../common/apiEndpoints";
 import RadioSelector from "./RadioSelector";
 import DropdownSelector from "./DropdownSelector";
 import { hasKeys, updateProperty } from "../common/objectUtils";
+import StyledButton from "./styledButton";
 
 const RoomTitleForm = ({ updateRoomData }) => {
   const { loggedInUser } = useContext(AuthContext);
@@ -132,12 +133,8 @@ const CreateRoomModal = ({ handleClose }) => {
       title={"게임 방 생성하기"}
       footerButtons={
         <>
-          <button className="btn btn-secondary" onClick={handleClose}>
-            취소
-          </button>
-          <button className="btn btn-primary" onClick={handleSubmit}>
-            확인
-          </button>
+          <StyledButton name={"취소"} styleType={"secondary"} onClick={handleClose} />
+          <StyledButton name={"확인"} styleType={"primary"} onClick={handleSubmit} />
         </>
       }>
       <form>

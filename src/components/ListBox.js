@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { get } from "../common/apiBase";
+import StyledButton from "./styledButton";
 
 const ListFilter = ({ filterTypes, currentFilter, onFilterClick, rightButton }) => {
   // todo: currentFilter는 다른 스타일 적용
@@ -8,9 +9,7 @@ const ListFilter = ({ filterTypes, currentFilter, onFilterClick, rightButton }) 
       <div className="col">
         {filterTypes.map((type, index) => (
           <React.Fragment key={type.value}>
-            <button className="btn btn-link" onClick={() => onFilterClick(type)}>
-              {type.label}
-            </button>
+            <StyledButton name={type.label} styleType={"link"} onClick={() => onFilterClick(type)} />
             {index < filterTypes.length - 1 && " | "}
           </React.Fragment>
         ))}

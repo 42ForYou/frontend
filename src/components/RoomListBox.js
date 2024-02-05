@@ -4,6 +4,7 @@ import RoomItem from "./RoomItem";
 import ListBox from "./ListBox";
 import { API_ENDPOINTS } from "../common/apiEndpoints";
 import CreateRoomModal from "./CreateRoomModal";
+import StyledButton from "./styledButton";
 
 const RoomListBox = () => {
   const [showModal, setShowModal] = useState(false);
@@ -21,11 +22,7 @@ const RoomListBox = () => {
         apiEndpoint={API_ENDPOINTS.ROOM_LIST}
         ItemComponent={RoomItem}
         filterTypes={filterTypes}
-        additionalButton={
-          <button className="btn btn-primary" onClick={handleCreateRoomClick}>
-            방 생성
-          </button>
-        }
+        additionalButton={<StyledButton name={"방 생성"} styleType={"primary"} onClick={handleCreateRoomClick} />}
         emptyMsg={"일치하는 게임 방이 없습니다."}
       />
       {showModal && <CreateRoomModal handleClose={handleCloseModal} />}

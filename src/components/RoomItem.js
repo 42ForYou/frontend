@@ -1,4 +1,5 @@
 import React from "react";
+import StyledButton from "./styledButton";
 
 // 스타일을 가지는 박스
 // 일단은 1대1도 토너먼트 스타일과 통일
@@ -16,7 +17,7 @@ const RoomItem = ({ game, room }) => {
       <div className="row ps-3 pe-3">
         <div className="col-8">
           <div className="row">
-            <h5>{title}</h5>
+            <h5 className="fst-italic">{title}</h5>
           </div>
           <div className="row">
             방장: {host}
@@ -31,9 +32,7 @@ const RoomItem = ({ game, room }) => {
         <div className="col d-flex flex-column justify-content-between align-items-end">
           <div className="row">{is_tournament === 2 ? "[1vs1]" : "[토너먼트]"}</div>
           <div className="row">
-            <button className="btn btn-primary" onClick={() => handleJoinClick(game_id)}>
-              JOIN
-            </button>
+            <StyledButton styleType={"primary"} name={"JOIN"} onClick={() => handleJoinClick(game_id)} />
           </div>
         </div>
       </div>
