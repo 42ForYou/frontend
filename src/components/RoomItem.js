@@ -13,22 +13,28 @@ const RoomItem = ({ game, room }) => {
 
   return (
     <div className="RoomItem border border-primary w-100 p-3">
-      <div className="row justify-space-between">
-        <div className="col">
-          <h5>{title}</h5>
+      <div className="row ps-3 pe-3">
+        <div className="col-8">
+          <div className="row">
+            <h5>{title}</h5>
+          </div>
+          <div className="row">
+            방장: {host}
+            <br />
+            인원 수: {join_players} / {n_players}
+            <br />
+            목표 득점: {game_point}점
+            <br />
+            제한 시간: {time_limit}초
+          </div>
         </div>
-        <div className="col text-end">{is_tournament === 2 ? "[1vs1]" : "[토너먼트]"}</div>
-      </div>
-      <div className="row">
-        <div className="col-9">
-          방장: {host}
-          <br />
-          인원 수: {join_players} / {n_players}
-          <br />
-          승리 요건: 제한시간 {time_limit}초, 득점 {game_point}점
-        </div>
-        <div className="col container-fluid d-flex flex-column align-items-end">
-          <button onClick={() => handleJoinClick(game_id)}>JOIN</button>
+        <div className="col d-flex flex-column justify-content-between align-items-end">
+          <div className="row">{is_tournament === 2 ? "[1vs1]" : "[토너먼트]"}</div>
+          <div className="row">
+            <button className="btn btn-primary" onClick={() => handleJoinClick(game_id)}>
+              JOIN
+            </button>
+          </div>
         </div>
       </div>
     </div>
