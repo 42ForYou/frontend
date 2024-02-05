@@ -22,6 +22,6 @@ RUN openssl req -x509 -nodes -days 365 \
     -keyout /etc/nginx/ssl/42foryou.key \
     -out /etc/nginx/ssl/42foryou.crt;
 
-COPY --from=build /app/dist .
+COPY --from=build /app/dist ./dist
 
 EXPOSE 443 80
