@@ -3,7 +3,6 @@ import { get } from "../common/apiBase";
 import StyledButton from "./styledButton";
 
 const ListFilter = ({ filterTypes, currentFilter, onFilterClick, rightButton }) => {
-  // todo: currentFilter는 다른 스타일 적용
   return (
     <header className="row mt-1 mb-1">
       <div className="col">
