@@ -1,4 +1,4 @@
-@import 'bootstrap/scss/bootstrap';
+@import "bootstrap/scss/bootstrap";
 
 .border-p3-box {
   @extend .border;
@@ -20,13 +20,13 @@
 }
 
 .navbar-nav {
-	flex-direction: column;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 }
 
 .align-vertical {
-	display: flex;
+  display: flex;
   flex-direction: column;
   align-items: center;
 }
@@ -42,6 +42,6 @@ li {
 }
 
 .icon {
-	width: 24px;
-	height: 24px;
+  width: 24px;
+  height: 24px;
 }

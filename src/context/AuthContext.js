@@ -35,7 +35,7 @@ export const AuthProvider = ({ children }) => {
       if (resData) {
         const { user } = resData.data;
         setLoggedInUser(user);
-        console.log(`토큰 유효성 검사: ${user.intra_id}의 유효한 토큰`);
+        // console.log(`토큰 유효성 검사: ${user.intra_id}의 유효한 토큰`);
         return true;
       }
     } catch (error) {
