@@ -80,11 +80,11 @@ const GameWaitingPage = () => {
   return (
     <div className="UserProfilePage">
       {gameData && roomData && playersData ? (
-        <PageContainer hasNavigationBar={true}>
+        <PageContainer hasNavigationBar={false}>
           <WaitingRoomBox gameData={gameData} roomData={roomData} playersData={playersData} />
         </PageContainer>
       ) : (
-        <LoadingPage hasNavigationBar={true} />
+        <LoadingPage hasNavigationBar={false} />
       )}
     </div>
   );
