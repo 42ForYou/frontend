@@ -6,7 +6,7 @@ import LoadingPage from "./LoadingPage";
 import AuthContext from "../context/AuthContext";
 
 import { get } from "../common/apiBase";
-import { API_ENDPOINTS } from "../common/apiEndPoints";
+import { API_ENDPOINTS } from "../common/apiEndpoints";
 
 // 마이프로필 URL: /profile
 const MyProfilePage = () => {
