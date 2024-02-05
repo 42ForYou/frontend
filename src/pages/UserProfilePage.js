@@ -5,7 +5,7 @@ import ProfileBox from "../components/ProfileBox";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import LoadingPage from "./LoadingPage";
 import { get } from "../common/apiBase";
-import { API_ENDPOINTS } from "../common/apiEndPoints";
+import { API_ENDPOINTS } from "../common/apiEndpoints";
 
 // 유저프로필 URL: /profile/users/:user_id
 const UserProfilePage = () => {

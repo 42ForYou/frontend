@@ -3,7 +3,7 @@ import ToggleButton from "./ToggleButton";
 import Avatar from "./Avatar";
 import { checkRegex } from "../common/checkRegex";
 import { patchForm } from "../common/apiBase";
-import { API_ENDPOINTS } from "../common/apiEndPoints";
+import { API_ENDPOINTS } from "../common/apiEndpoints";
 
 const STATUS = {
   PROFILE: 0,

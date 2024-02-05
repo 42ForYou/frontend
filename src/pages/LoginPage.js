@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
 import PageContainer from "../components/PageContainer";
-import { API_ENDPOINTS } from "../common/apiEndPoints";
+import { API_ENDPOINTS } from "../common/apiEndpoints";
 import { getWithoutCredentials } from "../common/apiBase";
 
 const LoginPage = () => {

@@ -9,7 +9,7 @@ const RoomListPage = () => {
     <div className="RoomListPage">
       <PageContainer hasNavigationBar={true}>
         <SearchBar />
-        <RoomListBox totalPages={42} />
+        <RoomListBox />
       </PageContainer>
     </div>
   );

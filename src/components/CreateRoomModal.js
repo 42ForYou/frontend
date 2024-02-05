@@ -1,184 +1,156 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import CustomModal from "./CustomModal";
+import AuthContext from "../context/AuthContext";
+import { post } from "../common/apiBase";
+import { API_ENDPOINTS } from "../common/apiEndpoints";
+import RadioSelector from "./RadioSelector";
+import DropdownSelector from "./DropdownSelector";
+import { hasKeys, updateProperty } from "../common/objectUtils";
+import StyledButton from "./styledButton";
 
-const CreateRoomModal = ({ handleClose }) => {
-  const [roomName, setRoomName] = useState(""); // 추후 호스트 닉네임으로 기본값 설정 예정
-  const [selectedMode, setSelectedMode] = useState("1vs1");
-  const [timeOption, setTimeOption] = useState("시간 옵션1");
-  const [scoreOption, setScoreOption] = useState("스코어 옵션1");
-  const [selectedRound, setSelectedRound] = useState("2");
+const RoomTitleForm = ({ updateRoomData }) => {
+  const { loggedInUser } = useContext(AuthContext);
+  const initRoomTitle = loggedInUser ? `${loggedInUser.nickname}의 게임 방` : "";
+  const [roomTitle, setRoomTitle] = useState(initRoomTitle);
 
-  // todo: 백엔드 서버로 방 생성 요청 보내는 함수 구현
-  const sendCreateRoomRequest = () => {};
+  useEffect(() => {
+    updateRoomData("room.title", initRoomTitle);
+  }, []);
 
-  const handleModeChange = (e) => {
-    setSelectedMode(e.target.value);
-    console.log({ roomName, selectedMode, timeOption, scoreOption, selectedRound });
+  const handleChangeRoomTitle = (e) => {
+    const newRoomTitle = e.target.value;
+    setRoomTitle(newRoomTitle);
+    updateRoomData("room.title", newRoomTitle);
   };
 
-  const handleRoundChange = (e) => {
-    setSelectedRound(e.target.value);
+  return (
+    <div className="form-group">
+      <label htmlFor="roomTitle">
+        <b>방 이름</b>
+      </label>
+      <input
+        type="text"
+        className="form-control"
+        id="roomTitle"
+        placeholder="방 이름을 입력하세요"
+        value={roomTitle}
+        onChange={handleChangeRoomTitle}
+      />
+    </div>
+  );
+};
+
+const RoomModeSelectForm = ({ updateRoomData }) => {
+  const modeOptions = [
+    { value: "dual", label: "1vs1" },
+    { value: "tournament", label: "토너먼트" },
+  ];
+
+  useEffect(() => {
+    updateRoomData("game.is_tournament", false);
+    updateRoomData("game.n_players", 2);
+  }, []);
+
+  const handleModeChange = (value) => {
+    const isTournament = value === "tournament";
+    updateRoomData("game.is_tournament", isTournament);
+    updateRoomData("game.n_players", isTournament ? 4 : 2);
+  };
+
+  return <RadioSelector title="모드 선택" options={modeOptions} reflectSelect={handleModeChange} />;
+};
+
+const RoomGameOptionForm = ({ updateRoomData }) => {
+  const scoreOptions = [
+    { value: 3, label: "3점" },
+    { value: 5, label: "5점" },
+    { value: 10, label: "10점" },
+  ];
+  const timeOptions = [
+    { value: 30, label: "30초" },
+    { value: 60, label: "60초" },
+    { value: 90, label: "90초" },
+  ];
+
+  useEffect(() => {
+    updateRoomData("game.game_point", scoreOptions[0].value);
+    updateRoomData("game.time_limit", timeOptions[0].value);
+  }, []);
+
+  const handleScoreChange = (value) => {
+    updateRoomData("game.game_point", value);
+  };
+
+  const handleTimeChange = (value) => {
+    updateRoomData("game.time_limit", value);
+  };
+
+  return (
+    <>
+      <div className="col">
+        <DropdownSelector title={"목표 득점"} options={scoreOptions} reflectSelect={handleScoreChange} />
+      </div>
+      <div className="col">
+        <DropdownSelector title={"제한 시간"} options={timeOptions} reflectSelect={handleTimeChange} />
+      </div>
+    </>
+  );
+};
+
+const CreateRoomModal = ({ handleClose }) => {
+  const [roomData, setRoomData] = useState({});
+
+  const handleUpdateRoomData = (path, value) => {
+    setRoomData((prevRoomData) => updateProperty(prevRoomData, path, value));
+    // 함수형 업데이트: 비동기적으로 수행되는 setState 함수가 이전 state값을 기반으로 동작하도록 보장
   };
 
   const handleSubmit = () => {
-    if (!roomName || !timeOption || !scoreOption || (selectedMode === "tournament" && !selectedRound)) {
+    const postRoomData = async () => {
+      try {
+        const resData = await post(API_ENDPOINTS.ROOM_LIST(), roomData);
+        console.log(resData);
+        alert("방이 성공적으로 생성되었습니다.");
+        handleClose();
+      } catch (error) {
+        alert("방 생성에 실패하였습니다.");
+      }
+    };
+
+    // console.log("submit roomData: ", roomData);
+    const keysToCheck = ["game.is_tournament", "game.time_limit", "game.game_point", "game.n_players", "room.title"];
+    if (!hasKeys(roomData, keysToCheck)) {
       alert("모든 필드를 입력해주세요.");
       return;
     }
-
-    // 백엔드 서버로 방 생성 요청 보내기
-    console.log("방 생성 요청: ", { roomName, selectedMode, timeOption, scoreOption, selectedRound });
-    // sendCreateRoomRequest({ roomName, selectedMode, timeOption, scoreOption, selectedRound });
+    postRoomData();
   };
 
   return (
     <CustomModal
       hasCloseButton={false}
       handleClose={handleClose}
-      title={"방 생성 모달"}
+      title={"게임 방 생성하기"}
       footerButtons={
-        <div>
-          <button className="btn btn-primary" onClick={handleSubmit}>
-            확인
-          </button>
-          <button className="btn btn-secondary" onClick={handleClose}>
-            취소
-          </button>
-        </div>
+        <>
+          <StyledButton name={"취소"} styleType={"secondary"} onClick={handleClose} />
+          <StyledButton name={"확인"} styleType={"primary"} onClick={handleSubmit} />
+        </>
       }>
       <form>
-        {/* 방 이름 입력 */}
-        <div className="form-group row mb-3">
-          <label htmlFor="roomName">
-            <b>방 이름</b>
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            id="roomName"
-            placeholder="방 이름 입력"
-            value={roomName}
-            onChange={(e) => setRoomName(e.target.value)}
-          />
+        <div className="row">
+          <RoomTitleForm updateRoomData={handleUpdateRoomData} />
         </div>
-
-        {/* 모드 선택 */}
-        <div className="form-group row mb-3">
-          <label>
-            <b>모드 선택</b>
-          </label>
-          <div className="form-check">
-            <input
-              className="form-check-input"
-              type="radio"
-              name="modeOptions"
-              id="1vs1"
-              value="1vs1"
-              checked={selectedMode === "1vs1"}
-              onChange={handleModeChange}
-            />
-            <label className="form-check-label" htmlFor="1vs1">
-              1vs1
-            </label>
-          </div>
-          <div className="form-check">
-            <input
-              className="form-check-input"
-              type="radio"
-              name="modeOptions"
-              id="tournament"
-              value="tournament"
-              checked={selectedMode === "tournament"}
-              onChange={handleModeChange}
-            />
-            <label className="form-check-label" htmlFor="tournament">
-              토너먼트
-            </label>
-          </div>
+        <div className="row mt-3">
+          <RoomModeSelectForm updateRoomData={handleUpdateRoomData} />
         </div>
-
-        {/* 게임 옵션 */}
-        <div>
-          <b>게임 옵션</b>
-          <div className="form-group row mb-3">
-            <div className="col">
-              <label htmlFor="timeOptions">시간</label>
-              <select
-                className="form-control"
-                id="timeOptions"
-                value={timeOption}
-                onChange={(e) => setTimeOption(e.target.value)}>
-                <option>시간 옵션1</option>
-                <option>시간 옵션2</option>
-                <option>시간 옵션3</option>
-              </select>
-            </div>
-            <div className="col">
-              <label htmlFor="scoreOptions">스코어</label>
-              <select
-                className="form-control"
-                id="scoreOptions"
-                value={scoreOption}
-                onChange={(e) => setScoreOption(e.target.value)}>
-                <option>스코어 옵션1</option>
-                <option>스코어 옵션2</option>
-                <option>스코어 옵션3</option>
-              </select>
-            </div>
-          </div>
+        <div className="row mt-3">
+          <RoomGameOptionForm updateRoomData={handleUpdateRoomData} />
         </div>
-
-        {/* 라운드 수 선택 (토너먼트 모드 선택시에만 표시) */}
-        {selectedMode === "tournament" && (
-          <div className="form-group">
-            <label>라운드 수</label>
-            <div className="form-check">
-              <input
-                className="form-check-input"
-                type="radio"
-                name="roundOptions"
-                id="rounds2"
-                value="2"
-                checked={selectedRound === "2"}
-                onChange={handleRoundChange}
-              />
-              <label className="form-check-label" htmlFor="rounds2">
-                2 Round
-              </label>
-            </div>
-            <div className="form-check">
-              <input
-                className="form-check-input"
-                type="radio"
-                name="roundOptions"
-                id="rounds3"
-                value="3"
-                checked={selectedRound === "3"}
-                onChange={handleRoundChange}
-              />
-              <label className="form-check-label" htmlFor="rounds3">
-                3 Round
-              </label>
-            </div>
-            <div className="form-check">
-              <input
-                className="form-check-input"
-                type="radio"
-                name="roundOptions"
-                id="rounds4"
-                value="4"
-                checked={selectedRound === "4"}
-                onChange={handleRoundChange}
-              />
-              <label className="form-check-label" htmlFor="rounds4">
-                4 Round
-              </label>
-            </div>
-          </div>
-        )}
       </form>
     </CustomModal>
   );
 };
 
 export default CreateRoomModal;
+//
