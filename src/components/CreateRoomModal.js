@@ -12,9 +12,14 @@ const RoomTitleForm = ({ updateRoomData }) => {
   const initRoomTitle = loggedInUser ? `${loggedInUser.nickname}의 게임 방` : "";
   const [roomTitle, setRoomTitle] = useState(initRoomTitle);
 
+  useEffect(() => {
+    updateRoomData("room.title", initRoomTitle);
+  }, []);
+
   const handleChangeRoomTitle = (e) => {
-    setRoomTitle(e.target.value);
-    updateRoomData("room.title", roomTitle);
+    const newRoomTitle = e.target.value;
+    setRoomTitle(newRoomTitle);
+    updateRoomData("room.title", newRoomTitle);
   };
 
   return (
@@ -26,7 +31,7 @@ const RoomTitleForm = ({ updateRoomData }) => {
         type="text"
         className="form-control"
         id="roomTitle"
-        placeholder="방 이름 입력"
+        placeholder="방 이름을 입력하세요"
         value={roomTitle}
         onChange={handleChangeRoomTitle}
       />
@@ -96,7 +101,6 @@ const CreateRoomModal = ({ handleClose }) => {
 
   const handleUpdateRoomData = (path, value) => {
     setRoomData((prevRoomData) => updateProperty(prevRoomData, path, value));
-    console.log(roomData);
     // 함수형 업데이트: 비동기적으로 수행되는 setState 함수가 이전 state값을 기반으로 동작하도록 보장
   };
 
@@ -112,6 +116,7 @@ const CreateRoomModal = ({ handleClose }) => {
       }
     };
 
+    // console.log("submit roomData: ", roomData);
     const keysToCheck = ["game.is_tournament", "game.time_limit", "game.game_point", "game.n_players", "room.title"];
     if (!hasKeys(roomData, keysToCheck)) {
       alert("모든 필드를 입력해주세요.");
@@ -124,7 +129,7 @@ const CreateRoomModal = ({ handleClose }) => {
     <CustomModal
       hasCloseButton={false}
       handleClose={handleClose}
-      title={"방 생성 모달"}
+      title={"게임 방 생성하기"}
       footerButtons={
         <>
           <button className="btn btn-secondary" onClick={handleClose}>
