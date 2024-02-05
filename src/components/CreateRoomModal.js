@@ -81,8 +81,12 @@ const RoomGameOptionForm = ({ updateRoomData }) => {
 
   return (
     <>
-      <DropdownSelector title={"목표 득점"} options={scoreOptions} reflectSelect={handleScoreChange} />
-      <DropdownSelector title={"제한 시간"} options={timeOptions} reflectSelect={handleTimeChange} />
+      <div className="col">
+        <DropdownSelector title={"목표 득점"} options={scoreOptions} reflectSelect={handleScoreChange} />
+      </div>
+      <div className="col">
+        <DropdownSelector title={"제한 시간"} options={timeOptions} reflectSelect={handleTimeChange} />
+      </div>
     </>
   );
 };
@@ -135,10 +139,10 @@ const CreateRoomModal = ({ handleClose }) => {
         <div className="row">
           <RoomTitleForm updateRoomData={handleUpdateRoomData} />
         </div>
-        <div className="row">
+        <div className="row mt-3">
           <RoomModeSelectForm updateRoomData={handleUpdateRoomData} />
         </div>
-        <div className="row">
+        <div className="row mt-3">
           <RoomGameOptionForm updateRoomData={handleUpdateRoomData} />
         </div>
       </form>
