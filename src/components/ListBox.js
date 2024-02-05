@@ -9,7 +9,12 @@ const ListFilter = ({ filterTypes, currentFilter, onFilterClick, rightButton }) 
       <div className="col">
         {filterTypes.map((type, index) => (
           <React.Fragment key={type.value}>
-            <StyledButton name={type.label} styleType={"link"} onClick={() => onFilterClick(type)} />
+            <StyledButton
+              name={type.label}
+              styleType={"link"}
+              onClick={() => onFilterClick(type)}
+              overrideStyle={currentFilter.value === type.value ? { fontSize: "18px", fontWeight: "bold" } : {}}
+            />
             {index < filterTypes.length - 1 && " | "}
           </React.Fragment>
         ))}
@@ -114,7 +119,7 @@ const ListPagination = ({ totalPage, currentPage, onPaginationClick }) => {
 
 const ListBox = ({ apiEndpoint, ItemComponent, filterTypes, additionalButton, emptyMsg }) => {
   const [itemsData, setItemsData] = useState(null);
-  const [totalPage, setTotalPage] = useState(42);
+  const [totalPage, setTotalPage] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
   const [currentFilter, setCurrentFilter] = useState(filterTypes[0]);
   const itemCountPerPage = 9;
@@ -143,7 +148,12 @@ const ListBox = ({ apiEndpoint, ItemComponent, filterTypes, additionalButton, em
   return (
     <div>
       <div className="row">
-        <ListFilter filterTypes={filterTypes} onFilterClick={handleChangeFilter} rightButton={additionalButton} />
+        <ListFilter
+          filterTypes={filterTypes}
+          onFilterClick={handleChangeFilter}
+          rightButton={additionalButton}
+          currentFilter={currentFilter}
+        />
       </div>
       <div className="row">
         <ListItems itemsData={itemsData} ItemComponent={ItemComponent} itemsPerRow={itemsPerRow} emptyMsg={emptyMsg} />
