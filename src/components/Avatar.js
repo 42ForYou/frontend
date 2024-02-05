@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const Avatar = ({ src, alt, to, isEditing = false, onImageUploadClick }) => {
+const Avatar = ({ src, alt, to, isEditing = false, onImageUploadClick, diameter = 100 }) => {
   const defaultImage =
     "https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg";
   const imageSrc = src || defaultImage;
@@ -16,13 +16,13 @@ const Avatar = ({ src, alt, to, isEditing = false, onImageUploadClick }) => {
       src={imageSrc}
       alt={imageAlt}
       className="rounded-circle"
-      style={{ objectFit: "cover", border: "2px solid #f000f0", width: "100px" }}
+      style={{ objectFit: "cover", border: "2px solid #f000f0", width: `${diameter}px` }}
       onError={handleImageLoadFailed}
     />
   );
 
   return (
-    <div className="Avatar position-relative" style={{ width: "100px", height: "100px" }}>
+    <div className="Avatar position-relative" style={{ width: `${diameter}px`, height: `${diameter}px` }}>
       {to ? <Link to={to}>{renderImage()}</Link> : renderImage()}
       {isEditing && (
         <button
