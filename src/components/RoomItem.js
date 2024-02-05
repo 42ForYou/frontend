@@ -30,7 +30,7 @@ const RoomItem = ({ game, room }) => {
           </div>
         </div>
         <div className="col d-flex flex-column justify-content-between align-items-end">
-          <div className="row">{is_tournament === 2 ? "[1vs1]" : "[토너먼트]"}</div>
+          <div className="row">{is_tournament ? "[토너먼트]" : "[1vs1]"}</div>
           <div className="row">
             <StyledButton styleType={"primary"} name={"JOIN"} onClick={() => handleJoinClick(game_id)} />
           </div>
