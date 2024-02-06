@@ -25,7 +25,7 @@ const WaitingRoomInfo = ({ title, host, point, time, nPlayers, joinPlayers }) =>
 const WaitingPlayer = ({ nickname, avatar }) => {
   return (
     <div className="d-flex flex-column justify-content-center align-items-center p-3">
-      <Avatar src={avatar} alt={`${nickname}의 아바타`} diameter={180} />
+      <Avatar src={avatar} alt={`${nickname}의 아바타`} diameter={170} />
       <div className="mt-3">
         <p className="fs-4">{nickname}</p>
       </div>
@@ -42,7 +42,7 @@ const WaitingPlayersRow = ({ players, playersPerRow }) => {
         <div
           key={index}
           className={`col-${colSize} d-flex justify-content-center align-items-center border border-info bg-light`}
-          style={{ minHeight: "300px" }}>
+          style={{ minHeight: "200px" }}>
           {player ? (
             <WaitingPlayer nickname={player.nickname} avatar={player.avatar} />
           ) : (
