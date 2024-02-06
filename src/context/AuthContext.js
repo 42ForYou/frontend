@@ -1,10 +1,20 @@
-import React, { createContext, useState, useContext } from "react";
+import React, { createContext, useState, useContext, useEffect } from "react";
 import { get } from "../common/apiBase";
 import { API_ENDPOINTS } from "../common/apiEndpoints";
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [loggedInUser, setLoggedInUser] = useState(null);
+  const getDefaultIfNoAuthProt = () => {
+    const defaultUser = {
+      intra_id: "intra_id",
+      nickname: "nickname",
+      email: "email",
+      avatar: "avatar",
+      two_factor_auth: false,
+    };
+    return process.env.NO_AUTH_PROTECTION === "true" ? defaultUser : null;
+  };
+  const [loggedInUser, setLoggedInUser] = useState(getDefaultIfNoAuthProt());
 
   const login = async (code) => {
     try {
