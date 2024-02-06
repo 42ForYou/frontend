@@ -13,6 +13,7 @@ const withAuthProtection = (WrappedComponent) => {
 
     // 보호된 페이지로 접근 시도할 때마다 인증 검사
     useEffect(() => {
+      if (process.env.NO_AUTH_PROTECTION) return;
       setIsAuthorized(false);
       const authCheck = async () => {
         const isValid = await validateTokenInCookies();
@@ -23,6 +24,9 @@ const withAuthProtection = (WrappedComponent) => {
       };
       authCheck();
     }, [location]);
+
+    console.log(process.env.NO_AUTH_PROTECTION);
+    if (process.env.NO_AUTH_PROTECTION) return <WrappedComponent {...props} />;
 
     return isAuthorized ? <WrappedComponent {...props} /> : null;
   };
