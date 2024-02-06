@@ -9,24 +9,21 @@ import { API_ENDPOINTS } from "../common/apiEndpoints";
 
 // 유저프로필 URL: /profile/users/:user_id
 const UserProfilePage = () => {
-  const location = useLocation();
-  const userId = location.pathname.split("/").pop(); // useParams를 사용할 수 없어 대체제로 사용
+  const { userId } = useParams();
   const navigate = useNavigate();
   const [profileData, setProfileData] = useState(null);
 
   useEffect(() => {
-    const getDataAndSet = async () => {
+    const fetchProfileData = async () => {
       try {
         const resData = await get(API_ENDPOINTS.USER_PROFILE(userId));
-        if (resData) {
-          setProfileData(resData.data.user);
-        }
+        setProfileData(resData.data.user);
       } catch (error) {
         alert("유효하지 않은 유저 프로필 페이지입니다.");
         navigate(-1);
       }
     };
-    getDataAndSet();
+    fetchProfileData();
   }, [userId, navigate]);
 
   return (
