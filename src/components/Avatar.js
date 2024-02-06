@@ -1,22 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
+const baseImageURL = `${process.env.API_BASE_URL}/images/avatar`;
+
 const Avatar = ({ src, alt, to, isEditing = false, onImageUploadClick }) => {
-  const defaultImage =
-    "https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg";
-  const imageSrc = src || defaultImage;
-  const imageAlt = alt || "프로필 이미지";
+  const [imageSrc, setImageSrc] = useState(src || "default.jpg");
+  const imageAlt = alt || "아바타 이미지";
 
   const handleImageLoadFailed = (e) => {
-    e.target.src = defaultImage;
+    setImageSrc("loading-failed.png");
   };
 
   const renderImage = () => (
     <img
-      src={imageSrc}
+      src={`${baseImageURL}/${imageSrc}`}
       alt={imageAlt}
       className="rounded-circle"
-      style={{ objectFit: "cover", border: "2px solid #f000f0", width: "100px" }}
+      style={{ objectFit: "cover", border: "2px solid #f000f0", width: "100px", height: "100px" }}
       onError={handleImageLoadFailed}
     />
   );
