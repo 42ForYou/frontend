@@ -6,18 +6,23 @@ import { useNavigate } from "react-router-dom";
 import AuthContext from "../context/AuthContext";
 
 // todo: 호스트인 경우에만 노출, 방에 인원이 다 찬 경우에만 활성화
-const StartGameButton = () => {
+const StartGameButton = ({ isActive }) => {
+  const handleStartGame = () => {
+    alert("게임 스타트 (미구현)");
+  };
+
   return (
     <StyledButton
       styleType={"primary pb-5"}
       name={"START"}
-      onClick={handleStartGame}
+      onClick={isActive ? handleStartGame : null}
       overrideStyle={{
         width: "150px",
         height: "50px",
         fontSize: "30px",
         padding: "-10px 24px",
       }}
+      disabled={!isActive}
     />
   );
 };
@@ -126,14 +131,8 @@ const GameWaitingBox = ({ gameData, roomData, playersData }) => {
   console.log(playersData);
   const { is_tournament, game_point, time_limit, n_players } = gameData;
   const { id, title, host, join_players } = roomData;
-  const navigate = useNavigate();
-
-  const handleStartGame = () => {
-    alert("게임 스타트 (미구현)");
-  };
-  const handleExitRoom = () => {
-    if (window.confirm("게임 대기 방을 나가시겠습니까?")) navigate(-1);
-  };
+  const { loggedInUser } = useContext(AuthContext);
+  const amIHost = host === loggedInUser.nickname;
 
   return (
     <>
@@ -153,7 +152,7 @@ const GameWaitingBox = ({ gameData, roomData, playersData }) => {
       <div className="row d-flex justify-content-between border border-primary p-3">
         <div className="col"></div>
         <div className="col text-end">
-          <StartGameButton />
+          {amIHost && <StartGameButton isActive={n_players === join_players} />}
           <ExitRoomButton />
         </div>
       </div>
