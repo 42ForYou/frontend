@@ -1,19 +1,19 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
-const baseImageURL = `${process.env.API_BASE_URL}/images/avatar`;
-
 const Avatar = ({ src, alt, to, isEditing = false, onImageUploadClick }) => {
-  const [imageSrc, setImageSrc] = useState(src || "default.jpg");
+  const [imageSrc, setImageSrc] = useState(
+    `${process.env.API_BASE_URL}/${src}` || `${process.env.STATIC_IMAGE_URL}/default-avatar.jpg`
+  );
   const imageAlt = alt || "아바타 이미지";
 
   const handleImageLoadFailed = (e) => {
-    setImageSrc("loading-failed.png");
+    setImageSrc(`${process.env.STATIC_IMAGE_URL}/loading-failed.png`);
   };
 
   const renderImage = () => (
     <img
-      src={`${baseImageURL}/${imageSrc}`}
+      src={imageSrc}
       alt={imageAlt}
       className="rounded-circle"
       style={{ objectFit: "cover", border: "2px solid #f000f0", width: "100px", height: "100px" }}
