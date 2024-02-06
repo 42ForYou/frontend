@@ -126,8 +126,28 @@ const GameWaitingBox = ({ gameData, roomData, playersData }) => {
       <div className="row d-flex justify-content-between border border-primary p-3">
         <div className="col"></div>
         <div className="col text-end">
-          <StyledButton styleType={"primary"} name={"START"} onClick={handleStartGame} />
-          <StyledButton styleType={"danger"} name={"EXIT"} onClick={handleExitRoom} />
+          <StyledButton
+            styleType={"primary pb-5"}
+            name={"START"}
+            onClick={handleStartGame}
+            overrideStyle={{
+              width: "150px",
+              height: "50px",
+              fontSize: "30px",
+              padding: "-10px 24px",
+            }}
+          />
+          <StyledButton
+            styleType={"danger pb-5  ms-3 "}
+            name={"EXIT"}
+            onClick={handleExitRoom}
+            overrideStyle={{
+              width: "120px",
+              height: "50px",
+              fontSize: "30px",
+              padding: "-10px 24px",
+            }}
+          />
         </div>
       </div>
     </>
