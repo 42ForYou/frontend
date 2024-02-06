@@ -3,12 +3,12 @@ import { Link } from "react-router-dom";
 
 const Avatar = ({ src, alt, to, isEditing = false, onImageUploadClick }) => {
   const [imageSrc, setImageSrc] = useState(
-    `${process.env.API_BASE_URL}/${src}` || `${process.env.STATIC_IMAGE_URL}/default-avatar.jpg`
+    src ? `${process.env.API_BASE_URL}/images/avatar/${src}` : `${process.env.ASSETS_IMAGE_URL}/default-avatar.jpg`
   );
   const imageAlt = alt || "아바타 이미지";
 
   const handleImageLoadFailed = (e) => {
-    setImageSrc(`${process.env.STATIC_IMAGE_URL}/loading-failed.png`);
+    setImageSrc(`${process.env.ASSETS_IMAGE_URL}/loading-failed.png`);
   };
 
   const renderImage = () => (
