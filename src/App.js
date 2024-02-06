@@ -6,16 +6,16 @@ import { AuthProvider } from "./context/AuthContext";
 
 // page
 import HomePage from "./pages/HomePage";
-import GamePlayPage from "./pages/game/GamePlayPage";
+import GamePlayPage from "./pages/GamePlayPage";
 import FriendsPage from "./pages/FriendsPage";
 import LoginPage from "./pages/LoginPage";
 import LoginCallbackPage from "./pages/LoginCallbackPage";
 import UserProfilePage from "./pages/UserProfilePage";
 import MyProfilePage from "./pages/MyProfilePage";
-import RoomListPage from "./pages/RoomListPage";
+import GameWaitingPage from "./pages/GameWaitingPage";
 import UsersPage from "./pages/UsersPage";
 import NotFoundPage from "./pages/error/NotFoundPage";
-import RoomPage from "./pages/game/RoomPage";
+import RoomListPage from "./pages/RoomListPage";
 import TestPage from "./pages/TestPage";
 
 const App = () => {
@@ -40,10 +40,9 @@ const AppContent = () => {
         <Route path="/profile/users/:user_id" element={<UserProfilePage />} />
         <Route path="/users" element={<UsersPage />} />
         <Route path="/friends" element={<FriendsPage />} />
-        <Route path="/games" element={<RoomListPage />} />
-        <Route path="/play/:game_id" element={<GamePlayPage />} />
-        <Route path="/games/onevsone/:room_id" element={<RoomPage />} />
-        <Route path="/games/tournament/:room_id" element={<RoomPage />} />
+        <Route path="/game/list" element={<RoomListPage />} />
+        <Route path="/game/waiting/:room_id" element={<GameWaitingPage />} />
+        <Route path="/game/play/:game_id" element={<GamePlayPage />} />
         <Route path="/test" element={<TestPage />} />
         {/* fallback page */}
         <Route path="*" element={<NotFoundPage />} />
