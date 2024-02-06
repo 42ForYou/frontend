@@ -34,11 +34,15 @@ const WaitingPlayer = ({ nickname, avatar }) => {
 };
 
 // todo: 자기 자신과 호스트는 다르게 표시 (겹치는 케이스도 고려)
-const WaitingPlayersRow = ({ players }) => {
+const WaitingPlayersRow = ({ players, playersPerRow }) => {
+  const colSize = 12 / playersPerRow;
   return (
     <>
       {players.map((player, index) => (
-        <div key={index} className="col-6 d-flex justify-content-center align-items-center border border-info bg-light">
+        <div
+          key={index}
+          className={`col-${colSize} d-flex justify-content-center align-items-center border border-info bg-light`}
+          style={{ minHeight: "300px" }}>
           {player ? (
             <WaitingPlayer nickname={player.nickname} avatar={player.avatar} />
           ) : (
@@ -50,40 +54,28 @@ const WaitingPlayersRow = ({ players }) => {
   );
 };
 
-const WaitingPlayersGridDual = () => {
-  return (
-    <>
-      <div className="col"></div>
-      <div className="col"></div>
-    </>
-  );
-};
-
-const WaitingPlayersGridTournament = ({ players }) => {
-  const gridItems = Array.from({ length: 4 }, (_, index) => players[index]);
+const WaitingPlayersGrid = ({ players, host, isTournament }) => {
+  const gridItems = isTournament ? Array.from({ length: 4 }, (_, index) => players[index]) : players.slice(0, 2);
 
   return (
     <div className="container position-relative">
-      {/* position-relative 추가 */}
-      {/* VS 텍스트를 위한 요소 추가, 중앙에 배치 */}
-      <div
-        className="vs-text"
-        style={{
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
-          fontSize: "5rem",
-          fontWeight: "bold",
-          zIndex: 2,
-        }}>
-        VS
-      </div>
+      {isTournament && (
+        <div
+          className="vs-text"
+          style={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            fontSize: "5rem",
+            fontWeight: "bold",
+            zIndex: 2,
+          }}>
+          VS
+        </div>
+      )}
       <div className="row">
-        <WaitingPlayersRow players={gridItems.slice(0, 2)} />
-      </div>
-      <div className="row">
-        <WaitingPlayersRow players={gridItems.slice(2, 4)} />
+        <WaitingPlayersRow players={gridItems} playersPerRow={2} />
       </div>
     </div>
   );
@@ -117,11 +109,7 @@ const GameWaitingBox = ({ gameData, roomData, playersData }) => {
         />
       </div>
       <div className="row">
-        {is_tournament ? (
-          <WaitingPlayersGridTournament players={playersData} />
-        ) : (
-          <WaitingPlayersGridDual players={playersData} />
-        )}
+        <WaitingPlayersGrid players={playersData} host={host} isTournament={is_tournament} />
       </div>
       <div className="row d-flex justify-content-between border border-primary p-3">
         <div className="col"></div>
