@@ -51,10 +51,9 @@ const GameWaitingPage = () => {
   const [playersData, setPlayersData] = useState(null);
 
   useEffect(() => {
-    console.log("초기값세팅");
     setGameData(gameDataDummy);
     setRoomData(roomDataDummy);
-    setPlayersData(playersDataDummy);
+    setPlayersData(playersDataDummy.slice(0, 3));
   }, []);
 
   // useEffect(() => {
