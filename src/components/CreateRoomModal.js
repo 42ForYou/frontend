@@ -6,7 +6,7 @@ import { API_ENDPOINTS } from "../common/apiEndpoints";
 import RadioSelector from "./RadioSelector";
 import DropdownSelector from "./DropdownSelector";
 import { hasKeys, updateProperty } from "../common/objectUtils";
-import StyledButton from "./styledButton";
+import StyledButton from "./StyledButton";
 
 const RoomTitleForm = ({ updateRoomData }) => {
   const { loggedInUser } = useContext(AuthContext);

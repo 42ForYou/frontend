@@ -4,7 +4,7 @@ import RoomItem from "./RoomItem";
 import ListBox from "./ListBox";
 import { API_ENDPOINTS } from "../common/apiEndpoints";
 import CreateRoomModal from "./CreateRoomModal";
-import StyledButton from "./styledButton";
+import StyledButton from "./StyledButton";
 
 const RoomListBox = () => {
   const [showModal, setShowModal] = useState(false);

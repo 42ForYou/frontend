@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { get } from "../common/apiBase";
-import StyledButton from "./styledButton";
+import StyledButton from "./StyledButton";
 
 const ListFilter = ({ filterTypes, currentFilter, onFilterClick, rightButton }) => {
   return (

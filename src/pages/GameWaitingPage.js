@@ -5,7 +5,7 @@ import LoadingPage from "./LoadingPage";
 import WaitingRoomBox from "../components/GameWaitingBox";
 
 import { get } from "../common/apiBase";
-import { API_ENDPOINTS } from "../common/apiEndPoints";
+import { API_ENDPOINTS } from "../common/apiEndpoints";
 import { useNavigate, useParams } from "react-router-dom";
 
 const gameDataDummy = {
