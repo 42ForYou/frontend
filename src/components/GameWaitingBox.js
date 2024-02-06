@@ -5,7 +5,6 @@ import StyledButton from "./StyledButton";
 import { useNavigate } from "react-router-dom";
 import AuthContext from "../context/AuthContext";
 
-// todo: 호스트인 경우에만 노출, 방에 인원이 다 찬 경우에만 활성화
 const StartGameButton = ({ isActive }) => {
   const handleStartGame = () => {
     alert("게임 스타트 (미구현)");
@@ -28,6 +27,11 @@ const StartGameButton = ({ isActive }) => {
 };
 
 const ExitRoomButton = () => {
+  const navigate = useNavigate();
+  const handleExitRoom = () => {
+    if (window.confirm("게임 대기 방을 나가시겠습니까?")) navigate(-1);
+  };
+
   return (
     <StyledButton
       styleType={"danger pb-5  ms-3 "}
