@@ -2,6 +2,7 @@ import React from "react";
 import Avatar from "./Avatar";
 
 import StyledButton from "./StyledButton";
+import { useNavigate } from "react-router-dom";
 
 const WaitingRoomInfo = ({ title, host, point, time, nPlayers, joinPlayers }) => {
   return (
@@ -79,9 +80,14 @@ const GameWaitingBox = ({ gameData, roomData, playersData }) => {
   console.log(playersData);
   const { is_tournament, game_point, time_limit, n_players } = gameData;
   const { id, title, host, join_players } = roomData;
+  const navigate = useNavigate();
 
-  const handleStartGame = () => {};
-  const handleExitRoom = () => {};
+  const handleStartGame = () => {
+    alert("게임 스타트 (미구현)");
+  };
+  const handleExitRoom = () => {
+    if (window.confirm("게임 대기 방을 나가시겠습니까?")) navigate(-1);
+  };
 
   return (
     <>
