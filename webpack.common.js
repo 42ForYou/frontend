@@ -16,8 +16,8 @@ module.exports = {
     new DotenvWebpackPlugin(),
     new CopyWebpackPlugin({
       patterns: [
-        { from: "public/favicon.ico", to: "" }, // src 디렉토리에서 루트 출력 디렉토리로 favicon.ico 복사
-        { from: "public/images", to: "images" },
+        { from: "public/favicon.ico", to: "" },
+        { from: "public/assets", to: "assets" },
       ],
     }),
   ],
