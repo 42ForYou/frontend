@@ -5,6 +5,39 @@ import StyledButton from "./StyledButton";
 import { useNavigate } from "react-router-dom";
 import AuthContext from "../context/AuthContext";
 
+// todo: 호스트인 경우에만 노출, 방에 인원이 다 찬 경우에만 활성화
+const StartGameButton = () => {
+  return (
+    <StyledButton
+      styleType={"primary pb-5"}
+      name={"START"}
+      onClick={handleStartGame}
+      overrideStyle={{
+        width: "150px",
+        height: "50px",
+        fontSize: "30px",
+        padding: "-10px 24px",
+      }}
+    />
+  );
+};
+
+const ExitRoomButton = () => {
+  return (
+    <StyledButton
+      styleType={"danger pb-5  ms-3 "}
+      name={"EXIT"}
+      onClick={handleExitRoom}
+      overrideStyle={{
+        width: "120px",
+        height: "50px",
+        fontSize: "30px",
+        padding: "-10px 24px",
+      }}
+    />
+  );
+};
+
 const WaitingRoomInfo = ({ title, host, point, time, nPlayers, joinPlayers }) => {
   return (
     <div className="d-flex justify-content-between border bg-info p-3">
@@ -120,28 +153,8 @@ const GameWaitingBox = ({ gameData, roomData, playersData }) => {
       <div className="row d-flex justify-content-between border border-primary p-3">
         <div className="col"></div>
         <div className="col text-end">
-          <StyledButton
-            styleType={"primary pb-5"}
-            name={"START"}
-            onClick={handleStartGame}
-            overrideStyle={{
-              width: "150px",
-              height: "50px",
-              fontSize: "30px",
-              padding: "-10px 24px",
-            }}
-          />
-          <StyledButton
-            styleType={"danger pb-5  ms-3 "}
-            name={"EXIT"}
-            onClick={handleExitRoom}
-            overrideStyle={{
-              width: "120px",
-              height: "50px",
-              fontSize: "30px",
-              padding: "-10px 24px",
-            }}
-          />
+          <StartGameButton />
+          <ExitRoomButton />
         </div>
       </div>
     </>
