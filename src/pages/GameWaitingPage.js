@@ -18,13 +18,13 @@ const gameDataDummy = {
 const roomDataDummy = {
   id: 1,
   title: "게임 방 1",
-  host: "호스트 닉네임",
+  host: "플레이어 2",
   join_players: 2,
 };
 
 const playersDataDummy = [
   {
-    nickname: "플레이어 1",
+    nickname: "nickname",
     avatar: "https://image.news1.kr/system/photos/2014/2/3/747428/article.jpg/dims/optimize",
   },
   {

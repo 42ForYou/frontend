@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useContext } from "react";
 import Avatar from "./Avatar";
 
 import StyledButton from "./StyledButton";
 import { useNavigate } from "react-router-dom";
+import AuthContext from "../context/AuthContext";
 
 const WaitingRoomInfo = ({ title, host, point, time, nPlayers, joinPlayers }) => {
   return (
@@ -22,29 +23,34 @@ const WaitingRoomInfo = ({ title, host, point, time, nPlayers, joinPlayers }) =>
   );
 };
 
-const WaitingPlayer = ({ nickname, avatar }) => {
+const WaitingPlayer = ({ nickname, avatar, isHost, isMine }) => {
   return (
     <div className="d-flex flex-column justify-content-center align-items-center p-3">
       <Avatar src={avatar} alt={`${nickname}의 아바타`} diameter={170} />
       <div className="mt-3">
-        <p className="fs-4">{nickname}</p>
+        <p className={`fs-4 ${isMine ? "text-primary" : ""}`}>{isHost ? `${nickname} (방장)` : nickname}</p>
       </div>
     </div>
   );
 };
 
-// todo: 자기 자신과 호스트는 다르게 표시 (겹치는 케이스도 고려)
-const WaitingPlayersRow = ({ players, playersPerRow }) => {
+const WaitingPlayersRow = ({ players, playersPerRow, host }) => {
   const colSize = 12 / playersPerRow;
+  const { loggedInUser } = useContext(AuthContext);
   return (
     <>
       {players.map((player, index) => (
         <div
           key={index}
-          className={`col-${colSize} d-flex justify-content-center align-items-center border border-info bg-light`}
+          className={`col-${colSize} d-flex justify-content-center align-items-center border border-info ${player && player.nickname === loggedInUser.nickname ? "bg-warning" : "bg-light"}`}
           style={{ minHeight: "200px" }}>
           {player ? (
-            <WaitingPlayer nickname={player.nickname} avatar={player.avatar} />
+            <WaitingPlayer
+              nickname={player.nickname}
+              avatar={player.avatar}
+              isHost={player.nickname === host}
+              isMine={player.nickname === loggedInUser.nickname}
+            />
           ) : (
             <p className="text-muted">플레이어의 입장을 기다리고 있습니다...</p>
           )}
@@ -75,7 +81,7 @@ const WaitingPlayersGrid = ({ players, host, isTournament }) => {
         </div>
       )}
       <div className="row">
-        <WaitingPlayersRow players={gridItems} playersPerRow={2} />
+        <WaitingPlayersRow players={gridItems} playersPerRow={2} host={host} />
       </div>
     </div>
   );
