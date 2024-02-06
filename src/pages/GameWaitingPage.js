@@ -52,6 +52,8 @@ const GameWaitingPage = () => {
 
   useEffect(() => {
     setGameData(gameDataDummy);
+    roomDataDummy.host = "nickname"; // 방장 여부 변경
+    roomDataDummy.join_players = 3; // 게임 시작 가능 여부 변경
     setRoomData(roomDataDummy);
     setPlayersData(playersDataDummy.slice(0, 3));
   }, []);
