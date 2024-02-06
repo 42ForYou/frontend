@@ -6,12 +6,14 @@ import Avatar from "./Avatar";
 import Icon from "./Icon";
 
 const NavItem = ({ label, to, icon }) => {
-  <li className="nav-item mb-2">
-    <div className="row">
-      <div className="col-3">{icon && <Icon filename={icon} alt={label} />}</div>
-      <div className="col">{to ? <Link to={to}>{label}</Link> : <span>{label}</span>}</div>
-    </div>
-  </li>;
+  return (
+    <li className="nav-item mb-2">
+      <div className="row">
+        <div className="col-3">{icon && <Icon filename={`${icon}.png`} alt={label} />}</div>
+        <div className="col">{to ? <Link to={to}>{label}</Link> : <span>{label}</span>}</div>
+      </div>
+    </li>
+  );
 };
 
 const NavItems = () => {
