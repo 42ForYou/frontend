@@ -40,15 +40,14 @@
     "webpack-merge": "^5.10.0"
   },
   "scripts": {
-    "start": "webpack serve --history-api-fallback --watch --config webpack.dev.js",
-    "dev": "webpack --watch --config webpack.dev.js",
-    "build": "webpack --config webpack.prod.js",
+    "start": "webpack serve --watch --config ./config/webpack/webpack.dev.js",
+    "dev": "webpack --watch --config ./config/webpack/webpack.dev.js",
+    "build": "webpack --config ./config/webpack/webpack.prod.js",
     "prepare": "if [ \"$NODE_ENV\" = \"development\" ]; then git config --local commit.template .gitmessage.txt; fi",
     "postinstall": "if [ \"$NODE_ENV\" = \"development\" ]; then husky install; fi",
     "format": "prettier --cache --write .",
     "lint": "eslint --cache .",
     "test": "jest",
-    "reinstall": "./tools/reinstall.sh",
     "docs": "jsdoc src/* -d docs"
   },
   "jira-prepare-commit-msg": {
