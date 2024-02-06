@@ -63,7 +63,22 @@ const WaitingPlayersGridTournament = ({ players }) => {
   const gridItems = Array.from({ length: 4 }, (_, index) => players[index]);
 
   return (
-    <div className="container">
+    <div className="container position-relative">
+      {/* position-relative 추가 */}
+      {/* VS 텍스트를 위한 요소 추가, 중앙에 배치 */}
+      <div
+        className="vs-text"
+        style={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          fontSize: "5rem",
+          fontWeight: "bold",
+          zIndex: 2,
+        }}>
+        VS
+      </div>
       <div className="row">
         <WaitingPlayersRow players={gridItems.slice(0, 2)} />
       </div>
