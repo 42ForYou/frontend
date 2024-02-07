@@ -20,7 +20,7 @@ const NavItems = () => {
   return (
     <ul>
       <NavItem to={"/"} label="HOME" icon={"home"} />
-      <NavItem to={"/games"} label="GAMES" icon={"pong"} />
+      <NavItem to={"/game/list"} label="GAMES" icon={"pong"} />
       <NavItem to={"/friends"} label="FRIENDS" icon={"handshake"} />
       <NavItem to={"/users"} label="USERS" icon={"people"} />
       <NavItem label="NOTICE" icon={"bell"} />
