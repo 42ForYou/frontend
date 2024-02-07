@@ -1,16 +1,17 @@
 import React, { useState } from "react";
 
-const ToggleButton = ({ title, initIsToggled }) => {
+const ToggleButton = ({ title, initIsToggled, toggleEvent }) => {
   const [isToggled, setIsToggled] = useState(initIsToggled);
 
-  const toggle = () => {
+  const handleToggle = () => {
     setIsToggled(!isToggled);
+    toggleEvent();
   };
 
   return (
     <div className="ToggleButton">
       {title}
-      <button onClick={toggle}>{isToggled ? "ON" : "OFF"}</button>
+      <button onClick={handleToggle}>{isToggled ? "ON" : "OFF"}</button>
     </div>
   );
 };
