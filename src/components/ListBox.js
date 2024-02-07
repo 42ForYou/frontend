@@ -114,7 +114,9 @@ const ListPagination = ({ totalPage, currentPage, onPaginationClick }) => {
 const ListBox = ({ apiEndpoint, ItemComponent, filterTypes, additionalButton, emptyMsg }) => {
   const [itemsData, setItemsData] = useState(null);
   const [totalPage, setTotalPage] = useState(1);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(
+    filterTypes.reduce((acc, filter) => ({ ...acc, [filter.value]: 1 }), {})
+  );
   const [currentFilter, setCurrentFilter] = useState(filterTypes[0]);
   const itemCountPerPage = 9;
   const itemsPerRow = 3;
@@ -122,14 +124,16 @@ const ListBox = ({ apiEndpoint, ItemComponent, filterTypes, additionalButton, em
   const handleChangeFilter = (changedFilter) => {
     setCurrentFilter(changedFilter);
   };
+
   const handleChangePage = (changedPage) => {
-    setCurrentPage(changedPage);
+    setCurrentPage((prev) => ({ ...prev, [currentFilter.value]: changedPage }));
   };
 
   useEffect(() => {
     const fetchItemsData = async () => {
       try {
-        const resData = await get(apiEndpoint(currentFilter.value, currentPage, itemCountPerPage));
+        const currentPageForFilter = currentPage[currentFilter.value];
+        const resData = await get(apiEndpoint(currentFilter.value, currentPageForFilter, itemCountPerPage));
         setItemsData(resData.data);
         setTotalPage(resData.pages.total_pages);
       } catch (error) {
@@ -154,7 +158,11 @@ const ListBox = ({ apiEndpoint, ItemComponent, filterTypes, additionalButton, em
       </div>
       {itemsData && (
         <div className="row d-flex flex-column justify-content-center">
-          <ListPagination totalPage={totalPage} currentPage={currentPage} onPaginationClick={handleChangePage} />
+          <ListPagination
+            totalPage={totalPage}
+            currentPage={currentPage[currentFilter.value]}
+            onPaginationClick={handleChangePage}
+          />
         </div>
       )}
     </div>
