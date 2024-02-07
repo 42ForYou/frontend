@@ -70,29 +70,24 @@ const buttonStyle = {
 };
 
 const ListPagination = ({ totalPage, currentPage, onPaginationClick }) => {
-  const [viewPrevButton, setViewPrevButton] = useState(true);
-  const [viewNextButton, setViewNextButton] = useState(true);
+  const [viewPrevButton, setViewPrevButton] = useState(currentPage > 1);
+  const [viewNextButton, setViewNextButton] = useState(currentPage < totalPage);
 
   const onPrevClick = () => {
     if (currentPage > 1) {
       onPaginationClick(currentPage - 1);
-    } else {
-      alert("이전 페이지가 존재하지 않습니다.");
-      setViewPrevButton(false);
     }
   };
+
   const onNextClick = () => {
     if (currentPage < totalPage) {
       onPaginationClick(currentPage + 1);
-    } else {
-      alert("다음 페이지가 존재하지 않습니다.");
-      setViewNextButton(false);
     }
   };
 
   useEffect(() => {
-    if (currentPage === 1) setViewPrevButton(false);
-    if (currentPage === totalPage) setViewNextButton(false);
+    setViewPrevButton(currentPage > 1);
+    setViewNextButton(currentPage < totalPage);
   }, [currentPage, totalPage]);
 
   return (
@@ -119,7 +114,9 @@ const ListPagination = ({ totalPage, currentPage, onPaginationClick }) => {
 const ListBox = ({ apiEndpoint, ItemComponent, filterTypes, additionalButton, emptyMsg }) => {
   const [itemsData, setItemsData] = useState(null);
   const [totalPage, setTotalPage] = useState(1);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(
+    filterTypes.reduce((acc, filter) => ({ ...acc, [filter.value]: 1 }), {})
+  );
   const [currentFilter, setCurrentFilter] = useState(filterTypes[0]);
   const itemCountPerPage = 9;
   const itemsPerRow = 3;
@@ -127,14 +124,16 @@ const ListBox = ({ apiEndpoint, ItemComponent, filterTypes, additionalButton, em
   const handleChangeFilter = (changedFilter) => {
     setCurrentFilter(changedFilter);
   };
+
   const handleChangePage = (changedPage) => {
-    setCurrentPage(changedPage);
+    setCurrentPage((prev) => ({ ...prev, [currentFilter.value]: changedPage }));
   };
 
   useEffect(() => {
     const fetchItemsData = async () => {
       try {
-        const resData = await get(apiEndpoint(currentFilter.value, currentPage, itemCountPerPage));
+        const currentPageForFilter = currentPage[currentFilter.value];
+        const resData = await get(apiEndpoint(currentFilter.value, currentPageForFilter, itemCountPerPage));
         setItemsData(resData.data);
         setTotalPage(resData.pages.total_pages);
       } catch (error) {
@@ -145,21 +144,32 @@ const ListBox = ({ apiEndpoint, ItemComponent, filterTypes, additionalButton, em
   }, [apiEndpoint, currentFilter, currentPage]);
 
   return (
-    <div>
+    <div className="container d-flex flex-column justify-content-between h-100">
       <div className="row">
-        <ListFilter
-          filterTypes={filterTypes}
-          onFilterClick={handleChangeFilter}
-          rightButton={additionalButton}
-          currentFilter={currentFilter}
-        />
-      </div>
-      <div className="row">
-        <ListItems itemsData={itemsData} ItemComponent={ItemComponent} itemsPerRow={itemsPerRow} emptyMsg={emptyMsg} />
+        <div className="row">
+          <ListFilter
+            filterTypes={filterTypes}
+            onFilterClick={handleChangeFilter}
+            rightButton={additionalButton}
+            currentFilter={currentFilter}
+          />
+        </div>
+        <div className="row">
+          <ListItems
+            itemsData={itemsData}
+            ItemComponent={ItemComponent}
+            itemsPerRow={itemsPerRow}
+            emptyMsg={emptyMsg}
+          />
+        </div>
       </div>
       {itemsData && (
         <div className="row d-flex flex-column justify-content-center">
-          <ListPagination totalPage={totalPage} currentPage={currentPage} onPaginationClick={handleChangePage} />
+          <ListPagination
+            totalPage={totalPage}
+            currentPage={currentPage[currentFilter.value]}
+            onPaginationClick={handleChangePage}
+          />
         </div>
       )}
     </div>
