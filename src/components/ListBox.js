@@ -70,29 +70,24 @@ const buttonStyle = {
 };
 
 const ListPagination = ({ totalPage, currentPage, onPaginationClick }) => {
-  const [viewPrevButton, setViewPrevButton] = useState(true);
-  const [viewNextButton, setViewNextButton] = useState(true);
+  const [viewPrevButton, setViewPrevButton] = useState(currentPage > 1);
+  const [viewNextButton, setViewNextButton] = useState(currentPage < totalPage);
 
   const onPrevClick = () => {
     if (currentPage > 1) {
       onPaginationClick(currentPage - 1);
-    } else {
-      alert("이전 페이지가 존재하지 않습니다.");
-      setViewPrevButton(false);
     }
   };
+
   const onNextClick = () => {
     if (currentPage < totalPage) {
       onPaginationClick(currentPage + 1);
-    } else {
-      alert("다음 페이지가 존재하지 않습니다.");
-      setViewNextButton(false);
     }
   };
 
   useEffect(() => {
-    if (currentPage === 1) setViewPrevButton(false);
-    if (currentPage === totalPage) setViewNextButton(false);
+    setViewPrevButton(currentPage > 1);
+    setViewNextButton(currentPage < totalPage);
   }, [currentPage, totalPage]);
 
   return (
