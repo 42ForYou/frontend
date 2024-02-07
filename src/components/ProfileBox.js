@@ -5,6 +5,7 @@ import Avatar from "./Avatar";
 import { checkRegex } from "../common/checkRegex";
 import { patchForm } from "../common/apiBase";
 import { API_ENDPOINTS } from "../common/apiEndpoints";
+import { updateProperty } from "../common/objectUtils";
 
 const STATUS = {
   PROFILE: 0,
@@ -37,7 +38,7 @@ const ProfileInfoTextItem = ({ label, value, isEditing = false, onChange }) => {
   );
 };
 
-const ProfileInfoAvatar = ({ src, nickname, intraId, isEditing = false, setEditStatus }) => {
+const ProfileInfoAvatar = ({ src, nickname, intraId, isEditing = false, setEditStatus, updateProfileData }) => {
   const imgInputRef = useRef(null);
 
   const handleAvatarUploadClick = () => {
@@ -58,8 +59,11 @@ const ProfileInfoAvatar = ({ src, nickname, intraId, isEditing = false, setEditS
     const editStatusMsg = ["", "", "", ""];
     try {
       const resData = await patchForm(API_ENDPOINTS.USER_PROFILE(intraId), formData);
+      const updatedProfile = resData.data.user;
+      updateProfileData("avatar", updatedProfile.avatar);
       editStatusMsg[STATUS.PROFILE] = "아바타가 성공적으로 업로드 되었습니다.";
     } catch (error) {
+      console.log(error);
       editStatusMsg[STATUS.PROFILE] = "아바타 업로드가 실패하였습니다.";
     }
     setEditStatus(editStatusMsg);
@@ -101,7 +105,7 @@ const ProfileInfoEditButtons = ({ isEditing, onExitClick, onSubmitClick, onEntry
   );
 };
 
-const MyProfileInfo = ({ intraId, nickname, email, avatar, fetchProfileData }) => {
+const MyProfileInfo = ({ intraId, nickname, email, avatar, updateProfileData }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [newNickname, setNewNickname] = useState(nickname);
   const [newEmail, setNewEmail] = useState(email);
@@ -120,6 +124,8 @@ const MyProfileInfo = ({ intraId, nickname, email, avatar, fetchProfileData }) =
   };
 
   const handleSubmitEditClick = () => {
+    // console.log(intraId);
+    // console.log(nickname);
     const isChangeExist = !(newNickname === nickname && newEmail === email);
     const editStatusMsg = ["", "", "", ""];
 
@@ -140,9 +146,12 @@ const MyProfileInfo = ({ intraId, nickname, email, avatar, fetchProfileData }) =
         const newProfile = { nickname: newNickname, email: newEmail };
         formData.append("data", JSON.stringify(newProfile));
         const resData = await patchForm(API_ENDPOINTS.USER_PROFILE(intraId), formData);
+        const updatedProfile = resData.data.user;
+        updateProfileData("nickname", updatedProfile.nickname);
+        updateProfileData("email", updatedProfile.email);
+
         editStatusMsg[STATUS.PROFILE] = "프로필 정보가 성공적으로 업데이트 되었습니다.";
         setIsEditing(false);
-        fetchProfileData();
       } catch (error) {
         const errorCode = error.response.status;
         const errorData = error.response.data;
@@ -171,6 +180,7 @@ const MyProfileInfo = ({ intraId, nickname, email, avatar, fetchProfileData }) =
         intraId={intraId}
         isEditing={isEditing}
         setEditStatus={setEditStatus}
+        updateProfileData={updateProfileData}
       />
       <div>
         <div className="d-flex flex-column mt-4 mb-4">
@@ -228,29 +238,49 @@ const ProfileSecurity = (is2FA) => {
   );
 };
 
-const ProfileBox = ({ isMine, profileData, fetchProfileData }) => {
-  const { intra_id: intraId, nickname, email, history, avatar, two_factor_auth: is2FA } = profileData;
+const MyProfileBox = ({ profileDataInitial }) => {
+  const [profileData, setProfileData] = useState(profileDataInitial);
+
+  const updateProfileData = (path, value) => {
+    setProfileData((profileData) => updateProperty(profileData, path, value));
+    // 함수형 업데이트: 비동기적으로 수행되는 setState 함수가 이전 state값을 기반으로 동작하도록 보장
+  };
 
   return (
     <div className="container-fluid">
       <div className="row">
-        {isMine ? (
-          <MyProfileInfo
-            intraId={intraId}
-            nickname={nickname}
-            email={email}
-            avatar={avatar}
-            fetchProfileData={fetchProfileData}
-          />
-        ) : (
-          <UserProfileInfo nickname={nickname} />
-        )}
+        <MyProfileInfo
+          intraId={profileData.intra_id}
+          nickname={profileData.nickname}
+          email={profileData.email}
+          avatar={profileData.avatar}
+          updateProfileData={updateProfileData}
+        />
       </div>
       <div className="row">
-        <ProfileHistory nickname={nickname} />
+        <ProfileHistory nickname={profileData.nickname} />
       </div>
-      <div className="row">{isMine && <ProfileSecurity is2FA={is2FA} />}</div>
+      <div className="row">{<ProfileSecurity is2FA={profileData.two_factor_auth} />}</div>
     </div>
+  );
+};
+
+const UserProfileBox = ({ profileData }) => {
+  return (
+    <div className="container-fluid">
+      <div className="row">
+        <UserProfileInfo nickname={profileData.nickname} />
+      </div>
+      <div className="row">
+        <ProfileHistory nickname={profileData.nickname} />
+      </div>
+    </div>
+  );
+};
+
+const ProfileBox = ({ isMine, profileData }) => {
+  return (
+    <>{isMine ? <MyProfileBox profileDataInitial={profileData} /> : <UserProfileBox profileData={profileData} />}</>
   );
 };
 
