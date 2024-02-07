@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import ToggleButton from "./ToggleButton";
+import StyledButton from "./StyledButton";
 import Avatar from "./Avatar";
 import { checkRegex } from "../common/checkRegex";
 import { patchForm } from "../common/apiBase";
@@ -90,17 +91,11 @@ const ProfileInfoEditButtons = ({ isEditing, onExitClick, onSubmitClick, onEntry
     <div className="text-center mb-2">
       {isEditing ? (
         <>
-          <button className="btn btn-primary" onClick={onSubmitClick}>
-            확인
-          </button>
-          <button className="btn btn-danger me-2" onClick={onExitClick}>
-            취소
-          </button>
+          <StyledButton styleType={"primary"} name={"확인"} onClick={onSubmitClick} />
+          <StyledButton styleType={"danger ms-2"} name={"취소"} onClick={onExitClick} />
         </>
       ) : (
-        <button className="btn btn-primary" onClick={onEntryClick}>
-          정보 수정하기
-        </button>
+        <StyledButton styleType={"primary"} name={"정보 수정하기"} onClick={onEntryClick} />
       )}
     </div>
   );
