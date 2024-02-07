@@ -2,7 +2,7 @@ FROM node AS build
 
 WORKDIR /app
 
-COPY . .
+COPY ./frontend .
 
 RUN npm install
 RUN npm run build
