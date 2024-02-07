@@ -153,7 +153,6 @@ const MyProfileInfo = ({ intraId, nickname, email, avatar, updateProfileData }) 
         const updatedProfile = resData.data.user;
         updateProfileData("nickname", updatedProfile.nickname);
         updateProfileData("email", updatedProfile.email);
-        updateProfileData("two_factor_auth", false);
         setLoggedInUser(updatedProfile);
 
         editStatusMsg[STATUS.PROFILE] = "프로필 정보가 성공적으로 업데이트 되었습니다.";
@@ -230,15 +229,33 @@ const ProfileHistory = ({ nickname }) => {
   );
 };
 
-const ProfileSecurity = (is2FA) => {
+const ProfileSecurity = ({ is2FA, updateProfileData }) => {
+  const { loggedInUser, setLoggedInUser } = useContext(AuthContext);
   const handleDeleteUser = () => {
     if (window.confirm("정말 탈퇴하시겠습니까?")) alert("탈퇴 기능은 아직 구현되지 않음");
     // 탈퇴 요청을 백엔드 서버로 보내 반영
   };
 
+  const handleClick2FAToggle = (new2FA) => {
+    const patchProfile = async () => {
+      try {
+        const formData = new FormData();
+        const newProfile = { two_factor_auth: new2FA };
+        formData.append("data", JSON.stringify(newProfile));
+        const resData = await patchForm(API_ENDPOINTS.USER_PROFILE(loggedInUser.intra_id), formData);
+        const updatedProfile = resData.data.user;
+        updateProfileData("two_factor_auth", new2FA);
+        setLoggedInUser(updatedProfile);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    patchProfile();
+  };
+
   return (
     <div className="d-flex justify-content-between mt-4">
-      <ToggleButton title="2FA" initIsToggled={is2FA} />
+      <ToggleButton title="2FA" initIsToggled={is2FA} toggleEvent={() => handleClick2FAToggle(!is2FA)} />
       <button onClick={handleDeleteUser}>Delete</button>
     </div>
   );
@@ -266,7 +283,9 @@ const MyProfileBox = ({ profileDataInitial }) => {
       <div className="row">
         <ProfileHistory nickname={profileData.nickname} />
       </div>
-      <div className="row">{<ProfileSecurity is2FA={profileData.two_factor_auth} />}</div>
+      <div className="row">
+        {<ProfileSecurity is2FA={profileData.two_factor_auth} updateProfileData={updateProfileData} />}
+      </div>
     </div>
   );
 };
