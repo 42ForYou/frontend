@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import ToggleButton from "./ToggleButton";
 import StyledButton from "./StyledButton";
 import Avatar from "./Avatar";
@@ -6,6 +6,7 @@ import { checkRegex } from "../common/checkRegex";
 import { patchForm } from "../common/apiBase";
 import { API_ENDPOINTS } from "../common/apiEndpoints";
 import { updateProperty } from "../common/objectUtils";
+import AuthContext from "../context/AuthContext";
 
 const STATUS = {
   PROFILE: 0,
@@ -39,6 +40,7 @@ const ProfileInfoTextItem = ({ label, value, isEditing = false, onChange }) => {
 };
 
 const ProfileInfoAvatar = ({ avatar, nickname, intraId, isEditing = false, setEditStatus, updateProfileData }) => {
+  const { setLoggedInUser } = useContext(AuthContext);
   const [newAvatar, setNewAvatar] = useState(avatar);
   const imgInputRef = useRef(null);
 
@@ -63,6 +65,7 @@ const ProfileInfoAvatar = ({ avatar, nickname, intraId, isEditing = false, setEd
       const updatedProfile = resData.data.user;
       updateProfileData("avatar", updatedProfile.avatar);
       setNewAvatar(updatedProfile.avatar);
+      setLoggedInUser(updatedProfile);
       editStatusMsg[STATUS.PROFILE] = "아바타가 성공적으로 업로드 되었습니다.";
     } catch (error) {
       console.log(error);
@@ -108,6 +111,7 @@ const ProfileInfoEditButtons = ({ isEditing, onExitClick, onSubmitClick, onEntry
 };
 
 const MyProfileInfo = ({ intraId, nickname, email, avatar, updateProfileData }) => {
+  const { setLoggedInUser } = useContext(AuthContext);
   const [isEditing, setIsEditing] = useState(false);
   const [newNickname, setNewNickname] = useState(nickname);
   const [newEmail, setNewEmail] = useState(email);
@@ -149,6 +153,8 @@ const MyProfileInfo = ({ intraId, nickname, email, avatar, updateProfileData }) 
         const updatedProfile = resData.data.user;
         updateProfileData("nickname", updatedProfile.nickname);
         updateProfileData("email", updatedProfile.email);
+        updateProfileData("two_factor_auth", false);
+        setLoggedInUser(updatedProfile);
 
         editStatusMsg[STATUS.PROFILE] = "프로필 정보가 성공적으로 업데이트 되었습니다.";
         setIsEditing(false);
