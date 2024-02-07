@@ -140,7 +140,7 @@ const MyProfileInfo = ({ intraId, nickname, email, avatar, fetchProfileData }) =
         const newProfile = { nickname: newNickname, email: newEmail };
         formData.append("data", JSON.stringify(newProfile));
         const resData = await patchForm(API_ENDPOINTS.USER_PROFILE(intraId), formData);
-        editStatusMsg[STATUS.AVATAR] = "프로필 정보가 성공적으로 업데이트 되었습니다.";
+        editStatusMsg[STATUS.PROFILE] = "프로필 정보가 성공적으로 업데이트 되었습니다.";
         setIsEditing(false);
         fetchProfileData();
       } catch (error) {
