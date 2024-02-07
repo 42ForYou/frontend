@@ -158,7 +158,8 @@ const MyProfileInfo = ({ intraId, nickname, email, avatar, fetchProfileData }) =
       setNewEmail(email);
     };
 
-    if (isChangeExist && isValidNewProfile(newNickname, newEmail)) patchProfile();
+    if (!isChangeExist) setIsEditing(false);
+    else if (isValidNewProfile(newNickname, newEmail)) patchProfile();
     setEditStatus(editStatusMsg);
   };
 
