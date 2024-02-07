@@ -38,7 +38,8 @@ const ProfileInfoTextItem = ({ label, value, isEditing = false, onChange }) => {
   );
 };
 
-const ProfileInfoAvatar = ({ src, nickname, intraId, isEditing = false, setEditStatus, updateProfileData }) => {
+const ProfileInfoAvatar = ({ avatar, nickname, intraId, isEditing = false, setEditStatus, updateProfileData }) => {
+  const [newAvatar, setNewAvatar] = useState(avatar);
   const imgInputRef = useRef(null);
 
   const handleAvatarUploadClick = () => {
@@ -61,6 +62,7 @@ const ProfileInfoAvatar = ({ src, nickname, intraId, isEditing = false, setEditS
       const resData = await patchForm(API_ENDPOINTS.USER_PROFILE(intraId), formData);
       const updatedProfile = resData.data.user;
       updateProfileData("avatar", updatedProfile.avatar);
+      setNewAvatar(updatedProfile.avatar);
       editStatusMsg[STATUS.PROFILE] = "아바타가 성공적으로 업로드 되었습니다.";
     } catch (error) {
       console.log(error);
@@ -72,7 +74,7 @@ const ProfileInfoAvatar = ({ src, nickname, intraId, isEditing = false, setEditS
   return (
     <>
       <Avatar
-        src={src}
+        src={newAvatar}
         alt={`${nickname}\'s avatar`}
         isEditing={isEditing}
         onImageUploadClick={handleAvatarUploadClick}
@@ -124,8 +126,6 @@ const MyProfileInfo = ({ intraId, nickname, email, avatar, updateProfileData }) 
   };
 
   const handleSubmitEditClick = () => {
-    // console.log(intraId);
-    // console.log(nickname);
     const isChangeExist = !(newNickname === nickname && newEmail === email);
     const editStatusMsg = ["", "", "", ""];
 
@@ -175,7 +175,7 @@ const MyProfileInfo = ({ intraId, nickname, email, avatar, updateProfileData }) 
   return (
     <div className="d-flex flex-column align-items-center">
       <ProfileInfoAvatar
-        src={avatar}
+        avatar={avatar}
         nickname={nickname}
         intraId={intraId}
         isEditing={isEditing}
@@ -205,7 +205,7 @@ const MyProfileInfo = ({ intraId, nickname, email, avatar, updateProfileData }) 
 const UserProfileInfo = ({ avatar, nickname }) => {
   return (
     <div className="d-flex flex-column align-items-center">
-      <ProfileInfoAvatar src={avatar} nickname={nickname} />
+      <ProfileInfoAvatar avatar={avatar} nickname={nickname} />
       <div className="d-flex flex-column mt-4 mb-4">
         <ProfileInfoTextItem label="Nickname" value={nickname} />
       </div>
