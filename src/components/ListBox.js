@@ -144,17 +144,24 @@ const ListBox = ({ apiEndpoint, ItemComponent, filterTypes, additionalButton, em
   }, [apiEndpoint, currentFilter, currentPage]);
 
   return (
-    <div>
+    <div className="container d-flex flex-column justify-content-between h-100">
       <div className="row">
-        <ListFilter
-          filterTypes={filterTypes}
-          onFilterClick={handleChangeFilter}
-          rightButton={additionalButton}
-          currentFilter={currentFilter}
-        />
-      </div>
-      <div className="row">
-        <ListItems itemsData={itemsData} ItemComponent={ItemComponent} itemsPerRow={itemsPerRow} emptyMsg={emptyMsg} />
+        <div className="row">
+          <ListFilter
+            filterTypes={filterTypes}
+            onFilterClick={handleChangeFilter}
+            rightButton={additionalButton}
+            currentFilter={currentFilter}
+          />
+        </div>
+        <div className="row">
+          <ListItems
+            itemsData={itemsData}
+            ItemComponent={ItemComponent}
+            itemsPerRow={itemsPerRow}
+            emptyMsg={emptyMsg}
+          />
+        </div>
       </div>
       {itemsData && (
         <div className="row d-flex flex-column justify-content-center">
