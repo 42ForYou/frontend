@@ -9,13 +9,13 @@ const TestPage = () => {
       <PageContainer hasNavigationBar={true}>
         <ul>
           <li>
-            <Link to={"/profile/users/pikachu"}>PROFILE (pikachu)</Link>
+            <Link to={"/profile/users/james"}>PROFILE (james)</Link>
           </li>
           <li>
-            <Link to={"/profile/users/jgo"}>PROFILE (jgo)</Link>
+            <Link to={"/profile/users/invalid"}>PROFILE (invalid)</Link>
           </li>
           <li>
-            <Link to={"/profile/users/someone"}>PROFILE (someone)</Link>
+            <Link to={"/game/waiting/1"}>게임 대기 방</Link>
           </li>
         </ul>
       </PageContainer>

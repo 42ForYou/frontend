@@ -1,5 +1,5 @@
 import React from "react";
-import StyledButton from "./styledButton";
+import StyledButton from "./StyledButton";
 
 // 스타일을 가지는 박스
 // 일단은 1대1도 토너먼트 스타일과 통일
