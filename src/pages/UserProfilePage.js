@@ -7,16 +7,15 @@ import LoadingPage from "./LoadingPage";
 import { get } from "../common/apiBase";
 import { API_ENDPOINTS } from "../common/apiEndpoints";
 
-// 유저프로필 URL: /profile/users/:user_id
 const UserProfilePage = () => {
-  const { userId } = useParams();
+  const { intra_id } = useParams();
   const navigate = useNavigate();
   const [profileData, setProfileData] = useState(null);
 
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
-        const resData = await get(API_ENDPOINTS.USER_PROFILE(userId));
+        const resData = await get(API_ENDPOINTS.USER_PROFILE(intra_id));
         setProfileData(resData.data.user);
       } catch (error) {
         alert("유효하지 않은 유저 프로필 페이지입니다.");
@@ -24,7 +23,7 @@ const UserProfilePage = () => {
       }
     };
     fetchProfileData();
-  }, [userId, navigate]);
+  }, [intra_id, navigate]);
 
   return (
     <div className="UserProfilePage">

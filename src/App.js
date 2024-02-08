@@ -37,7 +37,7 @@ const AppContent = () => {
         {/* 로그인 콜백 페이지를 라우팅 관련 이슈 없이 /login 경로 아래 둘 수 있는 방법 알아보기 */}
         <Route path="/callback" element={<LoginCallbackPage />} />
         <Route path="/profile" element={<MyProfilePage />} />
-        <Route path="/profile/users/:user_id" element={<UserProfilePage />} />
+        <Route path="/profile/users/:intra_id" element={<UserProfilePage />} />
         <Route path="/users" element={<UsersPage />} />
         <Route path="/friends" element={<FriendsListPage />} />
         <Route path="/game/list" element={<RoomListPage />} />
