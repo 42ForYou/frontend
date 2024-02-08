@@ -6,7 +6,7 @@ import { AuthProvider } from "./context/AuthContext";
 
 // page
 import HomePage from "./pages/HomePage";
-import GamePlayPage from "./pages/game/GamePlayPage";
+import GamePlayPage from "./pages/GamePlayPage";
 import FriendsListPage from "./pages/FriendsListPage";
 import LoginPage from "./pages/LoginPage";
 import LoginCallbackPage from "./pages/LoginCallbackPage";
