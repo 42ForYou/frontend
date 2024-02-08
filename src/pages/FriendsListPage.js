@@ -8,7 +8,6 @@ const FriendsListPage = () => {
   return (
     <div className="FriendsListPage">
       <PageContainer hasNavigationBar={true}>
-        <SearchBar />
         <FriendsListBox />
       </PageContainer>
     </div>
