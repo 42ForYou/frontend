@@ -4,6 +4,8 @@ import Avatar from "./Avatar";
 import StyledButton from "./StyledButton";
 import { useNavigate } from "react-router-dom";
 import AuthContext from "../context/AuthContext";
+import { del } from "../common/apiBase";
+import { API_ENDPOINTS } from "../common/apiEndpoints";
 
 const StartGameButton = ({ isActive }) => {
   const handleStartGame = () => {
@@ -26,10 +28,12 @@ const StartGameButton = ({ isActive }) => {
   );
 };
 
-const ExitRoomButton = () => {
+const ExitRoomButton = ({ onClick }) => {
   const navigate = useNavigate();
   const handleExitRoom = () => {
-    if (window.confirm("게임 대기 방을 나가시겠습니까?")) navigate(-1);
+    if (!window.confirm("게임 대기 방을 나가시겠습니까?")) return;
+    onClick();
+    navigate(-1);
   };
 
   return (
@@ -136,9 +140,19 @@ const GameWaitingBox = ({ gameData, roomData, playersData }) => {
     return <div>로딩 중...</div>;
   }
 
-  const { is_tournament, game_point, time_limit, n_players } = gameData;
+  const { game_id, is_tournament, game_point, time_limit, n_players } = gameData;
   const { id, title, host, join_players } = roomData;
   const amIHost = host === loggedInUser.nickname;
+
+  const exitRoomRequest = async () => {
+    try {
+      const resData = await del(API_ENDPOINTS.ROOM(game_id));
+      console.log("Test");
+      console.log("방 나가기 성공: ", resData);
+    } catch (error) {
+      console.log("방 나가기 요청 에러: ", error);
+    }
+  };
 
   return (
     <>
@@ -159,7 +173,7 @@ const GameWaitingBox = ({ gameData, roomData, playersData }) => {
         <div className="col"></div>
         <div className="col text-end">
           {amIHost && <StartGameButton isActive={n_players === join_players} />}
-          <ExitRoomButton />
+          <ExitRoomButton onClick={exitRoomRequest} />
         </div>
       </div>
     </>
