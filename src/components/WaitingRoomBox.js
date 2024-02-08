@@ -141,13 +141,23 @@ const WaitingRoomBox = ({ gameData, roomData, playersData, myPlayerId }) => {
   }
 
   const { game_id, is_tournament, game_point, time_limit, n_players } = gameData;
-  const { id, title, host, join_players } = roomData;
+  const { id: room_id, title, host, join_players } = roomData;
   const amIHost = host === loggedInUser.nickname;
+
+  const bombRoomRequest = async () => {
+    try {
+      const resData = await del(API_ENDPOINTS.ROOM(room_id));
+      console.log("방 폭파 성공: ", resData);
+    } catch (error) {
+      console.log("방 폭파 요청 에러: ", error);
+    }
+  };
 
   const exitRoomRequest = async () => {
     try {
       const resData = await del(API_ENDPOINTS.PLAYERS(myPlayerId));
       console.log("방 나가기 성공: ", resData);
+      if (amIHost) bombRoomRequest();
     } catch (error) {
       console.log("방 나가기 요청 에러: ", error);
     }
