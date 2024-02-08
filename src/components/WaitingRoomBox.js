@@ -33,7 +33,7 @@ const ExitRoomButton = ({ onClick }) => {
   const handleExitRoom = () => {
     if (!window.confirm("게임 대기 방을 나가시겠습니까?")) return;
     onClick();
-    navigate(-1);
+    navigate("/game/list");
   };
 
   return (
