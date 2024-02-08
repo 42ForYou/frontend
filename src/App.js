@@ -12,7 +12,7 @@ import LoginPage from "./pages/LoginPage";
 import LoginCallbackPage from "./pages/LoginCallbackPage";
 import UserProfilePage from "./pages/UserProfilePage";
 import MyProfilePage from "./pages/MyProfilePage";
-import GameWaitingPage from "./pages/GameWaitingPage";
+import WaitingRoomPage from "./pages/WaitingRoomPage";
 import UsersPage from "./pages/UsersPage";
 import NotFoundPage from "./pages/error/NotFoundPage";
 import RoomListPage from "./pages/RoomListPage";
@@ -41,7 +41,7 @@ const AppContent = () => {
         <Route path="/users" element={<UsersPage />} />
         <Route path="/friends" element={<FriendsPage />} />
         <Route path="/game/list" element={<RoomListPage />} />
-        <Route path="/game/waiting/:room_id" element={<GameWaitingPage />} />
+        <Route path="/game/waiting/:room_id" element={<WaitingRoomPage />} />
         <Route path="/game/play/:game_id" element={<GamePlayPage />} />
         <Route path="/test" element={<TestPage />} />
         {/* fallback page */}

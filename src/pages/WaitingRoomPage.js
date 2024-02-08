@@ -2,14 +2,14 @@ import React, { useEffect, useState } from "react";
 import PageContainer from "../components/PageContainer";
 
 import LoadingPage from "./LoadingPage";
-import WaitingRoomBox from "../components/GameWaitingBox";
+import WaitingRoomBox from "../components/WaitingRoomBox";
 
 import { get } from "../common/apiBase";
 import { API_ENDPOINTS } from "../common/apiEndpoints";
 import { useNavigate, useParams } from "react-router-dom";
 
 // 차후 필요시 1대1, 토너먼트 방 분리
-const GameWaitingPage = () => {
+const WaitingRoomPage = () => {
   const { room_id } = useParams();
   const navigate = useNavigate();
   const [gameData, setGameData] = useState(null);
@@ -46,4 +46,4 @@ const GameWaitingPage = () => {
   );
 };
 
-export default GameWaitingPage;
+export default WaitingRoomPage;

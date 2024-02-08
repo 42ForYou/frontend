@@ -133,7 +133,7 @@ const WaitingPlayersGrid = ({ players, host, isTournament }) => {
   );
 };
 
-const GameWaitingBox = ({ gameData, roomData, playersData }) => {
+const WaitingRoomBox = ({ gameData, roomData, playersData }) => {
   const { loggedInUser, isLoading } = useContext(AuthContext);
 
   if (isLoading) {
@@ -147,7 +147,6 @@ const GameWaitingBox = ({ gameData, roomData, playersData }) => {
   const exitRoomRequest = async () => {
     try {
       const resData = await del(API_ENDPOINTS.ROOM(game_id));
-      console.log("Test");
       console.log("방 나가기 성공: ", resData);
     } catch (error) {
       console.log("방 나가기 요청 에러: ", error);
@@ -180,4 +179,4 @@ const GameWaitingBox = ({ gameData, roomData, playersData }) => {
   );
 };
 
-export default GameWaitingBox;
+export default WaitingRoomBox;
