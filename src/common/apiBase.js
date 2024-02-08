@@ -63,6 +63,17 @@ const del = async (url) => {
   }
 };
 
+const patch = async (url, data) => {
+  try {
+    const response = await axiosInstance.patch(url, data);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    console.log(`patch 요청 ${url} 실패`);
+    throw error;
+  }
+};
+
 const patchForm = async (url, formData) => {
   try {
     const response = await axiosInstance.patch(url, formData);
@@ -73,4 +84,4 @@ const patchForm = async (url, formData) => {
   }
 };
 
-export { get, getWithoutCredentials, post, put, del, patchForm };
+export { get, getWithoutCredentials, post, put, del, patch, patchForm };
