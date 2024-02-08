@@ -10,4 +10,10 @@ export const API_ENDPOINTS = {
     }
     return "api/game/game_rooms/";
   },
+  PLAYERS: (player_id) => {
+    if (player_id) return `api/game/players/${player_id}`;
+    return "api/game/players/";
+  },
+  ROOM: (roomId) => `/api/game/game_rooms/${roomId}`,
+  FRIENDS: "/api/friends/",
 };

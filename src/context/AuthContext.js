@@ -4,17 +4,8 @@ import { API_ENDPOINTS } from "../common/apiEndpoints";
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const getDefaultIfNoAuthProt = () => {
-    const defaultUser = {
-      intra_id: "intra_id",
-      nickname: "nickname",
-      email: "email",
-      avatar: "avatar",
-      two_factor_auth: false,
-    };
-    return process.env.NO_AUTH_PROTECTION === "true" ? defaultUser : null;
-  };
-  const [loggedInUser, setLoggedInUser] = useState(getDefaultIfNoAuthProt());
+  const [isLoading, setIsLoading] = useState(true); // 로딩 상태
+  const [loggedInUser, setLoggedInUser] = useState(null);
 
   const login = async (code) => {
     try {
@@ -23,6 +14,7 @@ export const AuthProvider = ({ children }) => {
         console.log("로그인 성공");
         const { user } = resData.data;
         setLoggedInUser(user);
+        setIsLoading(false);
         return true;
       } else {
         console.log("로그인 실패");
@@ -45,14 +37,19 @@ export const AuthProvider = ({ children }) => {
       if (resData) {
         const { user } = resData.data;
         setLoggedInUser(user);
-        // console.log(`토큰 유효성 검사: ${user.intra_id}의 유효한 토큰`);
+        setIsLoading(false);
         return true;
       }
     } catch (error) {
       console.log("유효성 검사 중 에러 발생: ", error);
+      setIsLoading(false);
     }
     return false;
   };
+
+  useEffect(() => {
+    validateTokenInCookies();
+  }, []);
 
   return (
     <AuthContext.Provider
@@ -62,6 +59,7 @@ export const AuthProvider = ({ children }) => {
         validateTokenInCookies,
         loggedInUser,
         setLoggedInUser,
+        isLoading,
       }}>
       {children}
     </AuthContext.Provider>

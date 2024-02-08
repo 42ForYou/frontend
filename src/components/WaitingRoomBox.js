@@ -4,6 +4,8 @@ import Avatar from "./Avatar";
 import StyledButton from "./StyledButton";
 import { useNavigate } from "react-router-dom";
 import AuthContext from "../context/AuthContext";
+import { del } from "../common/apiBase";
+import { API_ENDPOINTS } from "../common/apiEndpoints";
 
 const StartGameButton = ({ isActive }) => {
   const handleStartGame = () => {
@@ -26,10 +28,12 @@ const StartGameButton = ({ isActive }) => {
   );
 };
 
-const ExitRoomButton = () => {
+const ExitRoomButton = ({ onClick }) => {
   const navigate = useNavigate();
   const handleExitRoom = () => {
-    if (window.confirm("게임 대기 방을 나가시겠습니까?")) navigate(-1);
+    if (!window.confirm("게임 대기 방을 나가시겠습니까?")) return;
+    onClick();
+    navigate("/game/list");
   };
 
   return (
@@ -129,14 +133,37 @@ const WaitingPlayersGrid = ({ players, host, isTournament }) => {
   );
 };
 
-const GameWaitingBox = ({ gameData, roomData, playersData }) => {
-  console.log(gameData);
-  console.log(roomData);
-  console.log(playersData);
-  const { is_tournament, game_point, time_limit, n_players } = gameData;
-  const { id, title, host, join_players } = roomData;
-  const { loggedInUser } = useContext(AuthContext);
+const WaitingRoomBox = ({ gameData, roomData, playersData, myPlayerId }) => {
+  const { loggedInUser, isLoading } = useContext(AuthContext);
+
+  if (isLoading) {
+    return <div>로딩 중...</div>;
+  }
+
+  const { game_id, is_tournament, game_point, time_limit, n_players } = gameData;
+  const { id: room_id, title, host, join_players } = roomData;
   const amIHost = host === loggedInUser.nickname;
+
+  const bombRoomRequest = async () => {
+    try {
+      const resData = await del(API_ENDPOINTS.ROOM(room_id));
+      console.log("방 폭파 성공: ", resData);
+    } catch (error) {
+      console.log("방 폭파 요청 에러: ", error);
+    }
+  };
+
+  // todo: 페이지 뒤로가기나 URL 변경으로 인해 방을 나가게 되는 경우 백 서버에 반영 (웹소켓으로 이벤트 감지)
+  const exitRoomRequest = async () => {
+    try {
+      const resData = await del(API_ENDPOINTS.PLAYERS(myPlayerId));
+      console.log("방 나가기 성공", resData);
+      // todo: 현재 실시간으로 다른 유저가 있는 경우에만 방 폭파 요청
+      if (amIHost && join_players !== 1) bombRoomRequest();
+    } catch (error) {
+      console.log("방 나가기 요청 에러: ", error);
+    }
+  };
 
   return (
     <>
@@ -151,17 +178,17 @@ const GameWaitingBox = ({ gameData, roomData, playersData }) => {
         />
       </div>
       <div className="row">
-        <WaitingPlayersGrid players={playersData} host={host} isTournament={is_tournament} />
+        <WaitingPlayersGrid players={playersData} host={host} isTournament={is_tournament || n_players === 4} />
       </div>
       <div className="row d-flex justify-content-between border border-primary p-3">
         <div className="col"></div>
         <div className="col text-end">
           {amIHost && <StartGameButton isActive={n_players === join_players} />}
-          <ExitRoomButton />
+          <ExitRoomButton onClick={exitRoomRequest} />
         </div>
       </div>
     </>
   );
 };
 
-export default GameWaitingBox;
+export default WaitingRoomBox;

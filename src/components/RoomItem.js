@@ -1,19 +1,38 @@
 import React from "react";
 import StyledButton from "./StyledButton";
+import { post } from "../common/apiBase";
+import { API_ENDPOINTS } from "../common/apiEndpoints";
+import { useNavigate } from "react-router-dom";
 
 // 스타일을 가지는 박스
 // 일단은 1대1도 토너먼트 스타일과 통일
 const RoomItem = ({ game, room }) => {
+  const navigate = useNavigate();
   const { game_id, is_tournament, game_point, time_limit, n_players } = game;
-  const { id, title, is_playing, join_players, host } = room;
+  const { id: room_id, title, is_playing, join_players, host } = room;
 
-  const handleJoinClick = (roomId) => {
-    // 서버에 방 참가 요청
-    console.log("방 참가 요청");
+  const handleJoinClick = (gameId) => {
+    const postJoinRequest = async () => {
+      try {
+        const resData = await post(API_ENDPOINTS.PLAYERS(), { game_id: gameId });
+        navigate(`/game/waiting/${room_id}`);
+        console.log("방 참가 요청 성공: ", resData);
+      } catch (error) {
+        console.log("방 참가 요청 에러: ", error);
+        const errorReason = error.response.data.error;
+        let alertMsg;
+        if (errorReason === "The game room is full") alertMsg = "게임 방 인원이 모두 찼습니다.";
+        else if (errorReason === "The player is already participating") alertMsg = "이미 참가한 방입니다.";
+        else if (errorReason === "The game room is already started") alertMsg = "게임이 이미 시작된 방입니다.";
+        else alertMsg = "게임 방에 입장할 수 없습니다.";
+        alert(alertMsg);
+      }
+    };
+    postJoinRequest();
   };
 
   return (
-    <div className="RoomItem border border-primary w-100 p-3">
+    <div className={`roomItem ${is_playing ? "roomItemPlaying" : ""} w-100 p-3`}>
       <div className="row ps-3 pe-3">
         <div className="col-8">
           <div className="row">
@@ -32,7 +51,12 @@ const RoomItem = ({ game, room }) => {
         <div className="col d-flex flex-column justify-content-between align-items-end">
           <div className="row">{is_tournament ? "[토너먼트]" : "[1vs1]"}</div>
           <div className="row">
-            <StyledButton styleType={"primary"} name={"JOIN"} onClick={() => handleJoinClick(game_id)} />
+            <StyledButton
+              styleType={"primary"}
+              name={"JOIN"}
+              onClick={() => handleJoinClick(game_id)}
+              disabled={is_playing}
+            />
           </div>
         </div>
       </div>

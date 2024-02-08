@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import CustomModal from "./CustomModal";
 import AuthContext from "../context/AuthContext";
 import { post } from "../common/apiBase";
@@ -98,6 +99,7 @@ const RoomGameOptionForm = ({ updateRoomData }) => {
 };
 
 const CreateRoomModal = ({ handleClose }) => {
+  const navigate = useNavigate();
   const [roomData, setRoomData] = useState({});
 
   const handleUpdateRoomData = (path, value) => {
@@ -108,11 +110,13 @@ const CreateRoomModal = ({ handleClose }) => {
   const handleSubmit = () => {
     const postRoomData = async () => {
       try {
+        console.log("방 생성 요청 시작");
         const resData = await post(API_ENDPOINTS.ROOM_LIST(), roomData);
-        console.log(resData);
-        alert("방이 성공적으로 생성되었습니다.");
+        const createdGameId = resData.data.game.game_id;
+        navigate(`/game/waiting/${createdGameId}`);
         handleClose();
       } catch (error) {
+        console.error("방 생성 요청 실패:", error);
         alert("방 생성에 실패하였습니다.");
       }
     };
