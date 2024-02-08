@@ -29,7 +29,7 @@ const RoomItem = ({ game, room }) => {
   };
 
   return (
-    <div className="RoomItem border border-primary w-100 p-3">
+    <div className={`roomItem ${is_playing ? "roomItemPlaying" : ""} w-100 p-3`}>
       <div className="row ps-3 pe-3">
         <div className="col-8">
           <div className="row">
@@ -48,7 +48,12 @@ const RoomItem = ({ game, room }) => {
         <div className="col d-flex flex-column justify-content-between align-items-end">
           <div className="row">{is_tournament ? "[토너먼트]" : "[1vs1]"}</div>
           <div className="row">
-            <StyledButton styleType={"primary"} name={"JOIN"} onClick={() => handleJoinClick(game_id)} />
+            <StyledButton
+              styleType={"primary"}
+              name={"JOIN"}
+              onClick={() => handleJoinClick(game_id)}
+              disabled={is_playing}
+            />
           </div>
         </div>
       </div>

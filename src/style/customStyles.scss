@@ -45,3 +45,14 @@ li {
   width: 24px;
   height: 24px;
 }
+
+.roomItem {
+  border: 1px solid #007bff;
+	background-color: aquamarine;
+  width: 100%;
+  padding: 16px;
+}
+
+.roomItemPlaying {
+	background-color: orangered;
+}
