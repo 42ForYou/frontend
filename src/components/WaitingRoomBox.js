@@ -153,11 +153,13 @@ const WaitingRoomBox = ({ gameData, roomData, playersData, myPlayerId }) => {
     }
   };
 
+  // todo: 페이지 뒤로가기나 URL 변경으로 인해 방을 나가게 되는 경우 백 서버에 반영 (웹소켓으로 이벤트 감지)
   const exitRoomRequest = async () => {
     try {
       const resData = await del(API_ENDPOINTS.PLAYERS(myPlayerId));
-      console.log("방 나가기 성공: ", resData);
-      if (amIHost) bombRoomRequest();
+      console.log("방 나가기 성공", resData);
+      // todo: 현재 실시간으로 다른 유저가 있는 경우에만 방 폭파 요청
+      if (amIHost && join_players !== 1) bombRoomRequest();
     } catch (error) {
       console.log("방 나가기 요청 에러: ", error);
     }
