@@ -1,9 +1,12 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import ToggleButton from "./ToggleButton";
+import StyledButton from "./StyledButton";
 import Avatar from "./Avatar";
 import { checkRegex } from "../common/checkRegex";
 import { patchForm } from "../common/apiBase";
 import { API_ENDPOINTS } from "../common/apiEndpoints";
+import { updateProperty } from "../common/objectUtils";
+import AuthContext from "../context/AuthContext";
 
 const STATUS = {
   PROFILE: 0,
@@ -36,7 +39,9 @@ const ProfileInfoTextItem = ({ label, value, isEditing = false, onChange }) => {
   );
 };
 
-const ProfileInfoAvatar = ({ src, nickname, intraId, isEditing = false, setEditStatus }) => {
+const ProfileInfoAvatar = ({ avatar, nickname, intraId, isEditing = false, setEditStatus, updateProfileData }) => {
+  const { setLoggedInUser } = useContext(AuthContext);
+  const [newAvatar, setNewAvatar] = useState(avatar);
   const imgInputRef = useRef(null);
 
   const handleAvatarUploadClick = () => {
@@ -57,8 +62,13 @@ const ProfileInfoAvatar = ({ src, nickname, intraId, isEditing = false, setEditS
     const editStatusMsg = ["", "", "", ""];
     try {
       const resData = await patchForm(API_ENDPOINTS.USER_PROFILE(intraId), formData);
+      const updatedProfile = resData.data.user;
+      updateProfileData("avatar", updatedProfile.avatar);
+      setNewAvatar(updatedProfile.avatar);
+      setLoggedInUser(updatedProfile);
       editStatusMsg[STATUS.PROFILE] = "아바타가 성공적으로 업로드 되었습니다.";
     } catch (error) {
+      console.log(error);
       editStatusMsg[STATUS.PROFILE] = "아바타 업로드가 실패하였습니다.";
     }
     setEditStatus(editStatusMsg);
@@ -67,7 +77,7 @@ const ProfileInfoAvatar = ({ src, nickname, intraId, isEditing = false, setEditS
   return (
     <>
       <Avatar
-        src={src}
+        src={newAvatar}
         alt={`${nickname}\'s avatar`}
         isEditing={isEditing}
         onImageUploadClick={handleAvatarUploadClick}
@@ -90,23 +100,18 @@ const ProfileInfoEditButtons = ({ isEditing, onExitClick, onSubmitClick, onEntry
     <div className="text-center mb-2">
       {isEditing ? (
         <>
-          <button className="btn btn-primary" onClick={onSubmitClick}>
-            확인
-          </button>
-          <button className="btn btn-danger me-2" onClick={onExitClick}>
-            취소
-          </button>
+          <StyledButton styleType={"primary"} name={"확인"} onClick={onSubmitClick} />
+          <StyledButton styleType={"danger ms-2"} name={"취소"} onClick={onExitClick} />
         </>
       ) : (
-        <button className="btn btn-primary" onClick={onEntryClick}>
-          정보 수정하기
-        </button>
+        <StyledButton styleType={"primary"} name={"정보 수정하기"} onClick={onEntryClick} />
       )}
     </div>
   );
 };
 
-const MyProfileInfo = ({ intraId, nickname, email, avatar, fetchProfileData }) => {
+const MyProfileInfo = ({ intraId, nickname, email, avatar, updateProfileData }) => {
+  const { setLoggedInUser } = useContext(AuthContext);
   const [isEditing, setIsEditing] = useState(false);
   const [newNickname, setNewNickname] = useState(nickname);
   const [newEmail, setNewEmail] = useState(email);
@@ -145,9 +150,13 @@ const MyProfileInfo = ({ intraId, nickname, email, avatar, fetchProfileData }) =
         const newProfile = { nickname: newNickname, email: newEmail };
         formData.append("data", JSON.stringify(newProfile));
         const resData = await patchForm(API_ENDPOINTS.USER_PROFILE(intraId), formData);
-        editStatusMsg[STATUS.AVATAR] = "프로필 정보가 성공적으로 업데이트 되었습니다.";
+        const updatedProfile = resData.data.user;
+        updateProfileData("nickname", updatedProfile.nickname);
+        updateProfileData("email", updatedProfile.email);
+        setLoggedInUser(updatedProfile);
+
+        editStatusMsg[STATUS.PROFILE] = "프로필 정보가 성공적으로 업데이트 되었습니다.";
         setIsEditing(false);
-        fetchProfileData();
       } catch (error) {
         const errorCode = error.response.status;
         const errorData = error.response.data;
@@ -163,18 +172,20 @@ const MyProfileInfo = ({ intraId, nickname, email, avatar, fetchProfileData }) =
       setNewEmail(email);
     };
 
-    if (isChangeExist && isValidNewProfile(newNickname, newEmail)) patchProfile();
+    if (!isChangeExist) setIsEditing(false);
+    else if (isValidNewProfile(newNickname, newEmail)) patchProfile();
     setEditStatus(editStatusMsg);
   };
 
   return (
     <div className="d-flex flex-column align-items-center">
       <ProfileInfoAvatar
-        src={avatar}
+        avatar={avatar}
         nickname={nickname}
         intraId={intraId}
         isEditing={isEditing}
         setEditStatus={setEditStatus}
+        updateProfileData={updateProfileData}
       />
       <div>
         <div className="d-flex flex-column mt-4 mb-4">
@@ -199,7 +210,7 @@ const MyProfileInfo = ({ intraId, nickname, email, avatar, fetchProfileData }) =
 const UserProfileInfo = ({ avatar, nickname }) => {
   return (
     <div className="d-flex flex-column align-items-center">
-      <ProfileInfoAvatar src={avatar} nickname={nickname} />
+      <ProfileInfoAvatar avatar={avatar} nickname={nickname} />
       <div className="d-flex flex-column mt-4 mb-4">
         <ProfileInfoTextItem label="Nickname" value={nickname} />
       </div>
@@ -218,43 +229,83 @@ const ProfileHistory = ({ nickname }) => {
   );
 };
 
-const ProfileSecurity = (is2FA) => {
+const ProfileSecurity = ({ is2FA, updateProfileData }) => {
+  const { loggedInUser, setLoggedInUser } = useContext(AuthContext);
   const handleDeleteUser = () => {
     if (window.confirm("정말 탈퇴하시겠습니까?")) alert("탈퇴 기능은 아직 구현되지 않음");
     // 탈퇴 요청을 백엔드 서버로 보내 반영
   };
 
+  const handleClick2FAToggle = (new2FA) => {
+    const patchProfile = async () => {
+      try {
+        const formData = new FormData();
+        const newProfile = { two_factor_auth: new2FA };
+        formData.append("data", JSON.stringify(newProfile));
+        const resData = await patchForm(API_ENDPOINTS.USER_PROFILE(loggedInUser.intra_id), formData);
+        const updatedProfile = resData.data.user;
+        updateProfileData("two_factor_auth", new2FA);
+        setLoggedInUser(updatedProfile);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    patchProfile();
+  };
+
   return (
     <div className="d-flex justify-content-between mt-4">
-      <ToggleButton title="2FA" initIsToggled={is2FA} />
+      <ToggleButton title="2FA" initIsToggled={is2FA} toggleEvent={() => handleClick2FAToggle(!is2FA)} />
       <button onClick={handleDeleteUser}>Delete</button>
     </div>
   );
 };
 
-const ProfileBox = ({ isMine, profileData, fetchProfileData }) => {
-  const { intra_id: intraId, nickname, email, history, avatar, two_factor_auth: is2FA } = profileData;
+const MyProfileBox = ({ profileDataInitial }) => {
+  const [profileData, setProfileData] = useState(profileDataInitial);
+
+  const updateProfileData = (path, value) => {
+    setProfileData((profileData) => updateProperty(profileData, path, value));
+    // 함수형 업데이트: 비동기적으로 수행되는 setState 함수가 이전 state값을 기반으로 동작하도록 보장
+  };
 
   return (
     <div className="container-fluid">
       <div className="row">
-        {isMine ? (
-          <MyProfileInfo
-            intraId={intraId}
-            nickname={nickname}
-            email={email}
-            avatar={avatar}
-            fetchProfileData={fetchProfileData}
-          />
-        ) : (
-          <UserProfileInfo nickname={nickname} />
-        )}
+        <MyProfileInfo
+          intraId={profileData.intra_id}
+          nickname={profileData.nickname}
+          email={profileData.email}
+          avatar={profileData.avatar}
+          updateProfileData={updateProfileData}
+        />
       </div>
       <div className="row">
-        <ProfileHistory nickname={nickname} />
+        <ProfileHistory nickname={profileData.nickname} />
       </div>
-      <div className="row">{isMine && <ProfileSecurity is2FA={is2FA} />}</div>
+      <div className="row">
+        {<ProfileSecurity is2FA={profileData.two_factor_auth} updateProfileData={updateProfileData} />}
+      </div>
     </div>
+  );
+};
+
+const UserProfileBox = ({ profileData }) => {
+  return (
+    <div className="container-fluid">
+      <div className="row">
+        <UserProfileInfo nickname={profileData.nickname} />
+      </div>
+      <div className="row">
+        <ProfileHistory nickname={profileData.nickname} />
+      </div>
+    </div>
+  );
+};
+
+const ProfileBox = ({ isMine, profileData }) => {
+  return (
+    <>{isMine ? <MyProfileBox profileDataInitial={profileData} /> : <UserProfileBox profileData={profileData} />}</>
   );
 };
 
