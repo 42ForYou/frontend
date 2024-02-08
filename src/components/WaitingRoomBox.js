@@ -176,7 +176,7 @@ const WaitingRoomBox = ({ gameData, roomData, playersData, myPlayerId }) => {
         />
       </div>
       <div className="row">
-        <WaitingPlayersGrid players={playersData} host={host} isTournament={is_tournament} />
+        <WaitingPlayersGrid players={playersData} host={host} isTournament={is_tournament || n_players === 4} />
       </div>
       <div className="row d-flex justify-content-between border border-primary p-3">
         <div className="col"></div>
