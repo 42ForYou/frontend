@@ -4,10 +4,6 @@ import { post } from "../common/apiBase";
 import { API_ENDPOINTS } from "../common/apiEndpoints";
 import { useNavigate } from "react-router-dom";
 
-// todo: 플레이 중인 방에 대해 JOIN 버튼 비활성화
-// todo: 플레이 중인 방에 대해 스타일 변경
-// todo: 게임 입장 API 연동
-
 // 스타일을 가지는 박스
 // 일단은 1대1도 토너먼트 스타일과 통일
 const RoomItem = ({ game, room }) => {
@@ -20,9 +16,16 @@ const RoomItem = ({ game, room }) => {
       try {
         const resData = await post(API_ENDPOINTS.PLAYERS(), { game_id: gameId });
         navigate(`/game/waiting/${room_id}`);
-        console.log("방 입장 성공: ", resData);
+        console.log("방 참가 요청 성공: ", resData);
       } catch (error) {
         console.log("방 참가 요청 에러: ", error);
+        const errorReason = error.response.data.error;
+        let alertMsg;
+        if (errorReason === "The game room is full") alertMsg = "게임 방 인원이 모두 찼습니다.";
+        else if (errorReason === "The player is already participating") alertMsg = "이미 참가한 방입니다.";
+        else if (errorReason === "The game room is already started") alertMsg = "게임이 이미 시작된 방입니다.";
+        else alertMsg = "게임 방에 입장할 수 없습니다.";
+        alert(alertMsg);
       }
     };
     postJoinRequest();
