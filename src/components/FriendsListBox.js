@@ -4,10 +4,10 @@ import FriendItem from "./FriendItem";
 import ListBox from "./ListBox";
 import { API_ENDPOINTS } from "../common/apiEndpoints";
 
-const RoomListBox = () => {
+const FriendsListBox = () => {
   const filterTypes = [
-    { value: "my_friend", label: "내 친구" },
-    { value: "pending", label: "내게 온 친구요청" },
+    { value: "friend", label: "나의 친구" },
+    { value: "pending", label: "받지 않은 친구요청" },
   ];
 
   return (
@@ -22,4 +22,4 @@ const RoomListBox = () => {
   );
 };
 
-export default RoomListBox;
+export default FriendsListBox;

@@ -138,6 +138,7 @@ const ListBox = ({ apiEndpoint, ItemComponent, filterTypes, additionalButton, em
         setTotalPage(resData.pages.total_pages);
       } catch (error) {
         setItemsData(null);
+        console.log("리스트 조회 실패: ", error);
       }
     };
     fetchItemsData();
