@@ -1,15 +1,31 @@
 import React from "react";
 import StyledButton from "./StyledButton";
+import { post } from "../common/apiBase";
+import { API_ENDPOINTS } from "../common/apiEndpoints";
+import { useNavigate } from "react-router-dom";
+
+// todo: 플레이 중인 방에 대해 JOIN 버튼 비활성화
+// todo: 플레이 중인 방에 대해 스타일 변경
+// todo: 게임 입장 API 연동
 
 // 스타일을 가지는 박스
 // 일단은 1대1도 토너먼트 스타일과 통일
 const RoomItem = ({ game, room }) => {
+  const navigate = useNavigate();
   const { game_id, is_tournament, game_point, time_limit, n_players } = game;
-  const { id, title, is_playing, join_players, host } = room;
+  const { id: room_id, title, is_playing, join_players, host } = room;
 
-  const handleJoinClick = (roomId) => {
-    // 서버에 방 참가 요청
-    console.log("방 참가 요청");
+  const handleJoinClick = (gameId) => {
+    const postJoinRequest = async () => {
+      try {
+        const resData = await post(API_ENDPOINTS.PLAYERS, { game_id: gameId });
+        navigate(`/game/waiting/${room_id}`);
+        console.log("방 입장 성공: ", resData);
+      } catch (error) {
+        console.log("방 참가 요청 에러: ", error);
+      }
+    };
+    postJoinRequest();
   };
 
   return (
