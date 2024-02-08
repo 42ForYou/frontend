@@ -1,10 +1,25 @@
 import React from "react";
 import Avatar from "./Avatar";
 import StyledButton from "./StyledButton";
+import { patch } from "../common/apiBase";
+import { API_ENDPOINTS } from "../common/apiEndpoints";
 
-// todo: 친구 수락 버튼 구현
-const FriendItem = ({ status, friend }) => {
+const FriendItem = ({ id, status, friend, onOccurChange }) => {
   const { intra_id, nickname, avatar, is_online } = friend;
+
+  const handleAcceptFriend = () => {
+    const patchFriend = async () => {
+      try {
+        const resData = await patch(`${API_ENDPOINTS.FRIENDS()}${id}/`);
+        onOccurChange();
+        console.error("친구 수락 성공:", resData);
+      } catch (error) {
+        console.error("친구 수락 실패:", error);
+        alert("친구 수락에 실패하였습니다.");
+      }
+    };
+    patchFriend();
+  };
 
   return (
     <div className="FriendItem border border-primary w-100 p-3">
@@ -19,7 +34,9 @@ const FriendItem = ({ status, friend }) => {
         </div>
         <div className="col">
           {nickname}
-          {status === "pending" && <StyledButton styleType={"btn btn-primary"} name={"친구 수락"} />}
+          {status === "pending" && (
+            <StyledButton styleType={"btn btn-primary"} name={"친구 수락"} onClick={handleAcceptFriend} />
+          )}
         </div>
       </div>
     </div>
