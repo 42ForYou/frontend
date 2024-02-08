@@ -54,7 +54,7 @@ const put = async (url, data) => {
 
 const del = async (url) => {
   try {
-    const response = await axiosInstance.del(url);
+    const response = await axiosInstance.delete(url);
     return response.data;
   } catch (error) {
     console.log(error);
