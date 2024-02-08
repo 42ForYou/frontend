@@ -130,12 +130,14 @@ const WaitingPlayersGrid = ({ players, host, isTournament }) => {
 };
 
 const GameWaitingBox = ({ gameData, roomData, playersData }) => {
-  console.log(gameData);
-  console.log(roomData);
-  console.log(playersData);
+  const { loggedInUser, isLoading } = useContext(AuthContext);
+
+  if (isLoading) {
+    return <div>로딩 중...</div>;
+  }
+
   const { is_tournament, game_point, time_limit, n_players } = gameData;
   const { id, title, host, join_players } = roomData;
-  const { loggedInUser } = useContext(AuthContext);
   const amIHost = host === loggedInUser.nickname;
 
   return (
