@@ -290,6 +290,7 @@ const MyProfileBox = ({ profileDataInitial }) => {
   );
 };
 
+// todo: 친구 상태에 따라 UI 조정
 const UserProfileBox = ({ profileData }) => {
   return (
     <div className="container-fluid">

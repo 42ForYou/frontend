@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const Avatar = ({ src, alt, to, isEditing = false, onImageUploadClick, diameter = 100 }) => {
+const Avatar = ({ src, alt, to, isEditing = false, onImageUploadClick = null, diameter = 100, isOnline = null }) => {
   const getImageSrc = (src) => {
     if (!src || src === "default.jpg") return `${process.env.ASSETS_URL}/images/default-avatar.jpg`;
     return `${process.env.API_BASE_URL}/images/avatar/${src}`;
@@ -26,6 +26,23 @@ const Avatar = ({ src, alt, to, isEditing = false, onImageUploadClick, diameter 
     />
   );
 
+  const renderOnlineStatusIndicator = () => {
+    if (isOnline === null) return null;
+    return (
+      <span
+        style={{
+          width: "27px",
+          height: "27px",
+          borderRadius: "50%",
+          backgroundColor: isOnline ? "#00ff00" : "#ff0000",
+          position: "absolute",
+          top: "0",
+          right: "0",
+          border: "3px solid white",
+        }}></span>
+    );
+  };
+
   return (
     <div className="Avatar position-relative" style={{ width: `${diameter}px`, height: `${diameter}px` }}>
       {to ? <Link to={to}>{renderImage()}</Link> : renderImage()}
@@ -43,6 +60,7 @@ const Avatar = ({ src, alt, to, isEditing = false, onImageUploadClick, diameter 
           <i className="fas fa-edit" style={{ fontSize: "24px", color: "#000" }}></i>
         </button>
       )}
+      {renderOnlineStatusIndicator()}
     </div>
   );
 };

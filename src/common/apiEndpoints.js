@@ -15,5 +15,11 @@ export const API_ENDPOINTS = {
     return "api/game/players/";
   },
   ROOM: (roomId) => `/api/game/game_rooms/${roomId}`,
-  FRIENDS: "/api/friends/",
+  FRIENDS: (type, page, page_size) => {
+    if (type && page && page_size) {
+      if (type === "all") return `api/friends/?page=${page}&page_size=${page_size}`;
+      else return `api/friends/?filter=${type}&page=${page}&page_size=${page_size}`;
+    }
+    return "api/friends/";
+  },
 };

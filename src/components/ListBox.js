@@ -23,7 +23,7 @@ const ListFilter = ({ filterTypes, currentFilter, onFilterClick, rightButton }) 
   );
 };
 
-const ListItems = ({ itemsData, ItemComponent, itemsPerRow, emptyMsg }) => {
+const ListItems = ({ itemsData, ItemComponent, itemsPerRow, emptyMsg, onOccurChange }) => {
   // 1차 배열을 행 단위로 나눠 2차 배열로 반환
   const divideArrayInto2DRows = (data, itemsPerRow) => {
     const rows = [];
@@ -43,7 +43,7 @@ const ListItems = ({ itemsData, ItemComponent, itemsPerRow, emptyMsg }) => {
         <div className="row mb-3" key={rowIndex}>
           {row.map((item, itemIndex) => (
             <div className={`col-${12 / itemsPerRow}`} key={itemIndex}>
-              <ItemComponent {...item} />
+              <ItemComponent {...item} onOccurChange={onOccurChange} />
             </div>
           ))}
         </div>
@@ -129,19 +129,25 @@ const ListBox = ({ apiEndpoint, ItemComponent, filterTypes, additionalButton, em
     setCurrentPage((prev) => ({ ...prev, [currentFilter.value]: changedPage }));
   };
 
+  const fetchItemsData = async () => {
+    try {
+      const currentPageForFilter = currentPage[currentFilter.value];
+      const resData = await get(apiEndpoint(currentFilter.value, currentPageForFilter, itemCountPerPage));
+      setItemsData(resData.data);
+      setTotalPage(resData.pages.total_pages);
+    } catch (error) {
+      setItemsData(null);
+      console.log("리스트 조회 실패: ", error);
+    }
+  };
+
   useEffect(() => {
-    const fetchItemsData = async () => {
-      try {
-        const currentPageForFilter = currentPage[currentFilter.value];
-        const resData = await get(apiEndpoint(currentFilter.value, currentPageForFilter, itemCountPerPage));
-        setItemsData(resData.data);
-        setTotalPage(resData.pages.total_pages);
-      } catch (error) {
-        setItemsData(null);
-      }
-    };
     fetchItemsData();
   }, [apiEndpoint, currentFilter, currentPage]);
+
+  const handleOccurChange = async () => {
+    fetchItemsData();
+  };
 
   return (
     <div className="container d-flex flex-column justify-content-between h-100">
@@ -160,6 +166,7 @@ const ListBox = ({ apiEndpoint, ItemComponent, filterTypes, additionalButton, em
             ItemComponent={ItemComponent}
             itemsPerRow={itemsPerRow}
             emptyMsg={emptyMsg}
+            onOccurChange={handleOccurChange}
           />
         </div>
       </div>
