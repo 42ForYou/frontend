@@ -15,15 +15,17 @@ const WaitingRoomPage = () => {
   const [gameData, setGameData] = useState(null);
   const [roomData, setRoomData] = useState(null);
   const [playersData, setPlayersData] = useState(null);
+  const [myPlayerId, setMyPlayerId] = useState(null);
 
   useEffect(() => {
     const fetchWaitingRoomData = async (roomId) => {
       try {
         const resData = await get(API_ENDPOINTS.ROOM(roomId));
-        const { game, room, players } = resData.data;
+        const { game, room, players, my_player_id } = resData.data;
         setGameData(game);
         setRoomData(room);
         setPlayersData(players);
+        setMyPlayerId(my_player_id);
         console.log(resData);
       } catch (error) {
         console.log("방 데이터 로드 실패: ", error);
@@ -37,7 +39,7 @@ const WaitingRoomPage = () => {
     <div className="UserProfilePage">
       {gameData && roomData && playersData ? (
         <PageContainer hasNavigationBar={false}>
-          <WaitingRoomBox gameData={gameData} roomData={roomData} playersData={playersData} />
+          <WaitingRoomBox gameData={gameData} roomData={roomData} playersData={playersData} myPlayerId={myPlayerId} />
         </PageContainer>
       ) : (
         <LoadingPage hasNavigationBar={false} />

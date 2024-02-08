@@ -133,7 +133,7 @@ const WaitingPlayersGrid = ({ players, host, isTournament }) => {
   );
 };
 
-const WaitingRoomBox = ({ gameData, roomData, playersData }) => {
+const WaitingRoomBox = ({ gameData, roomData, playersData, myPlayerId }) => {
   const { loggedInUser, isLoading } = useContext(AuthContext);
 
   if (isLoading) {
@@ -146,8 +146,7 @@ const WaitingRoomBox = ({ gameData, roomData, playersData }) => {
 
   const exitRoomRequest = async () => {
     try {
-      const player_id = 1; // todo: 본인의 플레이어 아이디를 넘겨야 함
-      const resData = await del(API_ENDPOINTS.PLAYERS(player_id));
+      const resData = await del(API_ENDPOINTS.PLAYERS(myPlayerId));
       console.log("방 나가기 성공: ", resData);
     } catch (error) {
       console.log("방 나가기 요청 에러: ", error);

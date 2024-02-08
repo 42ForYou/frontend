@@ -18,7 +18,7 @@ const RoomItem = ({ game, room }) => {
   const handleJoinClick = (gameId) => {
     const postJoinRequest = async () => {
       try {
-        const resData = await post(API_ENDPOINTS.PLAYERS, { game_id: gameId });
+        const resData = await post(API_ENDPOINTS.PLAYERS(), { game_id: gameId });
         navigate(`/game/waiting/${room_id}`);
         console.log("방 입장 성공: ", resData);
       } catch (error) {
