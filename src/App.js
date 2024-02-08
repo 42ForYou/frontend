@@ -6,16 +6,16 @@ import { AuthProvider } from "./context/AuthContext";
 
 // page
 import HomePage from "./pages/HomePage";
-import GamePlayPage from "./pages/GamePlayPage";
-import FriendsPage from "./pages/FriendsPage";
+import GamePlayPage from "./pages/game/GamePlayPage";
+import FriendsListPage from "./pages/FriendsListPage";
 import LoginPage from "./pages/LoginPage";
 import LoginCallbackPage from "./pages/LoginCallbackPage";
 import UserProfilePage from "./pages/UserProfilePage";
 import MyProfilePage from "./pages/MyProfilePage";
 import WaitingRoomPage from "./pages/WaitingRoomPage";
+import RoomListPage from "./pages/RoomListPage";
 import UsersPage from "./pages/UsersPage";
 import NotFoundPage from "./pages/error/NotFoundPage";
-import RoomListPage from "./pages/RoomListPage";
 import TestPage from "./pages/TestPage";
 
 const App = () => {
@@ -39,7 +39,7 @@ const AppContent = () => {
         <Route path="/profile" element={<MyProfilePage />} />
         <Route path="/profile/users/:user_id" element={<UserProfilePage />} />
         <Route path="/users" element={<UsersPage />} />
-        <Route path="/friends" element={<FriendsPage />} />
+        <Route path="/friends" element={<FriendsListPage />} />
         <Route path="/game/list" element={<RoomListPage />} />
         <Route path="/game/waiting/:room_id" element={<WaitingRoomPage />} />
         <Route path="/game/play/:game_id" element={<GamePlayPage />} />
