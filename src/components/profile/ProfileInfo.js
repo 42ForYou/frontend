@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import useProfileData from "../../hooks/useProfileData";
 import { checkRegex } from "../../common/checkRegex";
 import StyledButton from "../common/StyledButton";
-import ProfileInfoAvatar from "./ProfileInfoAvatar";
-import ProfileInfoTextLine from "./ProfileInfoTextLine";
+import ProfileAvatar from "./ProfileAvatar";
+import ProfileTextLine from "./ProfileTextLine";
 
 export const STATUS = {
   PROFILE: 0,
@@ -26,7 +26,7 @@ const EditProfileButtons = ({ isEditing, onExitClick, onSubmitClick, onEntryClic
   );
 };
 
-const CommonInfoDisplay = ({
+const InfoDisplay = ({
   intraId,
   avatar,
   nickname,
@@ -37,11 +37,11 @@ const CommonInfoDisplay = ({
   setEditStatus,
 }) => (
   <div>
-    <ProfileInfoAvatar avatar={avatar} nickname={nickname} isEditing={isEditing} setEditStatus={setEditStatus} />
+    <ProfileAvatar avatar={avatar} nickname={nickname} isEditing={isEditing} setEditStatus={setEditStatus} />
     <div>
-      {intraId && <ProfileInfoTextLine label="Intra ID" value={intraId} />}
-      <ProfileInfoTextLine label="Nickname" value={nickname} isEditing={isEditing} onChange={onChangeNickname} />
-      {email && <ProfileInfoTextLine label="Email" value={email} isEditing={isEditing} onChange={onChangeEmail} />}
+      {intraId && <ProfileTextLine label="Intra ID" value={intraId} />}
+      <ProfileTextLine label="Nickname" value={nickname} isEditing={isEditing} onChange={onChangeNickname} />
+      {email && <ProfileTextLine label="Email" value={email} isEditing={isEditing} onChange={onChangeEmail} />}
     </div>
   </div>
 );
@@ -94,7 +94,7 @@ export const MyProfileInfo = ({ initProfileInfo }) => {
 
   return (
     <div>
-      <CommonInfoDisplay
+      <InfoDisplay
         intraId={initProfileInfo.intraId}
         avatar={initProfileInfo.avatar}
         nickname={nickname}
@@ -123,6 +123,6 @@ export const MyProfileInfo = ({ initProfileInfo }) => {
 
 export const UserProfileInfo = ({ profileInfoData }) => (
   <div>
-    <CommonInfoDisplay {...profileInfoData} />
+    <InfoDisplay {...profileInfoData} />
   </div>
 );

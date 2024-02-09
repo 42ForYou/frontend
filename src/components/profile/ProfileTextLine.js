@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-const ProfileInfoTextLine = ({ label, value, isEditing = false, onChange }) => {
+const ProfileTextLine = ({ label, value, isEditing = false, onChange }) => {
   const [inputValue, setInputValue] = useState(value);
 
   useEffect(() => {
@@ -25,4 +25,4 @@ const ProfileInfoTextLine = ({ label, value, isEditing = false, onChange }) => {
   );
 };
 
-export default ProfileInfoTextLine;
+export default ProfileTextLine;

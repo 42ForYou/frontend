@@ -10,7 +10,7 @@ const HiddenImageUploader = ({ imgInputRef, handleAvatarChange }) => {
   );
 };
 
-const ProfileInfoAvatar = ({ avatar, nickname, isEditing = false, setEditStatus }) => {
+const ProfileAvatar = ({ avatar, nickname, isEditing = false, setEditStatus }) => {
   const { patchProfileInfo } = useProfileData();
   const { setLoggedInUser } = useContext(AuthContext);
   const [newAvatar, setNewAvatar] = useState(avatar);
@@ -58,4 +58,4 @@ const ProfileInfoAvatar = ({ avatar, nickname, isEditing = false, setEditStatus 
   );
 };
 
-export default ProfileInfoAvatar;
+export default ProfileAvatar;
