@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import StyledButton from "./StyledButton";
+import StyledButton from "../common/StyledButton";
 
 const buttonStyle = {
   fontSize: "20px",

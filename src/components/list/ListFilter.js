@@ -1,5 +1,5 @@
 import React from "react";
-import StyledButton from "./StyledButton";
+import StyledButton from "../StyledButton";
 
 const ListFilter = ({ filterTypes, currentFilter, onFilterClick, rightButton }) => {
   return (

@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 
 import RoomItem from "./RoomItem";
 import ListBox from "./ListBox";
-import { API_ENDPOINTS } from "../common/apiEndpoints";
+import { API_ENDPOINTS } from "../../common/apiEndpoints";
 import CreateRoomModal from "./CreateRoomModal";
-import StyledButton from "./StyledButton";
+import StyledButton from "../StyledButton";
 
 const RoomListBox = () => {
   const [showModal, setShowModal] = useState(false);

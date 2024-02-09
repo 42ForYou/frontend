@@ -1,6 +1,6 @@
 import React from "react";
 import ListBox from "./ListBox";
-import { API_ENDPOINTS } from "../common/apiEndpoints";
+import { API_ENDPOINTS } from "../../common/apiEndpoints";
 import UserItem from "./UserItem";
 
 const UserListBox = () => {

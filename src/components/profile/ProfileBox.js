@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
-import ToggleButton from "./ToggleButton";
-import StyledButton from "./StyledButton";
-import Avatar from "./Avatar";
-import { checkRegex } from "../common/checkRegex";
-import { patchForm } from "../common/apiBase";
-import { API_ENDPOINTS } from "../common/apiEndpoints";
-import { updateProperty } from "../common/objectUtils";
-import AuthContext from "../context/AuthContext";
+import ToggleButton from "../common/ToggleButton";
+import StyledButton from "../common/StyledButton";
+import Avatar from "../common/Avatar";
+import { checkRegex } from "../../common/checkRegex";
+import { patchForm } from "../../common/apiBase";
+import { API_ENDPOINTS } from "../../common/apiEndpoints";
+import { updateProperty } from "../../common/objectUtils";
+import AuthContext from "../../context/AuthContext";
 
 const STATUS = {
   PROFILE: 0,

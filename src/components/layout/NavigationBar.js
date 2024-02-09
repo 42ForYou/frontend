@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import AuthContext from "../context/AuthContext";
+import AuthContext from "../../context/AuthContext";
 
-import Avatar from "./Avatar";
-import Icon from "./Icon";
+import Avatar from "../common/Avatar";
+import Icon from "../common/Icon";
 
 const NavItem = ({ label, to, icon }) => {
   return (

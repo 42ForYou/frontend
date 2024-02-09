@@ -1,8 +1,8 @@
 import React from "react";
-import Avatar from "./Avatar";
-import StyledButton from "./StyledButton";
-import { patch } from "../common/apiBase";
-import { API_ENDPOINTS } from "../common/apiEndpoints";
+import Avatar from "../common/Avatar";
+import StyledButton from "../common/StyledButton";
+import { patch } from "../../common/apiBase";
+import { API_ENDPOINTS } from "../../common/apiEndpoints";
 
 const FriendItem = ({ id, status, friend, onOccurChange }) => {
   const { intra_id, nickname, avatar, is_online } = friend;

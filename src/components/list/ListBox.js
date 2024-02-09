@@ -2,8 +2,8 @@ import React, { useEffect, useReducer } from "react";
 import ListFilter from "./ListFilter";
 import ListItems from "./ListItems";
 import ListPagination from "./ListPagination";
-import useFetchItems from "../hooks/useFetchItems";
-import SearchBar from "./SearchBar";
+import useFetchItems from "../../hooks/useFetchItems";
+import SearchBar from "../SearchBar";
 
 const reducer = (state, action) => {
   switch (action.type) {

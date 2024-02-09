@@ -1,5 +1,5 @@
 import React from "react";
-import Avatar from "./Avatar";
+import Avatar from "../common/Avatar";
 
 // todo: 아이템 박스 자체가 링크
 const UserItem = ({ intra_id, nickname, avatar }) => {
