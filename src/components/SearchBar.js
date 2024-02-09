@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 
-const SearchBar = ({ searchKeyword, setSearchKeyword, onSearch }) => {
+const SearchBar = ({ searchKeyword, onSearch }) => {
+  const [inputValue, setInputValue] = useState(searchKeyword);
+
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
-      onSearch();
+      onSearch(inputValue);
     }
   };
 
@@ -12,11 +14,11 @@ const SearchBar = ({ searchKeyword, setSearchKeyword, onSearch }) => {
       <input
         type="text"
         placeholder="검색 키워드를 입력하세요"
-        value={searchKeyword}
-        onChange={(e) => setSearchKeyword(e.target.value)}
+        value={inputValue}
+        onChange={(e) => setInputValue(e.target.value)}
         onKeyDown={handleKeyPress}
       />
-      <button onClick={onSearch}>검색</button>
+      <button onClick={() => onSearch(inputValue)}>검색</button>
     </div>
   );
 };
