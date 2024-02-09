@@ -4,31 +4,15 @@ import withAuthProtection from "../components/common/withAuthProtection";
 import ProfileBox from "../components/profile/ProfileBox";
 import LoadingPage from "./LoadingPage";
 import AuthContext from "../context/AuthContext";
-import { get } from "../common/apiBase";
-import { API_ENDPOINTS } from "../common/apiEndpoints";
+import useFetchProfileData from "../hooks/useFetchProfileData";
 
 const MyProfilePage = () => {
-  // todo: Auth 훅 사용
   const { loggedInUser } = useContext(AuthContext);
-  const [profileData, setProfileData] = useState(null);
-
-  const fetchProfileData = async () => {
-    try {
-      console.log("로그인유저: ", loggedInUser);
-      const resData = await get(API_ENDPOINTS.USER_PROFILE(loggedInUser.intra_id));
-      setProfileData(resData.data.user);
-    } catch (error) {
-      console.error("프로필 데이터를 가져오는 데 실패했습니다.", error);
-    }
-  };
-
-  useEffect(() => {
-    fetchProfileData();
-  }, []);
+  const { profileData, isLoading } = useFetchProfileData(loggedInUser.intra_id);
 
   return (
     <div className="MyProfilePage">
-      {profileData === null ? (
+      {isLoading ? (
         <LoadingPage hasNavigationBar={true} />
       ) : (
         <PageContainer hasNavigationBar={true}>
