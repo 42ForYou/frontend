@@ -143,7 +143,7 @@ const ListBox = ({ apiEndpoint, ItemComponent, filterTypes, additionalButton, em
       setTotalPage(resData.pages.total_pages);
     } catch (error) {
       setItemsData(null);
-      console.error("리스트 조회 실패: ", error);
+      console.log("리스트 조회 실패: ", error);
     }
   };
 
@@ -159,6 +159,10 @@ const ListBox = ({ apiEndpoint, ItemComponent, filterTypes, additionalButton, em
     if (e.key === "Enter") {
       fetchItemsData();
     }
+  };
+
+  const handleOccurChange = async () => {
+    fetchItemsData();
   };
 
   return (
