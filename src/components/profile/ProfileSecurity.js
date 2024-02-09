@@ -2,14 +2,14 @@ import React, { useState, useEffect, useContext } from "react";
 import ToggleButton from "../common/ToggleButton";
 import useProfileData from "../../hooks/useProfileData";
 
-const ProfileSecurity = ({ initialIs2FA }) => {
-  const [is2FA, setIs2FA] = useState(initialIs2FA);
+const ProfileSecurity = ({ initIs2FA }) => {
+  const [is2FA, setIs2FA] = useState(initIs2FA);
   const [loading, setLoading] = useState(false);
   const { patchProfileInfo } = useProfileData();
 
   useEffect(() => {
-    setIs2FA(initialIs2FA);
-  }, [initialIs2FA]);
+    setIs2FA(initIs2FA);
+  }, [initIs2FA]);
 
   const handleClick2FAToggle = async () => {
     if (!window.confirm("2차 인증 설정을 변경하시겠습니까?")) return;

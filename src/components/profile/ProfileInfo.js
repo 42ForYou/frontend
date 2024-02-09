@@ -47,12 +47,12 @@ const CommonInfoDisplay = ({
 );
 
 export const MyProfileInfo = ({ initProfileInfo }) => {
-  const { nickname: initialNickname, email: initialEmail } = initProfileInfo;
+  const { nickname: initNickname, email: initEmail } = initProfileInfo;
   const { patchProfileInfo } = useProfileData();
   const [isEditing, setIsEditing] = useState(false);
   const [editStatus, setEditStatus] = useState(null);
-  const [nickname, setNickname] = useState(initialNickname);
-  const [email, setEmail] = useState(initialEmail);
+  const [nickname, setNickname] = useState(initNickname);
+  const [email, setEmail] = useState(initEmail);
 
   const handleEntryEditClick = () => {
     setIsEditing(true);
@@ -62,12 +62,12 @@ export const MyProfileInfo = ({ initProfileInfo }) => {
   const handleExitEditClick = () => {
     setIsEditing(false);
     setEditStatus(null);
-    setNickname(initialNickname);
-    setEmail(initialEmail);
+    setNickname(initNickname);
+    setEmail(initEmail);
   };
 
   const handleSubmitEditClick = async () => {
-    const isChangeExist = !(nickname === initialNickname && email === initialEmail);
+    const isChangeExist = !(nickname === initNickname && email === initEmail);
     const isValidNewProfile = (nickname, email) => {
       const isValidNickname = checkRegex(nickname, /^[a-zA-Z0-9가-힣]{2,16}$/);
       const isValidEmail = checkRegex(email, /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i);

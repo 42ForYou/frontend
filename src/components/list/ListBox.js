@@ -22,12 +22,12 @@ const ListBox = ({ apiEndpoint, ItemComponent, filterTypes, additionalButton, em
   // todo: 페이지 스타일 별 조정
   const itemsPerPage = 9;
   const itemsPerRow = 3;
-  const initialState = {
+  const initState = {
     currentFilter: filterTypes[0],
     currentPage: 1,
     searchKeyword: "",
   };
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(reducer, initState);
   const { itemsData, totalPage, isLoading, error } = useFetchItems(
     apiEndpoint,
     state.currentFilter,

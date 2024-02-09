@@ -12,7 +12,7 @@ const MyProfileBox = ({ profileData }) => {
       <div className="row">
         <ProfileHistory profileInfoData={profileData} />
       </div>
-      <div className="row">{<ProfileSecurity initialIs2FA={profileData.two_factor_auth} />}</div>
+      <div className="row">{<ProfileSecurity initIs2FA={profileData.two_factor_auth} />}</div>
     </div>
   );
 };
