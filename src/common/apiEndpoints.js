@@ -8,8 +8,6 @@ export const API_ENDPOINTS = {
   },
   ROOM: (roomId) => `/api/game/game_rooms/${roomId}`,
   ROOM_LIST: (filter, page, page_size) => {
-    console.log("params: ", filter, page, page_size);
-
     if (filter && page && page_size) {
       if (filter === "all") return `api/game/game_rooms/?page=${page}&page_size=${page_size}`;
       else return `api/game/game_rooms/?filter=${filter}&page=${page}&page_size=${page_size}`;

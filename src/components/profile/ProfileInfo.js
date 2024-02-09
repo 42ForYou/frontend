@@ -26,7 +26,7 @@ const EditProfileButtons = ({ isEditing, onExitClick, onSubmitClick, onEntryClic
   );
 };
 
-const InfoDisplay = ({ profileData, isEditing, onNicknameChange, onEmailChange, setEditStatus }) => {
+const InfoDisplay = ({ profileData, isEditing, onChangeNickname, onChangeEmail, setEditStatus }) => {
   return (
     <div>
       <ProfileAvatar
@@ -41,10 +41,10 @@ const InfoDisplay = ({ profileData, isEditing, onNicknameChange, onEmailChange, 
           label="Nickname"
           value={profileData.nickname}
           isEditing={isEditing}
-          onChange={onNicknameChange}
+          onChange={onChangeNickname}
         />
         {profileData.email && (
-          <ProfileTextLine label="Email" value={profileData.email} isEditing={isEditing} onChange={onEmailChange} />
+          <ProfileTextLine label="Email" value={profileData.email} isEditing={isEditing} onChange={onChangeEmail} />
         )}
       </div>
     </div>
@@ -58,6 +58,22 @@ export const MyProfileInfo = ({ initProfileData }) => {
   const [editStatus, setEditStatus] = useState(null);
   const [nickname, setNickname] = useState(initNickname);
   const [email, setEmail] = useState(initEmail);
+
+  const validateProfile = (nickname, email) => {
+    const validations = {
+      nickname: checkRegex(nickname, /^[a-zA-Z0-9가-힣]{2,16}$/),
+      email: checkRegex(email, /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/),
+    };
+
+    const validateMsg = [
+      validations.nickname
+        ? ""
+        : "유효하지 않은 형식의 닉네임입니다. (한글, 영어, 숫자로 이루어진 2~16자의 문자열이어야 함)",
+      validations.email ? "" : "유효하지 않은 형식의 이메일입니다.",
+    ];
+
+    return { isValid: validations.nickname && validations.email, validateMsg };
+  };
 
   const handleEntryEditClick = () => {
     setIsEditing(true);
@@ -73,18 +89,11 @@ export const MyProfileInfo = ({ initProfileData }) => {
 
   const handleSubmitEditClick = async () => {
     const isChangeExist = !(nickname === initNickname && email === initEmail);
-    const isValidNewProfile = (nickname, email) => {
-      const isValidNickname = checkRegex(nickname, /^[a-zA-Z0-9가-힣]{2,16}$/);
-      const isValidEmail = checkRegex(email, /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i);
-      if (!isValidNickname)
-        editStatusMsg[STATUS.NICKNAME] =
-          "유효하지 않은 형식의 닉네임입니다. (한글, 영어, 숫자로 이루어진 2~16자의 문자열이어야 함)";
-      if (!isValidEmail) editStatusMsg[STATUS.EMAIL] = "유효하지 않은 형식의 이메일입니다.";
-      return isValidNickname && isValidEmail;
-    };
-    const editStatusMsg = ["", "", "", ""];
+    const { isValid, validateMsg } = validateProfile(nickname, email);
 
-    if (isChangeExist && isValidNewProfile(nickname, email)) {
+    const editStatusMsg = [...validateMsg, ""];
+
+    if (isChangeExist && isValid) {
       const result = await patchProfileInfo({ nickname, email }, (updatedProfile) => {
         console.log("업데이트 결과: ", updatedProfile);
       });
@@ -92,7 +101,10 @@ export const MyProfileInfo = ({ initProfileData }) => {
       if (result.success) {
         setIsEditing(false);
         editStatusMsg[STATUS.PROFILE] = "프로필 정보가 성공적으로 업데이트 되었습니다.";
-      } else editStatusMsg[STATUS.PROFILE] = "프로필 정보 업데이트가 실패하였습니다.";
+      } else {
+        // todo: 에러 케이스 구체화 (중복된 닉네임, 이메일)
+        editStatusMsg[STATUS.PROFILE] = "프로필 정보 업데이트가 실패하였습니다.";
+      }
     }
     setEditStatus(editStatusMsg);
   };

@@ -10,7 +10,10 @@ const ProfileTextLine = ({ label, value, isEditing = false, onChange }) => {
   const handleChange = (e) => {
     const newValue = e.target.value;
     setInputValue(newValue);
-    onChange(newValue);
+    if (onChange) {
+      console.log(label, newValue);
+      onChange(newValue);
+    }
   };
 
   return (
