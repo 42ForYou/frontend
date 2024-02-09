@@ -1,16 +1,16 @@
 import React from "react";
 import PageContainer from "../components/PageContainer";
 import withAuthProtection from "../common/withAuthProtection";
-import UserListBox from "../components/UserListBox";
+import FriendsListBox from "../components/FriendsListBox";
 
-const UsersPage = () => {
+const FriendsPage = () => {
   return (
-    <div className="UsersPage">
+    <div className="FriendsPage">
       <PageContainer hasNavigationBar={true}>
-        <UserListBox />
+        <FriendsListBox />
       </PageContainer>
     </div>
   );
 };
 
-export default withAuthProtection(UsersPage);
+export default withAuthProtection(FriendsPage);

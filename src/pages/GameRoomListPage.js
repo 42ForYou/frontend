@@ -4,9 +4,9 @@ import withAuthProtection from "../common/withAuthProtection";
 import RoomListBox from "../components/RoomListBox";
 import SearchBar from "../components/SearchBar";
 
-const RoomListPage = () => {
+const GameRoomListPage = () => {
   return (
-    <div className="RoomListPage">
+    <div className="GameRoomListPage">
       <PageContainer hasNavigationBar={true}>
         <RoomListBox />
       </PageContainer>
@@ -14,4 +14,4 @@ const RoomListPage = () => {
   );
 };
 
-export default withAuthProtection(RoomListPage);
+export default withAuthProtection(GameRoomListPage);

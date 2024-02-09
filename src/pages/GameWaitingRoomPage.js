@@ -9,7 +9,7 @@ import { API_ENDPOINTS } from "../common/apiEndpoints";
 import { useNavigate, useParams } from "react-router-dom";
 
 // 차후 필요시 1대1, 토너먼트 방 분리
-const WaitingRoomPage = () => {
+const GameWaitingRoomPage = () => {
   const { room_id } = useParams();
   const navigate = useNavigate();
   const [gameData, setGameData] = useState(null);
@@ -48,4 +48,4 @@ const WaitingRoomPage = () => {
   );
 };
 
-export default WaitingRoomPage;
+export default GameWaitingRoomPage;
