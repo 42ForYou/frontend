@@ -58,7 +58,8 @@ const HiddenImageUploader = ({ imgInputRef, handleAvatarChange }) => {
 };
 
 const InfoAvatar = ({ avatar, nickname, intraId, isEditing = false, setEditStatus }) => {
-  const { patchUserProfile } = useProfileData();
+  const { intra_id } = useContext(AuthContext).loggedInUser;
+  const { patchProfileInfo } = useProfileData();
   const { setLoggedInUser } = useContext(AuthContext);
   const [newAvatar, setNewAvatar] = useState(avatar);
   const imgInputRef = useRef(null);
@@ -76,11 +77,16 @@ const InfoAvatar = ({ avatar, nickname, intraId, isEditing = false, setEditStatu
       return;
     }
     const editStatusMsg = ["", "", "", ""];
-    const result = await patchUserProfile(intraId, { image: file }, (updatedProfile) => {
-      console.log("업데이트 결과: ", updatedProfile);
-      setNewAvatar(updatedProfile.avatar);
-      setLoggedInUser(updatedProfile);
-    });
+    const result = await patchProfileInfo(
+      intra_id,
+      file,
+      (updatedProfile) => {
+        console.log("업데이트 결과: ", updatedProfile);
+        setNewAvatar(updatedProfile.avatar);
+        setLoggedInUser(updatedProfile);
+      },
+      true
+    );
 
     if (result.success) {
       editStatusMsg[STATUS.PROFILE] = "아바타가 성공적으로 업로드 되었습니다.";
@@ -101,9 +107,18 @@ const InfoAvatar = ({ avatar, nickname, intraId, isEditing = false, setEditStatu
   );
 };
 
-const CommonInfoDisplay = ({ intraId, avatar, nickname, email, isEditing, onChangeNickname, onChangeEmail }) => (
+const CommonInfoDisplay = ({
+  intraId,
+  avatar,
+  nickname,
+  email,
+  isEditing,
+  onChangeNickname,
+  onChangeEmail,
+  setEditStatus,
+}) => (
   <div>
-    <InfoAvatar avatar={avatar} nickname={nickname} />
+    <InfoAvatar avatar={avatar} nickname={nickname} isEditing={isEditing} setEditStatus={setEditStatus} />
     <div>
       {intraId && <InfoTextLine label="Intra ID" value={intraId} />}
       <InfoTextLine label="Nickname" value={nickname} isEditing={isEditing} onChange={onChangeNickname} />
@@ -114,7 +129,7 @@ const CommonInfoDisplay = ({ intraId, avatar, nickname, email, isEditing, onChan
 
 export const MyProfileInfo = ({ profileInfoData }) => {
   const { nickname, email } = profileInfoData;
-  const { patchUserProfile } = useProfileData();
+  const { patchProfileInfo } = useProfileData();
   const { loggedInUser } = useContext(AuthContext);
   const [isEditing, setIsEditing] = useState(false);
   const [editStatus, setEditStatus] = useState(null);
@@ -148,7 +163,7 @@ export const MyProfileInfo = ({ profileInfoData }) => {
     const editStatusMsg = ["", "", "", ""];
 
     if (isChangeExist && isValidNewProfile(newNickname, newEmail)) {
-      const result = await patchUserProfile(
+      const result = await patchProfileInfo(
         loggedInUser.intra_id,
         { nickname: newNickname, email: newEmail },
         (updatedProfile) => {
@@ -173,6 +188,7 @@ export const MyProfileInfo = ({ profileInfoData }) => {
         isEditing={isEditing}
         onChangeNickname={setNewNickname}
         onChangeEmail={setNewEmail}
+        setEditStatus={setEditStatus}
       />
       <EditProfileButtons
         isEditing={isEditing}

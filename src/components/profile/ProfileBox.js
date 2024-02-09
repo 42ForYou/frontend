@@ -6,7 +6,7 @@ import ProfileSecurity from "./ProfileSecurity";
 const MyProfileBox = ({ profileDataInitial }) => {
   const [profileData, setProfileData] = useState(profileDataInitial);
 
-  const patchUserProfile = (path, value) => {
+  const patchProfileInfo = (path, value) => {
     setProfileData((profileData) => updateProperty(profileData, path, value));
     // 함수형 업데이트: 비동기적으로 수행되는 setState 함수가 이전 state값을 기반으로 동작하도록 보장
   };
@@ -20,7 +20,7 @@ const MyProfileBox = ({ profileDataInitial }) => {
         <ProfileHistory profileInfoData={profileData} />
       </div>
       <div className="row">
-        {<ProfileSecurity is2FA={profileData.two_factor_auth} patchUserProfile={patchUserProfile} />}
+        {<ProfileSecurity is2FA={profileData.two_factor_auth} patchProfileInfo={patchProfileInfo} />}
       </div>
     </div>
   );
