@@ -12,6 +12,7 @@ const FriendItem = ({ id, status, friend, onOccurChange }) => {
       try {
         const resData = await patch(`${API_ENDPOINTS.FRIENDS()}${id}/`);
         onOccurChange();
+        alert("친구 요청을 수락하였습니다.");
         console.log("친구 요청 수락 성공:", resData);
       } catch (error) {
         console.error("친구 요청 수락 실패:", error);
@@ -26,13 +27,22 @@ const FriendItem = ({ id, status, friend, onOccurChange }) => {
       try {
         const resData = await del(`${API_ENDPOINTS.FRIENDS()}${id}/`);
         onOccurChange();
-        console.log("친구 요청 거절 성공:", resData);
+        console.log("친구 삭제 성공:", resData);
       } catch (error) {
-        console.error("친구 요청 거절 실패:", error);
-        alert("친구 요청 거절에 실패하였습니다.");
+        console.error("친구 삭제 실패:", error);
+        alert("친구 삭제에 실패하였습니다.");
       }
     };
-    delFriend();
+
+    let confirmMsg = "";
+    if (status === "pending") {
+      confirmMsg = "친구 요청을 거절하시겠습니까?";
+    } else if (status === "friend") {
+      confirmMsg = "친구를 삭제하시겠습니까?";
+    }
+    if (window.confirm(confirmMsg)) {
+      delFriend();
+    }
   };
 
   return (
@@ -52,6 +62,11 @@ const FriendItem = ({ id, status, friend, onOccurChange }) => {
             <>
               <StyledButton styleType={"btn btn-primary"} name={"수락"} onClick={handleAcceptFriend} />
               <StyledButton styleType={"btn btn-danger"} name={"거절"} onClick={handleRejectFriend} />
+            </>
+          )}
+          {status === "friend" && (
+            <>
+              <StyledButton styleType={"btn btn-danger"} name={"친구 삭제"} onClick={handleRejectFriend} />
             </>
           )}
         </div>
