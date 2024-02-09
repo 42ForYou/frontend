@@ -111,55 +111,82 @@ const ListPagination = ({ totalPage, currentPage, onPaginationClick }) => {
   );
 };
 
-const ListBox = ({ apiEndpoint, ItemComponent, filterTypes, additionalButton, emptyMsg }) => {
+const ListBox = ({ apiEndpoint, ItemComponent, filterTypes, additionalButton, emptyMsg, searchable = false }) => {
   const [itemsData, setItemsData] = useState(null);
   const [totalPage, setTotalPage] = useState(1);
+  // 필터별 페이지 상태를 객체로 관리
   const [currentPage, setCurrentPage] = useState(
-    filterTypes.reduce((acc, filter) => ({ ...acc, [filter.value]: 1 }), {})
+    filterTypes?.length ? filterTypes.reduce((acc, filter) => ({ ...acc, [filter.value]: 1 }), {}) : { all: 1 }
   );
-  const [currentFilter, setCurrentFilter] = useState(filterTypes[0]);
+  const [currentFilter, setCurrentFilter] = useState(filterTypes[0] || { value: "all" });
+  const [searchKeyword, setSearchKeyword] = useState("");
   const itemCountPerPage = 9;
   const itemsPerRow = 3;
 
   const handleChangeFilter = (changedFilter) => {
     setCurrentFilter(changedFilter);
+    // 필터 변경 시 페이지를 리셋하지 않음
   };
 
   const handleChangePage = (changedPage) => {
+    // 현재 필터에 대한 페이지 번호를 업데이트
     setCurrentPage((prev) => ({ ...prev, [currentFilter.value]: changedPage }));
   };
 
   const fetchItemsData = async () => {
     try {
-      const currentPageForFilter = currentPage[currentFilter.value];
-      const resData = await get(apiEndpoint(currentFilter.value, currentPageForFilter, itemCountPerPage));
+      const currentPageForFilter = currentPage[currentFilter.value] || 1;
+      const resData = await get(
+        apiEndpoint(currentFilter.value, currentPageForFilter, itemCountPerPage, searchKeyword)
+      );
       setItemsData(resData.data);
       setTotalPage(resData.pages.total_pages);
     } catch (error) {
       setItemsData(null);
-      console.log("리스트 조회 실패: ", error);
+      console.error("리스트 조회 실패: ", error);
     }
   };
 
   useEffect(() => {
     fetchItemsData();
-  }, [apiEndpoint, currentFilter, currentPage]);
+  }, [currentFilter, currentPage[currentFilter.value]]);
 
   const handleOccurChange = async () => {
     fetchItemsData();
   };
 
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      fetchItemsData();
+    }
+  };
+
   return (
     <div className="container d-flex flex-column justify-content-between h-100">
-      <div className="row">
-        <div className="row">
-          <ListFilter
-            filterTypes={filterTypes}
-            onFilterClick={handleChangeFilter}
-            rightButton={additionalButton}
-            currentFilter={currentFilter}
+      {searchable && (
+        <div className="search-input-container row">
+          <input
+            type="text"
+            placeholder="검색 키워드를 입력하세요"
+            value={searchKeyword}
+            onChange={(e) => setSearchKeyword(e.target.value)}
+            onKeyDown={handleKeyPress}
           />
+          <button onClick={fetchItemsData}>검색</button>
         </div>
+      )}
+
+      <div className="row">
+        {filterTypes?.length > 0 && (
+          <div className="row">
+            <ListFilter
+              filterTypes={filterTypes}
+              onFilterClick={handleChangeFilter}
+              rightButton={additionalButton}
+              currentFilter={currentFilter}
+            />
+          </div>
+        )}
         <div className="row">
           <ListItems
             itemsData={itemsData}
@@ -174,7 +201,7 @@ const ListBox = ({ apiEndpoint, ItemComponent, filterTypes, additionalButton, em
         <div className="row d-flex flex-column justify-content-center">
           <ListPagination
             totalPage={totalPage}
-            currentPage={currentPage[currentFilter.value]}
+            currentPage={currentPage[currentFilter?.value] ?? 1}
             onPaginationClick={handleChangePage}
           />
         </div>
