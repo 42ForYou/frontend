@@ -1,7 +1,7 @@
 import React from "react";
 import Avatar from "../common/Avatar";
 import StyledButton from "../common/StyledButton";
-import { patch } from "../../common/apiBase";
+import { del, patch } from "../../common/apiBase";
 import { API_ENDPOINTS } from "../../common/apiEndpoints";
 
 const FriendItem = ({ id, status, friend, onOccurChange }) => {
@@ -12,13 +12,27 @@ const FriendItem = ({ id, status, friend, onOccurChange }) => {
       try {
         const resData = await patch(`${API_ENDPOINTS.FRIENDS()}${id}/`);
         onOccurChange();
-        console.error("친구 수락 성공:", resData);
+        console.log("친구 요청 수락 성공:", resData);
       } catch (error) {
-        console.error("친구 수락 실패:", error);
-        alert("친구 수락에 실패하였습니다.");
+        console.error("친구 요청 수락 실패:", error);
+        alert("친구 요청 수락에 실패하였습니다.");
       }
     };
     patchFriend();
+  };
+
+  const handleRejectFriend = () => {
+    const delFriend = async () => {
+      try {
+        const resData = await del(`${API_ENDPOINTS.FRIENDS()}${id}/`);
+        onOccurChange();
+        console.log("친구 요청 거절 성공:", resData);
+      } catch (error) {
+        console.error("친구 요청 거절 실패:", error);
+        alert("친구 요청 거절에 실패하였습니다.");
+      }
+    };
+    delFriend();
   };
 
   return (
@@ -35,7 +49,10 @@ const FriendItem = ({ id, status, friend, onOccurChange }) => {
         <div className="col">
           {nickname}
           {status === "pending" && (
-            <StyledButton styleType={"btn btn-primary"} name={"친구 수락"} onClick={handleAcceptFriend} />
+            <>
+              <StyledButton styleType={"btn btn-primary"} name={"수락"} onClick={handleAcceptFriend} />
+              <StyledButton styleType={"btn btn-danger"} name={"거절"} onClick={handleRejectFriend} />
+            </>
           )}
         </div>
       </div>
