@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { get } from "../common/apiBase";
 
 // 필터, 페이지, 키워드를 넘겨받아 API를 호출하고 결과를 반환하는 커스텀 훅

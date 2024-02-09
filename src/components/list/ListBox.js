@@ -28,7 +28,7 @@ const ListBox = ({ apiEndpoint, ItemComponent, filterTypes, additionalButton, em
     searchKeyword: "",
   };
   const [state, dispatch] = useReducer(reducer, initState);
-  const { itemsData, totalPage, isLoading, error, fetchItems } = useFetchListItems(apiEndpoint, itemsPerPage);
+  const { itemsData, totalPage, isLoading, error, fetchListItems } = useFetchListItems(apiEndpoint, itemsPerPage);
 
   useEffect(() => {
     fetchListItems(state.currentFilter, state.currentPage, state.searchKeyword);
@@ -51,8 +51,6 @@ const ListBox = ({ apiEndpoint, ItemComponent, filterTypes, additionalButton, em
       )}
       {isLoading ? (
         <div>Loading...</div>
-      ) : error ? (
-        <div>Error: {error.message}</div>
       ) : (
         <ListItems itemsData={itemsData} ItemComponent={ItemComponent} itemsPerRow={itemsPerRow} emptyMsg={emptyMsg} />
       )}
