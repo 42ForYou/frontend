@@ -102,8 +102,12 @@ export const MyProfileInfo = ({ initProfileData }) => {
         setIsEditing(false);
         editStatusMsg[STATUS.PROFILE] = "프로필 정보가 성공적으로 업데이트 되었습니다.";
       } else {
-        // todo: 에러 케이스 구체화 (중복된 닉네임, 이메일)
         editStatusMsg[STATUS.PROFILE] = "프로필 정보 업데이트가 실패하였습니다.";
+        // 409: Conflict
+        if (result.errcode === 409) {
+          if ("nickname" in result.errmsg) editStatusMsg[STATUS.NICKNAME] = "이미 사용 중인 닉네임입니다.";
+          if ("email" in result.errmsg) editStatusMsg[STATUS.EMAIL] = "이미 사용 중인 이메일입니다.";
+        }
       }
     }
     setEditStatus(editStatusMsg);

@@ -11,7 +11,6 @@ const ProfileTextLine = ({ label, value, isEditing = false, onChange }) => {
     const newValue = e.target.value;
     setInputValue(newValue);
     if (onChange) {
-      console.log(label, newValue);
       onChange(newValue);
     }
   };
