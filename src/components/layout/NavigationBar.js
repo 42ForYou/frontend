@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import AuthContext from "../context/AuthContext";
+import AuthContext from "../../context/AuthContext";
 
-import Avatar from "./Avatar";
-import Icon from "./Icon";
+import Avatar from "../common/Avatar";
+import Icon from "../common/Icon";
 
 const NavItem = ({ label, to, icon }) => {
   return (
@@ -23,8 +23,6 @@ const NavItems = () => {
       <NavItem to={"/game/list"} label="GAMES" icon={"pong"} />
       <NavItem to={"/friends"} label="FRIENDS" icon={"handshake"} />
       <NavItem to={"/users"} label="USERS" icon={"people"} />
-      <NavItem label="NOTICE" icon={"bell"} />
-      <NavItem to={"/test"} label="테스트용" />
     </ul>
   );
 };

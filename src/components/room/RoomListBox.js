@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 
-import RoomItem from "./RoomItem";
-import ListBox from "./ListBox";
-import { API_ENDPOINTS } from "../common/apiEndpoints";
-import CreateRoomModal from "./CreateRoomModal";
-import StyledButton from "./StyledButton";
+import RoomItem from "../room/RoomItem";
+import ListBox from "../list/ListBox";
+import { API_ENDPOINTS } from "../../common/apiEndpoints";
+import CreateRoomModal from "../room/CreateRoomModal";
+import StyledButton from "../common/StyledButton";
 
 const RoomListBox = () => {
   const [showModal, setShowModal] = useState(false);

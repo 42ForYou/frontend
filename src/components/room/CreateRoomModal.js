@@ -1,13 +1,13 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import CustomModal from "./CustomModal";
-import AuthContext from "../context/AuthContext";
-import { post } from "../common/apiBase";
-import { API_ENDPOINTS } from "../common/apiEndpoints";
-import RadioSelector from "./RadioSelector";
-import DropdownSelector from "./DropdownSelector";
-import { hasKeys, updateProperty } from "../common/objectUtils";
-import StyledButton from "./StyledButton";
+import CustomModal from "../common/CustomModal";
+import AuthContext from "../../context/AuthContext";
+import { post } from "../../common/apiBase";
+import { API_ENDPOINTS } from "../../common/apiEndpoints";
+import RadioSelector from "../common/RadioSelector";
+import DropdownSelector from "../common/DropdownSelector";
+import { hasKeys, updateProperty } from "../../common/objectUtils";
+import StyledButton from "../common/StyledButton";
 
 const RoomTitleForm = ({ updateRoomData }) => {
   const { loggedInUser } = useContext(AuthContext);
@@ -121,7 +121,6 @@ const CreateRoomModal = ({ handleClose }) => {
       }
     };
 
-    // console.log("submit roomData: ", roomData);
     const keysToCheck = ["game.is_tournament", "game.time_limit", "game.game_point", "game.n_players", "room.title"];
     if (!hasKeys(roomData, keysToCheck)) {
       alert("모든 필드를 입력해주세요.");
@@ -157,4 +156,3 @@ const CreateRoomModal = ({ handleClose }) => {
 };
 
 export default CreateRoomModal;
-//

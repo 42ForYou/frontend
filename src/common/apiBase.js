@@ -1,7 +1,5 @@
 import axios from "axios";
 
-// todo: 환경 변수로 변경
-
 const axiosInstance = axios.create({
   baseURL: process.env.API_BASE_URL,
   timeout: 7000,

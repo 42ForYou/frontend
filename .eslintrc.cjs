@@ -26,7 +26,7 @@ module.exports = {
     strict: ["error", "global"], // "use strict"
     camelcase: "off", // camelCase 사용
     "no-var": "error", // var is not allowed
-    indent: ["error", 2], // 2 spaces
+    // indent: ["error", 2], // 2 spaces
     "linebreak-style": ["error", "unix"], // LF
     quotes: ["error", "double"], // use double quotes
     semi: ["error", "always"], // always use semicolon

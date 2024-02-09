@@ -1,6 +1,6 @@
 import React from "react";
-import PageContainer from "../components/PageContainer";
-import withAuthProtection from "../common/withAuthProtection";
+import PageContainer from "../components/layout/PageContainer";
+import withAuthProtection from "../components/common/withAuthProtection";
 
 const LoadingPage = ({ hasNavigationBar }) => {
   return (
