@@ -11,23 +11,26 @@ const UserProfilePage = () => {
   const { intra_id } = useParams();
   const navigate = useNavigate();
   const [profileData, setProfileData] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const fetchProfileData = async () => {
+    const getProfileData = async () => {
+      setIsLoading(true);
       try {
         const resData = await get(API_ENDPOINTS.USER_PROFILE(intra_id));
         setProfileData(resData.data.user);
+        setIsLoading(false);
       } catch (error) {
         alert("유효하지 않은 유저 프로필 페이지입니다.");
         navigate(-1);
       }
     };
-    fetchProfileData();
+    getProfileData();
   }, [intra_id, navigate]);
 
   return (
     <div className="UserProfilePage">
-      {profileData === null ? (
+      {isLoading ? (
         <LoadingPage hasNavigationBar={true} />
       ) : (
         <PageContainer hasNavigationBar={true}>
