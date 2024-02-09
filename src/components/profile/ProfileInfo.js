@@ -90,10 +90,10 @@ export const MyProfileInfo = ({ initProfileData }) => {
   const handleSubmitEditClick = async () => {
     const isChangeExist = !(nickname === initNickname && email === initEmail);
     const { isValid, validateMsg } = validateProfile(nickname, email);
-
     const editStatusMsg = [...validateMsg, ""];
 
-    if (isChangeExist && isValid) {
+    if (!isChangeExist) return setIsEditing(false);
+    else if (isValid) {
       const result = await patchProfileInfo({ nickname, email }, (updatedProfile) => {
         console.log("업데이트 결과: ", updatedProfile);
       });
