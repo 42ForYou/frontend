@@ -1,20 +1,13 @@
-import React, { useState } from "react";
+import React from "react";
 import { MyProfileInfo, UserProfileInfo } from "./ProfileInfo";
 import ProfileHistory from "./ProfileHistory";
 import ProfileSecurity from "./ProfileSecurity";
 
-const MyProfileBox = ({ profileDataInitial }) => {
-  const [profileData, setProfileData] = useState(profileDataInitial);
-
-  const updateViewProfile = (path, value) => {
-    setProfileData((profileData) => updateProperty(profileData, path, value));
-    // 함수형 업데이트: 비동기적으로 수행되는 setState 함수가 이전 state값을 기반으로 동작하도록 보장
-  };
-
+const MyProfileBox = ({ profileData }) => {
   return (
     <div className="container-fluid">
       <div className="row">
-        <MyProfileInfo profileInfoData={profileData} />
+        <MyProfileInfo initProfileInfo={profileData} />
       </div>
       <div className="row">
         <ProfileHistory profileInfoData={profileData} />
@@ -39,9 +32,7 @@ const UserProfileBox = ({ profileData }) => {
 };
 
 const ProfileBox = ({ isMine, profileData }) => {
-  return (
-    <>{isMine ? <MyProfileBox profileDataInitial={profileData} /> : <UserProfileBox profileData={profileData} />}</>
-  );
+  return <>{isMine ? <MyProfileBox profileData={profileData} /> : <UserProfileBox profileData={profileData} />}</>;
 };
 
 export default ProfileBox;

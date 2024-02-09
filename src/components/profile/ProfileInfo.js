@@ -46,8 +46,8 @@ const CommonInfoDisplay = ({
   </div>
 );
 
-export const MyProfileInfo = ({ profileInfoData }) => {
-  const { nickname: initialNickname, email: initialEmail } = profileInfoData;
+export const MyProfileInfo = ({ initProfileInfo }) => {
+  const { nickname: initialNickname, email: initialEmail } = initProfileInfo;
   const { patchProfileInfo } = useProfileData();
   const [isEditing, setIsEditing] = useState(false);
   const [editStatus, setEditStatus] = useState(null);
@@ -95,10 +95,10 @@ export const MyProfileInfo = ({ profileInfoData }) => {
   return (
     <div>
       <CommonInfoDisplay
-        intraId={profileInfoData.intraId}
-        avatar={profileInfoData.avatar}
-        nickname={nickname} // 수정됨
-        email={email} // 수정됨
+        intraId={initProfileInfo.intraId}
+        avatar={initProfileInfo.avatar}
+        nickname={nickname}
+        email={email}
         isEditing={isEditing}
         onChangeNickname={setNickname}
         onChangeEmail={setEmail}

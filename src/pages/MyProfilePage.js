@@ -4,12 +4,11 @@ import withAuthProtection from "../components/common/withAuthProtection";
 import ProfileBox from "../components/profile/ProfileBox";
 import LoadingPage from "./LoadingPage";
 import AuthContext from "../context/AuthContext";
-
 import { get } from "../common/apiBase";
 import { API_ENDPOINTS } from "../common/apiEndpoints";
 
-// 마이프로필 URL: /profile
 const MyProfilePage = () => {
+  // todo: Auth 훅 사용
   const { loggedInUser } = useContext(AuthContext);
   const [profileData, setProfileData] = useState(null);
 
@@ -24,7 +23,7 @@ const MyProfilePage = () => {
   };
 
   useEffect(() => {
-    fetchProfileData(); // 컴포넌트 마운트 시 동작
+    fetchProfileData();
   }, []);
 
   return (
@@ -33,7 +32,7 @@ const MyProfilePage = () => {
         <LoadingPage hasNavigationBar={true} />
       ) : (
         <PageContainer hasNavigationBar={true}>
-          <ProfileBox isMine={true} profileData={profileData} fetchProfileData={fetchProfileData} />
+          <ProfileBox isMine={true} profileData={profileData} />
         </PageContainer>
       )}
     </div>
