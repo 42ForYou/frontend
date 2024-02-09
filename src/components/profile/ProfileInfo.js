@@ -57,8 +57,7 @@ const HiddenImageUploader = ({ imgInputRef, handleAvatarChange }) => {
   );
 };
 
-const InfoAvatar = ({ avatar, nickname, intraId, isEditing = false, setEditStatus }) => {
-  const { intra_id } = useContext(AuthContext).loggedInUser;
+const InfoAvatar = ({ avatar, nickname, isEditing = false, setEditStatus }) => {
   const { patchProfileInfo } = useProfileData();
   const { setLoggedInUser } = useContext(AuthContext);
   const [newAvatar, setNewAvatar] = useState(avatar);
@@ -78,7 +77,6 @@ const InfoAvatar = ({ avatar, nickname, intraId, isEditing = false, setEditStatu
     }
     const editStatusMsg = ["", "", "", ""];
     const result = await patchProfileInfo(
-      intra_id,
       file,
       (updatedProfile) => {
         console.log("업데이트 결과: ", updatedProfile);
@@ -130,7 +128,6 @@ const CommonInfoDisplay = ({
 export const MyProfileInfo = ({ profileInfoData }) => {
   const { nickname, email } = profileInfoData;
   const { patchProfileInfo } = useProfileData();
-  const { loggedInUser } = useContext(AuthContext);
   const [isEditing, setIsEditing] = useState(false);
   const [editStatus, setEditStatus] = useState(null);
   const [newNickname, setNewNickname] = useState(nickname);
@@ -163,13 +160,9 @@ export const MyProfileInfo = ({ profileInfoData }) => {
     const editStatusMsg = ["", "", "", ""];
 
     if (isChangeExist && isValidNewProfile(newNickname, newEmail)) {
-      const result = await patchProfileInfo(
-        loggedInUser.intra_id,
-        { nickname: newNickname, email: newEmail },
-        (updatedProfile) => {
-          console.log("업데이트 결과: ", updatedProfile);
-        }
-      );
+      const result = await patchProfileInfo({ nickname: newNickname, email: newEmail }, (updatedProfile) => {
+        console.log("업데이트 결과: ", updatedProfile);
+      });
 
       if (result.success) {
         setIsEditing(false);

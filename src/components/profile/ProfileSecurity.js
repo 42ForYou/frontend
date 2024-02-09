@@ -3,8 +3,7 @@ import ToggleButton from "../common/ToggleButton";
 import useProfileData from "../../hooks/useProfileData";
 import AuthContext from "../../context/AuthContext";
 
-const ProfileSecurity = ({ initialIs2FA, intraId }) => {
-  const { loggedInUser } = useContext(AuthContext);
+const ProfileSecurity = ({ initialIs2FA }) => {
   const [is2FA, setIs2FA] = useState(initialIs2FA);
   const [loading, setLoading] = useState(false);
   const { patchProfileInfo } = useProfileData();
@@ -18,11 +17,7 @@ const ProfileSecurity = ({ initialIs2FA, intraId }) => {
 
     setLoading(true);
     const newIs2FA = !is2FA;
-
-    const formData = new FormData();
-    formData.append("two_factor_auth", newIs2FA);
-
-    const res = await patchProfileInfo(loggedInUser.intra_id, formData, () => {});
+    const res = await patchProfileInfo({ two_factor_auth: newIs2FA }, () => {});
     setLoading(false);
 
     if (res.success) {
