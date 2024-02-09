@@ -58,7 +58,7 @@ const HiddenImageUploader = ({ imgInputRef, handleAvatarChange }) => {
 };
 
 const InfoAvatar = ({ avatar, nickname, intraId, isEditing = false, setEditStatus }) => {
-  const { updateProfileData } = useProfileData();
+  const { patchUserProfile } = useProfileData();
   const { setLoggedInUser } = useContext(AuthContext);
   const [newAvatar, setNewAvatar] = useState(avatar);
   const imgInputRef = useRef(null);
@@ -75,23 +75,19 @@ const InfoAvatar = ({ avatar, nickname, intraId, isEditing = false, setEditStatu
       alert("파일을 선택해주세요");
       return;
     }
-    const formData = new FormData();
-    formData.append("image", file);
-
     const editStatusMsg = ["", "", "", ""];
-    try {
-      const resData = await patchForm(API_ENDPOINTS.USER_PROFILE(intraId), formData);
-      const updatedProfile = resData.data.user;
-      updateProfileData("avatar", updatedProfile.avatar);
+    const result = await patchUserProfile(intraId, { image: file }, (updatedProfile) => {
+      console.log("업데이트 결과: ", updatedProfile);
       setNewAvatar(updatedProfile.avatar);
       setLoggedInUser(updatedProfile);
+    });
+
+    if (result.success) {
       editStatusMsg[STATUS.PROFILE] = "아바타가 성공적으로 업로드 되었습니다.";
-    } catch (error) {
-      console.log(error);
-      editStatusMsg[STATUS.PROFILE] = "아바타 업로드가 실패하였습니다.";
-    }
+    } else editStatusMsg[STATUS.PROFILE] = "아바타 업로드가 실패하였습니다.";
     setEditStatus(editStatusMsg);
   };
+
   return (
     <>
       <Avatar
@@ -118,7 +114,7 @@ const CommonInfoDisplay = ({ intraId, avatar, nickname, email, isEditing, onChan
 
 export const MyProfileInfo = ({ profileInfoData }) => {
   const { nickname, email } = profileInfoData;
-  const { updateProfileData } = useProfileData();
+  const { patchUserProfile } = useProfileData();
   const { loggedInUser } = useContext(AuthContext);
   const [isEditing, setIsEditing] = useState(false);
   const [editStatus, setEditStatus] = useState(null);
@@ -152,17 +148,18 @@ export const MyProfileInfo = ({ profileInfoData }) => {
     const editStatusMsg = ["", "", "", ""];
 
     if (isChangeExist && isValidNewProfile(newNickname, newEmail)) {
-      const formData = new FormData();
-      formData.append("nickname", newNickname);
-      formData.append("email", newEmail);
-      const result = await updateProfileData(loggedInUser.intra_id, formData, (updatedProfile) => {
-        console.log("업데이트 결과: ", updatedProfile);
-      });
+      const result = await patchUserProfile(
+        loggedInUser.intra_id,
+        { nickname: newNickname, email: newEmail },
+        (updatedProfile) => {
+          console.log("업데이트 결과: ", updatedProfile);
+        }
+      );
 
       if (result.success) {
         setIsEditing(false);
-        editStatusMsg[STATUS.PROFILE] = [result.message];
-      } else editStatusMsg[STATUS.PROFILE] = [result.message];
+        editStatusMsg[STATUS.PROFILE] = "프로필 정보가 성공적으로 업데이트 되었습니다.";
+      } else editStatusMsg[STATUS.PROFILE] = "프로필 정보 업데이트가 실패하였습니다.";
     }
     setEditStatus(editStatusMsg);
     setNewNickname(nickname);

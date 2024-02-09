@@ -7,7 +7,7 @@ const ProfileSecurity = ({ initialIs2FA, intraId }) => {
   const { loggedInUser } = useContext(AuthContext);
   const [is2FA, setIs2FA] = useState(initialIs2FA);
   const [loading, setLoading] = useState(false);
-  const { updateProfileData } = useProfileData();
+  const { patchUserProfile } = useProfileData();
 
   useEffect(() => {
     setIs2FA(initialIs2FA);
@@ -22,7 +22,7 @@ const ProfileSecurity = ({ initialIs2FA, intraId }) => {
     const formData = new FormData();
     formData.append("two_factor_auth", newIs2FA);
 
-    const res = await updateProfileData(loggedInUser.intra_id, formData);
+    const res = await patchUserProfile(loggedInUser.intra_id, formData);
     setLoading(false);
 
     if (res.success) {
