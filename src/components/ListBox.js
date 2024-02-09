@@ -151,10 +151,6 @@ const ListBox = ({ apiEndpoint, ItemComponent, filterTypes, additionalButton, em
     fetchItemsData();
   }, [currentFilter, currentPage[currentFilter.value]]);
 
-  const handleOccurChange = async () => {
-    fetchItemsData();
-  };
-
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
       fetchItemsData();
