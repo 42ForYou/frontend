@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useContext } from "react";
 import ToggleButton from "../common/ToggleButton";
-import useProfileData from "../../hooks/useProfileData";
+import usePatchProfile from "../../hooks/usePatchProfile";
 
 const ProfileSecurity = ({ initIs2FA }) => {
   const [is2FA, setIs2FA] = useState(initIs2FA);
   const [loading, setLoading] = useState(false);
-  const { patchProfileInfo } = useProfileData();
+  const { patchProfileInfo } = usePatchProfile();
 
   useEffect(() => {
     setIs2FA(initIs2FA);

@@ -3,7 +3,7 @@ import AuthContext from "../context/AuthContext";
 import { patchForm } from "../common/apiBase";
 import { API_ENDPOINTS } from "../common/apiEndpoints";
 
-const useProfileData = () => {
+const usePatchProfile = () => {
   const { loggedInUser } = useContext(AuthContext);
   const { setLoggedInUser } = useContext(AuthContext);
 
@@ -26,4 +26,4 @@ const useProfileData = () => {
   return { patchProfileInfo };
 };
 
-export default useProfileData;
+export default usePatchProfile;

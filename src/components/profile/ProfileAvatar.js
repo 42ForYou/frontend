@@ -1,6 +1,6 @@
 import React, { useContext, useRef, useState } from "react";
 import { STATUS } from "./ProfileInfo";
-import useProfileData from "../../hooks/useProfileData";
+import usePatchProfile from "../../hooks/usePatchProfile";
 import AuthContext from "../../context/AuthContext";
 import Avatar from "../common/Avatar";
 
@@ -11,7 +11,7 @@ const HiddenImageUploader = ({ imgInputRef, handleAvatarChange }) => {
 };
 
 const ProfileAvatar = ({ avatar, nickname, isEditing = false, setEditStatus }) => {
-  const { patchProfileInfo } = useProfileData();
+  const { patchProfileInfo } = usePatchProfile();
   const { setLoggedInUser } = useContext(AuthContext);
   const [newAvatar, setNewAvatar] = useState(avatar);
   const imgInputRef = useRef(null);

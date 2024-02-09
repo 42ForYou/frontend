@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import useProfileData from "../../hooks/useProfileData";
+import usePatchProfile from "../../hooks/usePatchProfile";
 import { checkRegex } from "../../common/checkRegex";
 import StyledButton from "../common/StyledButton";
 import ProfileAvatar from "./ProfileAvatar";
@@ -53,7 +53,7 @@ const InfoDisplay = ({ profileData, isEditing, onNicknameChange, onEmailChange, 
 
 export const MyProfileInfo = ({ initProfileData }) => {
   const { nickname: initNickname, email: initEmail } = initProfileData;
-  const { patchProfileInfo } = useProfileData();
+  const { patchProfileInfo } = usePatchProfile();
   const [isEditing, setIsEditing] = useState(false);
   const [editStatus, setEditStatus] = useState(null);
   const [nickname, setNickname] = useState(initNickname);
@@ -100,10 +100,7 @@ export const MyProfileInfo = ({ initProfileData }) => {
   return (
     <div>
       <InfoDisplay
-        intraId={initProfileData.intraId}
-        avatar={initProfileData.avatar}
-        nickname={nickname}
-        email={email}
+        profileData={{ ...initProfileData, nickname, email }}
         isEditing={isEditing}
         onChangeNickname={setNickname}
         onChangeEmail={setEmail}
