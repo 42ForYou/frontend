@@ -31,8 +31,8 @@ const ListBox = ({ apiEndpoint, ItemComponent, filterTypes, additionalButton, em
   const { itemsData, totalPage, isLoading, error, fetchItems } = useFetchListItems(apiEndpoint, itemsPerPage);
 
   useEffect(() => {
-    fetchItems(state.currentFilter, state.currentPage, state.searchKeyword);
-  }, [fetchItems, state.currentFilter, state.currentPage, state.searchKeyword]);
+    fetchListItems(state.currentFilter, state.currentPage, state.searchKeyword);
+  }, [state.currentFilter, state.currentPage, state.searchKeyword]);
 
   const handleChangeFilter = (filter) => dispatch({ type: "CHANGE_FILTER", payload: filter });
   const handleChangePage = (page) => dispatch({ type: "CHANGE_PAGE", payload: page });
