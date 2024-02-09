@@ -2,7 +2,6 @@ import React from "react";
 import PageContainer from "../components/PageContainer";
 import withAuthProtection from "../common/withAuthProtection";
 import FriendsListBox from "../components/FriendsListBox";
-import SearchBar from "../components/SearchBar";
 
 const FriendsListPage = () => {
   return (
