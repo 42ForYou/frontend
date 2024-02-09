@@ -29,14 +29,7 @@ const NavItems = () => {
 
 const NavUser = () => {
   const { loggedInUser, logout } = useContext(AuthContext);
-  const [avatarSrc, setAvatarSrc] = useState(loggedInUser ? loggedInUser.avatar : null);
-  const [nickname, setNickname] = useState(loggedInUser ? loggedInUser.nickname : null);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    setAvatarSrc(loggedInUser ? loggedInUser.avatar : null);
-    setNickname(loggedInUser ? loggedInUser.nickname : null);
-  }, [loggedInUser]);
 
   const handleLogout = () => {
     logout();
@@ -44,9 +37,12 @@ const NavUser = () => {
     navigate("/login");
   };
 
+  const avatarSrc = loggedInUser ? loggedInUser.avatar : null;
+  const nickname = loggedInUser ? loggedInUser.nickname : "로그인하지 않은 사용자";
+
   return (
     <div className="d-flex flex-column align-items-center">
-      {loggedInUser ? nickname : "로그인하지 않은 사용자"}
+      {nickname}
       <Avatar src={avatarSrc} to={"/profile"} />
       <button className="btn btn-primary mt-2 w-40" onClick={handleLogout}>
         로그아웃하기
