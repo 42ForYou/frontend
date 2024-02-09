@@ -15,7 +15,7 @@ const useProfileData = () => {
       const resData = await patchForm(API_ENDPOINTS.USER_PROFILE(loggedInUser.intra_id), formData);
       const updatedProfile = resData.data.user;
       setLoggedInUser(updatedProfile);
-      callback(updatedProfile);
+      if (callback) callback(updatedProfile);
       return { success: true, message: "patchProfileInfo 성공" };
     } catch (error) {
       console.error(error);

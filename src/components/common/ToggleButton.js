@@ -1,16 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 
-const ToggleButton = ({ title, initIsToggled, toggleEvent, loading }) => {
-  const [isToggled, setIsToggled] = useState(initIsToggled);
-
-  useEffect(() => {
-    setIsToggled(initIsToggled);
-  }, [initIsToggled]);
-
+const ToggleButton = ({ title, isToggled, onToggle, loading }) => {
   const handleToggle = () => {
     if (!loading) {
-      setIsToggled(!isToggled);
-      toggleEvent(!isToggled);
+      onToggle();
     }
   };
 
