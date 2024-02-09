@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { get } from "../common/apiBase";
 import StyledButton from "./StyledButton";
+import SearchBar from "./SearchBar";
 
 const ListFilter = ({ filterTypes, currentFilter, onFilterClick, rightButton }) => {
   return (
@@ -151,12 +152,6 @@ const ListBox = ({ apiEndpoint, ItemComponent, filterTypes, additionalButton, em
     fetchItemsData();
   }, [currentFilter, currentPage[currentFilter.value]]);
 
-  const handleKeyPress = (e) => {
-    if (e.key === "Enter") {
-      fetchItemsData();
-    }
-  };
-
   const handleOccurChange = async () => {
     fetchItemsData();
   };
@@ -164,18 +159,10 @@ const ListBox = ({ apiEndpoint, ItemComponent, filterTypes, additionalButton, em
   return (
     <div className="container d-flex flex-column justify-content-between h-100">
       {searchable && (
-        <div className="search-input-container row">
-          <input
-            type="text"
-            placeholder="검색 키워드를 입력하세요"
-            value={searchKeyword}
-            onChange={(e) => setSearchKeyword(e.target.value)}
-            onKeyDown={handleKeyPress}
-          />
-          <button onClick={fetchItemsData}>검색</button>
+        <div className="row">
+          <SearchBar searchKeyword={searchKeyword} setSearchKeyword={setSearchKeyword} onSearch={fetchItemsData} />
         </div>
       )}
-
       <div className="row">
         {filterTypes?.length > 0 && (
           <div className="row">

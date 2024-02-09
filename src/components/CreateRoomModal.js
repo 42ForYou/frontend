@@ -121,7 +121,6 @@ const CreateRoomModal = ({ handleClose }) => {
       }
     };
 
-    // console.log("submit roomData: ", roomData);
     const keysToCheck = ["game.is_tournament", "game.time_limit", "game.game_point", "game.n_players", "room.title"];
     if (!hasKeys(roomData, keysToCheck)) {
       alert("모든 필드를 입력해주세요.");
@@ -157,4 +156,3 @@ const CreateRoomModal = ({ handleClose }) => {
 };
 
 export default CreateRoomModal;
-//
