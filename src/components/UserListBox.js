@@ -9,7 +9,7 @@ const UserListBox = () => {
   return (
     <>
       <ListBox
-        apiEndpoint={(_, __, ___, searchKeyword) => API_ENDPOINTS.USER_SEARCH(searchKeyword)}
+        apiEndpoint={(_, page, page_size, keyword) => API_ENDPOINTS.USER_SEARCH(page, page_size, keyword)}
         ItemComponent={UserItem}
         filterTypes={filterTypes}
         additionalButton={null}
