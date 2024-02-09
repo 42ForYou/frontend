@@ -2,7 +2,7 @@ import React, { useEffect, useReducer } from "react";
 import ListFilter from "./ListFilter";
 import ListItems from "./ListItems";
 import ListPagination from "./ListPagination";
-import useFetchItems from "../../hooks/useFetchItems";
+import useFetchListItems from "../../hooks/useFetchListItems";
 import SearchBar from "../common/SearchBar";
 
 const reducer = (state, action) => {
@@ -28,7 +28,7 @@ const ListBox = ({ apiEndpoint, ItemComponent, filterTypes, additionalButton, em
     searchKeyword: "",
   };
   const [state, dispatch] = useReducer(reducer, initState);
-  const { itemsData, totalPage, isLoading, error } = useFetchItems(
+  const { itemsData, totalPage, isLoading, error } = useFetchListItems(
     apiEndpoint,
     state.currentFilter,
     state.currentPage,
