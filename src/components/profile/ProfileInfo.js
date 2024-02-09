@@ -26,28 +26,33 @@ const EditProfileButtons = ({ isEditing, onExitClick, onSubmitClick, onEntryClic
   );
 };
 
-const InfoDisplay = ({
-  intraId,
-  avatar,
-  nickname,
-  email,
-  isEditing,
-  onChangeNickname,
-  onChangeEmail,
-  setEditStatus,
-}) => (
-  <div>
-    <ProfileAvatar avatar={avatar} nickname={nickname} isEditing={isEditing} setEditStatus={setEditStatus} />
+const InfoDisplay = ({ profileData, isEditing, onNicknameChange, onEmailChange, setEditStatus }) => {
+  return (
     <div>
-      {intraId && <ProfileTextLine label="Intra ID" value={intraId} />}
-      <ProfileTextLine label="Nickname" value={nickname} isEditing={isEditing} onChange={onChangeNickname} />
-      {email && <ProfileTextLine label="Email" value={email} isEditing={isEditing} onChange={onChangeEmail} />}
+      <ProfileAvatar
+        avatar={profileData.avatar}
+        nickname={profileData.nickname}
+        isEditing={isEditing}
+        setEditStatus={setEditStatus}
+      />
+      <div>
+        {profileData.intraId && <ProfileTextLine label="Intra ID" value={profileData.intraId} />}
+        <ProfileTextLine
+          label="Nickname"
+          value={profileData.nickname}
+          isEditing={isEditing}
+          onChange={onNicknameChange}
+        />
+        {profileData.email && (
+          <ProfileTextLine label="Email" value={profileData.email} isEditing={isEditing} onChange={onEmailChange} />
+        )}
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
-export const MyProfileInfo = ({ initProfileInfo }) => {
-  const { nickname: initNickname, email: initEmail } = initProfileInfo;
+export const MyProfileInfo = ({ initProfileData }) => {
+  const { nickname: initNickname, email: initEmail } = initProfileData;
   const { patchProfileInfo } = useProfileData();
   const [isEditing, setIsEditing] = useState(false);
   const [editStatus, setEditStatus] = useState(null);
@@ -95,8 +100,8 @@ export const MyProfileInfo = ({ initProfileInfo }) => {
   return (
     <div>
       <InfoDisplay
-        intraId={initProfileInfo.intraId}
-        avatar={initProfileInfo.avatar}
+        intraId={initProfileData.intraId}
+        avatar={initProfileData.avatar}
         nickname={nickname}
         email={email}
         isEditing={isEditing}
@@ -121,8 +126,14 @@ export const MyProfileInfo = ({ initProfileInfo }) => {
   );
 };
 
-export const UserProfileInfo = ({ profileInfoData }) => (
+export const UserProfileInfo = ({ profileData }) => (
   <div>
-    <InfoDisplay {...profileInfoData} />
+    <InfoDisplay profileData={profileData} />
   </div>
 );
+
+const ProfileInfo = ({ isMine, profileData }) => {
+  return isMine ? <MyProfileInfo initProfileData={profileData} /> : <UserProfileInfo profileData={profileData} />;
+};
+
+export default ProfileInfo;
