@@ -22,7 +22,7 @@ const ProfileSecurity = ({ initialIs2FA, intraId }) => {
     const formData = new FormData();
     formData.append("two_factor_auth", newIs2FA);
 
-    const res = await patchUserProfile(loggedInUser.intra_id, formData);
+    const res = await patchUserProfile(loggedInUser.intra_id, formData, () => {});
     setLoading(false);
 
     if (res.success) {
@@ -32,7 +32,7 @@ const ProfileSecurity = ({ initialIs2FA, intraId }) => {
     }
   };
 
-  return <ToggleButton title="2FA" isToggled={is2FA} onToggle={handleClick2FAToggle} disabled={loading} />;
+  return <ToggleButton title="2FA" initIsToggled={is2FA} toggleEvent={handleClick2FAToggle} disabled={loading} />;
 };
 
 export default ProfileSecurity;
