@@ -3,7 +3,7 @@ import ListFilter from "./ListFilter";
 import ListItems from "./ListItems";
 import ListPagination from "./ListPagination";
 import useFetchItems from "../../hooks/useFetchItems";
-import SearchBar from "../SearchBar";
+import SearchBar from "../common/SearchBar";
 
 const reducer = (state, action) => {
   switch (action.type) {

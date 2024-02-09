@@ -1,7 +1,7 @@
 import React from "react";
 
 import FriendItem from "./FriendItem";
-import ListBox from "./ListBox";
+import ListBox from "../list/ListBox";
 import { API_ENDPOINTS } from "../../common/apiEndpoints";
 
 const FriendsListBox = () => {

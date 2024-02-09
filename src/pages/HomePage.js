@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
-import PageContainer from "../components/PageContainer";
-import withAuthProtection from "../common/withAuthProtection";
-import { useLocation } from "react-router-dom";
+import PageContainer from "../components/layout/PageContainer";
+import withAuthProtection from "../components/common/withAuthProtection";
 
 const HomePage = () => {
   return (

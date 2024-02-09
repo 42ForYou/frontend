@@ -1,8 +1,7 @@
 import React from "react";
-import PageContainer from "../components/PageContainer";
-import withAuthProtection from "../common/withAuthProtection";
-import RoomListBox from "../components/RoomListBox";
-import SearchBar from "../components/SearchBar";
+import PageContainer from "../components/layout/PageContainer";
+import withAuthProtection from "../components/common/withAuthProtection";
+import RoomListBox from "../components/room/RoomListBox";
 
 const GameRoomListPage = () => {
   return (

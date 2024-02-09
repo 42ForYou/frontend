@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import PageContainer from "../components/PageContainer";
-import withAuthProtection from "../common/withAuthProtection";
-import ProfileBox from "../components/ProfileBox";
+import PageContainer from "../components/layout/PageContainer";
+import withAuthProtection from "../components/common/withAuthProtection";
+import ProfileBox from "../components/profile/ProfileBox";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import LoadingPage from "./LoadingPage";
 import { get } from "../common/apiBase";

@@ -1,5 +1,4 @@
 import React from "react";
-import StyledButton from "../StyledButton";
 
 const ListItems = ({ itemsData, ItemComponent, itemsPerRow, emptyMsg, onOccurChange }) => {
   // 1차 배열을 행 단위로 나눠 2차 배열로 반환

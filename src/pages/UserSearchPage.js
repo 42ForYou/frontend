@@ -1,7 +1,7 @@
 import React from "react";
-import PageContainer from "../components/PageContainer";
-import withAuthProtection from "../common/withAuthProtection";
-import UserListBox from "../components/UserListBox";
+import PageContainer from "../components/layout/PageContainer";
+import withAuthProtection from "../components/common/withAuthProtection";
+import UserListBox from "../components/user/UserListBox";
 
 const UserSearchPage = () => {
   return (

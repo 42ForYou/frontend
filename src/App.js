@@ -16,7 +16,6 @@ import GameWaitingRoomPage from "./pages/GameWaitingRoomPage";
 import GameRoomListPage from "./pages/GameRoomListPage";
 import UserSearchPage from "./pages/UserSearchPage";
 import NotFoundPage from "./pages/error/NotFoundPage";
-import TestPage from "./pages/TestPage";
 
 const App = () => {
   return (
@@ -43,7 +42,6 @@ const AppContent = () => {
         <Route path="/game/list" element={<GameRoomListPage />} />
         <Route path="/game/waiting/:room_id" element={<GameWaitingRoomPage />} />
         <Route path="/game/play/:game_id" element={<GamePlayPage />} />
-        <Route path="/test" element={<TestPage />} />
         {/* fallback page */}
         <Route path="*" element={<NotFoundPage />} />
       </Routes>

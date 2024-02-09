@@ -1,13 +1,13 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import CustomModal from "../layout/CustomModal";
+import CustomModal from "../common/CustomModal";
 import AuthContext from "../../context/AuthContext";
 import { post } from "../../common/apiBase";
 import { API_ENDPOINTS } from "../../common/apiEndpoints";
-import RadioSelector from "../RadioSelector";
-import DropdownSelector from "../layout/DropdownSelector";
+import RadioSelector from "../common/RadioSelector";
+import DropdownSelector from "../common/DropdownSelector";
 import { hasKeys, updateProperty } from "../../common/objectUtils";
-import StyledButton from "../StyledButton";
+import StyledButton from "../common/StyledButton";
 
 const RoomTitleForm = ({ updateRoomData }) => {
   const { loggedInUser } = useContext(AuthContext);
