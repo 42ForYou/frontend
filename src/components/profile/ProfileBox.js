@@ -2,12 +2,14 @@ import React from "react";
 import ProfileHistory from "./ProfileHistory";
 import ProfileSecurity from "./ProfileSecurity";
 import { MyProfileInfo, UserProfileInfo } from "./ProfileInfo";
+import ProfileFriendStatus from "./ProfileFriendStatus";
 
 const ProfileBox = ({ isMine, profileData }) => {
   return (
     <div className="container-fluid">
       <div className="row">
         {isMine ? <MyProfileInfo initProfileData={profileData} /> : <UserProfileInfo profileData={profileData} />}
+        {!isMine && <ProfileFriendStatus friendStatus={profileData.friend_status} nickname={profileData.nickname} />}
       </div>
       <div className="row">
         <ProfileHistory profileData={profileData} />

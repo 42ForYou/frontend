@@ -48,7 +48,7 @@ module.exports = {
     extensions: [".js", ".jsx"],
   },
   output: {
-    filename: "[name].bundle.js",
+    filename: "[name].[contenthash].js",
     publicPath: "/",
     path: path.resolve(__dirname, "../../dist"),
     clean: true,

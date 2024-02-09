@@ -1,7 +1,7 @@
 import React from "react";
 import Avatar from "../common/Avatar";
 import StyledButton from "../common/StyledButton";
-import { patch } from "../../common/apiBase";
+import { del, patch } from "../../common/apiBase";
 import { API_ENDPOINTS } from "../../common/apiEndpoints";
 
 const FriendItem = ({ id, status, friend, onOccurChange }) => {
@@ -12,13 +12,37 @@ const FriendItem = ({ id, status, friend, onOccurChange }) => {
       try {
         const resData = await patch(`${API_ENDPOINTS.FRIENDS()}${id}/`);
         onOccurChange();
-        console.error("친구 수락 성공:", resData);
+        alert("친구 요청을 수락하였습니다.");
+        console.log("친구 요청 수락 성공:", resData);
       } catch (error) {
-        console.error("친구 수락 실패:", error);
-        alert("친구 수락에 실패하였습니다.");
+        console.error("친구 요청 수락 실패:", error);
+        alert("친구 요청 수락에 실패하였습니다.");
       }
     };
     patchFriend();
+  };
+
+  const handleRejectFriend = () => {
+    const delFriend = async () => {
+      try {
+        const resData = await del(`${API_ENDPOINTS.FRIENDS()}${id}/`);
+        onOccurChange();
+        console.log("친구 삭제 성공:", resData);
+      } catch (error) {
+        console.error("친구 삭제 실패:", error);
+        alert("친구 삭제에 실패하였습니다.");
+      }
+    };
+
+    let confirmMsg = "";
+    if (status === "pending") {
+      confirmMsg = "친구 요청을 거절하시겠습니까?";
+    } else if (status === "friend") {
+      confirmMsg = "친구를 삭제하시겠습니까?";
+    }
+    if (window.confirm(confirmMsg)) {
+      delFriend();
+    }
   };
 
   return (
@@ -35,7 +59,15 @@ const FriendItem = ({ id, status, friend, onOccurChange }) => {
         <div className="col">
           {nickname}
           {status === "pending" && (
-            <StyledButton styleType={"btn btn-primary"} name={"친구 수락"} onClick={handleAcceptFriend} />
+            <>
+              <StyledButton styleType={"btn btn-primary"} name={"수락"} onClick={handleAcceptFriend} />
+              <StyledButton styleType={"btn btn-danger"} name={"거절"} onClick={handleRejectFriend} />
+            </>
+          )}
+          {status === "friend" && (
+            <>
+              <StyledButton styleType={"btn btn-danger"} name={"친구 삭제"} onClick={handleRejectFriend} />
+            </>
           )}
         </div>
       </div>

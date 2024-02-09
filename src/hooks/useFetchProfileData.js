@@ -7,12 +7,12 @@ import { API_ENDPOINTS } from "../common/apiEndpoints";
 const useFetchProfileData = (intraId) => {
   const [profileData, setProfileData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState({ errcode: null, errmsg: null });
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchProfileData = async () => {
       setIsLoading(true);
-      setError({ code: null, msg: null });
+      setError(null);
       try {
         const resData = await get(API_ENDPOINTS.USER_PROFILE(intraId));
         setProfileData(resData.data.user);

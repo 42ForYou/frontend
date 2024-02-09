@@ -30,8 +30,12 @@ const ListBox = ({ apiEndpoint, ItemComponent, filterTypes, additionalButton, em
   const [state, dispatch] = useReducer(reducer, initState);
   const { itemsData, totalPage, isLoading, error, fetchListItems } = useFetchListItems(apiEndpoint, itemsPerPage);
 
-  useEffect(() => {
+  const reloadListItems = () => {
     fetchListItems(state.currentFilter, state.currentPage, state.searchKeyword);
+  };
+
+  useEffect(() => {
+    reloadListItems();
   }, [state.currentFilter, state.currentPage, state.searchKeyword]);
 
   const handleChangeFilter = (filter) => dispatch({ type: "CHANGE_FILTER", payload: filter });
@@ -52,7 +56,13 @@ const ListBox = ({ apiEndpoint, ItemComponent, filterTypes, additionalButton, em
       {isLoading ? (
         <div>Loading...</div>
       ) : (
-        <ListItems itemsData={itemsData} ItemComponent={ItemComponent} itemsPerRow={itemsPerRow} emptyMsg={emptyMsg} />
+        <ListItems
+          itemsData={itemsData}
+          ItemComponent={ItemComponent}
+          itemsPerRow={itemsPerRow}
+          emptyMsg={emptyMsg}
+          onOccurChange={reloadListItems}
+        />
       )}
       {itemsData && (
         <ListPagination totalPage={totalPage} currentPage={state.currentPage} onPaginationClick={handleChangePage} />

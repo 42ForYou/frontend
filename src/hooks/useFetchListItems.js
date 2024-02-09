@@ -6,11 +6,11 @@ const useFetchListItems = (apiEndpoint, fetchLimit) => {
   const [itemsData, setItemsData] = useState(null);
   const [totalPage, setTotalPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState({ code: null, msg: null });
+  const [error, setError] = useState(null);
 
   const fetchListItems = async (currentFilter, currentPage, searchKeyword) => {
     setIsLoading(true);
-    setError({ code: null, msg: null });
+    setError(null);
     try {
       const resData = await get(apiEndpoint(currentFilter.value, currentPage, fetchLimit, searchKeyword));
       setItemsData(resData.data);
