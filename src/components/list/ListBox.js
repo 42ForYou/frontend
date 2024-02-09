@@ -28,13 +28,11 @@ const ListBox = ({ apiEndpoint, ItemComponent, filterTypes, additionalButton, em
     searchKeyword: "",
   };
   const [state, dispatch] = useReducer(reducer, initState);
-  const { itemsData, totalPage, isLoading, error } = useFetchListItems(
-    apiEndpoint,
-    state.currentFilter,
-    state.currentPage,
-    state.searchKeyword,
-    itemsPerPage
-  );
+  const { itemsData, totalPage, isLoading, error, fetchItems } = useFetchListItems(apiEndpoint, itemsPerPage);
+
+  useEffect(() => {
+    fetchItems(state.currentFilter, state.currentPage, state.searchKeyword);
+  }, [fetchItems, state.currentFilter, state.currentPage, state.searchKeyword]);
 
   const handleChangeFilter = (filter) => dispatch({ type: "CHANGE_FILTER", payload: filter });
   const handleChangePage = (page) => dispatch({ type: "CHANGE_PAGE", payload: page });
