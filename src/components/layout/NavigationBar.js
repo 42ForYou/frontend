@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import AuthContext from "../../context/AuthContext";
+import AuthContext, { useAuth } from "../../context/AuthContext";
 
 import Avatar from "../common/Avatar";
 import Icon from "../common/Icon";
@@ -28,7 +28,7 @@ const NavItems = () => {
 };
 
 const NavUser = () => {
-  const { loggedIn, logout } = useContext(AuthContext);
+  const { loggedIn, logout } = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = () => {

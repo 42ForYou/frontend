@@ -1,12 +1,12 @@
 import { useContext, useState } from "react";
-import AuthContext from "../context/AuthContext";
+import AuthContext, { useAuth } from "../context/AuthContext";
 import { patchForm } from "../common/apiBase";
 import { API_ENDPOINTS } from "../common/apiEndpoints";
 
 // 사용자의 프로필 업데이트 요청을 비동기로 처리하는 커스텀 훅
 // 사용자가 로그인한 상태에서만 사용 가능
 const usePatchProfile = () => {
-  const { loggedIn } = useContext(AuthContext);
+  const { loggedIn } = useAuth();
   const [error, setError] = useState(null);
 
   const patchProfileInfo = async (formDataObj, callback, isImage = false) => {

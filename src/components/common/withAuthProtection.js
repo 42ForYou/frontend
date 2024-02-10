@@ -1,12 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import AuthContext from "../../context/AuthContext";
+import AuthContext, { useAuth } from "../../context/AuthContext";
 
 // 보호된 페이지를 위한 고차 컴포넌트
 // 인증 상태에 따라 페이지 접근을 제어함
 const withAuthProtection = (WrappedComponent) => {
   return (props) => {
-    const { validateTokenInCookies } = useContext(AuthContext);
+    const { validateTokenInCookies } = useAuth();
     const [isAuthorized, setIsAuthorized] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();

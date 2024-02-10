@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import Avatar from "../common/Avatar";
 import StyledButton from "../common/StyledButton";
 import { useNavigate } from "react-router-dom";
-import AuthContext from "../../context/AuthContext";
+import AuthContext, { useAuth } from "../../context/AuthContext";
 import { del } from "../../common/apiBase";
 import { API_ENDPOINTS } from "../../common/apiEndpoints";
 
@@ -81,7 +81,7 @@ const WaitingPlayer = ({ nickname, avatar, isHost, isMine }) => {
 
 const WaitingPlayersRow = ({ players, playersPerRow, host }) => {
   const colSize = 12 / playersPerRow;
-  const { loggedIn } = useContext(AuthContext);
+  const { loggedIn } = useAuth();
   return (
     <>
       {players.map((player, index) => (
@@ -133,7 +133,7 @@ const WaitingPlayersGrid = ({ players, host, isTournament }) => {
 };
 
 const WaitingRoomBox = ({ gameData, roomData, playersData, myPlayerId }) => {
-  const { loggedIn, isLoading } = useContext(AuthContext);
+  const { loggedIn, isLoading } = useAuth();
 
   if (isLoading) {
     return <div>로딩 중...</div>;
