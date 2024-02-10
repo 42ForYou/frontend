@@ -81,20 +81,20 @@ const WaitingPlayer = ({ nickname, avatar, isHost, isMine }) => {
 
 const WaitingPlayersRow = ({ players, playersPerRow, host }) => {
   const colSize = 12 / playersPerRow;
-  const { loggedInUser } = useContext(AuthContext);
+  const { loggedIn } = useContext(AuthContext);
   return (
     <>
       {players.map((player, index) => (
         <div
           key={index}
-          className={`col-${colSize} d-flex justify-content-center align-items-center border border-info ${player && player.nickname === loggedInUser.nickname ? "bg-warning" : "bg-light"}`}
+          className={`col-${colSize} d-flex justify-content-center align-items-center border border-info ${player && player.nickname === loggedIn.nickname ? "bg-warning" : "bg-light"}`}
           style={{ minHeight: "200px" }}>
           {player ? (
             <WaitingPlayer
               nickname={player.nickname}
               avatar={player.avatar}
               isHost={player.nickname === host}
-              isMine={player.nickname === loggedInUser.nickname}
+              isMine={player.nickname === loggedIn.nickname}
             />
           ) : (
             <p className="text-muted">플레이어의 입장을 기다리고 있습니다...</p>
@@ -133,7 +133,7 @@ const WaitingPlayersGrid = ({ players, host, isTournament }) => {
 };
 
 const WaitingRoomBox = ({ gameData, roomData, playersData, myPlayerId }) => {
-  const { loggedInUser, isLoading } = useContext(AuthContext);
+  const { loggedIn, isLoading } = useContext(AuthContext);
 
   if (isLoading) {
     return <div>로딩 중...</div>;
@@ -141,7 +141,7 @@ const WaitingRoomBox = ({ gameData, roomData, playersData, myPlayerId }) => {
 
   const { game_id, is_tournament, game_point, time_limit, n_players } = gameData;
   const { id: room_id, title, host, join_players } = roomData;
-  const amIHost = host === loggedInUser.nickname;
+  const amIHost = host === loggedIn.nickname;
 
   const bombRoomRequest = async () => {
     try {

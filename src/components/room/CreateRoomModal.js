@@ -10,8 +10,8 @@ import { hasKeys, updateProperty } from "../../common/objectUtils";
 import StyledButton from "../common/StyledButton";
 
 const RoomTitleForm = ({ updateRoomData }) => {
-  const { loggedInUser } = useContext(AuthContext);
-  const initRoomTitle = loggedInUser ? `${loggedInUser.nickname}의 게임 방` : "";
+  const { loggedIn } = useContext(AuthContext);
+  const initRoomTitle = loggedIn ? `${loggedIn.nickname}의 게임 방` : "";
   const [roomTitle, setRoomTitle] = useState(initRoomTitle);
 
   useEffect(() => {

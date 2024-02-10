@@ -28,7 +28,7 @@ const NavItems = () => {
 };
 
 const NavUser = () => {
-  const { loggedInUser, logout } = useContext(AuthContext);
+  const { loggedIn, logout } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -37,8 +37,8 @@ const NavUser = () => {
     navigate("/login");
   };
 
-  const avatarSrc = loggedInUser ? loggedInUser.avatar : null;
-  const nickname = loggedInUser ? loggedInUser.nickname : "로그인하지 않은 사용자";
+  const avatarSrc = loggedIn ? loggedIn.avatar : null;
+  const nickname = loggedIn ? loggedIn.nickname : "로그인하지 않은 사용자";
 
   return (
     <div className="d-flex flex-column align-items-center">

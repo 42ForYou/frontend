@@ -7,8 +7,8 @@ import useFetchProfileData from "../hooks/useFetchProfileData";
 import ContentContainer from "../components/layout/ContentContainer";
 
 const MyProfilePage = () => {
-  const { loggedInUser } = useContext(AuthContext);
-  const { profileData, isLoading } = useFetchProfileData(loggedInUser.intra_id);
+  const { loggedIn } = useContext(AuthContext);
+  const { profileData, isLoading } = useFetchProfileData(loggedIn.intra_id);
 
   return (
     <div className="MyProfilePage">
