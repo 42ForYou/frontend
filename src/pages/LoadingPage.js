@@ -1,11 +1,11 @@
 import React from "react";
-import PageContainer from "../components/layout/PageContainer";
 import withAuthProtection from "../components/common/withAuthProtection";
+import ContentContainer from "../components/layout/ContentContainer";
 
-const LoadingPage = ({ hasNavigationBar }) => {
+const LoadingPage = () => {
   return (
     <div className="LoadingPage">
-      <PageContainer hasNavigationBar={hasNavigationBar}>Loading ...</PageContainer>
+      <ContentContainer>Loading ...</ContentContainer>
     </div>
   );
 };

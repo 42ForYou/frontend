@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
-import PageContainer from "../components/layout/PageContainer";
 import withAuthProtection from "../components/common/withAuthProtection";
 import ProfileBox from "../components/profile/ProfileBox";
 import { useParams, useNavigate } from "react-router-dom";
 import LoadingPage from "./LoadingPage";
 import useFetchProfileData from "../hooks/useFetchProfileData";
+import ContentContainer from "../components/layout/ContentContainer";
 
 const UserProfilePage = () => {
   const { intra_id } = useParams();
@@ -20,13 +20,10 @@ const UserProfilePage = () => {
 
   return (
     <div className="UserProfilePage">
-      {isLoading ? (
-        <LoadingPage hasNavigationBar={true} />
-      ) : (
-        <PageContainer hasNavigationBar={true}>
-          <ProfileBox isMine={false} profileData={profileData} />
-        </PageContainer>
-      )}
+      <ContentContainer>
+        <h1>User Profile</h1>
+        {isLoading ? <LoadingPage /> : <ProfileBox isMine={false} profileData={profileData} />}
+      </ContentContainer>
     </div>
   );
 };

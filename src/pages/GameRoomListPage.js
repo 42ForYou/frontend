@@ -1,14 +1,15 @@
 import React from "react";
-import PageContainer from "../components/layout/PageContainer";
 import withAuthProtection from "../components/common/withAuthProtection";
 import RoomListBox from "../components/room/RoomListBox";
+import ContentContainer from "../components/layout/ContentContainer";
 
 const GameRoomListPage = () => {
   return (
     <div className="GameRoomListPage">
-      <PageContainer hasNavigationBar={true}>
+      <ContentContainer>
+        <h1>Game Rooms</h1>
         <RoomListBox />
-      </PageContainer>
+      </ContentContainer>
     </div>
   );
 };

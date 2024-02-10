@@ -1,14 +1,15 @@
 import React from "react";
-import PageContainer from "../components/layout/PageContainer";
 import withAuthProtection from "../components/common/withAuthProtection";
 import UserListBox from "../components/user/UserListBox";
+import ContentContainer from "../components/layout/ContentContainer";
 
 const UserSearchPage = () => {
   return (
     <div className="UserSearchPage">
-      <PageContainer hasNavigationBar={true}>
+      <ContentContainer>
+        <h1>Users</h1>
         <UserListBox />
-      </PageContainer>
+      </ContentContainer>
     </div>
   );
 };

@@ -1,6 +1,5 @@
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import PageContainer from "../components/layout/PageContainer";
 import { API_ENDPOINTS } from "../common/apiEndpoints";
 import { getWithoutCredentials } from "../common/apiBase";
 
@@ -22,14 +21,11 @@ const LoginPage = () => {
 
   return (
     <div className="LoginPage">
-      {/* 차후 필요없을 시 PageContainer 빼는 것 고려 */}
-      <PageContainer hasNavigationBar={false}>
-        <div>
-          <h1>개발용 로그인 페이지</h1>
-          <button onClick={startOAuthFlow}>42인증 시작</button>
-          <button onClick={() => navigate("/")}>홈으로 가기</button>
-        </div>
-      </PageContainer>
+      <div>
+        <h1>개발용 로그인 페이지</h1>
+        <button onClick={startOAuthFlow}>42인증 시작</button>
+        <button onClick={() => navigate("/")}>홈으로 가기</button>
+      </div>
     </div>
   );
 };

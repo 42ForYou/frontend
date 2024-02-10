@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 
 // context
 import { AuthProvider } from "./context/AuthContext";
@@ -17,6 +17,17 @@ import GameRoomListPage from "./pages/GameRoomListPage";
 import UserSearchPage from "./pages/UserSearchPage";
 import NotFoundPage from "./pages/error/NotFoundPage";
 
+import NavigationBar from "./components/layout/NavigationBar";
+
+const shouldHideNavbar = (locationPathname, hideNavbarRoutes) => {
+  if (locationPathname === "/") return false;
+  const hideNavbarRegex = hideNavbarRoutes.map((route) => {
+    const regexPattern = route.replace(/:[^\s/]+/g, "[^/]+").replace(/\*/g, ".*");
+    return new RegExp(`^${regexPattern}$`);
+  });
+  return hideNavbarRegex.some((regex) => regex.test(locationPathname));
+};
+
 const App = () => {
   return (
     <BrowserRouter>
@@ -27,24 +38,37 @@ const App = () => {
   );
 };
 
+// todo: 콜백 페이지 경로 변경
 const AppContent = () => {
+  const location = useLocation();
+  const hideNavbarRoutes = ["/login", "/game/waiting/:room_id", "/game/play/:game_id"];
+  const showNavbar = !shouldHideNavbar(location.pathname, hideNavbarRoutes);
+
   return (
-    <div className="App">
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/login" element={<LoginPage />} />
-        {/* 로그인 콜백 페이지를 라우팅 관련 이슈 없이 /login 경로 아래 둘 수 있는 방법 알아보기 */}
-        <Route path="/callback" element={<LoginCallbackPage />} />
-        <Route path="/profile" element={<MyProfilePage />} />
-        <Route path="/profile/users/:intra_id" element={<UserProfilePage />} />
-        <Route path="/users" element={<UserSearchPage />} />
-        <Route path="/friends" element={<FriendsPage />} />
-        <Route path="/game/list" element={<GameRoomListPage />} />
-        <Route path="/game/waiting/:room_id" element={<GameWaitingRoomPage />} />
-        <Route path="/game/play/:game_id" element={<GamePlayPage />} />
-        {/* fallback page */}
-        <Route path="*" element={<NotFoundPage />} />
-      </Routes>
+    <div className="App container-fluid">
+      <div className="row">
+        {showNavbar && (
+          <div className="col-2 p-0">
+            <NavigationBar />
+          </div>
+        )}
+        <div className="col p-0">
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/callback" element={<LoginCallbackPage />} />
+            <Route path="/profile" element={<MyProfilePage />} />
+            <Route path="/profile/users/:intra_id" element={<UserProfilePage />} />
+            <Route path="/users" element={<UserSearchPage />} />
+            <Route path="/friends" element={<FriendsPage />} />
+            <Route path="/game/list" element={<GameRoomListPage />} />
+            <Route path="/game/waiting/:room_id" element={<GameWaitingRoomPage />} />
+            <Route path="/game/play/:game_id" element={<GamePlayPage />} />
+            {/* fallback page */}
+            <Route path="*" element={<NotFoundPage />} />
+          </Routes>
+        </div>
+      </div>
     </div>
   );
 };
