@@ -13,8 +13,9 @@ export const AuthProvider = ({ children }) => {
     setIsLoading(true);
     try {
       // const resData = await get(API_ENDPOINTS.VALIDATE_2FA(code));
-      // setLoggedIn(resData.data.user);
-      setIsTwoFactorAuthRequired(false);
+      // const user = resData.data.user;
+      // setLoggedIn(user);
+      if (!(code === "dev")) throw new Error("2FA 인증에 실패했습니다.");
       console.log("2FA 검증 성공");
       return { success: true, user: null };
     } catch (error) {
