@@ -2,6 +2,8 @@ export const API_ENDPOINTS = {
   LOGIN: "/login",
   OAUTH_REDIRECT: (code) => `/oauth/?code=${code}`,
   VALID: "/valid",
+  // todo: 2FA 검증 API 경로 확정시 수정
+  VALIDATE_2FA: (code) => `/valid/2fa?code=${code}`,
   USER_PROFILE: (nickname) => `api/accounts/profiles/${nickname}/`,
   USER_SEARCH: (page, page_size, keyword) => {
     return `/api/accounts/search?search=${keyword}&page=${page}&page_size=${page_size}`;
