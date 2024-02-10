@@ -13,7 +13,6 @@ module.exports = merge(common, {
     static: {
       directory: path.join(__dirname, "../../dist"),
     },
-    inline: true,
     hot: true,
     open: true,
   },
