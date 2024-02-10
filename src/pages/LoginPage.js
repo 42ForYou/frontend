@@ -11,11 +11,15 @@ const LoginPage = () => {
   const [emailFor2FA, setEmailFor2FA] = useState("");
   const { validateTokenInCookies, validate2FAcode, login } = useAuth();
   const navigate = useNavigate();
+  const { validateTokenInCookies } = useAuth();
 
   const redirectToOAuthPage = async () => {
     try {
       const resData = await getWithoutCredentials(API_ENDPOINTS.LOGIN);
-      window.location.href = resData.data.url;
+      // 42intra의 인증 페이지로 리다이렉팅
+      // 외부 페이지이므로 navigate를 사용하지 않고 location을 직접 수정하는 것이 일반적
+      const authorizationURL = resData.data.url;
+      window.location.href = authorizationURL;
     } catch (error) {
       console.log(error);
     }
