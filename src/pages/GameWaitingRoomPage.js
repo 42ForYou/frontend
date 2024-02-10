@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import PageContainer from "../components/layout/PageContainer";
 
 import LoadingPage from "./LoadingPage";
 import WaitingRoomBox from "../components/room/WaitingRoomBox";
@@ -7,6 +6,7 @@ import WaitingRoomBox from "../components/room/WaitingRoomBox";
 import { get } from "../common/apiBase";
 import { API_ENDPOINTS } from "../common/apiEndpoints";
 import { useNavigate, useParams } from "react-router-dom";
+import ContentContainer from "../components/layout/ContentContainer";
 
 // 차후 필요시 1대1, 토너먼트 방 분리
 const GameWaitingRoomPage = () => {
@@ -37,13 +37,14 @@ const GameWaitingRoomPage = () => {
 
   return (
     <div className="UserProfilePage">
-      {gameData && roomData && playersData ? (
-        <PageContainer hasNavigationBar={false}>
+      <ContentContainer>
+        <h1>Game Waiting Room</h1>
+        {gameData && roomData && playersData ? (
           <WaitingRoomBox gameData={gameData} roomData={roomData} playersData={playersData} myPlayerId={myPlayerId} />
-        </PageContainer>
-      ) : (
-        <LoadingPage hasNavigationBar={false} />
-      )}
+        ) : (
+          <LoadingPage />
+        )}
+      </ContentContainer>
     </div>
   );
 };

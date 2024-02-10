@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { post } from "../../common/apiBase";
 import { API_ENDPOINTS } from "../../common/apiEndpoints";
 import StyledButton from "../common/StyledButton";
@@ -7,11 +7,15 @@ import StyledButton from "../common/StyledButton";
 // 2. 현재 신청 상태 -> 별다른 기능 없이 '대기중'만 띄움
 // 3. 현재 친구임 -> 친구 삭제 (미구현)
 // 상대방이 나한테 친구 신청을 한 케이스는 고려하지 않는다.
-const ProfileFriendStatus = ({ friendStatus, nickname }) => {
+const ProfileFriendStatus = ({ initFriendStatus, nickname }) => {
+  const [friendStatus, setFriendStatus] = useState(initFriendStatus);
+
   const handleAddFriend = async () => {
     try {
       const resData = await post(`${API_ENDPOINTS.FRIENDS()}`, { receiver: nickname });
       console.log("친구 신청 성공:", resData);
+      console.log("???");
+      setFriendStatus("pending");
     } catch (error) {
       console.error("친구 신청 실패:", error);
       alert("친구 신청에 실패하였습니다.");

@@ -1,14 +1,15 @@
 import React from "react";
-import PageContainer from "../components/layout/PageContainer";
 import withAuthProtection from "../components/common/withAuthProtection";
 import FriendsListBox from "../components/friend/FriendsListBox";
+import ContentContainer from "../components/layout/ContentContainer";
 
 const FriendsPage = () => {
   return (
     <div className="FriendsPage">
-      <PageContainer hasNavigationBar={true}>
+      <ContentContainer>
+        <h1>Friends</h1>
         <FriendsListBox />
-      </PageContainer>
+      </ContentContainer>
     </div>
   );
 };

@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
-import PageContainer from "../components/layout/PageContainer";
 import withAuthProtection from "../components/common/withAuthProtection";
+import ContentContainer from "../components/layout/ContentContainer";
 
 const HomePage = () => {
   return (
     <div className="HomePage">
-      <PageContainer hasNavigationBar={true}>Welcome to the Pongdom.</PageContainer>
+      <ContentContainer>Welcome to the Pongdom.</ContentContainer>
     </div>
   );
 };

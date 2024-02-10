@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import AuthContext from "../../context/AuthContext";
+import AuthContext, { useAuth } from "../../context/AuthContext";
 
 import Avatar from "../common/Avatar";
 import Icon from "../common/Icon";
@@ -28,15 +28,8 @@ const NavItems = () => {
 };
 
 const NavUser = () => {
-  const { loggedInUser, logout } = useContext(AuthContext);
-  const [avatarSrc, setAvatarSrc] = useState(loggedInUser ? loggedInUser.avatar : null);
-  const [nickname, setNickname] = useState(loggedInUser ? loggedInUser.nickname : null);
+  const { loggedIn, logout } = useAuth();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    setAvatarSrc(loggedInUser ? loggedInUser.avatar : null);
-    setNickname(loggedInUser ? loggedInUser.nickname : null);
-  }, [loggedInUser]);
 
   const handleLogout = () => {
     logout();
@@ -44,9 +37,12 @@ const NavUser = () => {
     navigate("/login");
   };
 
+  const avatarSrc = loggedIn ? loggedIn.avatar : null;
+  const nickname = loggedIn ? loggedIn.nickname : "로그인하지 않은 사용자";
+
   return (
     <div className="d-flex flex-column align-items-center">
-      {loggedInUser ? nickname : "로그인하지 않은 사용자"}
+      {nickname}
       <Avatar src={avatarSrc} to={"/profile"} />
       <button className="btn btn-primary mt-2 w-40" onClick={handleLogout}>
         로그아웃하기
@@ -75,4 +71,4 @@ const NavigationBar = () => {
   );
 };
 
-export default NavigationBar;
+export default React.memo(NavigationBar);

@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CustomModal from "../common/CustomModal";
-import AuthContext from "../../context/AuthContext";
+import AuthContext, { useAuth } from "../../context/AuthContext";
 import { post } from "../../common/apiBase";
 import { API_ENDPOINTS } from "../../common/apiEndpoints";
 import RadioSelector from "../common/RadioSelector";
@@ -10,8 +10,8 @@ import { hasKeys, updateProperty } from "../../common/objectUtils";
 import StyledButton from "../common/StyledButton";
 
 const RoomTitleForm = ({ updateRoomData }) => {
-  const { loggedInUser } = useContext(AuthContext);
-  const initRoomTitle = loggedInUser ? `${loggedInUser.nickname}의 게임 방` : "";
+  const { loggedIn } = useAuth();
+  const initRoomTitle = loggedIn ? `${loggedIn.nickname}의 게임 방` : "";
   const [roomTitle, setRoomTitle] = useState(initRoomTitle);
 
   useEffect(() => {

@@ -5,7 +5,7 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true); // 로딩 상태
-  const [loggedInUser, setLoggedInUser] = useState(null);
+  const [loggedIn, setLoggedIn] = useState(null);
 
   const login = async (code) => {
     try {
@@ -13,7 +13,7 @@ export const AuthProvider = ({ children }) => {
       if (resData) {
         console.log("로그인 성공");
         const { user } = resData.data;
-        setLoggedInUser(user);
+        setLoggedIn(user);
         setIsLoading(false);
         return true;
       } else {
@@ -27,7 +27,7 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     // todo: 쿠키 삭제 API 구현 후 변경
-    setLoggedInUser(null);
+    setLoggedIn(null);
   };
 
   // 현재 쿠키에 저장되어 있는 토큰의 유효성을 검사
@@ -36,7 +36,7 @@ export const AuthProvider = ({ children }) => {
       const resData = await get(API_ENDPOINTS.VALID);
       if (resData) {
         const { user } = resData.data;
-        setLoggedInUser(user);
+        setLoggedIn(user);
         setIsLoading(false);
         return true;
       }
@@ -57,8 +57,8 @@ export const AuthProvider = ({ children }) => {
         login,
         logout,
         validateTokenInCookies,
-        loggedInUser,
-        setLoggedInUser,
+        loggedIn,
+        setLoggedIn,
         isLoading,
       }}>
       {children}
