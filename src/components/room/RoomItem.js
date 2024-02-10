@@ -18,7 +18,7 @@ const RoomItem = ({ game, room }) => {
         navigate(`/game/waiting/${room_id}`);
         console.log("방 참가 요청 성공: ", resData);
       } catch (error) {
-        console.log("방 참가 요청 에러: ", error);
+        console.log("방 참가 요청 실패: ", error);
         const errorReason = error.response.data.error;
         let alertMsg;
         if (errorReason === "The game room is full") alertMsg = "게임 방 인원이 모두 찼습니다.";

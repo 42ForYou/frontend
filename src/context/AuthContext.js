@@ -21,7 +21,7 @@ export const AuthProvider = ({ children }) => {
       setIs2FAVerified(true);
       return { success: true, user: null };
     } catch (error) {
-      console.log("2FA 검증 중 에러 발생: ", error);
+      console.log("2FA 검증 실패: ", error);
     } finally {
       setIsLoading(false);
     }
@@ -37,7 +37,7 @@ export const AuthProvider = ({ children }) => {
       setLoggedIn(user);
       return { success: true, user: user };
     } catch (error) {
-      console.log("유효성 검사 중 에러 발생: ", error);
+      console.log("쿠키 속 토큰 유효성 검사 실패: ", error);
     } finally {
       setIsLoading(false);
     }
@@ -53,7 +53,7 @@ export const AuthProvider = ({ children }) => {
       setIs2FAVerified(!user.two_factor_auth);
       console.log("로그인 성공");
     } catch (error) {
-      console.log("로그인 중 에러 발생: ", error);
+      console.log("로그인 실패: ", error);
       setLoggedIn(null);
       setIs2FAVerified(false);
     } finally {
