@@ -8,6 +8,7 @@ export const AuthProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [loggedIn, setLoggedIn] = useState(null);
 
+  // todo: 2FA 검증 API 구현 후 변경
   const validate2FAcode = async (code) => {
     setIsLoading(true);
     try {
@@ -15,26 +16,29 @@ export const AuthProvider = ({ children }) => {
       // setLoggedIn(resData.data.user);
       setIsTwoFactorAuthRequired(false);
       console.log("2FA 검증 성공");
+      return true;
     } catch (error) {
       console.error("2FA 검증 중 에러 발생: ", error);
     } finally {
       setIsLoading(false);
     }
+    setLoggedIn(null);
+    return false;
   };
 
   const validateTokenInCookies = async () => {
     setIsLoading(true);
     try {
       const resData = await get(API_ENDPOINTS.VALID);
-      setLoggedIn(resData.data.user);
-      setIsLoading(false);
+      const user = resData.data.user;
+      setLoggedIn(user);
       return true;
     } catch (error) {
       console.log("유효성 검사 중 에러 발생: ", error);
+    } finally {
       setIsLoading(false);
     }
     setLoggedIn(null);
-    setIsLoading(false);
     return false;
   };
 
