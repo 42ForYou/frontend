@@ -18,7 +18,7 @@ import UserSearchPage from "./pages/UserSearchPage";
 import NotFoundPage from "./pages/error/NotFoundPage";
 
 import NavigationBar from "./components/layout/NavigationBar";
-import ProtectedRoute from "./ProtectedRoute";
+import ProtectedRoute from "./components/auth/ProtectedRoute";
 
 const shouldHideNavbar = (locationPathname, hideNavbarRoutes) => {
   if (locationPathname === "/") return false;

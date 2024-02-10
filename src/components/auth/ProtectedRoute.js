@@ -1,8 +1,8 @@
 import React from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 
-const ProtectedRoute = ({ children }) => {
+const ProtectedRoute = () => {
   const { loggedIn, isLoading } = useAuth();
 
   // todo: 로딩 인디케이터 컴포넌트 추가
@@ -11,11 +11,10 @@ const ProtectedRoute = ({ children }) => {
   }
 
   if (!loggedIn) {
-    alert("로그인이 필요합니다.");
     return <Navigate to="/login" />;
   }
 
-  return children;
+  return <Outlet />;
 };
 
 export default ProtectedRoute;
