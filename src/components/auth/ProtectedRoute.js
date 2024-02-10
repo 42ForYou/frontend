@@ -11,6 +11,7 @@ const ProtectedRoute = () => {
   }
 
   if (!loggedIn || !is2FAVerified) {
+    alert("로그인이 필요합니다.");
     return <Navigate to="/login" />;
   }
 
