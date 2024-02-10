@@ -20,4 +20,4 @@ const MyProfilePage = () => {
   );
 };
 
-export default withAuthProtection(MyProfilePage);
+export default MyProfilePage;

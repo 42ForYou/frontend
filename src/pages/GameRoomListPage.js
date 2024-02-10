@@ -14,4 +14,4 @@ const GameRoomListPage = () => {
   );
 };
 
-export default withAuthProtection(GameRoomListPage);
+export default GameRoomListPage;

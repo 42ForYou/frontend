@@ -14,4 +14,4 @@ const UserSearchPage = () => {
   );
 };
 
-export default withAuthProtection(UserSearchPage);
+export default UserSearchPage;

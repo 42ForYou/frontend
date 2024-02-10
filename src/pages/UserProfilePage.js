@@ -28,4 +28,4 @@ const UserProfilePage = () => {
   );
 };
 
-export default withAuthProtection(UserProfilePage);
+export default UserProfilePage;

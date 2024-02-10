@@ -10,4 +10,4 @@ const HomePage = () => {
   );
 };
 
-export default withAuthProtection(HomePage);
+export default HomePage;

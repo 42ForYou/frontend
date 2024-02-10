@@ -10,4 +10,4 @@ const LoadingPage = () => {
   );
 };
 
-export default withAuthProtection(LoadingPage);
+export default LoadingPage;

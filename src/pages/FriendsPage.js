@@ -14,4 +14,4 @@ const FriendsPage = () => {
   );
 };
 
-export default withAuthProtection(FriendsPage);
+export default FriendsPage;

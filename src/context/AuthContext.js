@@ -24,6 +24,7 @@ export const AuthProvider = ({ children }) => {
     return false;
   };
 
+  // 맨 처음 마운트 시 쿠키에 저장된 토큰의 유효성 검사
   useEffect(() => {
     validateTokenInCookies();
   }, []);
