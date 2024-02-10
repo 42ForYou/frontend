@@ -17,9 +17,9 @@ import GameRoomListPage from "./pages/GameRoomListPage";
 import UserSearchPage from "./pages/UserSearchPage";
 import NotFoundPage from "./pages/error/NotFoundPage";
 
-import NavigationBar from "./components/layout/NavigationBar";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import { shouldHideNavbar } from "./utils/navigationUtils";
+import MainLayout from "./components/layout/MainLayout";
 
 const App = () => {
   return (
@@ -41,30 +41,25 @@ const AppContent = () => {
   return (
     <div className="App container-fluid">
       <div className="row">
-        {loggedIn && showNavbar && (
-          <div className="col-2 p-0">
-            <NavigationBar />
-          </div>
-        )}
-        <div className="col p-0">
-          <Routes>
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/callback" element={<LoginCallbackPage />} />
-            {/* Protect routes */}
-            <Route element={<ProtectedRoute />}>
+        <Routes>
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/callback" element={<LoginCallbackPage />} />
+          {/* Protect routes */}
+          <Route element={<ProtectedRoute />}>
+            <Route element={<MainLayout />}>
               <Route path="/" element={<HomePage />} />
               <Route path="/profile" element={<MyProfilePage />} />
               <Route path="/profile/users/:intra_id" element={<UserProfilePage />} />
               <Route path="/users" element={<UserSearchPage />} />
               <Route path="/friends" element={<FriendsPage />} />
               <Route path="/game/list" element={<GameRoomListPage />} />
-              <Route path="/game/waiting/:room_id" element={<GameWaitingRoomPage />} />
-              <Route path="/game/play/:game_id" element={<GamePlayPage />} />
-              {/* fallback page */}
-              <Route path="*" element={<NotFoundPage />} />
             </Route>
-          </Routes>
-        </div>
+            <Route path="/game/waiting/:room_id" element={<GameWaitingRoomPage />} />
+            <Route path="/game/play/:game_id" element={<GamePlayPage />} />
+            {/* fallback page */}
+            <Route path="*" element={<NotFoundPage />} />
+          </Route>
+        </Routes>
       </div>
     </div>
   );

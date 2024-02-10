@@ -9,8 +9,6 @@ const MyProfilePage = () => {
   const { loggedIn } = useAuth();
   const { profileData, isLoading } = useFetchProfileData(loggedIn.intra_id);
 
-  console.log("profileData", profileData);
-
   return (
     <div className="MyProfilePage">
       <ContentContainer>
