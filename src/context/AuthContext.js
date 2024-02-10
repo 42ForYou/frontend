@@ -8,6 +8,20 @@ export const AuthProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [loggedIn, setLoggedIn] = useState(null);
 
+  const validate2FAcode = async (code) => {
+    setIsLoading(true);
+    try {
+      // const resData = await get(API_ENDPOINTS.VALIDATE_2FA(code));
+      // setLoggedIn(resData.data.user);
+      setIsTwoFactorAuthRequired(false);
+      console.log("2FA 검증 성공");
+    } catch (error) {
+      console.error("2FA 검증 중 에러 발생: ", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const validateTokenInCookies = async () => {
     setIsLoading(true);
     try {
@@ -56,6 +70,7 @@ export const AuthProvider = ({ children }) => {
         login,
         logout,
         validateTokenInCookies,
+        validate2FAcode,
       }}>
       {children}
     </AuthContext.Provider>
