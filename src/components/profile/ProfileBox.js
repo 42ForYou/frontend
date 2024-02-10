@@ -9,7 +9,9 @@ const ProfileBox = ({ isMine, profileData }) => {
     <div className="container-fluid">
       <div className="row">
         {isMine ? <MyProfileInfo initProfileData={profileData} /> : <UserProfileInfo profileData={profileData} />}
-        {!isMine && <ProfileFriendStatus friendStatus={profileData.friend_status} nickname={profileData.nickname} />}
+        {!isMine && (
+          <ProfileFriendStatus initFriendStatus={profileData.friend_status} nickname={profileData.nickname} />
+        )}
       </div>
       <div className="row">
         <ProfileHistory profileData={profileData} />
