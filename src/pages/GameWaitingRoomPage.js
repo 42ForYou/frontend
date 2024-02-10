@@ -3,8 +3,8 @@ import React, { useEffect, useState } from "react";
 import LoadingPage from "./LoadingPage";
 import WaitingRoomBox from "../components/room/WaitingRoomBox";
 
-import { get } from "../common/apiBase";
-import { API_ENDPOINTS } from "../common/apiEndpoints";
+import { get } from "../utils/apiBase";
+import { API_ENDPOINTS } from "../utils/apiEndpoints";
 import { useNavigate, useParams } from "react-router-dom";
 import ContentContainer from "../components/layout/ContentContainer";
 

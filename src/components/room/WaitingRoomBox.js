@@ -3,8 +3,8 @@ import Avatar from "../common/Avatar";
 import StyledButton from "../common/StyledButton";
 import { useNavigate } from "react-router-dom";
 import AuthContext, { useAuth } from "../../context/AuthContext";
-import { del } from "../../common/apiBase";
-import { API_ENDPOINTS } from "../../common/apiEndpoints";
+import { del } from "../../utils/apiBase";
+import { API_ENDPOINTS } from "../../utils/apiEndpoints";
 
 const StartGameButton = ({ isActive }) => {
   const handleStartGame = () => {

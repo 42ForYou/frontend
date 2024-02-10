@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { API_ENDPOINTS } from "../common/apiEndpoints";
-import { getWithoutCredentials } from "../common/apiBase";
+import { API_ENDPOINTS } from "../utils/apiEndpoints";
+import { getWithoutCredentials } from "../utils/apiBase";
 import { useAuth } from "../context/AuthContext";
 
 const LoginPage = () => {

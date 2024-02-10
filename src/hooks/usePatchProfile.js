@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import AuthContext, { useAuth } from "../context/AuthContext";
-import { patchForm } from "../common/apiBase";
-import { API_ENDPOINTS } from "../common/apiEndpoints";
+import { patchForm } from "../utils/apiBase";
+import { API_ENDPOINTS } from "../utils/apiEndpoints";
 
 // 사용자의 프로필 업데이트 요청을 비동기로 처리하는 커스텀 훅
 // 사용자가 로그인한 상태에서만 사용 가능

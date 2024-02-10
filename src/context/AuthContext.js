@@ -1,6 +1,6 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
-import { get } from "../common/apiBase";
-import { API_ENDPOINTS } from "../common/apiEndpoints";
+import { get } from "../utils/apiBase";
+import { API_ENDPOINTS } from "../utils/apiEndpoints";
 
 const AuthContext = createContext();
 

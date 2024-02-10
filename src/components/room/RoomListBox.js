@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 
 import RoomItem from "../room/RoomItem";
 import ListBox from "../list/ListBox";
-import { API_ENDPOINTS } from "../../common/apiEndpoints";
+import { API_ENDPOINTS } from "../../utils/apiEndpoints";
 import CreateRoomModal from "../room/CreateRoomModal";
 import StyledButton from "../common/StyledButton";
 

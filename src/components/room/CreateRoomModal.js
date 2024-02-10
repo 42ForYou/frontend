@@ -2,11 +2,11 @@ import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CustomModal from "../common/CustomModal";
 import AuthContext, { useAuth } from "../../context/AuthContext";
-import { post } from "../../common/apiBase";
-import { API_ENDPOINTS } from "../../common/apiEndpoints";
+import { post } from "../../utils/apiBase";
+import { API_ENDPOINTS } from "../../utils/apiEndpoints";
 import RadioSelector from "../common/RadioSelector";
 import DropdownSelector from "../common/DropdownSelector";
-import { hasKeys, updateProperty } from "../../common/objectUtils";
+import { hasKeys, updateProperty } from "../../utils/objectUtils";
 import StyledButton from "../common/StyledButton";
 
 const RoomTitleForm = ({ updateRoomData }) => {
