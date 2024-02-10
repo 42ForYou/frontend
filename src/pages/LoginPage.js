@@ -49,7 +49,7 @@ const LoginPage = () => {
   return (
     <div className="LoginPage">
       <div>
-        <h1>로그인 페이지</h1>
+        <h1>Welcome to the Planet</h1>
         {is2FARequired ? (
           <>
             <p>{emailFor2FA}로 전송된 2차 인증 코드를 입력해주세요:</p>

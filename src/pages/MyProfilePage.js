@@ -1,9 +1,11 @@
-import React, { useContext, useEffect, useState } from "react";
+import React from "react";
 import ProfileBox from "../components/profile/ProfileBox";
 import LoadingPage from "./LoadingPage";
-import AuthContext, { useAuth } from "../context/AuthContext";
+import { useAuth } from "../context/AuthContext";
 import useFetchProfileData from "../hooks/useFetchProfileData";
 import ContentContainer from "../components/layout/ContentContainer";
+import ContentTitle from "../components/layout/ContentTitle";
+import MainContent from "../components/layout/MainContent";
 
 const MyProfilePage = () => {
   const { loggedIn } = useAuth();
@@ -12,8 +14,10 @@ const MyProfilePage = () => {
   return (
     <div className="MyProfilePage">
       <ContentContainer>
-        <h1>My Profile</h1>
-        {isLoading ? <LoadingPage /> : <ProfileBox isMine={true} profileData={profileData} />}
+        <ContentTitle title="My Profile" />
+        <MainContent>
+          {isLoading ? <LoadingPage /> : <ProfileBox isMine={true} profileData={profileData} />}
+        </MainContent>
       </ContentContainer>
     </div>
   );
