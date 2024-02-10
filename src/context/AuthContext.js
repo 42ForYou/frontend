@@ -35,6 +35,7 @@ export const AuthProvider = ({ children }) => {
       const resData = await get(API_ENDPOINTS.VALID);
       const user = resData.data.user;
       setLoggedIn(user);
+      setIs2FAVerified(!user.two_factor_auth);
       return { success: true, user: user };
     } catch (error) {
       console.log("쿠키 속 토큰 유효성 검사 실패: ", error);
@@ -49,7 +50,7 @@ export const AuthProvider = ({ children }) => {
     setIsLoading(true);
     try {
       const resData = await get(API_ENDPOINTS.OAUTH_REDIRECT(code));
-      const user = resData.data.user;
+      const user = resData.data.profile;
       setLoggedIn(user);
       setIs2FAVerified(!user.two_factor_auth);
       console.log("로그인 성공");
