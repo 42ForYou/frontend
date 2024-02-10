@@ -1,7 +1,7 @@
 import React from "react";
 import StyledButton from "../common/StyledButton";
-import { post } from "../../common/apiBase";
-import { API_ENDPOINTS } from "../../common/apiEndpoints";
+import { post } from "../../utils/apiBase";
+import { API_ENDPOINTS } from "../../utils/apiEndpoints";
 import { useNavigate } from "react-router-dom";
 
 // 스타일을 가지는 박스

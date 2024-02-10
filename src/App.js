@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useContext } from "react";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 
 // context
-import { AuthProvider } from "./context/AuthContext";
+import AuthContext, { AuthProvider, useAuth } from "./context/AuthContext";
 
 // page
 import HomePage from "./pages/HomePage";
@@ -17,16 +17,9 @@ import GameRoomListPage from "./pages/GameRoomListPage";
 import UserSearchPage from "./pages/UserSearchPage";
 import NotFoundPage from "./pages/error/NotFoundPage";
 
-import NavigationBar from "./components/layout/NavigationBar";
-
-const shouldHideNavbar = (locationPathname, hideNavbarRoutes) => {
-  if (locationPathname === "/") return false;
-  const hideNavbarRegex = hideNavbarRoutes.map((route) => {
-    const regexPattern = route.replace(/:[^\s/]+/g, "[^/]+").replace(/\*/g, ".*");
-    return new RegExp(`^${regexPattern}$`);
-  });
-  return hideNavbarRegex.some((regex) => regex.test(locationPathname));
-};
+import ProtectedRoute from "./components/auth/ProtectedRoute";
+import { shouldHideNavbar } from "./utils/navigationUtils";
+import MainLayout from "./components/layout/MainLayout";
 
 const App = () => {
   return (
@@ -40,34 +33,33 @@ const App = () => {
 
 // todo: 콜백 페이지 경로 변경
 const AppContent = () => {
+  const { loggedIn } = useAuth();
   const location = useLocation();
-  const hideNavbarRoutes = ["/login", "/game/waiting/:room_id", "/game/play/:game_id"];
+  const hideNavbarRoutes = ["/login", "/callback", "/game/waiting/:room_id", "/game/play/:game_id"];
   const showNavbar = !shouldHideNavbar(location.pathname, hideNavbarRoutes);
 
   return (
     <div className="App container-fluid">
       <div className="row">
-        {showNavbar && (
-          <div className="col-2 p-0">
-            <NavigationBar />
-          </div>
-        )}
-        <div className="col p-0">
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/callback" element={<LoginCallbackPage />} />
-            <Route path="/profile" element={<MyProfilePage />} />
-            <Route path="/profile/users/:intra_id" element={<UserProfilePage />} />
-            <Route path="/users" element={<UserSearchPage />} />
-            <Route path="/friends" element={<FriendsPage />} />
-            <Route path="/game/list" element={<GameRoomListPage />} />
+        <Routes>
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/callback" element={<LoginCallbackPage />} />
+          {/* Protect routes */}
+          <Route element={<ProtectedRoute />}>
+            <Route element={<MainLayout />}>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/profile" element={<MyProfilePage />} />
+              <Route path="/profile/users/:intra_id" element={<UserProfilePage />} />
+              <Route path="/users" element={<UserSearchPage />} />
+              <Route path="/friends" element={<FriendsPage />} />
+              <Route path="/game/list" element={<GameRoomListPage />} />
+            </Route>
             <Route path="/game/waiting/:room_id" element={<GameWaitingRoomPage />} />
             <Route path="/game/play/:game_id" element={<GamePlayPage />} />
             {/* fallback page */}
             <Route path="*" element={<NotFoundPage />} />
-          </Routes>
-        </div>
+          </Route>
+        </Routes>
       </div>
     </div>
   );

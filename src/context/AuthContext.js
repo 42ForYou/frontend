@@ -1,52 +1,49 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
-import { get } from "../common/apiBase";
-import { API_ENDPOINTS } from "../common/apiEndpoints";
+import { get } from "../utils/apiBase";
+import { API_ENDPOINTS } from "../utils/apiEndpoints";
+
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [isLoading, setIsLoading] = useState(true); // 로딩 상태
+  const [isLoading, setIsLoading] = useState(true);
   const [loggedIn, setLoggedIn] = useState(null);
 
-  const login = async (code) => {
-    try {
-      const resData = await get(API_ENDPOINTS.OAUTH_REDIRECT(code));
-      if (resData) {
-        console.log("로그인 성공");
-        const { user } = resData.data;
-        setLoggedIn(user);
-        setIsLoading(false);
-        return true;
-      } else {
-        console.log("로그인 실패");
-      }
-    } catch (error) {
-      console.error("로그인 중 에러 발생: ", error);
-    }
-    return false;
-  };
-
-  const logout = async () => {
-    // todo: 쿠키 삭제 API 구현 후 변경
-    setLoggedIn(null);
-  };
-
-  // 현재 쿠키에 저장되어 있는 토큰의 유효성을 검사
   const validateTokenInCookies = async () => {
+    setIsLoading(true);
     try {
       const resData = await get(API_ENDPOINTS.VALID);
-      if (resData) {
-        const { user } = resData.data;
-        setLoggedIn(user);
-        setIsLoading(false);
-        return true;
-      }
+      setLoggedIn(resData.data.user);
+      setIsLoading(false);
+      return true;
     } catch (error) {
       console.log("유효성 검사 중 에러 발생: ", error);
       setIsLoading(false);
     }
+    setLoggedIn(null);
+    setIsLoading(false);
     return false;
   };
 
+  const login = async (code) => {
+    setIsLoading(true);
+    try {
+      const resData = await get(API_ENDPOINTS.OAUTH_REDIRECT(code));
+      setLoggedIn(resData.data.user);
+      console.log("로그인 성공");
+    } catch (error) {
+      console.error("로그인 중 에러 발생: ", error);
+      setLoggedIn(null);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // todo: 쿠키 삭제 API 구현 후 변경
+  const logout = async () => {
+    setLoggedIn(null);
+  };
+
+  // 컴포넌트 마운트 시 쿠키에 저장된 토큰의 유효성 검사
   useEffect(() => {
     validateTokenInCookies();
   }, []);
@@ -54,19 +51,17 @@ export const AuthProvider = ({ children }) => {
   return (
     <AuthContext.Provider
       value={{
+        loggedIn,
+        isLoading,
         login,
         logout,
         validateTokenInCookies,
-        loggedIn,
-        setLoggedIn,
-        isLoading,
       }}>
       {children}
     </AuthContext.Provider>
   );
 };
 
-// AuthContext를 사용하기 위한 커스텀 훅
 export const useAuth = () => useContext(AuthContext);
 
 export default AuthContext;

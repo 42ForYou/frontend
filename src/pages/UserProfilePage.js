@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import withAuthProtection from "../components/common/withAuthProtection";
 import ProfileBox from "../components/profile/ProfileBox";
 import { useParams, useNavigate } from "react-router-dom";
 import LoadingPage from "./LoadingPage";
@@ -28,4 +27,4 @@ const UserProfilePage = () => {
   );
 };
 
-export default withAuthProtection(UserProfilePage);
+export default UserProfilePage;

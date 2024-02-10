@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from "react";
-import withAuthProtection from "../components/common/withAuthProtection";
 import ProfileBox from "../components/profile/ProfileBox";
 import LoadingPage from "./LoadingPage";
 import AuthContext, { useAuth } from "../context/AuthContext";
@@ -20,4 +19,4 @@ const MyProfilePage = () => {
   );
 };
 
-export default withAuthProtection(MyProfilePage);
+export default MyProfilePage;

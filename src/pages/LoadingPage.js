@@ -1,5 +1,4 @@
 import React from "react";
-import withAuthProtection from "../components/common/withAuthProtection";
 import ContentContainer from "../components/layout/ContentContainer";
 
 const LoadingPage = () => {
@@ -10,4 +9,4 @@ const LoadingPage = () => {
   );
 };
 
-export default withAuthProtection(LoadingPage);
+export default LoadingPage;

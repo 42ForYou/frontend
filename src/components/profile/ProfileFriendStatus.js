@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { post } from "../../common/apiBase";
-import { API_ENDPOINTS } from "../../common/apiEndpoints";
+import { post } from "../../utils/apiBase";
+import { API_ENDPOINTS } from "../../utils/apiEndpoints";
 import StyledButton from "../common/StyledButton";
 
 // 1. 현재 친구 아님 -> 친구 신청 가능

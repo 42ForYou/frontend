@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import usePatchProfile from "../../hooks/usePatchProfile";
-import { checkRegex } from "../../common/checkRegex";
+import { checkRegex } from "../../utils/checkRegex";
 import StyledButton from "../common/StyledButton";
 import ProfileAvatar from "./ProfileAvatar";
 import ProfileTextLine from "./ProfileTextLine";
