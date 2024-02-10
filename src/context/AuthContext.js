@@ -9,39 +9,33 @@ export const AuthProvider = ({ children }) => {
   const [loggedIn, setLoggedIn] = useState(null);
 
   const validateTokenInCookies = async () => {
+    setIsLoading(true);
     try {
       const resData = await get(API_ENDPOINTS.VALID);
-      if (resData) {
-        const { user } = resData.data;
-        setLoggedIn(user);
-        setIsLoading(false);
-        return true;
-      }
+      setLoggedIn(resData.data.user);
+      setIsLoading(false);
+      return true;
     } catch (error) {
       console.log("유효성 검사 중 에러 발생: ", error);
       setIsLoading(false);
     }
+    setLoggedIn(null);
+    setIsLoading(false);
     return false;
   };
 
-  // 맨 처음 마운트 시 쿠키에 저장된 토큰의 유효성 검사
-  useEffect(() => {
-    validateTokenInCookies();
-  }, []);
-
   const login = async (code) => {
-    if (await validateTokenInCookies()) return true;
+    setIsLoading(true);
     try {
       const resData = await get(API_ENDPOINTS.OAUTH_REDIRECT(code));
-      const { user } = resData.data;
-      setLoggedIn(user);
-      setIsLoading(false);
+      setLoggedIn(resData.data.user);
       console.log("로그인 성공");
     } catch (error) {
       console.error("로그인 중 에러 발생: ", error);
-      return false;
+      setLoggedIn(null);
+    } finally {
+      setIsLoading(false);
     }
-    return true;
   };
 
   // todo: 쿠키 삭제 API 구현 후 변경
@@ -49,15 +43,19 @@ export const AuthProvider = ({ children }) => {
     setLoggedIn(null);
   };
 
+  // 컴포넌트 마운트 시 쿠키에 저장된 토큰의 유효성 검사
+  useEffect(() => {
+    validateTokenInCookies();
+  }, []);
+
   return (
     <AuthContext.Provider
       value={{
+        loggedIn,
+        isLoading,
         login,
         logout,
         validateTokenInCookies,
-        loggedIn,
-        setLoggedIn,
-        isLoading,
       }}>
       {children}
     </AuthContext.Provider>
