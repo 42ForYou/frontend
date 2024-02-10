@@ -9,9 +9,8 @@ const LoginPage = () => {
   const [is2FARequired, setIs2FARequired] = useState(false);
   const [status2FA, setStatus2FA] = useState(""); // 2FA 인증 상태 메세지
   const [emailFor2FA, setEmailFor2FA] = useState("");
-  const { validateTokenInCookies, validate2FAcode, login } = useAuth();
+  const { validateTokenInCookies, validate2FAcode } = useAuth();
   const navigate = useNavigate();
-  const { validateTokenInCookies } = useAuth();
 
   const redirectToOAuthPage = async () => {
     try {
