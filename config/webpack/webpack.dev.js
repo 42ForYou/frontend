@@ -15,6 +15,9 @@ module.exports = merge(common, {
     },
     hot: true,
     open: true,
+    headers: {
+      "Cache-Control": "no-store",
+    },
   },
   optimization: {
     runtimeChunk: "single",
