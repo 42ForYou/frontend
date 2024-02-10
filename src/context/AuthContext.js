@@ -49,7 +49,8 @@ export const AuthProvider = ({ children }) => {
     setIsLoading(true);
     try {
       const resData = await get(API_ENDPOINTS.OAUTH_REDIRECT(code));
-      setLoggedIn(resData.data.user);
+      const user = resData.data.user;
+      setLoggedIn(user);
       setIs2FAVerified(!user.two_factor_auth);
       console.log("로그인 성공");
     } catch (error) {
