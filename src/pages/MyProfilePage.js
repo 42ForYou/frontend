@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from "react";
-import withAuthProtection from "../components/common/withAuthProtection";
 import ProfileBox from "../components/profile/ProfileBox";
 import LoadingPage from "./LoadingPage";
 import AuthContext, { useAuth } from "../context/AuthContext";
@@ -9,6 +8,8 @@ import ContentContainer from "../components/layout/ContentContainer";
 const MyProfilePage = () => {
   const { loggedIn } = useAuth();
   const { profileData, isLoading } = useFetchProfileData(loggedIn.intra_id);
+
+  console.log("profileData", profileData);
 
   return (
     <div className="MyProfilePage">

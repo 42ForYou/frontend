@@ -1,5 +1,4 @@
 import React from "react";
-import withAuthProtection from "../components/common/withAuthProtection";
 import RoomListBox from "../components/room/RoomListBox";
 import ContentContainer from "../components/layout/ContentContainer";
 
