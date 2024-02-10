@@ -19,15 +19,7 @@ import NotFoundPage from "./pages/error/NotFoundPage";
 
 import NavigationBar from "./components/layout/NavigationBar";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
-
-const shouldHideNavbar = (locationPathname, hideNavbarRoutes) => {
-  if (locationPathname === "/") return false;
-  const hideNavbarRegex = hideNavbarRoutes.map((route) => {
-    const regexPattern = route.replace(/:[^\s/]+/g, "[^/]+").replace(/\*/g, ".*");
-    return new RegExp(`^${regexPattern}$`);
-  });
-  return hideNavbarRegex.some((regex) => regex.test(locationPathname));
-};
+import { shouldHideNavbar } from "./utils/navigationUtils";
 
 const App = () => {
   return (
