@@ -16,14 +16,14 @@ export const AuthProvider = ({ children }) => {
       // setLoggedIn(resData.data.user);
       setIsTwoFactorAuthRequired(false);
       console.log("2FA 검증 성공");
-      return true;
+      return { success: true, user: null };
     } catch (error) {
       console.error("2FA 검증 중 에러 발생: ", error);
     } finally {
       setIsLoading(false);
     }
     setLoggedIn(null);
-    return false;
+    return { success: false };
   };
 
   const validateTokenInCookies = async () => {
@@ -32,14 +32,14 @@ export const AuthProvider = ({ children }) => {
       const resData = await get(API_ENDPOINTS.VALID);
       const user = resData.data.user;
       setLoggedIn(user);
-      return true;
+      return { success: true, user: user };
     } catch (error) {
       console.log("유효성 검사 중 에러 발생: ", error);
     } finally {
       setIsLoading(false);
     }
     setLoggedIn(null);
-    return false;
+    return { success: false };
   };
 
   const login = async (code) => {
