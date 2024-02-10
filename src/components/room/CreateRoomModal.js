@@ -116,7 +116,7 @@ const CreateRoomModal = ({ handleClose }) => {
         navigate(`/game/waiting/${createdGameId}`);
         handleClose();
       } catch (error) {
-        console.error("방 생성 요청 실패:", error);
+        console.log("방 생성 요청 실패:", error);
         alert("방 생성에 실패하였습니다.");
       }
     };

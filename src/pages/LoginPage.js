@@ -17,7 +17,7 @@ const LoginPage = () => {
       const resData = await getWithoutCredentials(API_ENDPOINTS.LOGIN);
       window.location.href = resData.data.url;
     } catch (error) {
-      console.error(error);
+      console.log(error);
     }
   };
 
