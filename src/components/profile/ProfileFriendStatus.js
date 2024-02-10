@@ -17,7 +17,7 @@ const ProfileFriendStatus = ({ initFriendStatus, nickname }) => {
       console.log("???");
       setFriendStatus("pending");
     } catch (error) {
-      console.error("친구 신청 실패:", error);
+      console.log("친구 신청 실패:", error);
       alert("친구 신청에 실패하였습니다.");
     }
   };

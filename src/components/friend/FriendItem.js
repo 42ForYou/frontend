@@ -15,7 +15,7 @@ const FriendItem = ({ id, status, friend, onOccurChange }) => {
         alert("친구 요청을 수락하였습니다.");
         console.log("친구 요청 수락 성공:", resData);
       } catch (error) {
-        console.error("친구 요청 수락 실패:", error);
+        console.log("친구 요청 수락 실패:", error);
         alert("친구 요청 수락에 실패하였습니다.");
       }
     };
@@ -29,7 +29,7 @@ const FriendItem = ({ id, status, friend, onOccurChange }) => {
         onOccurChange();
         console.log("친구 삭제 성공:", resData);
       } catch (error) {
-        console.error("친구 삭제 실패:", error);
+        console.log("친구 삭제 실패:", error);
         alert("친구 삭제에 실패하였습니다.");
       }
     };

@@ -148,7 +148,7 @@ const WaitingRoomBox = ({ gameData, roomData, playersData, myPlayerId }) => {
       const resData = await del(API_ENDPOINTS.ROOM(room_id));
       console.log("방 폭파 성공: ", resData);
     } catch (error) {
-      console.log("방 폭파 요청 에러: ", error);
+      console.log("방 폭파 요청 실패: ", error);
     }
   };
 
@@ -160,7 +160,7 @@ const WaitingRoomBox = ({ gameData, roomData, playersData, myPlayerId }) => {
       // todo: 현재 실시간으로 다른 유저가 있는 경우에만 방 폭파 요청
       if (amIHost && join_players !== 1) bombRoomRequest();
     } catch (error) {
-      console.log("방 나가기 요청 에러: ", error);
+      console.log("방 나가기 요청 실패: ", error);
     }
   };
 
