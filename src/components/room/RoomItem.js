@@ -32,7 +32,7 @@ const RoomItem = ({ game, room }) => {
   };
 
   return (
-    <div className={`roomItem ${is_playing ? "roomItemPlaying" : ""} w-100 p-3`}>
+    <div className={`RoomItem ${is_playing ? "RoomItemPlaying" : ""} w-100 p-3`}>
       <div className="row ps-3 pe-3">
         <div className="col-8">
           <div className="row">
