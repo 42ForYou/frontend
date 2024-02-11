@@ -1,8 +1,8 @@
-import React, { useContext } from "react";
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import React from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 // context
-import AuthContext, { AuthProvider, useAuth } from "./context/AuthContext";
+import { AuthProvider } from "./context/AuthContext";
 
 // page
 import HomePage from "./pages/HomePage";
@@ -18,7 +18,6 @@ import UserSearchPage from "./pages/UserSearchPage";
 import NotFoundPage from "./pages/error/NotFoundPage";
 
 import ProtectedRoute from "./components/auth/ProtectedRoute";
-import { shouldHideNavbar } from "./utils/navigationUtils";
 import MainLayout from "./components/layout/MainLayout";
 
 const App = () => {
@@ -33,11 +32,6 @@ const App = () => {
 
 // todo: 콜백 페이지 경로 변경
 const AppContent = () => {
-  const { loggedIn } = useAuth();
-  const location = useLocation();
-  const hideNavbarRoutes = ["/login", "/callback", "/game/waiting/:room_id", "/game/play/:game_id"];
-  const showNavbar = !shouldHideNavbar(location.pathname, hideNavbarRoutes);
-
   return (
     <div className="App">
       <Routes>
