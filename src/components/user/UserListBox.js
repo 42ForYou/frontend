@@ -17,6 +17,7 @@ const UserListBox = () => {
         searchable={true}
         itemsPerPage={6}
         itemsPerRow={3}
+        placeholder={"검색할 유저의 닉네임을 입력하세요"}
       />
     </>
   );

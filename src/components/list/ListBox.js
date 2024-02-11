@@ -27,6 +27,7 @@ const ListBox = ({
   searchable = false,
   itemsPerPage,
   itemsPerRow,
+  placeholder,
 }) => {
   const initState = {
     currentFilter: filterTypes[0],
@@ -50,7 +51,9 @@ const ListBox = ({
 
   return (
     <div className="ListBox d-flex-column flex-grow-1">
-      {searchable && <SearchBar searchKeyword={state.searchKeyword} onSearch={handleSearch} />}
+      {searchable && (
+        <SearchBar searchKeyword={state.searchKeyword} onSearch={handleSearch} placeholder={placeholder} />
+      )}
       {filterTypes.length >= 2 && (
         <ListFilter
           filterTypes={filterTypes}

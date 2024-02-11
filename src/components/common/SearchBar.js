@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const SearchBar = ({ searchKeyword, onSearch }) => {
+const SearchBar = ({ searchKeyword, placeholder, onSearch }) => {
   const [inputValue, setInputValue] = useState(searchKeyword);
 
   const handleKeyPress = (e) => {
@@ -10,15 +10,18 @@ const SearchBar = ({ searchKeyword, onSearch }) => {
   };
 
   return (
-    <div className="search-input-container">
+    <div className="search-input-container d-flex">
       <input
         type="text"
-        placeholder="검색 키워드를 입력하세요"
+        className="form-control"
+        placeholder={placeholder || "검색어를 입력하세요"}
         value={inputValue}
         onChange={(e) => setInputValue(e.target.value)}
         onKeyDown={handleKeyPress}
       />
-      <button onClick={() => onSearch(inputValue)}>검색</button>
+      <button className="btn btn-secondary" onClick={() => onSearch(inputValue)} style={{ width: "150px" }}>
+        검색
+      </button>
     </div>
   );
 };
