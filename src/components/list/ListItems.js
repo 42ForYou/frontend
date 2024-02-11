@@ -15,7 +15,7 @@ const ListItems = ({ itemsData, ItemComponent, itemsPerRow, emptyMsg, onOccurCha
   const rows = divideArrayInto2DRows(itemsData, itemsPerRow);
 
   return (
-    <div>
+    <div className="ListItems flex-grow-1">
       {rows.map((row, rowIndex) => (
         <div className="row mb-3" key={rowIndex}>
           {row.map((item, itemIndex) => (

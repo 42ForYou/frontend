@@ -49,7 +49,7 @@ const ListBox = ({
   const handleSearch = (keyword) => dispatch({ type: "SET_SEARCH_KEYWORD", payload: keyword });
 
   return (
-    <div className="container d-flex flex-column justify-content-between h-100">
+    <div className="ListBox d-flex-column flex-grow-1">
       {searchable && <SearchBar searchKeyword={state.searchKeyword} onSearch={handleSearch} />}
       {filterTypes.length >= 2 && (
         <ListFilter
