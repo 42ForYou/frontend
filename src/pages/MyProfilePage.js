@@ -9,7 +9,7 @@ import ContentBody from "../components/layout/ContentBody";
 
 const MyProfilePage = () => {
   const { loggedIn } = useAuth();
-  const { profileData, isLoading } = useFetchProfileData(loggedIn.intra_id);
+  const { profileData, isLoading } = useFetchProfileData(loggedIn?.intra_id);
 
   return (
     <div className="MyProfilePage">
