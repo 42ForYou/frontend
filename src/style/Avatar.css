@@ -2,15 +2,11 @@
 
 .avatar-img {
   object-fit: cover;
-  border: 2px solid #f000f0;
+  border: 2px solid white;
 }
 
 .avatar {
   position: relative;
-  padding: 3px; /* 아바타 이미지와 보더 사이의 공간 */
-  border: 2px solid #ffffff; /* 하얀색 보더 */
-  border-radius: 50%; /* 보더를 원형으로 만듦 */
-  display: inline-block; /* 또는 필요에 따라 다른 display 속성 */
 }
 
 .online-indicator {

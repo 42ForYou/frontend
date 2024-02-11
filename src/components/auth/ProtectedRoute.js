@@ -5,6 +5,8 @@ import { useAuth } from "../../context/AuthContext";
 const ProtectedRoute = () => {
   const { loggedIn, isLoading, is2FAVerified } = useAuth();
 
+  if (process.env.NO_AUTH_PROTECTION === "true") return <Outlet />;
+
   // todo: 로딩 인디케이터 컴포넌트 추가
   if (isLoading) {
     return <div>Loading...</div>;

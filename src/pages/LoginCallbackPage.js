@@ -21,10 +21,7 @@ const LoginCallbackPage = () => {
 
   return (
     <div className="CallbackPage">
-      <div>
-        <h1>OAuth 콜백 페이지</h1>
-        서버로부터 응답을 기다리고 있습니다...
-      </div>
+      <div>서버로부터 응답을 기다리고 있습니다...</div>
     </div>
   );
 };

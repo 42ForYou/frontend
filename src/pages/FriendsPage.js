@@ -2,16 +2,16 @@ import React from "react";
 import FriendsListBox from "../components/friend/FriendsListBox";
 import ContentContainer from "../components/layout/ContentContainer";
 import ContentTitle from "../components/layout/ContentTitle";
-import MainContent from "../components/layout/MainContent";
+import ContentBody from "../components/layout/ContentBody";
 
 const FriendsPage = () => {
   return (
     <div className="FriendsPage">
       <ContentContainer>
         <ContentTitle title="Friends" />
-        <MainContent>
+        <ContentBody>
           <FriendsListBox />
-        </MainContent>
+        </ContentBody>
       </ContentContainer>
     </div>
   );

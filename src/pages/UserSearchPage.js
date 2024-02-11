@@ -2,16 +2,16 @@ import React from "react";
 import UserListBox from "../components/user/UserListBox";
 import ContentContainer from "../components/layout/ContentContainer";
 import ContentTitle from "../components/layout/ContentTitle";
-import MainContent from "../components/layout/MainContent";
+import ContentBody from "../components/layout/ContentBody";
 
 const UserSearchPage = () => {
   return (
     <div className="UserSearchPage">
       <ContentContainer>
         <ContentTitle title="Users" />
-        <MainContent>
+        <ContentBody>
           <UserListBox />
-        </MainContent>
+        </ContentBody>
       </ContentContainer>
     </div>
   );

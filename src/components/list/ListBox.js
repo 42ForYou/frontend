@@ -50,7 +50,7 @@ const ListBox = ({
   const handleSearch = (keyword) => dispatch({ type: "SET_SEARCH_KEYWORD", payload: keyword });
 
   return (
-    <div className="ListBox d-flex-column flex-grow-1">
+    <div className="ListBox d-flex-col flex-grow-1">
       {searchable && (
         <SearchBar searchKeyword={state.searchKeyword} onSearch={handleSearch} placeholder={placeholder} />
       )}
@@ -73,7 +73,7 @@ const ListBox = ({
           onOccurChange={reloadListItems}
         />
       )}
-      {itemsData && (
+      {!isLoading && itemsData && (
         <ListPagination totalPage={totalPage} currentPage={state.currentPage} onPaginationClick={handleChangePage} />
       )}
     </div>

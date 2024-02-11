@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { API_ENDPOINTS } from "../utils/apiEndpoints";
 import { getWithoutCredentials } from "../utils/apiBase";
+import StyledButton from "../components/common/StyledButton";
 
 const LoginPage = () => {
   const [code2FA, setCode2FA] = useState("");
@@ -49,7 +50,7 @@ const LoginPage = () => {
   return (
     <div className="LoginPage">
       <div>
-        <h1>Welcome to the Planet</h1>
+        <h1>Welcome to the PlanetPong !</h1>
         {is2FARequired ? (
           <>
             <p>{emailFor2FA}로 전송된 2차 인증 코드를 입력해주세요:</p>
@@ -59,7 +60,7 @@ const LoginPage = () => {
             <p>{status2FA}</p>
           </>
         ) : (
-          <button onClick={handleLogin}>로그인</button>
+          <StyledButton styleType="light" name={"Sign with 42 Oauth"} onClick={handleLogin}></StyledButton>
         )}
       </div>
     </div>

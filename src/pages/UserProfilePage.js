@@ -5,7 +5,7 @@ import LoadingPage from "./LoadingPage";
 import useFetchProfileData from "../hooks/useFetchProfileData";
 import ContentContainer from "../components/layout/ContentContainer";
 import ContentTitle from "../components/layout/ContentTitle";
-import MainContent from "../components/layout/MainContent";
+import ContentBody from "../components/layout/ContentBody";
 
 const UserProfilePage = () => {
   const { intra_id } = useParams();
@@ -23,9 +23,9 @@ const UserProfilePage = () => {
     <div className="UserProfilePage">
       <ContentContainer>
         <ContentTitle title="User Profile" />
-        <MainContent>
+        <ContentBody>
           {isLoading ? <LoadingPage /> : <ProfileBox isMine={false} profileData={profileData} />}
-        </MainContent>
+        </ContentBody>
       </ContentContainer>
     </div>
   );

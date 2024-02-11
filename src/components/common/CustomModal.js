@@ -3,7 +3,7 @@ import React from "react";
 const CustomModal = ({ hasCloseButton, handleClose, title, children, footerButtons }) => {
   return (
     <>
-      <div className="modal d-block" role="dialog">
+      <div className="CustomModal modal d-block" role="dialog">
         <div className="modal-dialog modal-dialog-centered" role="document">
           <div className="modal-content">
             <div className="modal-header">

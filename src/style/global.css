@@ -1,5 +1,10 @@
-html, body, input, button, textarea, div {
-	font-family: 'Noto Sans KR', sans-serif;
+* {
+  box-sizing: border-box;
+}
+
+html, body, input, button, textarea {
+	color: aliceblue;
+	font-family: 'Roboto', sans-serif;
 }
 
 img {
@@ -13,7 +18,12 @@ img {
 }
 
 body {
-  background-image: url('your-background-image.jpg');
+  background-image: url('https://media.wired.co.uk/photos/606dafcb687a704c2c362125/16:9/w_1920,h_1080,c_limit/space_11.jpg');
   background-size: cover; /* 배경 이미지가 전체 화면을 커버하도록 설정 */
   background-position: center; /* 초기 배경 위치를 중앙으로 설정 */
+}
+
+.icon {
+	width: 36px;
+  height: 36px;
 }

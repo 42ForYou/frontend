@@ -7,7 +7,7 @@ import Icon from "../common/Icon";
 
 const NavItem = ({ label, to, icon }) => {
   return (
-    <li className="NavItem d-flex align-items-start mb-3">
+    <li className="NavItem d-flex align-items-start mb-4">
       <Link to={to} className="d-flex align-items-center justify-content-center w-100 text-decoration-none">
         {icon && <Icon filename={`${icon}.png`} alt={label} invert={true} />}
         <span className="nav-link ms-3">{label}</span>
@@ -19,10 +19,10 @@ const NavItem = ({ label, to, icon }) => {
 const NavItems = () => {
   return (
     <ul className="NavItems p-0">
-      <NavItem to={"/"} label="HOME" icon={"home"} />
-      <NavItem to={"/game/list"} label="GAMES" icon={"pong"} />
-      <NavItem to={"/friends"} label="FRIENDS" icon={"handshake"} />
-      <NavItem to={"/users"} label="USERS" icon={"people"} />
+      <NavItem to={"/"} label="Home" icon={"home"} />
+      <NavItem to={"/game/list"} label="Games" icon={"pong"} />
+      <NavItem to={"/friends"} label="Friends" icon={"handshake"} />
+      <NavItem to={"/users"} label="Users" icon={"people"} />
     </ul>
   );
 };
@@ -38,14 +38,14 @@ const NavUser = () => {
   };
 
   const avatarSrc = loggedIn ? loggedIn.avatar : null;
-  const nickname = loggedIn ? loggedIn.nickname : "로그인하지 않은 사용자";
+  const nickname = loggedIn ? loggedIn.nickname : "Unknown User";
 
   return (
     <div className="NavUser d-flex flex-column align-items-center mb-3">
-      <div className="mb-3">{nickname}</div>
+      <div className="mb-3 text-center">{nickname}</div>
       <Avatar src={avatarSrc} to={"/profile"} />
       <button className="btn btn-secondary mt-2 w-40" onClick={handleLogout}>
-        Logout
+        Sign Out
       </button>
     </div>
   );
@@ -54,7 +54,9 @@ const NavUser = () => {
 const NavLogo = () => {
   return (
     <h1 className="NavLogo mt-3 mb-5 invert-image">
-      <img src={`${process.env.ASSETS_URL}/logo-2.png`} alt={"logo"} />
+      <Link to="/">
+        <img src={`${process.env.ASSETS_URL}/logo-3-color.png`} alt="logo" />
+      </Link>
     </h1>
   );
 };
@@ -62,7 +64,7 @@ const NavLogo = () => {
 const NavigationBar = () => {
   return (
     <div className="NavigationBar h-100">
-      <nav className="border border-white d-flex-column justify-content-between h-100 p-3">
+      <nav className="NavigationBar-Content d-flex-col justify-content-between h-100 p-3">
         <div>
           <NavLogo />
           <NavItems />

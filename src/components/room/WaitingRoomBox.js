@@ -52,7 +52,7 @@ const ExitRoomButton = ({ onClick }) => {
 
 const WaitingRoomInfo = ({ title, host, point, time, nPlayers, joinPlayers }) => {
   return (
-    <div className="d-flex justify-content-between border bg-info p-3">
+    <div className="WaitingRoomInfo d-flex justify-content-between border bg-info p-3">
       <div className="col">
         <h5>
           방 제목: {title} ({joinPlayers} / {nPlayers})
@@ -70,7 +70,7 @@ const WaitingRoomInfo = ({ title, host, point, time, nPlayers, joinPlayers }) =>
 
 const WaitingPlayer = ({ nickname, avatar, isHost, isMine }) => {
   return (
-    <div className="d-flex flex-column justify-content-center align-items-center p-3">
+    <div className="WaitingPlayer d-flex flex-column justify-content-center align-items-center p-3">
       <Avatar src={avatar} alt={`${nickname}의 아바타`} diameter={170} />
       <div className="mt-3">
         <p className={`fs-4 ${isMine ? "text-primary" : ""}`}>{isHost ? `${nickname} (방장)` : nickname}</p>
@@ -79,11 +79,10 @@ const WaitingPlayer = ({ nickname, avatar, isHost, isMine }) => {
   );
 };
 
-const WaitingPlayersRow = ({ players, playersPerRow, host }) => {
+const WaitingPlayersRow = ({ players, playersPerRow, host, loggedIn }) => {
   const colSize = 12 / playersPerRow;
-  const { loggedIn } = useAuth();
   return (
-    <>
+    <div className="row m-0">
       {players.map((player, index) => (
         <div
           key={index}
@@ -101,7 +100,51 @@ const WaitingPlayersRow = ({ players, playersPerRow, host }) => {
           )}
         </div>
       ))}
-    </>
+    </div>
+  );
+};
+
+const WaitingPlayersRows = ({ players, playersPerRow, host }) => {
+  const chunkArray = (array, size) => {
+    const chunkedArr = [];
+    for (let i = 0; i < array.length; i += size) {
+      chunkedArr.push(array.slice(i, i + size));
+    }
+    return chunkedArr;
+  };
+  const chunkedPlayers = chunkArray(players, playersPerRow);
+  const { loggedIn } = useAuth();
+
+  return (
+    <div className="WaitingPlayersRows">
+      {chunkedPlayers.map((playerRow, rowIndex) => (
+        <WaitingPlayersRow
+          key={rowIndex}
+          players={playerRow}
+          playersPerRow={playersPerRow}
+          host={host}
+          loggedIn={loggedIn}
+        />
+      ))}
+    </div>
+  );
+};
+
+const VStext = () => {
+  return (
+    <div
+      className="vs-text"
+      style={{
+        position: "absolute",
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
+        fontSize: "5rem",
+        fontWeight: "bold",
+        zIndex: 2,
+      }}>
+      VS
+    </div>
   );
 };
 
@@ -109,25 +152,9 @@ const WaitingPlayersGrid = ({ players, host, isTournament }) => {
   const gridItems = isTournament ? Array.from({ length: 4 }, (_, index) => players[index]) : players.slice(0, 2);
 
   return (
-    <div className="container position-relative">
-      {isTournament && (
-        <div
-          className="vs-text"
-          style={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            fontSize: "5rem",
-            fontWeight: "bold",
-            zIndex: 2,
-          }}>
-          VS
-        </div>
-      )}
-      <div className="row">
-        <WaitingPlayersRow players={gridItems} playersPerRow={2} host={host} />
-      </div>
+    <div className="WaitingPlayersGrid container-fluid position-relative p-0">
+      <VStext />
+      <WaitingPlayersRows players={gridItems} playersPerRow={2} host={host} />
     </div>
   );
 };
@@ -165,28 +192,19 @@ const WaitingRoomBox = ({ gameData, roomData, playersData, myPlayerId }) => {
   };
 
   return (
-    <>
-      <div className="row">
-        <WaitingRoomInfo
-          title={title}
-          host={host}
-          point={game_point}
-          time={time_limit}
-          nPlayers={n_players}
-          joinPlayers={join_players}
-        />
-      </div>
-      <div className="row">
-        <WaitingPlayersGrid players={playersData} host={host} isTournament={is_tournament || n_players === 4} />
-      </div>
-      <div className="row d-flex justify-content-between border border-primary p-3">
-        <div className="col"></div>
-        <div className="col text-end">
-          {amIHost && <StartGameButton isActive={n_players === join_players} />}
-          <ExitRoomButton onClick={exitRoomRequest} />
-        </div>
-      </div>
-    </>
+    <div className="WaitingRoomBox">
+      <WaitingRoomInfo
+        title={title}
+        host={host}
+        point={game_point}
+        time={time_limit}
+        nPlayers={n_players}
+        joinPlayers={join_players}
+      />
+      <WaitingPlayersGrid players={playersData} host={host} isTournament={is_tournament || n_players === 4} />
+      {amIHost && <StartGameButton isActive={n_players === join_players} />}
+      <ExitRoomButton onClick={exitRoomRequest} />
+    </div>
   );
 };
 

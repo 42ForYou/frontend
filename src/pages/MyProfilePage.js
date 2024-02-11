@@ -5,7 +5,7 @@ import { useAuth } from "../context/AuthContext";
 import useFetchProfileData from "../hooks/useFetchProfileData";
 import ContentContainer from "../components/layout/ContentContainer";
 import ContentTitle from "../components/layout/ContentTitle";
-import MainContent from "../components/layout/MainContent";
+import ContentBody from "../components/layout/ContentBody";
 
 const MyProfilePage = () => {
   const { loggedIn } = useAuth();
@@ -15,9 +15,9 @@ const MyProfilePage = () => {
     <div className="MyProfilePage">
       <ContentContainer>
         <ContentTitle title="My Profile" />
-        <MainContent>
+        <ContentBody>
           {isLoading ? <LoadingPage /> : <ProfileBox isMine={true} profileData={profileData} />}
-        </MainContent>
+        </ContentBody>
       </ContentContainer>
     </div>
   );
