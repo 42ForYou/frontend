@@ -45,7 +45,7 @@ const NavUser = () => {
       {nickname}
       <Avatar src={avatarSrc} to={"/profile"} />
       <button className="btn btn-primary mt-2 w-40" onClick={handleLogout}>
-        로그아웃하기
+        로그아웃
       </button>
     </div>
   );
