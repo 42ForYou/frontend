@@ -26,7 +26,11 @@ const ProfileSecurity = ({ initIs2FA }) => {
     setLoading(false);
   };
 
-  return <ToggleButton title="2FA" isToggled={is2FA} onToggle={handleClick2FAToggle} loading={loading} />;
+  return (
+    <div className="ProfileSecurity">
+      <ToggleButton title="2FA" isToggled={is2FA} onToggle={handleClick2FAToggle} loading={loading} />;
+    </div>
+  );
 };
 
 export default ProfileSecurity;

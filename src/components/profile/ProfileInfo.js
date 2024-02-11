@@ -114,7 +114,7 @@ export const MyProfileInfo = ({ initProfileData }) => {
   };
 
   return (
-    <div>
+    <div className="ProfileInfo">
       <InfoDisplay
         profileData={{ ...initProfileData, nickname, email }}
         isEditing={isEditing}
@@ -140,7 +140,7 @@ export const MyProfileInfo = ({ initProfileData }) => {
 };
 
 export const UserProfileInfo = ({ profileData }) => (
-  <div>
+  <div className="ProfileInfo">
     <InfoDisplay profileData={profileData} />
   </div>
 );

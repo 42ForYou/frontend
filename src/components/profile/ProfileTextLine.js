@@ -16,7 +16,7 @@ const ProfileTextLine = ({ label, value, isEditing = false, onChange }) => {
   };
 
   return (
-    <div className="row">
+    <div className="ProfileTextLine row">
       <div className="col">
         <label>{label}: </label>
       </div>

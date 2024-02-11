@@ -46,7 +46,7 @@ const ProfileAvatar = ({ avatar, nickname, isEditing = false, setEditStatus }) =
   };
 
   return (
-    <>
+    <div className="ProfileAvatar">
       <Avatar
         src={newAvatar}
         alt={`${nickname}'s avatar`}
@@ -54,7 +54,7 @@ const ProfileAvatar = ({ avatar, nickname, isEditing = false, setEditStatus }) =
         onImageUploadClick={handleAvatarUploadClick}
       />
       {isEditing && <HiddenImageUploader imgInputRef={imgInputRef} handleAvatarChange={handleAvatarChange} />}
-    </>
+    </div>
   );
 };
 

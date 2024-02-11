@@ -6,7 +6,7 @@ import ProfileFriendStatus from "./ProfileFriendStatus";
 
 const ProfileBox = ({ isMine, profileData }) => {
   return (
-    <div className="container-fluid">
+    <div className="ProfileBox container-fluid">
       <div className="row">
         {isMine ? <MyProfileInfo initProfileData={profileData} /> : <UserProfileInfo profileData={profileData} />}
         {!isMine && (

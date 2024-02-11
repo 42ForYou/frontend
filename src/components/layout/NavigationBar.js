@@ -7,7 +7,7 @@ import Icon from "../common/Icon";
 
 const NavItem = ({ label, to, icon }) => {
   return (
-    <li className="nav-item mb-2">
+    <li className="NavItem mb-2">
       <div className="row">
         <div className="col-3">{icon && <Icon filename={`${icon}.png`} alt={label} />}</div>
         <div className="col">{to ? <Link to={to}>{label}</Link> : <span>{label}</span>}</div>
@@ -18,7 +18,7 @@ const NavItem = ({ label, to, icon }) => {
 
 const NavItems = () => {
   return (
-    <ul>
+    <ul className="NavItems">
       <NavItem to={"/"} label="HOME" icon={"home"} />
       <NavItem to={"/game/list"} label="GAMES" icon={"pong"} />
       <NavItem to={"/friends"} label="FRIENDS" icon={"handshake"} />
@@ -41,7 +41,7 @@ const NavUser = () => {
   const nickname = loggedIn ? loggedIn.nickname : "로그인하지 않은 사용자";
 
   return (
-    <div className="d-flex flex-column align-items-center">
+    <div className="NavUser d-flex flex-column align-items-center">
       {nickname}
       <Avatar src={avatarSrc} to={"/profile"} />
       <button className="btn btn-primary mt-2 w-40" onClick={handleLogout}>
@@ -53,7 +53,7 @@ const NavUser = () => {
 
 const NavLogo = () => {
   return (
-    <h1 className="mb-4">
+    <h1 className="NavLogo mb-4">
       <img src={`${process.env.ASSETS_URL}/logo_black.png`} alt={"logo"} />
     </h1>
   );
