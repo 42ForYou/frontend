@@ -1,9 +1,12 @@
 import React from "react";
 
 const ListItemRow = ({ itemRow, ItemComponent, onOccurChange }) => (
-  <div className="flex-grow-1 d-flex">
+  <div className="ListItemRow flex-grow-1 d-flex align-items-center">
     {itemRow.map((item, itemIndex) => (
-      <div className="flex-grow-1" key={itemIndex}>
+      <div
+        className={`ListItem flex-grow-1 flex-shrink-0 ${itemIndex !== itemRow.length - 1 ? "me-5" : ""}`}
+        key={itemIndex}
+        style={{ flexBasis: 0 }}>
         <ItemComponent {...item} onOccurChange={onOccurChange} />
       </div>
     ))}

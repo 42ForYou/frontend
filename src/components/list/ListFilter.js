@@ -3,7 +3,7 @@ import StyledButton from "../common/StyledButton";
 
 const ListFilter = ({ filterTypes, currentFilter, onFilterClick, rightButton }) => {
   return (
-    <div className="ListFilter d-flex justify-content-between mt-1 mb-1">
+    <div className="ListFilter d-flex justify-content-between my-3">
       <div>
         {filterTypes.map((type, index) => (
           <React.Fragment key={type.value}>
