@@ -43,6 +43,7 @@
     "start": "webpack serve --watch --config ./config/webpack/webpack.dev.js",
     "dev": "webpack --watch --config ./config/webpack/webpack.dev.js",
     "build": "webpack --config ./config/webpack/webpack.prod.js",
+    "dbuild": "webpack --config ./config/webpack/webpack.dev.js",
     "prepare": "if [ \"$NODE_ENV\" = \"development\" ]; then git config --local commit.template .gitmessage.txt; fi",
     "postinstall": "if [ \"$NODE_ENV\" = \"development\" ]; then husky install; fi",
     "format": "prettier --cache --write .",
