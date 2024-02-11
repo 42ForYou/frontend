@@ -39,28 +39,26 @@ const AppContent = () => {
   const showNavbar = !shouldHideNavbar(location.pathname, hideNavbarRoutes);
 
   return (
-    <div className="App container-fluid">
-      <div className="row">
-        <Routes>
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/callback" element={<LoginCallbackPage />} />
-          {/* Protect routes */}
-          <Route element={<ProtectedRoute />}>
-            <Route element={<MainLayout />}>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/profile" element={<MyProfilePage />} />
-              <Route path="/profile/users/:intra_id" element={<UserProfilePage />} />
-              <Route path="/users" element={<UserSearchPage />} />
-              <Route path="/friends" element={<FriendsPage />} />
-              <Route path="/game/list" element={<GameRoomListPage />} />
-            </Route>
-            <Route path="/game/waiting/:room_id" element={<GameWaitingRoomPage />} />
-            <Route path="/game/play/:game_id" element={<GamePlayPage />} />
-            {/* fallback page */}
-            <Route path="*" element={<NotFoundPage />} />
+    <div className="App">
+      <Routes>
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/callback" element={<LoginCallbackPage />} />
+        {/* Protect routes */}
+        <Route element={<ProtectedRoute />}>
+          <Route element={<MainLayout />}>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/profile" element={<MyProfilePage />} />
+            <Route path="/profile/users/:intra_id" element={<UserProfilePage />} />
+            <Route path="/users" element={<UserSearchPage />} />
+            <Route path="/friends" element={<FriendsPage />} />
+            <Route path="/game/list" element={<GameRoomListPage />} />
           </Route>
-        </Routes>
-      </div>
+          <Route path="/game/waiting/:room_id" element={<GameWaitingRoomPage />} />
+          <Route path="/game/play/:game_id" element={<GamePlayPage />} />
+          {/* fallback page */}
+          <Route path="*" element={<NotFoundPage />} />
+        </Route>
+      </Routes>
     </div>
   );
 };

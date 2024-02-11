@@ -9,7 +9,7 @@ const MainLayout = () => {
   const showNavbar = !shouldHideNavbar(location.pathname, hideNavbarRoutes);
 
   return (
-    <div className="App container-fluid">
+    <div className="container-fluid">
       <div className="row">
         {showNavbar && (
           <div className="col-2 p-0">
