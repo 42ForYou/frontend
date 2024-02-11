@@ -30,7 +30,7 @@ const ListItems = ({ itemsData, ItemComponent, itemsPerRow, emptyMsg, onOccurCha
   const displayMessage = !itemsData ? loadFailMsg : itemsData.length === 0 ? emptyMsg : null;
 
   return (
-    <div className="ListItems flex-grow-1 d-flex flex-column">
+    <div className="ListItems flex-grow-1 d-flex flex-column px-4">
       {itemRows.map((itemRow, rowIndex) => (
         <ListItemRow itemRow={itemRow} ItemComponent={ItemComponent} onOccurChange={onOccurChange} key={rowIndex} />
       ))}

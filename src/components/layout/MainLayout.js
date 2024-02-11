@@ -16,7 +16,7 @@ const MainLayout = () => {
             <NavigationBar />
           </div>
         )}
-        <div className="col">
+        <div className="col p-0">
           <Outlet />
           {/* 자식 라우트의 컴포넌트를 렌더링 */}
         </div>

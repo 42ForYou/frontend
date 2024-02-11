@@ -7,18 +7,18 @@ import Icon from "../common/Icon";
 
 const NavItem = ({ label, to, icon }) => {
   return (
-    <li className="NavItem mb-2">
-      <div className="row">
-        <div className="col-3">{icon && <Icon filename={`${icon}.png`} alt={label} />}</div>
-        <div className="col">{to ? <Link to={to}>{label}</Link> : <span>{label}</span>}</div>
-      </div>
+    <li className="NavItem d-flex align-items-start mb-3">
+      <Link to={to} className="d-flex align-items-center justify-content-center w-100 text-decoration-none">
+        {icon && <Icon filename={`${icon}.png`} alt={label} invert={true} />}
+        <span className="nav-link ms-3">{label}</span>
+      </Link>
     </li>
   );
 };
 
 const NavItems = () => {
   return (
-    <ul className="NavItems">
+    <ul className="NavItems p-0">
       <NavItem to={"/"} label="HOME" icon={"home"} />
       <NavItem to={"/game/list"} label="GAMES" icon={"pong"} />
       <NavItem to={"/friends"} label="FRIENDS" icon={"handshake"} />
@@ -41,11 +41,11 @@ const NavUser = () => {
   const nickname = loggedIn ? loggedIn.nickname : "로그인하지 않은 사용자";
 
   return (
-    <div className="NavUser d-flex flex-column align-items-center">
-      {nickname}
+    <div className="NavUser d-flex flex-column align-items-center mb-3">
+      <div className="mb-3">{nickname}</div>
       <Avatar src={avatarSrc} to={"/profile"} />
-      <button className="btn btn-primary mt-2 w-40" onClick={handleLogout}>
-        로그아웃
+      <button className="btn btn-secondary mt-2 w-40" onClick={handleLogout}>
+        Logout
       </button>
     </div>
   );
@@ -53,8 +53,8 @@ const NavUser = () => {
 
 const NavLogo = () => {
   return (
-    <h1 className="NavLogo mb-4">
-      <img src={`${process.env.ASSETS_URL}/logo_black.png`} alt={"logo"} />
+    <h1 className="NavLogo mt-3 mb-5 invert-image">
+      <img src={`${process.env.ASSETS_URL}/logo-2.png`} alt={"logo"} />
     </h1>
   );
 };
@@ -62,7 +62,7 @@ const NavLogo = () => {
 const NavigationBar = () => {
   return (
     <div className="NavigationBar h-100">
-      <nav className="bg-light d-flex-column justify-content-between h-100 p-3">
+      <nav className="border border-white d-flex-column justify-content-between h-100 p-3">
         <div>
           <NavLogo />
           <NavItems />
