@@ -51,21 +51,23 @@ const NavUser = () => {
   );
 };
 
+const NavLogo = () => {
+  return (
+    <h1 className="mb-4">
+      <img src={`${process.env.ASSETS_URL}/logo_black.png`} alt={"logo"} />
+    </h1>
+  );
+};
+
 const NavigationBar = () => {
   return (
-    <div className="NavigationBar border-p3-box h-100">
-      <nav className="bg-light p-3 d-flex flex-column justify-content-between h-100">
-        <div className="row">
-          <div className="row mb-4 text-center">
-            <div>LOGO</div>
-          </div>
-          <div className="row">
-            <NavItems />
-          </div>
+    <div className="NavigationBar h-100">
+      <nav className="bg-light d-flex-column justify-content-between h-100 p-3">
+        <div>
+          <NavLogo />
+          <NavItems />
         </div>
-        <div className="row">
-          <NavUser />
-        </div>
+        <NavUser />
       </nav>
     </div>
   );
