@@ -24,6 +24,8 @@ const RoomListBox = () => {
         filterTypes={filterTypes}
         additionalButton={<StyledButton name={"방 생성"} styleType={"primary"} onClick={handleCreateRoomClick} />}
         emptyMsg={"일치하는 게임 방이 없습니다."}
+        itemsPerPage={4}
+        itemsPerRow={2}
       />
       {showModal && <CreateRoomModal handleClose={handleCloseModal} />}
     </>

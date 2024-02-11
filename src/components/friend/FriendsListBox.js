@@ -17,6 +17,8 @@ const FriendsListBox = () => {
         ItemComponent={FriendItem}
         filterTypes={filterTypes}
         emptyMsg={"친구 데이터가 없습니다."}
+        itemsPerPage={6}
+        itemsPerRow={3}
       />
     </>
   );

@@ -18,10 +18,16 @@ const reducer = (state, action) => {
   }
 };
 
-const ListBox = ({ apiEndpoint, ItemComponent, filterTypes, additionalButton, emptyMsg, searchable = false }) => {
-  // todo: 페이지 스타일 별 조정
-  const itemsPerPage = 9;
-  const itemsPerRow = 3;
+const ListBox = ({
+  apiEndpoint,
+  ItemComponent,
+  filterTypes,
+  additionalButton,
+  emptyMsg,
+  searchable = false,
+  itemsPerPage,
+  itemsPerRow,
+}) => {
   const initState = {
     currentFilter: filterTypes[0],
     currentPage: 1,

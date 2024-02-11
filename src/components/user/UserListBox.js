@@ -15,6 +15,8 @@ const UserListBox = () => {
         additionalButton={null}
         emptyMsg="검색 결과가 없습니다."
         searchable={true}
+        itemsPerPage={6}
+        itemsPerRow={3}
       />
     </>
   );
