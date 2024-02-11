@@ -27,12 +27,11 @@ const StartGameButton = ({ isActive }) => {
   );
 };
 
-const ExitRoomButton = ({ onClick }) => {
+const ExitRoomButton = ({ handleExit }) => {
   const navigate = useNavigate();
   const handleExitRoom = () => {
     if (!window.confirm("게임 대기 방을 나가시겠습니까?")) return;
-    onClick();
-    navigate("/game/list");
+    if (handleExit()) navigate("/game/list");
   };
 
   return (
@@ -186,9 +185,11 @@ const WaitingRoomBox = ({ gameData, roomData, playersData, myPlayerId }) => {
       console.log("방 나가기 성공", resData);
       // todo: 현재 실시간으로 다른 유저가 있는 경우에만 방 폭파 요청
       if (amIHost && join_players !== 1) bombRoomRequest();
+      return true;
     } catch (error) {
       console.log("방 나가기 요청 실패: ", error);
     }
+    return false;
   };
 
   return (
@@ -203,7 +204,7 @@ const WaitingRoomBox = ({ gameData, roomData, playersData, myPlayerId }) => {
       />
       <WaitingPlayersGrid players={playersData} host={host} isTournament={is_tournament || n_players === 4} />
       {amIHost && <StartGameButton isActive={n_players === join_players} />}
-      <ExitRoomButton onClick={exitRoomRequest} />
+      <ExitRoomButton handleExit={exitRoomRequest} />
     </div>
   );
 };
