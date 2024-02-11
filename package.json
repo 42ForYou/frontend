@@ -40,7 +40,7 @@
     "webpack-merge": "^5.10.0"
   },
   "scripts": {
-    "start": "webpack serve --watch --config ./config/webpack/webpack.dev.js",
+    "start": "webpack serve --watch --history-api-fallback --config ./config/webpack/webpack.dev.js",
     "dev": "webpack --watch --config ./config/webpack/webpack.dev.js",
     "build": "webpack --config ./config/webpack/webpack.prod.js",
     "prepare": "if [ \"$NODE_ENV\" = \"development\" ]; then git config --local commit.template .gitmessage.txt; fi",
