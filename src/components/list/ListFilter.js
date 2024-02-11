@@ -3,8 +3,8 @@ import StyledButton from "../common/StyledButton";
 
 const ListFilter = ({ filterTypes, currentFilter, onFilterClick, rightButton }) => {
   return (
-    <header className="row mt-1 mb-1">
-      <div className="col">
+    <header className="d-flex justify-content-between mt-1 mb-1">
+      <div>
         {filterTypes.map((type, index) => (
           <React.Fragment key={type.value}>
             <StyledButton
@@ -17,7 +17,7 @@ const ListFilter = ({ filterTypes, currentFilter, onFilterClick, rightButton }) 
           </React.Fragment>
         ))}
       </div>
-      <div className="col d-flex justify-content-end">{rightButton}</div>
+      <div>{rightButton}</div>
     </header>
   );
 };
