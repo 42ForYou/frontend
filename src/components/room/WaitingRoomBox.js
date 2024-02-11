@@ -70,7 +70,7 @@ const WaitingRoomInfo = ({ title, host, point, time, nPlayers, joinPlayers }) =>
 const WaitingPlayer = ({ nickname, avatar, isHost, isMine }) => {
   return (
     <div className="WaitingPlayer d-flex flex-column justify-content-center align-items-center p-3">
-      <Avatar src={avatar} alt={`${nickname}의 아바타`} diameter={170} />
+      <Avatar src={avatar} alt={`${nickname}의 아바타`} diameter={150} />
       <div className="mt-3">
         <p className={`fs-4 ${isMine ? "text-primary" : ""}`}>{isHost ? `${nickname} (방장)` : nickname}</p>
       </div>
@@ -81,7 +81,7 @@ const WaitingPlayer = ({ nickname, avatar, isHost, isMine }) => {
 const WaitingPlayersRow = ({ players, playersPerRow, host, loggedIn }) => {
   const colSize = 12 / playersPerRow;
   return (
-    <div className="row m-0">
+    <div className="row m-0 flex-grow-1">
       {players.map((player, index) => (
         <div
           key={index}
@@ -115,7 +115,7 @@ const WaitingPlayersRows = ({ players, playersPerRow, host }) => {
   const { loggedIn } = useAuth();
 
   return (
-    <div className="WaitingPlayersRows">
+    <div className="WaitingPlayersRows flex-grow-1 d-flex-col">
       {chunkedPlayers.map((playerRow, rowIndex) => (
         <WaitingPlayersRow
           key={rowIndex}
@@ -135,7 +135,7 @@ const VStext = () => {
       className="vs-text"
       style={{
         position: "absolute",
-        top: "50%",
+        top: "55%",
         left: "50%",
         transform: "translate(-50%, -50%)",
         fontSize: "5rem",
@@ -151,7 +151,7 @@ const WaitingPlayersGrid = ({ players, host, isTournament }) => {
   const gridItems = isTournament ? Array.from({ length: 4 }, (_, index) => players[index]) : players.slice(0, 2);
 
   return (
-    <div className="WaitingPlayersGrid container-fluid position-relative p-0">
+    <div className="WaitingPlayersGrid d-flex-col flex-grow-1 position-relative p-0">
       <VStext />
       <WaitingPlayersRows players={gridItems} playersPerRow={2} host={host} />
     </div>
@@ -193,7 +193,7 @@ const WaitingRoomBox = ({ gameData, roomData, playersData, myPlayerId }) => {
   };
 
   return (
-    <div className="WaitingRoomBox">
+    <div className="WaitingRoomBox d-flex-col full-height">
       <WaitingRoomInfo
         title={title}
         host={host}
@@ -203,8 +203,10 @@ const WaitingRoomBox = ({ gameData, roomData, playersData, myPlayerId }) => {
         joinPlayers={join_players}
       />
       <WaitingPlayersGrid players={playersData} host={host} isTournament={is_tournament || n_players === 4} />
-      {amIHost && <StartGameButton isActive={n_players === join_players} />}
-      <ExitRoomButton handleExit={exitRoomRequest} />
+      <div className="WaitingRoomButtons d-flex justify-content-end">
+        {amIHost && <StartGameButton isActive={n_players === join_players} />}
+        <ExitRoomButton handleExit={exitRoomRequest} />
+      </div>
     </div>
   );
 };
