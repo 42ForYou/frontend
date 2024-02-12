@@ -9,7 +9,7 @@ const NavItem = ({ label, to, icon }) => {
   return (
     <li className="NavItem flex-1 mb-4">
       <div>
-        <Link to={to} className="d-flex ps-4">
+        <Link to={to} className="d-flex ps-3">
           {icon && <Icon filename={`${icon}.png`} alt={label} invert={true} />}
           <span className="nav-link flex-grow ms-3">{label}</span>
         </Link>
@@ -43,9 +43,9 @@ const NavUser = () => {
   const nickname = loggedIn ? loggedIn.nickname : "Unknown User";
 
   return (
-    <div className="NavUser d-flex flex-column align-items-center mb-3">
+    <div className="NavUser d-flex flex-column align-items-center pb-3">
       <div className="mb-3 text-center">{nickname}</div>
-      <Avatar src={avatarSrc} to={"/profile"} diameter={130} />
+      <Avatar src={avatarSrc} to={"/profile"} diameter={120} />
       <button className="btn btn-secondary mt-2 w-40" onClick={handleLogout}>
         Sign Out
       </button>
