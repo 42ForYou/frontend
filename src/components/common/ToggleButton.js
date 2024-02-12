@@ -9,9 +9,8 @@ const ToggleButton = ({ title, isToggled, onToggle, loading }) => {
 
   return (
     <div className="ToggleButton">
-      {title}
       <button onClick={handleToggle} disabled={loading}>
-        {loading ? "Loading..." : isToggled ? "ON" : "OFF"}
+        {loading ? "Loading..." : isToggled ? `${title} ON` : `${title} OFF`}
       </button>
     </div>
   );

@@ -26,7 +26,7 @@ const ProfileFriendStatus = ({ initFriendStatus, nickname }) => {
   const handleRemoveFriend = async () => {};
 
   return (
-    <div className="col-12 text-center">
+    <div className="ProfileFriendStatus col-12 text-center">
       {friendStatus === "None" && (
         <StyledButton styleType={"btn btn-primary"} name={"친구 신청"} onClick={handleAddFriend} />
       )}

@@ -133,7 +133,7 @@ const CreateRoomModal = ({ handleClose }) => {
     <CustomModal
       hasCloseButton={false}
       handleClose={handleClose}
-      title={"게임 방 생성하기"}
+      title={"게임 방 생성"}
       footerButtons={
         <>
           <StyledButton name={"취소"} styleType={"secondary"} onClick={handleClose} />

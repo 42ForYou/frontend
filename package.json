@@ -1,7 +1,7 @@
 {
   "name": "frontend",
   "version": "1.0.0",
-  "description": "PongDom frontend",
+  "description": "PlanetPong frontend",
   "main": "index.js",
   "dependencies": {
     "@fortawesome/fontawesome-free": "^6.5.1",
@@ -40,7 +40,7 @@
     "webpack-merge": "^5.10.0"
   },
   "scripts": {
-    "start": "webpack serve --watch --config ./config/webpack/webpack.dev.js",
+    "start": "webpack serve --https --watch --history-api-fallback --config ./config/webpack/webpack.dev.js",
     "dev": "webpack --watch --config ./config/webpack/webpack.dev.js",
     "build": "webpack --config ./config/webpack/webpack.prod.js",
     "dbuild": "webpack --config ./config/webpack/webpack.dev.js",

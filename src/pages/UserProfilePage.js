@@ -4,6 +4,8 @@ import { useParams, useNavigate } from "react-router-dom";
 import LoadingPage from "./LoadingPage";
 import useFetchProfileData from "../hooks/useFetchProfileData";
 import ContentContainer from "../components/layout/ContentContainer";
+import ContentTitle from "../components/layout/ContentTitle";
+import ContentBody from "../components/layout/ContentBody";
 
 const UserProfilePage = () => {
   const { intra_id } = useParams();
@@ -20,8 +22,10 @@ const UserProfilePage = () => {
   return (
     <div className="UserProfilePage">
       <ContentContainer>
-        <h1>User Profile</h1>
-        {isLoading ? <LoadingPage /> : <ProfileBox isMine={false} profileData={profileData} />}
+        <ContentTitle title="User Profile" />
+        <ContentBody>
+          {isLoading ? <LoadingPage /> : <ProfileBox isMine={false} profileData={profileData} />}
+        </ContentBody>
       </ContentContainer>
     </div>
   );

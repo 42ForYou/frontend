@@ -3,7 +3,7 @@ import ContentContainer from "../components/layout/ContentContainer";
 
 const LoadingPage = () => {
   return (
-    <div className="LoadingPage">
+    <div className="LoadingPage text-center">
       <ContentContainer>Loading ...</ContentContainer>
     </div>
   );

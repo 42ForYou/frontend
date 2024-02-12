@@ -7,10 +7,12 @@ import Icon from "../common/Icon";
 
 const NavItem = ({ label, to, icon }) => {
   return (
-    <li className="nav-item mb-2">
-      <div className="row">
-        <div className="col-3">{icon && <Icon filename={`${icon}.png`} alt={label} />}</div>
-        <div className="col">{to ? <Link to={to}>{label}</Link> : <span>{label}</span>}</div>
+    <li className="NavItem flex-1 mb-4">
+      <div>
+        <Link to={to} className="d-flex ps-3">
+          {icon && <Icon filename={`${icon}.png`} alt={label} invert={true} />}
+          <span className="nav-link flex-grow ms-3">{label}</span>
+        </Link>
       </div>
     </li>
   );
@@ -18,11 +20,11 @@ const NavItem = ({ label, to, icon }) => {
 
 const NavItems = () => {
   return (
-    <ul>
-      <NavItem to={"/"} label="HOME" icon={"home"} />
-      <NavItem to={"/game/list"} label="GAMES" icon={"pong"} />
-      <NavItem to={"/friends"} label="FRIENDS" icon={"handshake"} />
-      <NavItem to={"/users"} label="USERS" icon={"people"} />
+    <ul className="NavItems d-flex-col p-0">
+      <NavItem to={"/"} label="Home" icon={"home"} />
+      <NavItem to={"/game/list"} label="Games" icon={"pong"} />
+      <NavItem to={"/friends"} label="Friends" icon={"handshake"} />
+      <NavItem to={"/users"} label="Users" icon={"people"} />
     </ul>
   );
 };
@@ -38,34 +40,38 @@ const NavUser = () => {
   };
 
   const avatarSrc = loggedIn ? loggedIn.avatar : null;
-  const nickname = loggedIn ? loggedIn.nickname : "로그인하지 않은 사용자";
+  const nickname = loggedIn ? loggedIn.nickname : "Unknown User";
 
   return (
-    <div className="d-flex flex-column align-items-center">
-      {nickname}
-      <Avatar src={avatarSrc} to={"/profile"} />
-      <button className="btn btn-primary mt-2 w-40" onClick={handleLogout}>
-        로그아웃하기
+    <div className="NavUser d-flex flex-column align-items-center pb-3">
+      <div className="mb-3 text-center">{nickname}</div>
+      <Avatar src={avatarSrc} to={"/profile"} diameter={120} />
+      <button className="btn btn-secondary mt-2 w-40" onClick={handleLogout}>
+        Sign Out
       </button>
     </div>
   );
 };
 
+const NavLogo = () => {
+  return (
+    <h1 className="NavLogo mt-3 mb-4">
+      <Link to="/">
+        <img src={`${process.env.ASSETS_URL}/logo-3-color3.png`} alt="logo" />
+      </Link>
+    </h1>
+  );
+};
+
 const NavigationBar = () => {
   return (
-    <div className="NavigationBar border-p3-box h-100">
-      <nav className="bg-light p-3 d-flex flex-column justify-content-between h-100">
-        <div className="row">
-          <div className="row mb-4 text-center">
-            <div>LOGO</div>
-          </div>
-          <div className="row">
-            <NavItems />
-          </div>
+    <div className="NavigationBar h-100">
+      <nav className="NavigationBar-Content d-flex-col justify-content-between h-100 px-3 pb-4">
+        <div>
+          <NavLogo />
+          <NavItems />
         </div>
-        <div className="row">
-          <NavUser />
-        </div>
+        <NavUser />
       </nav>
     </div>
   );

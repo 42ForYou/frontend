@@ -1,0 +1,12 @@
+/* Room List */
+.RoomItem {
+	color: black;
+	border: 1px solid #ffffff;
+	border-radius: 10px;
+	background-color: rgb(213, 230, 255);
+  width: 100%;
+  padding: 16px;
+}
+.RoomItemPlaying {
+	background-color: orangered;
+}

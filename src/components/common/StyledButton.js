@@ -8,7 +8,12 @@ const StyledButton = ({ styleType, name, onClick, overrideStyle, disabled }) => 
   };
 
   return (
-    <button type="button" className={btnClass} onClick={onClick} style={buttonStyle} disabled={disabled}>
+    <button
+      type="button"
+      className={`StyledButton ${btnClass}`}
+      onClick={onClick}
+      style={buttonStyle}
+      disabled={disabled}>
       {name}
     </button>
   );

@@ -1,13 +1,17 @@
 import React from "react";
 import FriendsListBox from "../components/friend/FriendsListBox";
 import ContentContainer from "../components/layout/ContentContainer";
+import ContentTitle from "../components/layout/ContentTitle";
+import ContentBody from "../components/layout/ContentBody";
 
 const FriendsPage = () => {
   return (
     <div className="FriendsPage">
       <ContentContainer>
-        <h1>Friends</h1>
-        <FriendsListBox />
+        <ContentTitle title="Friends" />
+        <ContentBody>
+          <FriendsListBox />
+        </ContentBody>
       </ContentContainer>
     </div>
   );

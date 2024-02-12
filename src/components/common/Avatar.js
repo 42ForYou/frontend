@@ -15,49 +15,23 @@ const Avatar = ({ src, alt, to, isEditing = false, onImageUploadClick = null, di
     <img
       src={getImageSrc(src)}
       alt={alt || "아바타 이미지"}
-      className="rounded-circle"
-      style={{
-        objectFit: "cover",
-        border: "2px solid #f000f0",
-        width: `${diameter}px`,
-        height: `${diameter}px`,
-      }}
+      className="avatar-img rounded-circle"
+      style={{ width: `${diameter}px`, height: `${diameter}px` }}
       onError={handleImageLoadFailed}
     />
   );
 
   const renderOnlineStatusIndicator = () => {
     if (isOnline === null) return null;
-    return (
-      <span
-        style={{
-          width: "27px",
-          height: "27px",
-          borderRadius: "50%",
-          backgroundColor: isOnline ? "#00ff00" : "#ff0000",
-          position: "absolute",
-          top: "0",
-          right: "0",
-          border: "3px solid white",
-        }}></span>
-    );
+    return <span className={`online-indicator ${isOnline ? "online" : "offline"}`}></span>;
   };
 
   return (
-    <div className="Avatar position-relative" style={{ width: `${diameter}px`, height: `${diameter}px` }}>
+    <div className="avatar" style={{ width: `${diameter}px`, height: `${diameter}px` }}>
       {to ? <Link to={to}>{renderImage()}</Link> : renderImage()}
       {isEditing && (
-        <button
-          onClick={onImageUploadClick}
-          style={{
-            border: "none",
-            background: "none",
-            cursor: "pointer",
-            position: "absolute",
-            top: "0",
-            right: "0",
-          }}>
-          <i className="fas fa-edit" style={{ fontSize: "24px", color: "#000" }}></i>
+        <button onClick={onImageUploadClick} className="edit-button">
+          <i className="fas fa-edit edit-icon"></i>
         </button>
       )}
       {renderOnlineStatusIndicator()}

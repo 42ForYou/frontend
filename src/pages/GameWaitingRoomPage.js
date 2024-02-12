@@ -7,6 +7,7 @@ import { get } from "../utils/apiBase";
 import { API_ENDPOINTS } from "../utils/apiEndpoints";
 import { useNavigate, useParams } from "react-router-dom";
 import ContentContainer from "../components/layout/ContentContainer";
+import ContentBody from "../components/layout/ContentBody";
 
 // 차후 필요시 1대1, 토너먼트 방 분리
 const GameWaitingRoomPage = () => {
@@ -36,15 +37,12 @@ const GameWaitingRoomPage = () => {
   }, []);
 
   return (
-    <div className="UserProfilePage">
-      <ContentContainer>
-        <h1>Game Waiting Room</h1>
-        {gameData && roomData && playersData ? (
-          <WaitingRoomBox gameData={gameData} roomData={roomData} playersData={playersData} myPlayerId={myPlayerId} />
-        ) : (
-          <LoadingPage />
-        )}
-      </ContentContainer>
+    <div className="GameWaitingRoomPage">
+      {gameData && roomData && playersData ? (
+        <WaitingRoomBox gameData={gameData} roomData={roomData} playersData={playersData} myPlayerId={myPlayerId} />
+      ) : (
+        <LoadingPage />
+      )}
     </div>
   );
 };

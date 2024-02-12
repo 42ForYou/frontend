@@ -16,13 +16,9 @@ const ProfileTextLine = ({ label, value, isEditing = false, onChange }) => {
   };
 
   return (
-    <div className="row">
-      <div className="col">
-        <label>{label}: </label>
-      </div>
-      <div className="col">
-        {isEditing ? <input type="text" value={inputValue} onChange={handleChange} /> : <span>{inputValue}</span>}
-      </div>
+    <div className="ProfileTextLine d-flex justify-content-between mb-2">
+      <label>{label}: </label>
+      {isEditing ? <input type="text" value={inputValue} onChange={handleChange} /> : <span>{inputValue}</span>}
     </div>
   );
 };

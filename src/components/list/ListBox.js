@@ -4,6 +4,7 @@ import ListItems from "./ListItems";
 import ListPagination from "./ListPagination";
 import useFetchListItems from "../../hooks/useFetchListItems";
 import SearchBar from "../common/SearchBar";
+import Loading from "../common/Loading";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -18,10 +19,17 @@ const reducer = (state, action) => {
   }
 };
 
-const ListBox = ({ apiEndpoint, ItemComponent, filterTypes, additionalButton, emptyMsg, searchable = false }) => {
-  // todo: 페이지 스타일 별 조정
-  const itemsPerPage = 9;
-  const itemsPerRow = 3;
+const ListBox = ({
+  apiEndpoint,
+  ItemComponent,
+  filterTypes,
+  additionalButton,
+  emptyMsg,
+  searchable = false,
+  itemsPerPage,
+  itemsPerRow,
+  placeholder,
+}) => {
   const initState = {
     currentFilter: filterTypes[0],
     currentPage: 1,
@@ -43,8 +51,10 @@ const ListBox = ({ apiEndpoint, ItemComponent, filterTypes, additionalButton, em
   const handleSearch = (keyword) => dispatch({ type: "SET_SEARCH_KEYWORD", payload: keyword });
 
   return (
-    <div className="container d-flex flex-column justify-content-between h-100">
-      {searchable && <SearchBar searchKeyword={state.searchKeyword} onSearch={handleSearch} />}
+    <div className="ListBox d-flex-col flex-grow-1">
+      {searchable && (
+        <SearchBar searchKeyword={state.searchKeyword} onSearch={handleSearch} placeholder={placeholder} />
+      )}
       {filterTypes.length >= 2 && (
         <ListFilter
           filterTypes={filterTypes}
@@ -53,18 +63,17 @@ const ListBox = ({ apiEndpoint, ItemComponent, filterTypes, additionalButton, em
           rightButton={additionalButton}
         />
       )}
-      {isLoading ? (
-        <div>Loading...</div>
-      ) : (
-        <ListItems
-          itemsData={itemsData}
-          ItemComponent={ItemComponent}
-          itemsPerRow={itemsPerRow}
-          emptyMsg={emptyMsg}
-          onOccurChange={reloadListItems}
-        />
-      )}
-      {itemsData && (
+      {/* 차후 로딩 애니메이션 고려 */}
+      {/* {isLoading ? ( <Loading />) : (<ListItems/>)} */}
+      <ListItems
+        itemsData={itemsData}
+        ItemComponent={ItemComponent}
+        itemsPerRow={itemsPerRow}
+        emptyMsg={emptyMsg}
+        onOccurChange={reloadListItems}
+      />
+      {/* {!isLoading && itemsData && ( */}
+      {itemsData && itemsData.length > 0 && (
         <ListPagination totalPage={totalPage} currentPage={state.currentPage} onPaginationClick={handleChangePage} />
       )}
     </div>

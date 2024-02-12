@@ -1,0 +1,59 @@
+.LoginPage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-image: url('../../public/assets/images/login-background.jpeg'); 
+  background-size: cover;
+  background-position: center;
+  color: #fff;
+}
+
+.LoginPage h1 {
+	font-family: 'Orbitron', sans-serif;
+	font-size: 3rem;
+  color: #fff;
+	text-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
+}
+
+.LoginPage div {
+  text-align: center;
+}
+
+.LoginPage input[type="text"] {
+	height: 50px;
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+	color: black;
+}
+
+.LoginPage button {
+  margin-top: 10px;
+  padding: 10px 20px;
+  border-radius: 5px;
+  border: none;
+  color: #fff;
+	font-size: 1.5rem;
+  background-color: #00b377;
+  cursor: pointer;
+}
+
+.LoginPage button:hover {
+  color: #fff;
+  background-color: #00895b;
+}
+
+.LoginPage h1 {
+  margin-bottom: 20px; 
+}
+
+.LoginPage .twoFactorAuth {
+  height: 50px;
+  background-color: #007bff
+}
+
+.LoginPage .twoFactorAuth:hover {
+  background-color: #0056b3
+}

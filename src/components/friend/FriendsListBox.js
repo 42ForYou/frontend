@@ -7,7 +7,7 @@ import { API_ENDPOINTS } from "../../utils/apiEndpoints";
 const FriendsListBox = () => {
   const filterTypes = [
     { value: "friend", label: "나의 친구" },
-    { value: "pending", label: "받지 않은 친구요청" },
+    { value: "pending", label: "내게 온 친구요청" },
   ];
 
   return (
@@ -17,6 +17,8 @@ const FriendsListBox = () => {
         ItemComponent={FriendItem}
         filterTypes={filterTypes}
         emptyMsg={"친구 데이터가 없습니다."}
+        itemsPerPage={6}
+        itemsPerRow={3}
       />
     </>
   );
