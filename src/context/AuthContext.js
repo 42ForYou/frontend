@@ -79,6 +79,7 @@ export const AuthProvider = ({ children }) => {
     <AuthContext.Provider
       value={{
         loggedIn,
+        setLoggedIn,
         isLoading,
         is2FAVerified,
         login,

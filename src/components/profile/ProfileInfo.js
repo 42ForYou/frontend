@@ -4,6 +4,7 @@ import { checkRegex } from "../../utils/checkRegex";
 import StyledButton from "../common/StyledButton";
 import ProfileAvatar from "./ProfileAvatar";
 import ProfileTextLine from "./ProfileTextLine";
+import { useAuth } from "../../context/AuthContext";
 
 export const STATUS = {
   PROFILE: 0,
@@ -53,6 +54,7 @@ const InfoDisplay = ({ profileData, isEditing, onChangeNickname, onChangeEmail, 
 
 export const MyProfileInfo = ({ initProfileData }) => {
   const { nickname: initNickname, email: initEmail } = initProfileData;
+  const { setLoggedIn } = useAuth();
   const { patchProfileInfo } = usePatchProfile();
   const [isEditing, setIsEditing] = useState(false);
   const [editStatus, setEditStatus] = useState(null);
@@ -96,6 +98,7 @@ export const MyProfileInfo = ({ initProfileData }) => {
     else if (isValid) {
       const result = await patchProfileInfo({ nickname, email }, (updatedProfile) => {
         console.log("업데이트 결과: ", updatedProfile);
+        setLoggedIn(updatedProfile);
       });
 
       if (result.success) {

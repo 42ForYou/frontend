@@ -12,15 +12,15 @@ const usePatchProfile = () => {
   const patchProfileInfo = async (formDataObj, callback, isImage = false) => {
     try {
       const formData = new FormData();
-      if (isImage) {
-        formData.append("image", formDataObj);
-      } else {
-        formData.append("data", JSON.stringify(formDataObj));
-      }
+      if (isImage) formData.append("image", formDataObj);
+      else formData.append("data", JSON.stringify(formDataObj));
+
       const resData = await patchForm(API_ENDPOINTS.USER_PROFILE(loggedIn.intra_id), formData);
       const updatedProfile = resData.data.user;
+
       if (callback) callback(updatedProfile);
       setError(null);
+
       return { success: true };
     } catch (error) {
       setError({
