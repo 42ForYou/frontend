@@ -23,14 +23,6 @@
 .NavItems a:hover {
   text-shadow: 0 0 8px #fff, 0 0 20px #fff, 0 0 24px #fff;
 }
-.NavItems a span::after {
-  content: "";
-  display: block;
-  width: 100%;
-  border-bottom: 1px solid #fff;
-	margin: 5px 0px;
-}
-
 .NavItems img {
 	filter: invert(100%);
 }

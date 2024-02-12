@@ -23,3 +23,20 @@
   flex-shrink: 0; /* 아이템이 컨테이너 공간 부족 시 줄어들지 않도록 설정 */
   flex-basis: 33.3333%; /* 예를 들어 3개의 아이템이 같은 줄에 배치될 경우 */
 }
+
+.ListFilter button {
+	font-family: 'Noto Sans KR', sans-serif;
+  text-decoration: none;
+	color: aliceblue;
+	font-size: 1.3rem;
+}
+
+.ListFilter button:hover {
+  text-shadow: 0 0 8px #7da8ff, 0 0 20px #7da8ff, 0 0 24px #7da8ff;
+  /* text-shadow: 0 0 8px #fff, 0 0 20px #fff, 0 0 24px #fff; */
+	color: aliceblue;
+}
+
+.ListFilter button .selectedFilter {
+	font-style: bold !important;
+}
