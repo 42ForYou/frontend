@@ -1,6 +1,7 @@
 import React from "react";
 import { Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import LoadingPage from "../../pages/LoadingPage";
 
 const ProtectedRoute = () => {
   const { loggedIn, isLoading, is2FAVerified } = useAuth();
@@ -9,7 +10,7 @@ const ProtectedRoute = () => {
 
   // todo: 로딩 인디케이터 컴포넌트 추가
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <LoadingPage />;
   }
 
   if (!loggedIn || !is2FAVerified) {

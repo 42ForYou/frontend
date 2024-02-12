@@ -53,9 +53,9 @@ const NavUser = () => {
 
 const NavLogo = () => {
   return (
-    <h1 className="NavLogo mt-3 mb-5 invert-image">
+    <h1 className="NavLogo mt-3 mb-5">
       <Link to="/">
-        <img src={`${process.env.ASSETS_URL}/logo-3-color.png`} alt="logo" />
+        <img src={`${process.env.ASSETS_URL}/logo-3-color3.png`} alt="logo" />
       </Link>
     </h1>
   );
