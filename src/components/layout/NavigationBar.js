@@ -7,11 +7,13 @@ import Icon from "../common/Icon";
 
 const NavItem = ({ label, to, icon }) => {
   return (
-    <li className="NavItem flex-1 border-bottom border-white mb-4">
-      <Link to={to} className="d-flex  pb-1">
-        {icon && <Icon filename={`${icon}.png`} alt={label} invert={true} />}
-        <span className="nav-link flex-grow ms-3">{label}</span>
-      </Link>
+    <li className="NavItem flex-1 mb-4">
+      <div>
+        <Link to={to} className="d-flex ps-4">
+          {icon && <Icon filename={`${icon}.png`} alt={label} invert={true} />}
+          <span className="nav-link flex-grow ms-3">{label}</span>
+        </Link>
+      </div>
     </li>
   );
 };
@@ -64,7 +66,7 @@ const NavLogo = () => {
 const NavigationBar = () => {
   return (
     <div className="NavigationBar h-100">
-      <nav className="NavigationBar-Content d-flex-col justify-content-between h-100 p-3">
+      <nav className="NavigationBar-Content d-flex-col justify-content-between h-100 px-3 pb-4">
         <div>
           <NavLogo />
           <NavItems />
