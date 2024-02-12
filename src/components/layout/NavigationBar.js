@@ -7,10 +7,10 @@ import Icon from "../common/Icon";
 
 const NavItem = ({ label, to, icon }) => {
   return (
-    <li className="NavItem d-flex align-items-start mb-4">
-      <Link to={to} className="d-flex align-items-center justify-content-center w-100 text-decoration-none">
+    <li className="NavItem flex-1 border-bottom border-white mb-4">
+      <Link to={to} className="d-flex  pb-1">
         {icon && <Icon filename={`${icon}.png`} alt={label} invert={true} />}
-        <span className="nav-link ms-3">{label}</span>
+        <span className="nav-link flex-grow ms-3">{label}</span>
       </Link>
     </li>
   );
@@ -18,7 +18,7 @@ const NavItem = ({ label, to, icon }) => {
 
 const NavItems = () => {
   return (
-    <ul className="NavItems p-0">
+    <ul className="NavItems d-flex-col p-0">
       <NavItem to={"/"} label="Home" icon={"home"} />
       <NavItem to={"/game/list"} label="Games" icon={"pong"} />
       <NavItem to={"/friends"} label="Friends" icon={"handshake"} />
@@ -43,7 +43,7 @@ const NavUser = () => {
   return (
     <div className="NavUser d-flex flex-column align-items-center mb-3">
       <div className="mb-3 text-center">{nickname}</div>
-      <Avatar src={avatarSrc} to={"/profile"} />
+      <Avatar src={avatarSrc} to={"/profile"} diameter={130} />
       <button className="btn btn-secondary mt-2 w-40" onClick={handleLogout}>
         Sign Out
       </button>

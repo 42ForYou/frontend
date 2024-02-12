@@ -16,7 +16,7 @@ const MyProfilePage = () => {
       <ContentContainer>
         <ContentTitle title="My Profile" />
         <ContentBody>
-          {isLoading ? <LoadingPage /> : <ProfileBox isMine={true} profileData={profileData} />}
+          {isLoading ? <div>Loading ...</div> : <ProfileBox isMine={true} profileData={profileData} />}
         </ContentBody>
       </ContentContainer>
     </div>

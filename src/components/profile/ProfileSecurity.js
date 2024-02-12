@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import ToggleButton from "../common/ToggleButton";
 import usePatchProfile from "../../hooks/usePatchProfile";
+import StyledButton from "../common/StyledButton";
 
 const ProfileSecurity = ({ initIs2FA }) => {
   const [is2FA, setIs2FA] = useState(initIs2FA);
@@ -20,15 +21,22 @@ const ProfileSecurity = ({ initIs2FA }) => {
     const res = await patchProfileInfo({ two_factor_auth: newIs2FA });
     if (res.success) {
       setIs2FA(newIs2FA);
+      alert("2FA 설정이 성공적으로 변경되었습니다.");
     } else {
       alert("2FA 설정 변경 실패:", res.message);
     }
     setLoading(false);
   };
 
+  const handleDeleteAccount = () => {
+    if (!window.confirm("계정을 삭제하면 모든 정보가 사라집니다. 정말 탈퇴하시겠습니까?")) return;
+    alert("계정 탈퇴 미구현");
+  };
+
   return (
-    <div className="ProfileSecurity">
-      <ToggleButton title="2FA" isToggled={is2FA} onToggle={handleClick2FAToggle} loading={loading} />;
+    <div className="ProfileSecurity d-flex justify-content-between mt-4">
+      <ToggleButton title="2FA" isToggled={is2FA} onToggle={handleClick2FAToggle} loading={loading} />
+      <StyledButton styleType="danger" onClick={handleDeleteAccount} name="Delete" />
     </div>
   );
 };

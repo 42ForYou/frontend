@@ -46,12 +46,13 @@ const ProfileAvatar = ({ avatar, nickname, isEditing = false, setEditStatus }) =
   };
 
   return (
-    <div className="ProfileAvatar">
+    <div className="ProfileAvatar ms-5">
       <Avatar
         src={newAvatar}
         alt={`${nickname}'s avatar`}
         isEditing={isEditing}
         onImageUploadClick={handleAvatarUploadClick}
+        diameter={130}
       />
       {isEditing && <HiddenImageUploader imgInputRef={imgInputRef} handleAvatarChange={handleAvatarChange} />}
     </div>

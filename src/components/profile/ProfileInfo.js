@@ -20,7 +20,7 @@ const EditProfileButtons = ({ isEditing, onExitClick, onSubmitClick, onEntryClic
           <StyledButton styleType={"danger ms-2"} name={"취소"} onClick={onExitClick} />
         </>
       ) : (
-        <StyledButton styleType={"primary"} name={"정보 수정하기"} onClick={onEntryClick} />
+        <StyledButton styleType={"primary"} name={"정보 수정"} onClick={onEntryClick} />
       )}
     </div>
   );
@@ -28,14 +28,8 @@ const EditProfileButtons = ({ isEditing, onExitClick, onSubmitClick, onEntryClic
 
 const InfoDisplay = ({ profileData, isEditing, onChangeNickname, onChangeEmail, setEditStatus }) => {
   return (
-    <div>
-      <ProfileAvatar
-        avatar={profileData.avatar}
-        nickname={profileData.nickname}
-        isEditing={isEditing}
-        setEditStatus={setEditStatus}
-      />
-      <div>
+    <div className="d-flex justify-content-between align-items-center">
+      <div className="flex-grow-1">
         {profileData.intraId && <ProfileTextLine label="Intra ID" value={profileData.intraId} />}
         <ProfileTextLine
           label="Nickname"
@@ -47,6 +41,12 @@ const InfoDisplay = ({ profileData, isEditing, onChangeNickname, onChangeEmail, 
           <ProfileTextLine label="Email" value={profileData.email} isEditing={isEditing} onChange={onChangeEmail} />
         )}
       </div>
+      <ProfileAvatar
+        avatar={profileData.avatar}
+        nickname={profileData.nickname}
+        isEditing={isEditing}
+        setEditStatus={setEditStatus}
+      />
     </div>
   );
 };

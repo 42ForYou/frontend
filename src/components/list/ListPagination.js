@@ -14,7 +14,7 @@ const ListPagination = ({ totalPage, currentPage, onPaginationClick }) => {
   };
 
   return (
-    <div className="ListPagination text-center pt-3">
+    <div className="ListPagination text-center">
       <div className="row justify-content-center">
         {currentPage} / {totalPage}
       </div>

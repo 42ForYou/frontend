@@ -17,3 +17,9 @@
 .ListPagination .row.justify-content-center {
   text-align: center; /* 내용을 가운데 정렬합니다. */
 } 
+
+.ListItem {
+  flex-grow: 0; /* 아이템이 컨테이너 공간을 자동으로 채우지 않도록 설정 */
+  flex-shrink: 0; /* 아이템이 컨테이너 공간 부족 시 줄어들지 않도록 설정 */
+  flex-basis: 33.3333%; /* 예를 들어 3개의 아이템이 같은 줄에 배치될 경우 */
+}

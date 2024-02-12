@@ -6,18 +6,12 @@ import ProfileFriendStatus from "./ProfileFriendStatus";
 
 const ProfileBox = ({ isMine, profileData }) => {
   return (
-    <div className="ProfileBox container-fluid">
-      <div className="row">
-        {isMine ? <MyProfileInfo initProfileData={profileData} /> : <UserProfileInfo profileData={profileData} />}
-        {!isMine && (
-          <ProfileFriendStatus initFriendStatus={profileData.friend_status} nickname={profileData.nickname} />
-        )}
-      </div>
-      <div className="row">
-        <ProfileHistory profileData={profileData} />
-      </div>
+    <div className="ProfileBox d-flex-col flex-grow-1">
+      {isMine ? <MyProfileInfo initProfileData={profileData} /> : <UserProfileInfo profileData={profileData} />}
+      {!isMine && <ProfileFriendStatus initFriendStatus={profileData.friend_status} nickname={profileData.nickname} />}
+      <ProfileHistory profileData={profileData} />
       {isMine && (
-        <div className="row">
+        <div>
           <ProfileSecurity initIs2FA={profileData.two_factor_auth} />
         </div>
       )}

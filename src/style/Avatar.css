@@ -2,8 +2,9 @@
 
 .avatar-img {
   object-fit: cover;
-  border: 2px solid blue;
+  border: 3px solid goldenrod;
 }
+
 
 .avatar {
   position: relative;
@@ -37,6 +38,7 @@
 }
 
 .edit-icon {
-  font-size: 24px;
-  color: #000;
+  font-size: 30px;
+  color: #ffffff;
+	text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }

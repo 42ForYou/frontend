@@ -1,17 +1,26 @@
 import React from "react";
 
-const ListItemRow = ({ itemRow, ItemComponent, onOccurChange }) => (
-  <div className="ListItemRow flex-grow-1 d-flex align-items-center">
-    {itemRow.map((item, itemIndex) => (
-      <div
-        className={`ListItem flex-grow-1 flex-shrink-0 ${itemIndex !== itemRow.length - 1 ? "me-5" : ""}`}
-        key={itemIndex}
-        style={{ flexBasis: 0 }}>
-        <ItemComponent {...item} onOccurChange={onOccurChange} />
-      </div>
-    ))}
-  </div>
-);
+const ListItemRow = ({ itemRow, ItemComponent, onOccurChange, itemsPerRow }) => {
+  const marginRight = 20;
+  const colClass = `col-${Math.floor(12 / itemsPerRow)}`;
+  const itemStyle = {
+    marginRight: `${itemRow.length - 1 ? marginRight + "px" : 0}`,
+    flex: `0 0 calc((100% - ${marginRight * (itemsPerRow - 1)}px) / ${itemsPerRow})`,
+  };
+
+  return (
+    <div className="ListItemRow d-flex align-items-center mb-3">
+      {itemRow.map((item, itemIndex) => (
+        <div
+          className={`ListItem ${colClass} ${itemIndex !== itemRow.length - 1 ? "me-3" : ""}`} // Bootstrap의 me-3 클래스를 사용하여 마진을 적용합니다.
+          key={itemIndex}
+          style={itemStyle}>
+          <ItemComponent {...item} onOccurChange={onOccurChange} />
+        </div>
+      ))}
+    </div>
+  );
+};
 
 const ListItems = ({ itemsData, ItemComponent, itemsPerRow, emptyMsg, onOccurChange }) => {
   // 데이터를 행 단위로 나누어 2차원 배열로 반환하는 함수
@@ -30,9 +39,15 @@ const ListItems = ({ itemsData, ItemComponent, itemsPerRow, emptyMsg, onOccurCha
   const displayMessage = !itemsData ? loadFailMsg : itemsData.length === 0 ? emptyMsg : null;
 
   return (
-    <div className="ListItems flex-grow-1 d-flex flex-column px-4">
+    <div className="ListItems flex-grow-1 d-flex flex-column px-4 mt-3">
       {itemRows.map((itemRow, rowIndex) => (
-        <ListItemRow itemRow={itemRow} ItemComponent={ItemComponent} onOccurChange={onOccurChange} key={rowIndex} />
+        <ListItemRow
+          itemRow={itemRow}
+          ItemComponent={ItemComponent}
+          itemsPerRow={itemsPerRow}
+          onOccurChange={onOccurChange}
+          key={rowIndex}
+        />
       ))}
       {displayMessage && (
         <div className="flex-grow-1 d-flex justify-content-center align-items-center text-center">{displayMessage}</div>
