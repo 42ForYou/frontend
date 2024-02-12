@@ -35,7 +35,8 @@ const ListItems = ({ itemsData, ItemComponent, itemsPerRow, emptyMsg, onOccurCha
   };
 
   const itemRows = createItemRows(itemsData, itemsPerRow);
-  const loadFailMsg = "데이터 로드에 실패했습니다.";
+  // todo: 데이터 로드 실패한 경우와 로드 중인 상황을 구분하여 메시지를 표시
+  const loadFailMsg = "데이터 로드 중...";
   const displayMessage = !itemsData ? loadFailMsg : itemsData.length === 0 ? emptyMsg : null;
 
   return (

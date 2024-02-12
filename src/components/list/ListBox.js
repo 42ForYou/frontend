@@ -4,6 +4,7 @@ import ListItems from "./ListItems";
 import ListPagination from "./ListPagination";
 import useFetchListItems from "../../hooks/useFetchListItems";
 import SearchBar from "../common/SearchBar";
+import Loading from "../common/Loading";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -62,18 +63,17 @@ const ListBox = ({
           rightButton={additionalButton}
         />
       )}
-      {isLoading ? (
-        <div>Loading...</div>
-      ) : (
-        <ListItems
-          itemsData={itemsData}
-          ItemComponent={ItemComponent}
-          itemsPerRow={itemsPerRow}
-          emptyMsg={emptyMsg}
-          onOccurChange={reloadListItems}
-        />
-      )}
-      {!isLoading && itemsData && (
+      {/* 차후 로딩 애니메이션 고려 */}
+      {/* {isLoading ? ( <Loading />) : (<ListItems/>)} */}
+      <ListItems
+        itemsData={itemsData}
+        ItemComponent={ItemComponent}
+        itemsPerRow={itemsPerRow}
+        emptyMsg={emptyMsg}
+        onOccurChange={reloadListItems}
+      />
+      {/* {!isLoading && itemsData && ( */}
+      {itemsData && itemsData.length > 0 && (
         <ListPagination totalPage={totalPage} currentPage={state.currentPage} onPaginationClick={handleChangePage} />
       )}
     </div>
