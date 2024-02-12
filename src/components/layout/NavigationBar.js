@@ -53,7 +53,7 @@ const NavUser = () => {
 
 const NavLogo = () => {
   return (
-    <h1 className="NavLogo mt-3 mb-5">
+    <h1 className="NavLogo mt-3 mb-4">
       <Link to="/">
         <img src={`${process.env.ASSETS_URL}/logo-3-color3.png`} alt="logo" />
       </Link>

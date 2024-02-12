@@ -1,3 +1,9 @@
+html, body {
+  height: 100vh;
+  margin: 0;
+  /* overflow: hidden; */
+}
+
 .PageContainer {
   display: flex;
   flex-direction: row;
