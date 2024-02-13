@@ -18,6 +18,8 @@ const UserListBox = () => {
         itemsPerPage={6}
         itemsPerRow={3}
         placeholder={"검색할 유저의 닉네임을 입력하세요"}
+        maxLength={16}
+        alertMessage={"검색어 키워드를 16자 이하로 입력해주세요."}
       />
     </>
   );
