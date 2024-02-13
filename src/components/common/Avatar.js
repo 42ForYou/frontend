@@ -3,11 +3,14 @@ import { Link } from "react-router-dom";
 
 const Avatar = ({ src, alt, to, isEditing = false, onImageUploadClick = null, diameter = 100, isOnline = null }) => {
   const getImageSrc = (src) => {
-    if (!src || src === "default.jpg") return `${process.env.ASSETS_URL}/images/default-avatar.jpg`;
+    // todo: process.env.ASSETS_URL값이 존재하나 유효하지 않은 경우 처리
+    if (!process.env.ASSETS_URL) return;
+    if (!src || src === "") return `${process.env.ASSETS_URL}/images/default-avatar.jpg`;
     return `${process.env.API_BASE_URL}/images/avatar/${src}`;
   };
 
   const handleImageLoadFailed = (e) => {
+    if (!process.env.ASSETS_URL) return;
     e.target.src = `${process.env.ASSETS_URL}/images/loading-failed.png`;
   };
 
