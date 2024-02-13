@@ -7,8 +7,22 @@ export const SocketProvider = ({ children }) => {
   const [socket, setSocket] = useState(null);
 
   useEffect(() => {
-    const socketInstance = io(process.env.SOCKET_URL);
+    const socketInstance = io(process.env.SOCKET_URL, {
+      withCredentials: true,
+    });
     setSocket(socketInstance);
+
+    socketInstance.on("connect", () => {
+      console.log("Socket connected:", socketInstance.id);
+    });
+
+    socketInstance.on("connect_error", (err) => {
+      console.error("Socket connection error:", err);
+    });
+
+    socketInstance.on("disconnect", (reason) => {
+      console.log("Socket disconnected:", reason);
+    });
 
     return () => {
       socketInstance.disconnect();
