@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 // context
 import { AuthProvider } from "./context/AuthContext";
+import { SocketProvider } from "./context/socketContext";
 
 // page
 import HomePage from "./pages/HomePage";
@@ -24,7 +25,9 @@ const App = () => {
   return (
     <BrowserRouter>
       <AuthProvider>
-        <AppContent />
+        <SocketProvider>
+          <AppContent />
+        </SocketProvider>
       </AuthProvider>
     </BrowserRouter>
   );
