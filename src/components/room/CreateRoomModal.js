@@ -1,7 +1,7 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CustomModal from "../common/CustomModal";
-import AuthContext, { useAuth } from "../../context/AuthContext";
+import { useAuth } from "../../context/AuthContext";
 import { post } from "../../utils/apiBase";
 import { API_ENDPOINTS } from "../../utils/apiEndpoints";
 import RadioSelector from "../common/RadioSelector";

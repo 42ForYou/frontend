@@ -1,8 +1,8 @@
-import React, { useContext } from "react";
+import React from "react";
 import Avatar from "../common/Avatar";
 import StyledButton from "../common/StyledButton";
 import { useNavigate } from "react-router-dom";
-import AuthContext, { useAuth } from "../../context/AuthContext";
+import { useAuth } from "../../context/AuthContext";
 import { del } from "../../utils/apiBase";
 import { API_ENDPOINTS } from "../../utils/apiEndpoints";
 import { useSocket } from "../../context/SocketContext";

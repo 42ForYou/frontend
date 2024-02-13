@@ -1,8 +1,9 @@
-import React, { useEffect } from "react";
+import React from "react";
 import ContentContainer from "../components/layout/ContentContainer";
 import ContentBody from "../components/layout/ContentBody";
 import ContentTitle from "../components/layout/ContentTitle";
 
+// todo: 랜덤 매칭 컴포너트 추가
 const HomePage = () => {
   return (
     <div className="HomePage">

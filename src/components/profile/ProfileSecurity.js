@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import ToggleButton from "../common/ToggleButton";
 import usePatchProfile from "../../hooks/usePatchProfile";
 import StyledButton from "../common/StyledButton";

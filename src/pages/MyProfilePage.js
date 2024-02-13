@@ -1,6 +1,5 @@
 import React from "react";
 import ProfileBox from "../components/profile/ProfileBox";
-import LoadingPage from "./LoadingPage";
 import { useAuth } from "../context/AuthContext";
 import useFetchProfileData from "../hooks/useFetchProfileData";
 import ContentContainer from "../components/layout/ContentContainer";

@@ -1,5 +1,5 @@
-import { useContext, useState } from "react";
-import AuthContext, { useAuth } from "../context/AuthContext";
+import { useState } from "react";
+import { useAuth } from "../context/AuthContext";
 import { patchForm } from "../utils/apiBase";
 import { API_ENDPOINTS } from "../utils/apiEndpoints";
 
