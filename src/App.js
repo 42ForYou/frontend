@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 // context
 import { AuthProvider } from "./context/AuthContext";
+import { SocketProvider } from "./context/socketContext";
 
 // page
 import HomePage from "./pages/HomePage";
@@ -19,12 +20,15 @@ import NotFoundPage from "./pages/error/NotFoundPage";
 
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import MainLayout from "./components/layout/MainLayout";
+import ChatPage from "./pages/chatPage";
 
 const App = () => {
   return (
     <BrowserRouter>
       <AuthProvider>
-        <AppContent />
+        <SocketProvider>
+          <AppContent />
+        </SocketProvider>
       </AuthProvider>
     </BrowserRouter>
   );
@@ -37,6 +41,7 @@ const AppContent = () => {
       <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/callback" element={<LoginCallbackPage />} />
+        <Route path="/chat" element={<ChatPage />} />
         {/* Protect routes */}
         <Route element={<ProtectedRoute />}>
           <Route element={<MainLayout />}>
