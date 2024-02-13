@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 import RoomItem from "../room/RoomItem";
 import ListBox from "../list/ListBox";

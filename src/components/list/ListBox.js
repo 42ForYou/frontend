@@ -4,7 +4,6 @@ import ListItems from "./ListItems";
 import ListPagination from "./ListPagination";
 import useFetchListItems from "../../hooks/useFetchListItems";
 import SearchBar from "../common/SearchBar";
-import Loading from "../common/Loading";
 
 const reducer = (state, action) => {
   switch (action.type) {

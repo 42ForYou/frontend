@@ -1,7 +1,7 @@
-import React, { useContext, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { STATUS } from "./ProfileInfo";
 import usePatchProfile from "../../hooks/usePatchProfile";
-import AuthContext, { useAuth } from "../../context/AuthContext";
+import { useAuth } from "../../context/AuthContext";
 import Avatar from "../common/Avatar";
 
 const HiddenImageUploader = ({ imgInputRef, handleAvatarChange }) => {

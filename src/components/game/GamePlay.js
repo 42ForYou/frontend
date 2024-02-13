@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useSocket } from "../../context/socketContext";
+import { useSocket } from "../../context/SocketContext";
 import PongScene from "./PongScene";
 import GameBracket from "./GameBracket";
 

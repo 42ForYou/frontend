@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 // context
 import { AuthProvider } from "./context/AuthContext";
-import { SocketProvider } from "./context/socketContext";
+import { SocketProvider } from "./context/SocketContext";
 
 // page
 import HomePage from "./pages/HomePage";

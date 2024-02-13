@@ -1,10 +1,11 @@
-import React, { useContext } from "react";
+import React from "react";
 import Avatar from "../common/Avatar";
 import StyledButton from "../common/StyledButton";
 import { useNavigate } from "react-router-dom";
-import AuthContext, { useAuth } from "../../context/AuthContext";
+import { useAuth } from "../../context/AuthContext";
 import { del } from "../../utils/apiBase";
 import { API_ENDPOINTS } from "../../utils/apiEndpoints";
+import { useSocket } from "../../context/SocketContext";
 
 const StartGameButton = ({ isActive }) => {
   const handleStartGame = () => {
@@ -160,6 +161,7 @@ const WaitingPlayersGrid = ({ players, host, isTournament }) => {
 
 const WaitingRoomBox = ({ gameData, roomData, playersData, myPlayerId }) => {
   const { loggedIn, isLoading } = useAuth();
+  const socket = useSocket();
 
   if (isLoading) {
     return <div>로딩 중...</div>;
@@ -178,13 +180,17 @@ const WaitingRoomBox = ({ gameData, roomData, playersData, myPlayerId }) => {
     }
   };
 
-  // todo: 페이지 뒤로가기나 URL 변경으로 인해 방을 나가게 되는 경우 백 서버에 반영 (웹소켓으로 이벤트 감지)
+  // 페이지 뒤로가기나 URL 변경으로 인해 방을 나가게 되는 경우
+  window.addEventListener("beforeunload", (event) => {
+    socket.emit("leave", { roomId: "방ID", userId: "사용자ID" });
+  });
+
   const exitRoomRequest = async () => {
     try {
       const resData = await del(API_ENDPOINTS.PLAYERS(myPlayerId));
-      console.log("방 나가기 성공", resData);
-      // todo: 현재 실시간으로 다른 유저가 있는 경우에만 방 폭파 요청
+      // todo: 프론트에서 방 폭파 요청을 보내는 것이 맞는지 확인
       if (amIHost && join_players !== 1) bombRoomRequest();
+      console.log("방 나가기 성공", resData);
       return true;
     } catch (error) {
       console.log("방 나가기 요청 실패: ", error);
