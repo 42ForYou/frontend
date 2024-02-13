@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 const Avatar = ({ src, alt, to, isEditing = false, onImageUploadClick = null, diameter = 100, isOnline = null }) => {
   const getImageSrc = (src) => {
-    if (!src || src === "default.jpg") return `${process.env.ASSETS_URL}/images/default-avatar.jpg`;
+    if (!src || src === "") return `${process.env.ASSETS_URL}/images/default-avatar.jpg`;
     return `${process.env.API_BASE_URL}/images/avatar/${src}`;
   };
 
