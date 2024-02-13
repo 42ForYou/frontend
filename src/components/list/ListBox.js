@@ -25,10 +25,9 @@ const ListBox = ({
   filterTypes,
   additionalButton,
   emptyMsg,
-  searchable = false,
   itemsPerPage,
   itemsPerRow,
-  placeholder,
+  searchBarProps = null,
 }) => {
   const initState = {
     currentFilter: filterTypes[0],
@@ -46,14 +45,14 @@ const ListBox = ({
     reloadListItems();
   }, [state.currentFilter, state.currentPage, state.searchKeyword]);
 
-  const handleChangeFilter = (filter) => dispatch({ type: "CHANGE_FILTER", payload: filter });
+  const handleChangeFilter = (filter) => dispatch({ type: " FCHANGE_FILTER", payload: filter });
   const handleChangePage = (page) => dispatch({ type: "CHANGE_PAGE", payload: page });
   const handleSearch = (keyword) => dispatch({ type: "SET_SEARCH_KEYWORD", payload: keyword });
 
   return (
     <div className="ListBox d-flex-col flex-grow-1">
-      {searchable && (
-        <SearchBar searchKeyword={state.searchKeyword} onSearch={handleSearch} placeholder={placeholder} />
+      {searchBarProps?.searchable && (
+        <SearchBar searchKeyword={state.searchKeyword} onSearch={handleSearch} {...searchBarProps} />
       )}
       {filterTypes.length >= 2 && (
         <ListFilter

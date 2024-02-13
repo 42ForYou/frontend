@@ -1,10 +1,18 @@
 import React, { useState } from "react";
 
-const SearchBar = ({ searchKeyword, placeholder, onSearch }) => {
+const SearchBar = ({ searchKeyword, placeholder, onSearch, maxLength, alertMessage }) => {
   const [inputValue, setInputValue] = useState(searchKeyword);
 
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
+      triggerSearch();
+    }
+  };
+
+  const triggerSearch = () => {
+    if (inputValue.length > maxLength) {
+      alert(alertMessage);
+    } else {
       onSearch(inputValue);
     }
   };
@@ -19,7 +27,7 @@ const SearchBar = ({ searchKeyword, placeholder, onSearch }) => {
         onChange={(e) => setInputValue(e.target.value)}
         onKeyDown={handleKeyPress}
       />
-      <button className="btn btn-secondary" onClick={() => onSearch(inputValue)} style={{ width: "150px" }}>
+      <button className="btn btn-secondary" onClick={triggerSearch} style={{ width: "150px" }}>
         검색
       </button>
     </div>
