@@ -69,7 +69,7 @@ export const SocketProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    connectNamespace("/");
+    connectNamespace("");
     connectNamespace("online_status");
   }, []);
 
