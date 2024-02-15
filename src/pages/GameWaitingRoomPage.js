@@ -1,8 +1,6 @@
 import React, { useEffect } from "react";
-import LoadingPage from "./LoadingPage";
 import WaitingRoomBox from "../components/waiting_room/WaitingRoomBox";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
-import useSyncWaitingRoomData from "../hooks/useSyncWaitingRoomData";
 import { useSocket } from "../context/SocketContext";
 import { del } from "../utils/apiBase";
 import { API_ENDPOINTS } from "../utils/apiEndpoints";
@@ -10,9 +8,8 @@ import { useTournament } from "../context/TournamentContext";
 
 // 차후 필요시 1대1, 토너먼트 방 분리
 const GameWaitingRoomPage = () => {
-  const { myPlayerId, roomId } = useTournament();
+  const { setTournamentData, gameData, roomData, playersData, myPlayerId } = useTournament();
   const navigate = useNavigate();
-  const { gameData, roomData, playersData, isLoading, loadError } = useSyncWaitingRoomData(roomId);
   const {
     connectNamespace,
     disconnectNamespace,
@@ -21,9 +18,14 @@ const GameWaitingRoomPage = () => {
     removeEventListeners,
     emitWithTimestamp,
   } = useSocket();
-  const namespace = `/game/room/${roomId}`;
+  const namespace = `/game/room/${roomData.id}`;
 
-  const handleDestroyRoom = () => {
+  const updateRoomHandler = (data) => {
+    setTournamentData(data);
+    console.log("방 정보 업데이트", data);
+  };
+
+  const roomDestroyedHandler = () => {
     alert("방이 삭제되었습니다.");
     navigate(-1);
   };
@@ -51,32 +53,26 @@ const GameWaitingRoomPage = () => {
       onDisconnect: (reason) => console.log(`${namespace} disconnected`, reason),
     });
 
-    setupEventListeners(namespace, [{ event: "destroyed", handler: handleDestroyRoom }]);
+    setupEventListeners(namespace, [
+      {
+        event: "update_room",
+        handler: updateRoomHandler,
+      },
+      { event: "destroyed", handler: roomDestroyedHandler },
+    ]);
 
     return () => {
-      removeEventListeners(namespace, ["destroyed"]);
+      removeEventListeners(namespace, ["update_room", "destroyed"]);
       disconnectNamespace(namespace);
     };
   }, [namespace, connectNamespace, disconnectNamespace]);
-
-  useEffect(() => {
-    if (!isLoading && loadError) {
-      alert("방 정보를 불러오는데 실패했습니다.");
-      handleAbortExit();
-    }
-  }, [isLoading, loadError, navigate]);
 
   // todo: 소켓 연결 상태 확인하여 페이지 렌더할 것인지 결정
   const isConnected = sockets[namespace]?.connected || false;
 
   return (
     <div className="GameWaitingRoomPage">
-      {!isLoading && loadError ? (
-        <WaitingRoomBox gameData={gameData} roomData={roomData} playersData={playersData} />
-      ) : (
-        <LoadingPage />
-      )}
-      {/* {waitingRoomData && isConnected ? <WaitingRoomBox {...waitingRoomData} /> : <LoadingPage />} */}
+      <WaitingRoomBox gameData={gameData} roomData={roomData} playersData={playersData} />
     </div>
   );
 };
