@@ -6,8 +6,8 @@ import { useSocket } from "../../context/SocketContext";
 
 const ExitRoomButton = () => {
   const navigate = useNavigate();
-  const { roomId, myPlayerId } = useTournament();
-  const namespace = `/game/room/${roomId}`;
+  const { roomData, myPlayerId } = useTournament();
+  const namespace = `/game/room/${roomData.id}`;
   const socket = useSocket().sockets[namespace];
 
   const handleNormalExit = async () => {
