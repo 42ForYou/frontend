@@ -2,11 +2,13 @@ import React from "react";
 import StyledButton from "../common/StyledButton";
 import { useNavigate } from "react-router-dom";
 import { useTournament } from "../../context/TournamentContext";
+import { useSocket } from "../../context/SocketContext";
 
 const ExitRoomButton = () => {
   const navigate = useNavigate();
   const { roomId, myPlayerId } = useTournament();
   const namespace = `/game/room/${roomId}`;
+  const socket = useSocket().sockets[namespace];
 
   const handleNormalExit = async () => {
     if (!window.confirm("게임 대기 방을 나가시겠습니까?")) return;
@@ -17,10 +19,8 @@ const ExitRoomButton = () => {
     } catch (error) {
       console.log("방 나가기 요청 실패: ", error);
     }
-    emitWithTimestamp(namespace, "exited", { player_id: myPlayerId });
+    socket.emitWithTime("exited", { player_id: myPlayerId });
   };
-
-  const handleExitRoom = () => {};
 
   return (
     <StyledButton

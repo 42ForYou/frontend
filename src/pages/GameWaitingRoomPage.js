@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import WaitingRoomBox from "../components/waiting_room/WaitingRoomBox";
-import { useNavigate, useParams, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useSocket } from "../context/SocketContext";
 import { del } from "../utils/apiBase";
 import { API_ENDPOINTS } from "../utils/apiEndpoints";
@@ -10,15 +10,9 @@ import { useTournament } from "../context/TournamentContext";
 const GameWaitingRoomPage = () => {
   const { setTournamentData, gameData, roomData, playersData, myPlayerId } = useTournament();
   const navigate = useNavigate();
-  const {
-    connectNamespace,
-    disconnectNamespace,
-    sockets,
-    setupEventListeners,
-    removeEventListeners,
-    emitWithTimestamp,
-  } = useSocket();
+  const { connectNamespace, disconnectNamespace, setupEventListeners, removeEventListeners } = useSocket();
   const namespace = `/game/room/${roomData.id}`;
+  const socket = useSocket().sockets[namespace];
 
   const updateRoomHandler = (data) => {
     setTournamentData(data);
@@ -39,7 +33,6 @@ const GameWaitingRoomPage = () => {
     } catch (error) {
       console.log("방 나가기 요청 실패: ", error);
     }
-    emitWithTimestamp(namespace, "exited", { player_id: myPlayerId });
   };
 
   useEffect(() => {
@@ -68,7 +61,7 @@ const GameWaitingRoomPage = () => {
   }, [namespace, connectNamespace, disconnectNamespace]);
 
   // todo: 소켓 연결 상태 확인하여 페이지 렌더할 것인지 결정
-  const isConnected = sockets[namespace]?.connected || false;
+  const isConnected = socket?.connected || false;
 
   return (
     <div className="GameWaitingRoomPage">

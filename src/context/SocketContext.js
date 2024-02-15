@@ -30,6 +30,12 @@ export const SocketProvider = ({ children }) => {
         if (onDisconnect) onDisconnect(reason);
       });
 
+      newSocket.emitWithTime = (event, data) => {
+        const timestamp = Math.floor(Date.now() / 1000);
+        const dataWithTimestamp = { ...data, t_event: timestamp };
+        newSocket.emit(event, dataWithTimestamp);
+      };
+
       setSockets((prevSockets) => ({ ...prevSockets, [namespace]: newSocket }));
     }
   };
@@ -65,15 +71,6 @@ export const SocketProvider = ({ children }) => {
       events.forEach((event) => {
         socket.off(event);
       });
-    }
-  };
-
-  const emitWithTimestamp = (namespace, event, data) => {
-    const socket = sockets[namespace];
-    if (socket) {
-      const timestamp = Math.floor(Date.now() / 1000);
-      const dataWithTimestamp = { ...data, t_event: timestamp };
-      socket.emit(event, dataWithTimestamp);
     }
   };
 
@@ -118,7 +115,6 @@ export const SocketProvider = ({ children }) => {
         disconnectNamespace,
         setupEventListeners,
         removeEventListeners,
-        emitWithTimestamp,
       }}>
       {children}
     </SocketContext.Provider>
