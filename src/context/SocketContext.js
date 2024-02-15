@@ -68,6 +68,15 @@ export const SocketProvider = ({ children }) => {
     }
   };
 
+  const emitWithTimestamp = (namespace, event, data) => {
+    const socket = sockets[namespace];
+    if (socket) {
+      const timestamp = Math.floor(Date.now() / 1000);
+      const dataWithTimestamp = { ...data, t_event: timestamp };
+      socket.emit(event, dataWithTimestamp);
+    }
+  };
+
   useEffect(() => {
     connectNamespace("");
     connectNamespace("online_status");
@@ -103,7 +112,14 @@ export const SocketProvider = ({ children }) => {
 
   return (
     <SocketContext.Provider
-      value={{ sockets, connectNamespace, disconnectNamespace, setupEventListeners, removeEventListeners }}>
+      value={{
+        sockets,
+        connectNamespace,
+        disconnectNamespace,
+        setupEventListeners,
+        removeEventListeners,
+        emitWithTimestamp,
+      }}>
       {children}
     </SocketContext.Provider>
   );
