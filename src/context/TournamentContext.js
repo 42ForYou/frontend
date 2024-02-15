@@ -3,10 +3,24 @@ import React, { useContext, useState } from "react";
 const Tournament = React.createContext();
 
 export const TournamentProvider = ({ children }) => {
-  const [roomId, setRoomId] = useState(null);
+  const [gameData, setGameData] = useState(null);
+  const [roomData, setRoomData] = useState(null);
+  const [playersData, setPlayersData] = useState(null);
   const [myPlayerId, setMyPlayerId] = useState(null);
 
-  return <Tournament.Provider value={{ roomId, setRoomId, myPlayerId, setMyPlayerId }}>{children}</Tournament.Provider>;
+  const setTournamentData = async (data) => {
+    const { game, room, players, my_player_id } = data;
+    setGameData(game);
+    setRoomData(room);
+    setPlayersData(players);
+    setMyPlayerId(my_player_id);
+  };
+
+  return (
+    <Tournament.Provider value={{ gameData, roomData, playersData, myPlayerId, setTournamentData }}>
+      {children}
+    </Tournament.Provider>
+  );
 };
 
 export const useTournament = () => useContext(Tournament);
