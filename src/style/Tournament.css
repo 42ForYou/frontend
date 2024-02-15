@@ -1,0 +1,15 @@
+.bracket .col {
+	border: 1px solid white;
+}
+
+.bracket .row {
+  display: flex; /* Flexbox 레이아웃을 활성화 */
+  flex-wrap: nowrap; /* 아이템들이 다음 줄로 넘어가지 않도록 설정 */
+  justify-content: center; /* 가운데 정렬 */
+  align-items: center; /* 세로 중앙 정렬 */
+}
+
+.bracket-box {
+	min-width: 5rem;
+	min-height:10rem;
+}
