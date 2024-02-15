@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSocket } from "../context/SocketContext";
 
-const useRoomData = (roomId) => {
+const useWaitingRoomDataSync = (roomId) => {
   const socket = useSocket();
   const [gameData, setGameData] = useState(null);
   const [roomData, setRoomData] = useState(null);
@@ -49,4 +49,4 @@ const useRoomData = (roomId) => {
   return { gameData, roomData, playersData, myPlayerId };
 };
 
-export default useRoomData;
+export default useWaitingRoomDataSync;
