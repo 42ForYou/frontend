@@ -6,7 +6,9 @@ const SocketContext = createContext();
 export const SocketProvider = ({ children }) => {
   const [sockets, setSockets] = useState({});
 
-  const connectNamespace = (namespace, { onConnect, onConnectError, onDisconnect }) => {
+  const connectNamespace = (namespace, lifecycleHandlers) => {
+    const { onConnect, onConnectError, onDisconnect } = lifecycleHandlers || {};
+
     if (!sockets[namespace]) {
       const newSocket = io(`${process.env.SOCKET_URL}/${namespace}`, {
         withCredentials: true,
