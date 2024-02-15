@@ -3,11 +3,11 @@ import { useSocket } from "../context/SocketContext";
 import { get } from "../utils/apiBase";
 import { API_ENDPOINTS } from "../utils/apiEndpoints";
 
-const useWaitingRoomDataSync = (roomId) => {
+const useSyncWaitingRoomData = (roomId) => {
   const [gameData, setGameData] = useState(null);
   const [roomData, setRoomData] = useState(null);
   const [playersData, setPlayersData] = useState(null);
-  const [myPlayerId, setMyPlayerId] = useState(null);
+  // const [myPlayerId, setMyPlayerId] = useState(null);
   const [isLoading, setIsLoading] = useState(true); // HTTP 요청 로딩 상태
   const [loadError, setLoadError] = useState(null); // HTTP 요청 오류
   const { sockets } = useSocket();
@@ -18,7 +18,8 @@ const useWaitingRoomDataSync = (roomId) => {
     setGameData(game);
     setRoomData(room);
     setPlayersData(players);
-    setMyPlayerId(my_player_id);
+    // todo: 필요한지 검토
+    // setMyPlayerId(my_player_id);
   };
 
   useEffect(() => {
@@ -53,7 +54,7 @@ const useWaitingRoomDataSync = (roomId) => {
     }
   }, [sockets, namespace]);
 
-  return { gameData, roomData, playersData, myPlayerId, isLoading, loadError };
+  return { gameData, roomData, playersData, isLoading, loadError };
 };
 
-export default useWaitingRoomDataSync;
+export default useSyncWaitingRoomData;

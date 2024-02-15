@@ -4,7 +4,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 // context
 import { AuthProvider } from "./context/AuthContext";
 import { SocketProvider } from "./context/SocketContext";
-import { PlayerProvider } from "./context/PlayerContext";
+import { TournamentProvider } from "./context/TournamentContext";
 
 // page
 import HomePage from "./pages/HomePage";
@@ -29,9 +29,9 @@ const App = () => {
     <BrowserRouter>
       <AuthProvider>
         <SocketProvider>
-          <PlayerProvider>
+          <TournamentProvider>
             <AppContent />
-          </PlayerProvider>
+          </TournamentProvider>
         </SocketProvider>
       </AuthProvider>
     </BrowserRouter>
