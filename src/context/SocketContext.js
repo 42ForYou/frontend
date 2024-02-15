@@ -10,6 +10,7 @@ export const SocketProvider = ({ children }) => {
     if (!sockets[namespace]) {
       const newSocket = io(`${process.env.SOCKET_URL}/${namespace}`, {
         withCredentials: true,
+        // 필요시 재연결 옵션 설정
       });
 
       newSocket.on("connect", () => {

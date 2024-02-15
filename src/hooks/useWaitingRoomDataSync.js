@@ -16,6 +16,7 @@ const useWaitingRoomDataSync = (roomId) => {
     setGameData(game);
     setRoomData(room);
     setPlayersData(players);
+    // todo: 소켓 통신의 경우에도 my_player_id를 받는지 확인
     setMyPlayerId(my_player_id);
   };
 
