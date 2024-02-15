@@ -1,9 +1,16 @@
 import React from "react";
 import StyledButton from "../common/StyledButton";
+import { useTournament } from "../../context/TournamentContext";
+import { useSocket } from "../../context/SocketContext";
 
 const StartGameButton = ({ isActive }) => {
+  const { roomData } = useTournament();
+  const namespace = `/game/room/${roomData.id}`;
+  const socket = useSocket().sockets[namespace];
+
   const handleStartGame = () => {
-    alert("게임 스타트 (미구현)");
+    if (!window.confirm("게임을 시작하시겠습니까?")) return;
+    socket.emitWithTime("start");
   };
 
   return (
