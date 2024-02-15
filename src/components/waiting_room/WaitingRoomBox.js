@@ -171,31 +171,13 @@ const WaitingRoomBox = ({ gameData, roomData, playersData, myPlayerId }) => {
   const { id: room_id, title, host, join_players } = roomData;
   const amIHost = host === loggedIn.nickname;
 
-  const bombRoomRequest = async () => {
-    try {
-      const resData = await del(API_ENDPOINTS.ROOM(room_id));
-      console.log("방 폭파 성공: ", resData);
-    } catch (error) {
-      console.log("방 폭파 요청 실패: ", error);
-    }
-  };
-
   // 페이지 뒤로가기나 URL 변경으로 인해 방을 나가게 되는 경우
-  window.addEventListener("beforeunload", (event) => {
-    socket.emit("leave", { roomId: "방ID", userId: "사용자ID" });
+  window.addEventListener("beforeunload", (e) => {
+    socket.emit("leave", { my_player_id: myPlayerId });
   });
 
   const exitRoomRequest = async () => {
-    try {
-      const resData = await del(API_ENDPOINTS.PLAYERS(myPlayerId));
-      // todo: 프론트에서 방 폭파 요청을 보내는 것이 맞는지 확인
-      if (amIHost && join_players !== 1) bombRoomRequest();
-      console.log("방 나가기 성공", resData);
-      return true;
-    } catch (error) {
-      console.log("방 나가기 요청 실패: ", error);
-    }
-    return false;
+    // todo: 퇴장 socketio 이벤트
   };
 
   return (
