@@ -30,6 +30,12 @@ export const SocketProvider = ({ children }) => {
         if (onDisconnect) onDisconnect(reason);
       });
 
+      newSocket.emitWithTime = (event, data) => {
+        const timestamp = Math.floor(Date.now() / 1000);
+        const dataWithTimestamp = { ...data, t_event: timestamp };
+        newSocket.emit(event, dataWithTimestamp);
+      };
+
       setSockets((prevSockets) => ({ ...prevSockets, [namespace]: newSocket }));
     }
   };
@@ -103,7 +109,13 @@ export const SocketProvider = ({ children }) => {
 
   return (
     <SocketContext.Provider
-      value={{ sockets, connectNamespace, disconnectNamespace, setupEventListeners, removeEventListeners }}>
+      value={{
+        sockets,
+        connectNamespace,
+        disconnectNamespace,
+        setupEventListeners,
+        removeEventListeners,
+      }}>
       {children}
     </SocketContext.Provider>
   );

@@ -1,3 +1,6 @@
+// todo: httpApiBase로 이름 변경
+// todo: 모든 데이터는 data로 감싸져오기 때문에 data.data로 반환하는 것 고려
+
 import axios from "axios";
 
 const axiosInstance = axios.create({

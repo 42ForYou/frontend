@@ -1,5 +1,6 @@
 import React from "react";
 import Avatar from "../common/Avatar";
+import { useAuth } from "../../context/AuthContext";
 
 const VStext = () => {
   return (

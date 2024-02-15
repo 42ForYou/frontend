@@ -1,45 +1,74 @@
-import React, { useEffect, useState } from "react";
-import LoadingPage from "./LoadingPage";
+import React, { useEffect } from "react";
 import WaitingRoomBox from "../components/waiting_room/WaitingRoomBox";
-import { useNavigate, useParams } from "react-router-dom";
-import useWaitingRoomDataSync from "../hooks/useWaitingRoomDataSync";
+import { useNavigate } from "react-router-dom";
 import { useSocket } from "../context/SocketContext";
+import { del } from "../utils/apiBase";
+import { API_ENDPOINTS } from "../utils/apiEndpoints";
+import { useTournament } from "../context/TournamentContext";
 
 // 차후 필요시 1대1, 토너먼트 방 분리
 const GameWaitingRoomPage = () => {
-  const { room_id } = useParams();
-  const { gameData, roomData, playersData, myPlayerId } = useWaitingRoomDataSync(room_id);
+  const { setTournamentData, gameData, roomData, playersData, myPlayerId, resetTournamentData } = useTournament();
   const navigate = useNavigate();
-  const socket = useSocket().sockets[`/game/room/${room_id}`];
+  const { connectNamespace, disconnectNamespace, setupEventListeners, removeEventListeners } = useSocket();
+  const namespace = `/game/room/${roomData.id}`;
+  const socket = useSocket().sockets[namespace];
 
-  const handleLeaveWaitingRoom = (e) => {
-    console.log("사용자가 방을 떠남");
-    if (socket) {
-      socket.emit("leave", { my_player_id: myPlayerId });
+  const updateRoomHandler = (data) => {
+    setTournamentData(data);
+    console.log("방 정보 업데이트", data);
+  };
+
+  const roomDestroyedHandler = () => {
+    alert("방이 삭제되었습니다.");
+    navigate(-1);
+  };
+
+  // todo: 소켓 통신 연결 실패하고 방 나가기 요청도 실패할시 처리가 안됨
+  const handleAbortExit = async () => {
+    try {
+      const resData = await del(API_ENDPOINTS.PLAYERS(myPlayerId));
+      navigate("/game/list");
+      console.log("방 나가기 성공", resData);
+    } catch (error) {
+      console.log("방 나가기 요청 실패: ", error);
     }
   };
 
   useEffect(() => {
-    window.addEventListener("beforeunload", handleLeaveWaitingRoom);
-    return () => {
-      window.removeEventListener("beforeunload", handleLeaveWaitingRoom);
-    };
-  }, [socket, myPlayerId]);
+    connectNamespace(namespace, {
+      onConnect: () => console.log(`${namespace} connected`),
+      onConnectError: (err) => {
+        console.error("소켓 연결 에러", err);
+        alert("실시간 통신 연결에 실패하였습니다.");
+        handleAbortExit();
+      },
+      onDisconnect: (reason) => {
+        console.log(`${namespace} disconnected`, reason);
+        resetTournamentData();
+      },
+    });
 
-  useEffect(() => {
-    if (!roomData) {
-      alert("방 정보를 불러오는데 실패했습니다.");
-      navigate(-1);
-    }
-  }, [roomData, navigate]);
+    setupEventListeners(namespace, [
+      {
+        event: "update_room",
+        handler: updateRoomHandler,
+      },
+      { event: "destroyed", handler: roomDestroyedHandler },
+    ]);
+
+    return () => {
+      removeEventListeners(namespace, ["update_room", "destroyed"]);
+      disconnectNamespace(namespace);
+    };
+  }, [namespace, connectNamespace, disconnectNamespace]);
+
+  // todo: 소켓 연결 상태 확인하여 페이지 렌더할 것인지 결정
+  const isConnected = socket?.connected || false;
 
   return (
     <div className="GameWaitingRoomPage">
-      {gameData && roomData && playersData ? (
-        <WaitingRoomBox gameData={gameData} roomData={roomData} playersData={playersData} myPlayerId={myPlayerId} />
-      ) : (
-        <LoadingPage />
-      )}
+      <WaitingRoomBox gameData={gameData} roomData={roomData} playersData={playersData} />
     </div>
   );
 };
