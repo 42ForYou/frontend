@@ -16,8 +16,16 @@ export const TournamentProvider = ({ children }) => {
     setMyPlayerId(my_player_id);
   };
 
+  const resetTournamentData = () => {
+    setGameData(null);
+    setRoomData(null);
+    setPlayersData(null);
+    setMyPlayerId(null);
+  };
+
   return (
-    <Tournament.Provider value={{ gameData, roomData, playersData, myPlayerId, setTournamentData }}>
+    <Tournament.Provider
+      value={{ gameData, roomData, playersData, myPlayerId, setTournamentData, resetTournamentData }}>
       {children}
     </Tournament.Provider>
   );
