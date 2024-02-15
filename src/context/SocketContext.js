@@ -6,7 +6,7 @@ const SocketContext = createContext();
 export const SocketProvider = ({ children }) => {
   const [sockets, setSockets] = useState({});
 
-  const connectNamespace = (namespace) => {
+  const connectNamespace = (namespace, { onConnect, onConnectError, onDisconnect }) => {
     if (!sockets[namespace]) {
       const newSocket = io(`${process.env.SOCKET_URL}/${namespace}`, {
         withCredentials: true,
@@ -15,14 +15,17 @@ export const SocketProvider = ({ children }) => {
 
       newSocket.on("connect", () => {
         console.log(`Socket[${namespace}] connected: `, newSocket.id);
+        if (onConnect) onConnect();
       });
 
       newSocket.on("connect_error", (err) => {
         console.error(`Socket[${namespace}] connection error: `, err);
+        if (onConnectError) onConnectError(err);
       });
 
       newSocket.on("disconnect", (reason) => {
         console.log(`Socket[${namespace}] disconnected: `, reason);
+        if (onDisconnect) onDisconnect(reason);
       });
 
       setSockets((prevSockets) => ({ ...prevSockets, [namespace]: newSocket }));
