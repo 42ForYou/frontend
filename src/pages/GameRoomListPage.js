@@ -1,5 +1,5 @@
 import React from "react";
-import RoomListBox from "../components/room/RoomListBox";
+import RoomListBox from "../components/room_list/RoomListBox";
 import ContentContainer from "../components/layout/ContentContainer";
 import ContentTitle from "../components/layout/ContentTitle";
 import ContentBody from "../components/layout/ContentBody";

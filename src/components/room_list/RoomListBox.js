@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 
-import RoomItem from "../room/RoomItem";
+import RoomItem from "./RoomItem";
 import ListBox from "../list/ListBox";
 import { API_ENDPOINTS } from "../../utils/apiEndpoints";
-import CreateRoomModal from "../room/CreateRoomModal";
+import CreateRoomModal from "./CreateRoomModal";
 import StyledButton from "../common/StyledButton";
 
 const RoomListBox = () => {
