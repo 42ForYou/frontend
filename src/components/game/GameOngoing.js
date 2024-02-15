@@ -1,9 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { useSocket } from "../../context/SocketContext";
 import PongScene from "./PongScene";
-import GameBracket from "./GameBracket";
+import TournamentBracket from "./TournamentBracket";
 
-const GamePlay = () => {
+const roundsData = [
+  {
+    matches: [
+      { participant1: "Player 1", participant2: "Player 2" },
+      { participant1: "Player 3", participant2: "Player 4" },
+    ],
+  },
+  {
+    matches: [{ participant1: "Winner 1", participant2: "Winner 2" }],
+  },
+  // 추가 라운드 정보를 이곳에 포함할 수 있습니다.
+];
+
+const GameOngoing = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const socket = useSocket();
 
@@ -20,7 +33,7 @@ const GamePlay = () => {
     }
   }, []);
 
-  return <div>{isPlaying ? <PongScene /> : <GameBracket />}</div>;
+  return <div>{isPlaying ? <PongScene /> : <TournamentBracket rounds={roundsData} />}</div>;
 };
 
-export default GamePlay;
+export default GameOngoing;
