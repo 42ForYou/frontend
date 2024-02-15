@@ -3,12 +3,23 @@ import { useSocket } from "../context/SocketContext";
 import { get } from "../utils/apiBase";
 import { API_ENDPOINTS } from "../utils/apiEndpoints";
 
-const useFetchWaitingRoomData = (roomId) => {
-  const [waitingRoomData, setWaitingRoomData] = useState(null);
+const useWaitingRoomDataSync = (roomId) => {
+  const [gameData, setGameData] = useState(null);
+  const [roomData, setRoomData] = useState(null);
+  const [playersData, setPlayersData] = useState(null);
+  const [myPlayerId, setMyPlayerId] = useState(null);
   const [isLoading, setIsLoading] = useState(true); // HTTP 요청 로딩 상태
   const [loadError, setLoadError] = useState(null); // HTTP 요청 오류
   const { sockets } = useSocket();
   const namespace = `/game/room/${roomId}`;
+
+  const setWaitingRoomData = (data) => {
+    const { game, room, players, my_player_id } = data;
+    setGameData(game);
+    setRoomData(room);
+    setPlayersData(players);
+    setMyPlayerId(my_player_id);
+  };
 
   useEffect(() => {
     const fetchWaitingRoomData = async () => {
@@ -42,7 +53,7 @@ const useFetchWaitingRoomData = (roomId) => {
     }
   }, [sockets, namespace]);
 
-  return { waitingRoomData, isLoading, loadError };
+  return { gameData, roomData, playersData, myPlayerId, isLoading, loadError };
 };
 
-export default useFetchWaitingRoomData;
+export default useWaitingRoomDataSync;

@@ -9,7 +9,7 @@ import { useSocket } from "../context/SocketContext";
 const GameWaitingRoomPage = () => {
   const navigate = useNavigate();
   const { room_id: roomId } = useParams();
-  const { waitingRoomData, isLoading, loadError } = useWaitingRoomDataSync(roomId);
+  const { gameData, roomData, playersData, myPlayerId, isLoading, loadError } = useWaitingRoomDataSync(roomId);
   const { connectNamespace, disconnectNamespace, sockets, setupEventListeners, removeEventListeners } = useSocket();
   const namespace = `/game/room/${roomId}`;
 
@@ -49,7 +49,11 @@ const GameWaitingRoomPage = () => {
 
   return (
     <div className="GameWaitingRoomPage">
-      {waitingRoomData ? <WaitingRoomBox {...waitingRoomData} /> : <LoadingPage />}
+      {!isLoading && loadError ? (
+        <WaitingRoomBox gameData={gameData} roomData={roomData} playersData={playersData} />
+      ) : (
+        <LoadingPage />
+      )}
       {/* {waitingRoomData && isConnected ? <WaitingRoomBox {...waitingRoomData} /> : <LoadingPage />} */}
     </div>
   );
