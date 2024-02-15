@@ -14,7 +14,14 @@ const GameWaitingRoomPage = () => {
   const navigate = useNavigate();
   const { room_id: roomId } = useParams();
   const { gameData, roomData, playersData, isLoading, loadError } = useWaitingRoomDataSync(roomId);
-  const { connectNamespace, disconnectNamespace, sockets, setupEventListeners, removeEventListeners } = useSocket();
+  const {
+    connectNamespace,
+    disconnectNamespace,
+    sockets,
+    setupEventListeners,
+    removeEventListeners,
+    emitWithTimestamp,
+  } = useSocket();
   const namespace = `/game/room/${roomId}`;
 
   const handleDestroyRoom = () => {
@@ -31,6 +38,7 @@ const GameWaitingRoomPage = () => {
     } catch (error) {
       console.log("방 나가기 요청 실패: ", error);
     }
+    emitWithTimestamp(namespace, "exited", { player_id: myPlayerId });
   };
 
   useEffect(() => {
