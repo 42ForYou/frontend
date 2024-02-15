@@ -15,12 +15,14 @@ const RoomItem = ({ game, room }) => {
     const postJoinRequest = async () => {
       try {
         const resData = await post(API_ENDPOINTS.PLAYERS(), { game_id: gameId });
-        navigate(`/game/waiting/${room_id}`);
+        const myPlayerId = resData.data.my_player_id;
+        navigate(`/game/waiting/${room_id}`, { state: { myPlayerId } });
         console.log("방 참가 요청 성공: ", resData);
       } catch (error) {
         console.log("방 참가 요청 실패: ", error);
         const errorReason = error.response.data.error;
         let alertMsg;
+        // todo: 에러 케이스 제대로 출력되는지 확인
         if (errorReason === "The game room is full") alertMsg = "게임 방 인원이 모두 찼습니다.";
         else if (errorReason === "The player is already participating") alertMsg = "이미 참가한 방입니다.";
         else if (errorReason === "The game room is already started") alertMsg = "게임이 이미 시작된 방입니다.";
