@@ -28,11 +28,11 @@ const StartGameButton = ({ isActive }) => {
   );
 };
 
-const ExitRoomButton = ({ handleExit }) => {
+const ExitRoomButton = () => {
   const navigate = useNavigate();
   const handleExitRoom = () => {
     if (!window.confirm("게임 대기 방을 나가시겠습니까?")) return;
-    if (handleExit()) navigate("/game/list");
+    navigate("/game/list");
   };
 
   return (
@@ -159,26 +159,15 @@ const WaitingPlayersGrid = ({ players, host, isTournament }) => {
   );
 };
 
-const WaitingRoomBox = ({ gameData, roomData, playersData, myPlayerId }) => {
+const WaitingRoomBox = ({ gameData, roomData, playersData }) => {
   const { loggedIn, isLoading } = useAuth();
-  const socket = useSocket();
-
-  if (isLoading) {
-    return <div>로딩 중...</div>;
-  }
-
   const { game_id, is_tournament, game_point, time_limit, n_players } = gameData;
   const { id: room_id, title, host, join_players } = roomData;
   const amIHost = host === loggedIn.nickname;
 
-  // 페이지 뒤로가기나 URL 변경으로 인해 방을 나가게 되는 경우
-  window.addEventListener("beforeunload", (e) => {
-    socket.emit("leave", { my_player_id: myPlayerId });
-  });
-
-  const exitRoomRequest = async () => {
-    // todo: 퇴장 socketio 이벤트
-  };
+  if (isLoading) {
+    return <div>로딩 중...</div>;
+  }
 
   return (
     <div className="WaitingRoomBox d-flex-col full-height">
@@ -193,7 +182,7 @@ const WaitingRoomBox = ({ gameData, roomData, playersData, myPlayerId }) => {
       <WaitingPlayersGrid players={playersData} host={host} isTournament={is_tournament || n_players === 4} />
       <div className="WaitingRoomButtons d-flex justify-content-end">
         {amIHost && <StartGameButton isActive={n_players === join_players} />}
-        <ExitRoomButton handleExit={exitRoomRequest} />
+        <ExitRoomButton />
       </div>
     </div>
   );
