@@ -8,7 +8,7 @@ import { useTournament } from "../context/TournamentContext";
 
 // 차후 필요시 1대1, 토너먼트 방 분리
 const GameWaitingRoomPage = () => {
-  const { setTournamentData, gameData, roomData, playersData, myPlayerId } = useTournament();
+  const { setTournamentData, gameData, roomData, playersData, myPlayerId, resetTournamentData } = useTournament();
   const navigate = useNavigate();
   const { connectNamespace, disconnectNamespace, setupEventListeners, removeEventListeners } = useSocket();
   const namespace = `/game/room/${roomData.id}`;
@@ -43,7 +43,10 @@ const GameWaitingRoomPage = () => {
         alert("실시간 통신 연결에 실패하였습니다.");
         handleAbortExit();
       },
-      onDisconnect: (reason) => console.log(`${namespace} disconnected`, reason),
+      onDisconnect: (reason) => {
+        console.log(`${namespace} disconnected`, reason);
+        resetTournamentData();
+      },
     });
 
     setupEventListeners(namespace, [
