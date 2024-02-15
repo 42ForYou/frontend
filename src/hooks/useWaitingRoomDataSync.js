@@ -3,60 +3,46 @@ import { useSocket } from "../context/SocketContext";
 import { get } from "../utils/apiBase";
 import { API_ENDPOINTS } from "../utils/apiEndpoints";
 
-const useWaitingRoomDataSync = (roomId) => {
-  const { sockets, connectNamespace, disconnectNamespace, setupEventListeners, removeEventListeners } = useSocket();
-  const [gameData, setGameData] = useState(null);
-  const [roomData, setRoomData] = useState(null);
-  const [playersData, setPlayersData] = useState(null);
-  const [myPlayerId, setMyPlayerId] = useState(null);
+const useFetchWaitingRoomData = (roomId) => {
+  const [waitingRoomData, setWaitingRoomData] = useState(null);
+  const [isLoading, setIsLoading] = useState(true); // HTTP 요청 로딩 상태
+  const [loadError, setLoadError] = useState(null); // HTTP 요청 오류
+  const { sockets } = useSocket();
   const namespace = `/game/room/${roomId}`;
 
-  const setNewRoomData = (newRoomData) => {
-    const { game, room, players, my_player_id } = newRoomData;
-    setGameData(game);
-    setRoomData(room);
-    setPlayersData(players);
-    // todo: 소켓 통신의 경우에도 my_player_id를 받는지 확인
-    setMyPlayerId(my_player_id);
-  };
-
   useEffect(() => {
-    connectNamespace(namespace);
-
-    const fetchWaitingRoomData = async (roomId) => {
+    const fetchWaitingRoomData = async () => {
+      setIsLoading(true);
       try {
-        const resData = await get(API_ENDPOINTS.ROOM(roomId));
-        setNewRoomData(resData.data);
+        const res = await get(API_ENDPOINTS.ROOM(roomId));
+        setWaitingRoomData(res.data);
+        setIsLoading(false);
       } catch (error) {
-        console.log("방 데이터 로드 실패: ", error);
+        console.error("대기방 데이터 로드 실패: ", error);
+        setLoadError(error);
+        setIsLoading(false);
       }
     };
 
-    fetchWaitingRoomData(roomId);
-  }, [namespace]);
+    fetchWaitingRoomData();
+  }, [roomId]);
 
   useEffect(() => {
-    if (!sockets[namespace]) return;
-    const eventListeners = [
-      {
-        event: "update_room",
-        handler: (data) => {
-          setNewRoomData(data);
-        },
-      },
-    ];
-    setupEventListeners(namespace, eventListeners);
+    const socket = sockets[namespace];
+    if (socket) {
+      const updateRoomHandler = (data) => {
+        setWaitingRoomData(data);
+      };
 
-    return () => {
-      removeEventListeners(
-        namespace,
-        eventListeners.map((listener) => listener.event)
-      );
-      disconnectNamespace(namespace);
-    };
+      socket.on("update_room", updateRoomHandler);
+
+      return () => {
+        socket.off("update_room", updateRoomHandler);
+      };
+    }
   }, [sockets, namespace]);
 
-  return { gameData, roomData, playersData, myPlayerId };
+  return { waitingRoomData, isLoading, loadError };
 };
 
-export default useWaitingRoomDataSync;
+export default useFetchWaitingRoomData;
