@@ -69,6 +69,20 @@ const GameWaitingRoomPage = () => {
     };
   }, [namespace]);
 
+  useEffect(() => {
+    const handleBeforeUnload = (event) => {
+      event.preventDefault();
+      event.returnValue = "";
+      socket.emitWithTime("exited", { player_id: myPlayerId });
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
+
   // todo: 소켓 연결 상태 확인하여 페이지 렌더할 것인지 결정
   const isConnected = socket?.connected || false;
 
