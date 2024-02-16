@@ -62,7 +62,7 @@ const FriendItem = ({ id: friend_id, status, friend, onOccurChange }) => {
             src={avatar}
             alt={`친구 ${nickname}의 아바타`}
             to={`/profile/users/${intra_id}`}
-            isOnline={currentIsOnline}
+            onlineStatus={currentIsOnline ? "online" : "offline"}
           />
         </div>
         <div className="col">
