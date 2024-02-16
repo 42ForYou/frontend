@@ -9,7 +9,7 @@ import { API_ENDPOINTS } from "../../utils/apiEndpoints";
 const ExitRoomButton = () => {
   const navigate = useNavigate();
   const { roomData, myPlayerId } = useTournament();
-  const namespace = `/game/room/${roomData.id}`;
+  const namespace = `/game/room/${roomData?.id}`;
   const socket = useSocket().sockets[namespace];
 
   const handleNormalExit = async () => {
