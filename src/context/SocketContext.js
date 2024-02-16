@@ -1,10 +1,12 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import io from "socket.io-client";
+import { useAuth } from "./AuthContext";
 
 const SocketContext = createContext();
 
 export const SocketProvider = ({ children }) => {
   const [sockets, setSockets] = useState({});
+  const { loggedIn } = useAuth();
 
   const connectNamespace = (namespace, lifecycleHandlers) => {
     const { onConnect, onConnectError, onDisconnect } = lifecycleHandlers || {};
@@ -75,9 +77,10 @@ export const SocketProvider = ({ children }) => {
   };
 
   useEffect(() => {
+    if (!loggedIn) return;
     connectNamespace("");
     connectNamespace("online_status");
-  }, []);
+  }, [loggedIn]);
 
   useEffect(() => {
     const onlineStatusSocket = sockets["online_status"];
