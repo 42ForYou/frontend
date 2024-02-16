@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useTournament } from "../../context/TournamentContext";
 import { useSocket } from "../../context/SocketContext";
 import { del } from "../../utils/apiBase";
+import { API_ENDPOINTS } from "../../utils/apiEndpoints";
 
 const ExitRoomButton = () => {
   const navigate = useNavigate();
