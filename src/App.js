@@ -5,6 +5,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import { SocketProvider } from "./context/SocketContext";
 import { TournamentProvider } from "./context/TournamentContext";
+import { OnlineStatusProvider } from "./context/OnlineStatusContext";
 
 // page
 import HomePage from "./pages/HomePage";
@@ -23,7 +24,7 @@ import ProtectedRoute from "./components/auth/ProtectedRoute";
 import MainLayout from "./components/layout/MainLayout";
 import ChatPage from "./pages/chatPage";
 
-// todo: PlayserProvider는 필요한 컴포넌트에만 공급 검토
+// todo: Tournament, OnlineStatus는 필요한 컴포넌트에만 공급 검토
 const App = () => {
   return (
     <BrowserRouter>
