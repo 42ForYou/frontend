@@ -83,24 +83,6 @@ export const SocketProvider = ({ children }) => {
   }, [loggedIn]);
 
   useEffect(() => {
-    const onlineStatusSocket = sockets["/online_status"];
-    if (onlineStatusSocket) {
-      setupEventListeners("/online_status", [
-        {
-          event: "friends_update",
-          handler: (data) => {
-            console.log("friends_update", data);
-          },
-        },
-      ]);
-
-      return () => {
-        onlineStatusSocket.off("friends_update");
-      };
-    }
-  }, [sockets]);
-
-  useEffect(() => {
     return () => {
       Object.values(sockets).forEach((socket) => {
         if (socket.connected) {
