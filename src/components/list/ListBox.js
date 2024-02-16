@@ -18,6 +18,7 @@ const reducer = (state, action) => {
   }
 };
 
+// todo: 데이터를 갖고오는 로직을 커스텀 훅으로 분리
 const ListBox = ({
   apiEndpoint,
   ItemComponent,

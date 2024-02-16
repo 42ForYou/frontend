@@ -86,24 +86,6 @@ export const SocketProvider = ({ children }) => {
   }, [loggedIn]);
 
   useEffect(() => {
-    const onlineStatusSocket = sockets["/online_status"];
-    if (onlineStatusSocket) {
-      setupEventListeners("/online_status", [
-        {
-          event: "friends_update",
-          handler: (data) => {
-            console.log("friends_update", data);
-          },
-        },
-      ]);
-
-      return () => {
-        onlineStatusSocket.off("friends_update");
-      };
-    }
-  }, [sockets]);
-
-  useEffect(() => {
     return () => {
       console.log("모든 소켓 객체의 연결을 끊음");
       Object.values(sockets).forEach((socket) => {
