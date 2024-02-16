@@ -12,7 +12,7 @@ export const SocketProvider = ({ children }) => {
     const { onConnect, onConnectError, onDisconnect } = lifecycleHandlers || {};
 
     if (!sockets[namespace]) {
-      const newSocket = io(`${process.env.SOCKET_URL}/${namespace}`, {
+      const newSocket = io(`${process.env.SOCKET_URL}${namespace}`, {
         withCredentials: true,
         // 필요시 재연결 옵션 설정
       });
@@ -78,14 +78,14 @@ export const SocketProvider = ({ children }) => {
 
   useEffect(() => {
     if (!loggedIn) return;
-    connectNamespace("");
-    connectNamespace("online_status");
+    connectNamespace("/");
+    connectNamespace("/online_status");
   }, [loggedIn]);
 
   useEffect(() => {
-    const onlineStatusSocket = sockets["online_status"];
+    const onlineStatusSocket = sockets["/online_status"];
     if (onlineStatusSocket) {
-      setupEventListeners("online_status", [
+      setupEventListeners("/online_status", [
         {
           event: "friends_update",
           handler: (data) => {
