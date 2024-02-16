@@ -22,7 +22,7 @@ import NotFoundPage from "./pages/error/NotFoundPage";
 
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import MainLayout from "./components/layout/MainLayout";
-import ChatPage from "./pages/chatPage";
+import ChatPage from "./pages/ChatPage";
 
 // todo: Tournament, OnlineStatus는 필요한 컴포넌트에만 공급 검토
 const App = () => {
