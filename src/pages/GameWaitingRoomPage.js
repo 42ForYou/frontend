@@ -11,7 +11,7 @@ const GameWaitingRoomPage = () => {
   const { setTournamentData, gameData, roomData, playersData, myPlayerId, resetTournamentData } = useTournament();
   const navigate = useNavigate();
   const { connectNamespace, disconnectNamespace, setupEventListeners, removeEventListeners } = useSocket();
-  const namespace = `/game/room/${roomData.id}`;
+  const namespace = `/game/room/${roomData?.id}`;
   const socket = useSocket().sockets[namespace];
 
   const updateRoomHandler = (data) => {
@@ -36,6 +36,12 @@ const GameWaitingRoomPage = () => {
   };
 
   useEffect(() => {
+    // 존재하지 않는 방에 들어갔거나 룸 데이터가 없는 상태로 입장 시도하는 경우
+    if (!roomData || !roomData.id) {
+      alert("입장할 수 없는 방입니다.");
+      navigate(-1);
+    }
+
     connectNamespace(namespace, {
       onConnect: () => console.log(`${namespace} connected`),
       onConnectError: (err) => {
@@ -61,14 +67,30 @@ const GameWaitingRoomPage = () => {
       removeEventListeners(namespace, ["update_room", "destroyed"]);
       disconnectNamespace(namespace);
     };
-  }, [namespace, connectNamespace, disconnectNamespace]);
+  }, [namespace]);
+
+  useEffect(() => {
+    const handleBeforeUnload = (event) => {
+      event.preventDefault();
+      event.returnValue = "";
+      socket.emitWithTime("exited", { player_id: myPlayerId });
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
 
   // todo: 소켓 연결 상태 확인하여 페이지 렌더할 것인지 결정
   const isConnected = socket?.connected || false;
 
   return (
     <div className="GameWaitingRoomPage">
-      <WaitingRoomBox gameData={gameData} roomData={roomData} playersData={playersData} />
+      {gameData && roomData && playersData && (
+        <WaitingRoomBox gameData={gameData} roomData={roomData} playersData={playersData} />
+      )}
     </div>
   );
 };

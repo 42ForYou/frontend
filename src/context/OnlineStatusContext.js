@@ -9,6 +9,7 @@ export const OnlineStatusProvider = ({ children }) => {
 
   useEffect(() => {
     const handleOnlineStatusUpdate = (data) => {
+      console.log("onlineStatus Updated: ", data);
       setOnlineStatuses((prev) => ({
         ...prev,
         [data.intra_id]: data.is_online,
