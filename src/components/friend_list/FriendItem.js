@@ -1,16 +1,25 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Avatar from "../common/Avatar";
 import StyledButton from "../common/StyledButton";
 import { del, patch } from "../../utils/apiBase";
 import { API_ENDPOINTS } from "../../utils/apiEndpoints";
+import { useOnlineStatus } from "../../context/OnlineStatusContext";
 
-const FriendItem = ({ id, status, friend, onOccurChange }) => {
-  const { intra_id, nickname, avatar, is_online } = friend;
+const FriendItem = ({ id: friend_id, status, friend, onOccurChange }) => {
+  const { intra_id, nickname, avatar } = friend;
+  const [currentIsOnline, setCurrentIsOnline] = useState(friend.is_online);
+  const onlineStatuses = useOnlineStatus();
+
+  useEffect(() => {
+    if (onlineStatuses.hasOwnProperty(intra_id)) {
+      setCurrentIsOnline(onlineStatuses[intra_id]);
+    }
+  }, [onlineStatuses, intra_id]);
 
   const handleAcceptFriend = () => {
     const patchFriend = async () => {
       try {
-        const resData = await patch(`${API_ENDPOINTS.FRIENDS()}${id}/`);
+        const resData = await patch(`${API_ENDPOINTS.FRIENDS()}${friend_id}/`);
         onOccurChange();
         alert("친구 요청을 수락하였습니다.");
         console.log("친구 요청 수락 성공:", resData);
@@ -53,7 +62,7 @@ const FriendItem = ({ id, status, friend, onOccurChange }) => {
             src={avatar}
             alt={`친구 ${nickname}의 아바타`}
             to={`/profile/users/${intra_id}`}
-            isOnline={is_online}
+            isOnline={currentIsOnline}
           />
         </div>
         <div className="col">
