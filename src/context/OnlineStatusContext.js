@@ -9,10 +9,10 @@ export const OnlineStatusProvider = ({ children }) => {
 
   useEffect(() => {
     const handleOnlineStatusUpdate = (data) => {
-      console.log("onlineStatus Updated: ", data);
+      const friend = data.friend;
       setOnlineStatuses((prev) => ({
         ...prev,
-        [data.intra_id]: data.is_online,
+        [friend.intra_id]: friend.is_online,
       }));
     };
 
