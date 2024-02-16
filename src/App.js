@@ -31,7 +31,9 @@ const App = () => {
       <AuthProvider>
         <SocketProvider>
           <TournamentProvider>
-            <AppContent />
+            <OnlineStatusProvider>
+              <AppContent />
+            </OnlineStatusProvider>
           </TournamentProvider>
         </SocketProvider>
       </AuthProvider>
