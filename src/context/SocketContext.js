@@ -105,13 +105,14 @@ export const SocketProvider = ({ children }) => {
 
   useEffect(() => {
     return () => {
+      console.log("모든 소켓 객체의 연결을 끊음");
       Object.values(sockets).forEach((socket) => {
         if (socket.connected) {
           socket.disconnect();
         }
       });
     };
-  }, [sockets]);
+  }, []);
 
   return (
     <SocketContext.Provider
