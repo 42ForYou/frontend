@@ -12,7 +12,7 @@ export const SocketProvider = ({ children }) => {
     const { onConnect, onConnectError, onDisconnect } = lifecycleHandlers || {};
 
     if (!sockets[namespace]) {
-      const newSocket = io(`${process.env.SOCKET_URL}/${namespace}`, {
+      const newSocket = io(`${process.env.SOCKET_URL}${namespace}`, {
         withCredentials: true,
         reconnection: true, // 재연결 활성화
         reconnectionAttempts: 5, // 최대 재연결 시도 횟수
@@ -81,14 +81,14 @@ export const SocketProvider = ({ children }) => {
 
   useEffect(() => {
     if (!loggedIn) return;
-    connectNamespace("");
-    connectNamespace("online_status");
+    connectNamespace("/");
+    connectNamespace("/online_status");
   }, [loggedIn]);
 
   useEffect(() => {
-    const onlineStatusSocket = sockets["online_status"];
+    const onlineStatusSocket = sockets["/online_status"];
     if (onlineStatusSocket) {
-      setupEventListeners("online_status", [
+      setupEventListeners("/online_status", [
         {
           event: "friends_update",
           handler: (data) => {
