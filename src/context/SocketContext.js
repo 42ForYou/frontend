@@ -79,21 +79,27 @@ export const SocketProvider = ({ children }) => {
     }
   };
 
+  const disconnectAllSockets = () => {
+    console.log("모든 소켓 객체의 연결을 해제합니다.");
+    Object.values(sockets).forEach((socket) => {
+      if (socket.connected) {
+        socket.disconnect();
+      }
+    });
+    setSockets({});
+  };
+
   useEffect(() => {
-    if (!loggedIn) return;
-    connectNamespace("/");
-    connectNamespace("/online_status");
+    if (loggedIn) {
+      connectNamespace("/");
+      connectNamespace("/online_status");
+    } else {
+      disconnectAllSockets();
+    }
   }, [loggedIn]);
 
   useEffect(() => {
-    return () => {
-      console.log("모든 소켓 객체의 연결을 끊음");
-      Object.values(sockets).forEach((socket) => {
-        if (socket.connected) {
-          socket.disconnect();
-        }
-      });
-    };
+    return () => disconnectAllSockets();
   }, []);
 
   return (
