@@ -49,7 +49,6 @@ export const SocketProvider = ({ children }) => {
   const disconnectNamespace = (namespace) => {
     setSockets((currentSockets) => {
       const socket = currentSockets[namespace];
-      console.log("disconnectNamespace", namespace, socket);
       if (socket) {
         socket.disconnect();
         const updatedSockets = { ...currentSockets };

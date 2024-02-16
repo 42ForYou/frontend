@@ -7,7 +7,6 @@ import { API_ENDPOINTS } from "../utils/apiEndpoints";
 import { useTournament } from "../context/TournamentContext";
 import { useAuth } from "../context/AuthContext";
 
-// 차후 필요시 1대1, 토너먼트 방 분리
 const GameWaitingRoomPage = () => {
   const { loggedIn } = useAuth();
   const { setGameData, setRoomData, setPlayersData, gameData, roomData, playersData, myPlayerId, resetTournamentData } =
@@ -41,10 +40,10 @@ const GameWaitingRoomPage = () => {
   };
 
   useEffect(() => {
-    // 존재하지 않는 방에 들어갔거나 룸 데이터가 없는 상태로 입장 시도하는 경우
     if (!roomData || !roomData.id) {
       alert("입장할 수 없는 방입니다.");
       navigate("/game/list");
+      return;
     }
     connectNamespace(namespace, {
       onConnect: () => console.log(`${namespace} connected`),
@@ -60,10 +59,9 @@ const GameWaitingRoomPage = () => {
     });
 
     return () => {
-      removeEventListeners(namespace, ["update_room", "destroyed"]);
       disconnectNamespace(namespace);
     };
-  }, []);
+  }, [namespace]);
 
   useEffect(() => {
     if (sockets[namespace]) {
