@@ -12,9 +12,12 @@ export const SocketProvider = ({ children }) => {
     const { onConnect, onConnectError, onDisconnect } = lifecycleHandlers || {};
 
     if (!sockets[namespace]) {
-      const newSocket = io(`${process.env.SOCKET_URL}/${namespace}`, {
+      const newSocket = io(`${process.env.SOCKET_URL}${namespace}`, {
         withCredentials: true,
-        // 필요시 재연결 옵션 설정
+        reconnection: true, // 재연결 활성화
+        reconnectionAttempts: 5, // 최대 재연결 시도 횟수
+        reconnectionDelay: 2000, // 처음 재연결 시도 간격 (ms)
+        reconnectionDelayMax: 5000, // 재연결 시도 간격의 최대값 (ms)
       });
 
       newSocket.on("connect", () => {
@@ -78,14 +81,14 @@ export const SocketProvider = ({ children }) => {
 
   useEffect(() => {
     if (!loggedIn) return;
-    connectNamespace("");
-    connectNamespace("online_status");
+    connectNamespace("/");
+    connectNamespace("/online_status");
   }, [loggedIn]);
 
   useEffect(() => {
-    const onlineStatusSocket = sockets["online_status"];
+    const onlineStatusSocket = sockets["/online_status"];
     if (onlineStatusSocket) {
-      setupEventListeners("online_status", [
+      setupEventListeners("/online_status", [
         {
           event: "friends_update",
           handler: (data) => {
@@ -102,13 +105,14 @@ export const SocketProvider = ({ children }) => {
 
   useEffect(() => {
     return () => {
+      console.log("모든 소켓 객체의 연결을 끊음");
       Object.values(sockets).forEach((socket) => {
         if (socket.connected) {
           socket.disconnect();
         }
       });
     };
-  }, [sockets]);
+  }, []);
 
   return (
     <SocketContext.Provider

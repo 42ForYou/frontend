@@ -8,6 +8,7 @@ import RadioSelector from "../common/RadioSelector";
 import DropdownSelector from "../common/DropdownSelector";
 import { hasKeys, updateProperty } from "../../utils/objectUtils";
 import StyledButton from "../common/StyledButton";
+import { useTournament } from "../../context/TournamentContext";
 
 const RoomTitleForm = ({ updateRoomData }) => {
   const { loggedIn } = useAuth();
@@ -100,6 +101,7 @@ const RoomGameOptionForm = ({ updateRoomData }) => {
 
 const CreateRoomModal = ({ handleClose }) => {
   const navigate = useNavigate();
+  const { setTournamentData } = useTournament();
   const [roomData, setRoomData] = useState({});
 
   const handleUpdateRoomData = (path, value) => {
@@ -110,11 +112,12 @@ const CreateRoomModal = ({ handleClose }) => {
   const handleSubmit = () => {
     const postRoomData = async () => {
       try {
-        console.log("방 생성 요청 시작");
         const resData = await post(API_ENDPOINTS.ROOM_LIST(), roomData);
-        const createdGameId = resData.data.game.game_id;
-        navigate(`/game/waiting/${createdGameId}`);
+        const TournamentData = resData.data;
+        await setTournamentData(TournamentData);
+        navigate(`/game/waiting/${TournamentData.room.id}`);
         handleClose();
+        console.log("방 생성 요청 성공");
       } catch (error) {
         console.log("방 생성 요청 실패:", error);
         alert("방 생성에 실패하였습니다.");
