@@ -8,13 +8,16 @@ import { useTournament } from "../context/TournamentContext";
 
 // 차후 필요시 1대1, 토너먼트 방 분리
 const GameWaitingRoomPage = () => {
-  const { setTournamentData, gameData, roomData, playersData, myPlayerId, resetTournamentData } = useTournament();
+  const { setGameData, setRoomData, setPlayersData, gameData, roomData, playersData, myPlayerId, resetTournamentData } =
+    useTournament();
   const navigate = useNavigate();
   const { sockets, connectNamespace, disconnectNamespace, setupEventListeners, removeEventListeners } = useSocket();
   const namespace = `/game/room/${roomData?.id}`;
 
   const updateRoomHandler = (data) => {
-    setTournamentData(data);
+    setGameData(data.game);
+    setRoomData(data.room);
+    setPlayersData(data.players);
     console.log("방 정보 업데이트: ", data);
   };
 
