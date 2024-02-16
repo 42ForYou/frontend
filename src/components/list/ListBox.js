@@ -44,7 +44,7 @@ const ListBox = ({
     reloadListItems();
   }, [state.currentFilter, state.currentPage, state.searchKeyword]);
 
-  const handleChangeFilter = (filter) => dispatch({ type: " FCHANGE_FILTER", payload: filter });
+  const handleChangeFilter = (filter) => dispatch({ type: "CHANGE_FILTER", payload: filter });
   const handleChangePage = (page) => dispatch({ type: "CHANGE_PAGE", payload: page });
   const handleSearch = (keyword) => dispatch({ type: "SET_SEARCH_KEYWORD", payload: keyword });
 
