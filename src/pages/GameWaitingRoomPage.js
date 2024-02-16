@@ -5,9 +5,11 @@ import { useSocket } from "../context/SocketContext";
 import { del } from "../utils/apiBase";
 import { API_ENDPOINTS } from "../utils/apiEndpoints";
 import { useTournament } from "../context/TournamentContext";
+import { useAuth } from "../context/AuthContext";
 
 // 차후 필요시 1대1, 토너먼트 방 분리
 const GameWaitingRoomPage = () => {
+  const { loggedIn } = useAuth();
   const { setGameData, setRoomData, setPlayersData, gameData, roomData, playersData, myPlayerId, resetTournamentData } =
     useTournament();
   const navigate = useNavigate();
@@ -22,7 +24,7 @@ const GameWaitingRoomPage = () => {
   };
 
   const roomDestroyedHandler = () => {
-    alert("호스트가 나가 방이 사라졌습니다.");
+    if (loggedIn.nickname !== roomData.host) alert("호스트가 나가 방이 사라졌습니다.");
     navigate("/game/list");
   };
 
