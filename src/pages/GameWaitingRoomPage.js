@@ -10,21 +10,21 @@ import { useTournament } from "../context/TournamentContext";
 const GameWaitingRoomPage = () => {
   const { setTournamentData, gameData, roomData, playersData, myPlayerId, resetTournamentData } = useTournament();
   const navigate = useNavigate();
-  const { connectNamespace, disconnectNamespace, setupEventListeners, removeEventListeners } = useSocket();
+  const { sockets, connectNamespace, disconnectNamespace, setupEventListeners, removeEventListeners } = useSocket();
   const namespace = `/game/room/${roomData?.id}`;
-  const socket = useSocket().sockets[namespace];
 
   const updateRoomHandler = (data) => {
     setTournamentData(data);
-    console.log("방 정보 업데이트", data);
+    console.log("방 정보 업데이트: ", data);
   };
 
   const roomDestroyedHandler = () => {
-    alert("방이 삭제되었습니다.");
-    navigate(-1);
+    alert("호스트가 나가 방이 사라졌습니다.");
+    navigate("/game/list");
   };
 
   // todo: 소켓 통신 연결 실패하고 방 나가기 요청도 실패할시 처리가 안됨
+  // 소켓 통신 연결 후에 방 입장을 해야하나?
   const handleAbortExit = async () => {
     try {
       const resData = await del(API_ENDPOINTS.PLAYERS(myPlayerId));
@@ -39,9 +39,8 @@ const GameWaitingRoomPage = () => {
     // 존재하지 않는 방에 들어갔거나 룸 데이터가 없는 상태로 입장 시도하는 경우
     if (!roomData || !roomData.id) {
       alert("입장할 수 없는 방입니다.");
-      navigate(-1);
+      navigate("/game/list");
     }
-
     connectNamespace(namespace, {
       onConnect: () => console.log(`${namespace} connected`),
       onConnectError: (err) => {
@@ -55,36 +54,35 @@ const GameWaitingRoomPage = () => {
       },
     });
 
-    setupEventListeners(namespace, [
-      {
-        event: "update_room",
-        handler: updateRoomHandler,
-      },
-      { event: "destroyed", handler: roomDestroyedHandler },
-    ]);
-
     return () => {
       removeEventListeners(namespace, ["update_room", "destroyed"]);
       disconnectNamespace(namespace);
     };
-  }, [namespace]);
-
-  useEffect(() => {
-    const handleBeforeUnload = (event) => {
-      event.preventDefault();
-      event.returnValue = "";
-      socket.emitWithTime("exited", { player_id: myPlayerId });
-    };
-
-    window.addEventListener("beforeunload", handleBeforeUnload);
-
-    return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-    };
   }, []);
 
-  // todo: 소켓 연결 상태 확인하여 페이지 렌더할 것인지 결정
-  const isConnected = socket?.connected || false;
+  useEffect(() => {
+    if (sockets[namespace]) {
+      const handleBeforeUnload = (event) => {
+        event.preventDefault();
+        event.returnValue = "";
+        sockets[namespace].emitWithTime("exited", { player_id: myPlayerId });
+      };
+
+      window.addEventListener("beforeunload", handleBeforeUnload);
+
+      setupEventListeners(namespace, [
+        {
+          event: "update_room",
+          handler: updateRoomHandler,
+        },
+        { event: "destroyed", handler: roomDestroyedHandler },
+      ]);
+
+      return () => {
+        window.removeEventListener("beforeunload", handleBeforeUnload);
+      };
+    }
+  }, [sockets[namespace]]);
 
   return (
     <div className="GameWaitingRoomPage">
