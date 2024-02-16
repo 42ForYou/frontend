@@ -34,7 +34,7 @@ const FriendItem = ({ id: friend_id, status, friend, onOccurChange }) => {
   const handleRejectFriend = () => {
     const delFriend = async () => {
       try {
-        const resData = await del(`${API_ENDPOINTS.FRIENDS()}${id}/`);
+        const resData = await del(`${API_ENDPOINTS.FRIENDS()}${friend_id}/`);
         onOccurChange();
         console.log("친구 삭제 성공:", resData);
       } catch (error) {
