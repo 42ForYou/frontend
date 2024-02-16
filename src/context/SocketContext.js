@@ -14,7 +14,10 @@ export const SocketProvider = ({ children }) => {
     if (!sockets[namespace]) {
       const newSocket = io(`${process.env.SOCKET_URL}/${namespace}`, {
         withCredentials: true,
-        // 필요시 재연결 옵션 설정
+        reconnection: true, // 재연결 활성화
+        reconnectionAttempts: 5, // 최대 재연결 시도 횟수
+        reconnectionDelay: 2000, // 처음 재연결 시도 간격 (ms)
+        reconnectionDelayMax: 5000, // 재연결 시도 간격의 최대값 (ms)
       });
 
       newSocket.on("connect", () => {
