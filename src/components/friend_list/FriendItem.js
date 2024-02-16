@@ -34,7 +34,7 @@ const FriendItem = ({ id: friend_id, status, friend, onOccurChange }) => {
   const handleRejectFriend = () => {
     const delFriend = async () => {
       try {
-        const resData = await del(`${API_ENDPOINTS.FRIENDS()}${id}/`);
+        const resData = await del(`${API_ENDPOINTS.FRIENDS()}${friend_id}/`);
         onOccurChange();
         console.log("친구 삭제 성공:", resData);
       } catch (error) {
@@ -62,7 +62,7 @@ const FriendItem = ({ id: friend_id, status, friend, onOccurChange }) => {
             src={avatar}
             alt={`친구 ${nickname}의 아바타`}
             to={`/profile/users/${intra_id}`}
-            isOnline={currentIsOnline}
+            onlineStatus={currentIsOnline ? "online" : "offline"}
           />
         </div>
         <div className="col">

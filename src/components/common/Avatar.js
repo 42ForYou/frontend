@@ -1,7 +1,15 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const Avatar = ({ src, alt, to, isEditing = false, onImageUploadClick = null, diameter = 100, isOnline = null }) => {
+const Avatar = ({
+  src,
+  alt,
+  to,
+  isEditing = false,
+  onImageUploadClick = null,
+  diameter = 100,
+  onlineStatus = "None",
+}) => {
   const getImageSrc = (src) => {
     // todo: process.env.ASSETS_URL값이 존재하나 유효하지 않은 경우 처리
     if (!process.env.ASSETS_URL) return;
@@ -25,8 +33,8 @@ const Avatar = ({ src, alt, to, isEditing = false, onImageUploadClick = null, di
   );
 
   const renderOnlineStatusIndicator = () => {
-    if (isOnline === null) return null;
-    return <span className={`online-indicator ${isOnline ? "online" : "offline"}`}></span>;
+    if (onlineStatus !== "online" && onlineStatus !== "offline") return null;
+    return <span className={`online-indicator ${onlineStatus}`}></span>;
   };
 
   return (
