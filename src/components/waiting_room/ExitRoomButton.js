@@ -3,6 +3,7 @@ import StyledButton from "../common/StyledButton";
 import { useNavigate } from "react-router-dom";
 import { useTournament } from "../../context/TournamentContext";
 import { useSocket } from "../../context/SocketContext";
+import { del } from "../../utils/apiBase";
 
 const ExitRoomButton = () => {
   const navigate = useNavigate();
