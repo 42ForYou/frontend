@@ -59,6 +59,7 @@ const GameWaitingRoomPage = () => {
     });
 
     return () => {
+      removeEventListeners(namespace);
       disconnectNamespace(namespace);
     };
   }, [namespace]);
