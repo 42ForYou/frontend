@@ -18,7 +18,7 @@ const BracketPlayer = ({ playerData, columnCnt, nthColumn, topPos }) => {
   );
 };
 
-const Bracket = ({ players }) => (
+const Bracket4Players = ({ players }) => (
   <>
     <div className="bracket container-fluid p-0">
       <div className="row" style={{ position: "relative" }}>
@@ -57,5 +57,22 @@ const Bracket = ({ players }) => (
     </div>
   </>
 );
+
+// todo: 구현
+const Bracket2Players = ({ players }) => (
+  <>
+    <div className="bracket container-fluid p-0"></div>
+  </>
+);
+
+const Bracket = ({ players }) => {
+  if (!players) return null;
+  return (
+    <>
+      {players.length === 2 && <Bracket2Players players={players.players} />}
+      {players.length === 4 && <Bracket4Players players={players.players} />}
+    </>
+  );
+};
 
 export default Bracket;
