@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 const StartGameButton = ({ isActive }) => {
   const navigate = useNavigate();
   const { roomData, gameData } = useTournament();
-  const namespace = `/game/room/${roomData.id}`;
+  const namespace = `/game/room/${roomData?.id}`;
   const socket = useSocket().sockets[namespace];
 
   const handleStartGame = () => {
