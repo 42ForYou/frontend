@@ -47,15 +47,16 @@ export const SocketProvider = ({ children }) => {
 
   // 명시적으로 이벤트 리스너를 해제하지 않아도 라이브러리가 자동으로 해제해주지만 가급적 명시적으로 해제하는 것이 좋음
   const disconnectNamespace = (namespace) => {
-    const socket = sockets[namespace];
-    if (socket) {
-      socket.disconnect();
-      setSockets((prevSockets) => {
-        const updatedSockets = { ...prevSockets };
+    setSockets((currentSockets) => {
+      const socket = currentSockets[namespace];
+      if (socket) {
+        socket.disconnect();
+        const updatedSockets = { ...currentSockets };
         delete updatedSockets[namespace];
         return updatedSockets;
-      });
-    }
+      }
+      return currentSockets;
+    });
   };
 
   // 네임스페이스와 event 객체 배열을 받아서 해당 소켓에 이벤트 리스너를 등록
