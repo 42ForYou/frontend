@@ -7,10 +7,12 @@ const BracketPlayer = ({ playerData, columnCnt, nthColumn, topPos }) => {
   const leftPos = (nthColumn / columnCnt) * 100;
 
   return (
-    <div className="bracket-player p-0" style={{ position: "absolute", top: `${topPos}%`, left: `${leftPos}%` }}>
+    <div
+      className="bracket-player p-0"
+      style={{ position: "absolute", top: `${topPos}%`, left: `${leftPos}%`, zIndex: 100 }}>
       <div
         className={"text-center"}
-        style={{ width: `${diameter}px`, height: `${diameter}px`, transform: "translate(-50%, -50%)", zIndex: 100 }}>
+        style={{ width: `${diameter}px`, height: `${diameter}px`, transform: "translate(-50%, -50%)" }}>
         <Avatar src={avatar} diameter={130} />
         <p>{nickname}</p>
       </div>
