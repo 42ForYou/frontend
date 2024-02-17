@@ -1,5 +1,9 @@
+.bracket-player {
+	color: white;
+}
+
 .bracket .col {
-	border: 1px solid white;
+	/* border: 1px solid white; */
 }
 
 .bracket .row {
