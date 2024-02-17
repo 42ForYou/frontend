@@ -25,7 +25,18 @@ export const TournamentProvider = ({ children }) => {
 
   return (
     <Tournament.Provider
-      value={{ gameData, roomData, playersData, myPlayerId, setTournamentData, resetTournamentData }}>
+      value={{
+        gameData,
+        roomData,
+        playersData,
+        myPlayerId,
+        setGameData,
+        setRoomData,
+        setPlayersData,
+        setMyPlayerId,
+        setTournamentData,
+        resetTournamentData,
+      }}>
       {children}
     </Tournament.Provider>
   );
