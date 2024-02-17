@@ -92,10 +92,15 @@ const Bracket2Players = ({ players }) => (
 
 const Bracket = ({ players }) => {
   if (!players) return null;
+
+  const playersArr = players.players;
+  const nPlayers = playersArr[playersArr.length - 1].length * 2;
+  console.log(nPlayers);
+
   return (
     <>
-      {players.length === 2 && <Bracket2Players players={players.players} />}
-      {players.length === 4 && <Bracket4Players players={players.players} />}
+      {nPlayers === 2 && <Bracket2Players players={players.players} />}
+      {nPlayers === 4 && <Bracket4Players players={players.players} />}
     </>
   );
 };
