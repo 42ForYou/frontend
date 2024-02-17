@@ -84,23 +84,37 @@ const Bracket4Players = ({ players }) => (
 );
 
 // todo: 구현
-const Bracket2Players = ({ players }) => (
-  <>
-    <div className="bracket container-fluid p-0"></div>
-  </>
-);
+const Bracket2Players = ({ players }) => {
+  return (
+    <div className="bracket container-fluid p-0">
+      <BracketRow>
+        <BracketPlayer playerData={{ nickname: "winner" }} columnCnt={2} nthColumn={1} topPos={75} />
+        <BracketBoxNonBorder />
+        <BracketBoxNonBorder />
+      </BracketRow>
+
+      <BracketRow>
+        <BracketPlayer playerData={players[0][0][0]} columnCnt={4} nthColumn={1} topPos={75} />
+        <BracketPlayer playerData={players[0][0][1]} columnCnt={4} nthColumn={3} topPos={75} />
+        <BracketBoxNonBorder />
+        <BracketBoxLeftTopBorder />
+        <BracketBoxRightTopBorder />
+        <BracketBoxNonBorder />
+      </BracketRow>
+    </div>
+  );
+};
 
 const Bracket = ({ players }) => {
   if (!players) return null;
 
   const playersArr = players.players;
   const nPlayers = playersArr[playersArr.length - 1].length * 2;
-  console.log(nPlayers);
 
   return (
     <>
-      {nPlayers === 2 && <Bracket2Players players={players.players} />}
-      {nPlayers === 4 && <Bracket4Players players={players.players} />}
+      {nPlayers === 2 && <Bracket2Players players={playersArr} />}
+      {nPlayers === 4 && <Bracket4Players players={playersArr} />}
     </>
   );
 };
