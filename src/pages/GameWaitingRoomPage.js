@@ -68,7 +68,7 @@ const GameWaitingRoomPage = () => {
       const handleBeforeUnload = (event) => {
         event.preventDefault();
         event.returnValue = "";
-        sockets[namespace].emitWithTime("exited", { player_id: myPlayerId });
+        sockets[namespace].emitWithTime("exited", { my_player_id: myPlayerId });
       };
 
       window.addEventListener("beforeunload", handleBeforeUnload);
