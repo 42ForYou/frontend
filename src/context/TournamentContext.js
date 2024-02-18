@@ -7,6 +7,7 @@ export const TournamentProvider = ({ children }) => {
   const [roomData, setRoomData] = useState(null);
   const [playersData, setPlayersData] = useState(null);
   const [myPlayerId, setMyPlayerId] = useState(null);
+  const [matchConfig, setMatchConfig] = useState(null);
 
   const setTournamentData = async (data) => {
     const { game, room, players, my_player_id } = data;
@@ -36,6 +37,8 @@ export const TournamentProvider = ({ children }) => {
         setMyPlayerId,
         setTournamentData,
         resetTournamentData,
+        matchConfig,
+        setMatchConfig,
       }}>
       {children}
     </Tournament.Provider>
