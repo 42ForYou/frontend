@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import Bracket from "../components/game/Bracket";
 import PongScene from "../components/game/PongScene";
+import { useTournament } from "../context/TournamentContext";
+import { useNavigate } from "react-router-dom";
+import { useSocket } from "../context/SocketContext";
 
 const player = (intra_id, nickname, avatar) => {
   return {
@@ -49,21 +52,75 @@ const PongScenePage = () => {
 };
 
 const BracketPage = () => {
-  return <Bracket players={dummy4Players} />;
-  // return <Bracket players={dummy2Players} />;
+  const { bracketData } = useTournament();
+
+  return <Bracket players={bracketData.players} />;
 };
 
-// todo: 해당 게임에 참가하지 않는 유저가 접속 시도시 리다이렉팅
-// todo: 현 상태에 따라 대진표 혹은 게임 플레이 화면을 보여줌
 const GamePlayPage = () => {
-  const [isPlaying, setIsPlaying] = useState(false);
+  const navigate = useNavigate();
+  const { roomData, myPlayerId, resetTournamentData, setBracketData } = useTournament();
+  const { connectNamespace, disconnectNamespace, setupEventListeners, removeEventListeners } = useSockek();
+  const { sockets } = useSocket();
+  const roomNamespace = `/game/room/${roomData?.id}`;
+  const [showBracket, setShowBracket] = useState(true);
 
-  // 컴포넌트 마운트 후 소켓 수신할 이벤트를 등록
-  useEffect(() => {}, []);
+  const connectMatchSocket = (matchNamespace) => {
+    connectNamespace(matchNamespace, {
+      onConnectError: (err) => {
+        alert("실시간 통신 연결에 실패하였습니다.");
+        handleAbortExit();
+      },
+      onDisconnect: (reason) => {
+        resetTournamentData();
+      },
+    });
+  };
+
+  const updateBracketHandler = (data) => {
+    setBracketData(data);
+    setShowBracket(true);
+    const matchNamespace = `${roomNamespace}/${data.n_ranks}/${data.rank_ongoing}`;
+    connectMatchSocket(matchNamespace);
+  };
+
+  useEffect(() => {
+    if (!roomData || !roomData.id) {
+      alert("게임에 입장할 수 없습니다.");
+      navigate(-1);
+    }
+
+    setupEventListeners(namespace, [
+      {
+        event: "update_tournament",
+        handler: updateBracketHandler,
+      },
+    ]);
+
+    return () => {
+      removeEventListeners(roomNamespace, ["update_room"]);
+      disconnectNamespace(roomNamespace);
+    };
+  }, [roomNamespace]);
+
+  useEffect(() => {
+    const handleBeforeUnload = (event) => {
+      event.preventDefault();
+      event.returnValue = "";
+      // todo: 게임 플레이 중 나가는 경우 백측과 협의
+      // sockets[].emitWithTime("leave", { my_player_id: myPlayerId });
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
 
   return (
     <div className="GamePlayPage">
-      <div>{isPlaying ? <PongScenePage /> : <BracketPage />}</div>
+      <div>{showBracket ? <BracketPage /> : <PongScenePage />}</div>
     </div>
   );
 };
