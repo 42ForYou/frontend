@@ -13,8 +13,6 @@ const player = (intra_id, nickname, avatar) => {
   };
 };
 
-// todo: PongScenePage, BracketPage 차후 별도의 파일로 분리
-
 const PongScenePage = () => {
   const { roomData, matchData } = useTournament();
   const roomNamespace = `/game/room/${roomData?.id}`;
@@ -65,10 +63,11 @@ const BracketPage = () => {
   return <Bracket subgames={bracketData.subgames} />;
 };
 
+// todo: 게임 플레이 중 나가는 경우 백측과 협의 후 처리 필요
 const GamePlayPage = () => {
   const navigate = useNavigate();
   const { roomData, myPlayerId, resetTournamentData, setBracketData, setMatchData, matchData } = useTournament();
-  const { connectNamespace, disconnectNamespace, setupEventListeners, removeEventListeners, sockets } = useSocket();
+  const { connectNamespace, disconnectNamespace, setupEventListeners, removeEventListeners } = useSocket();
   const roomNamespace = `/game/room/${roomData?.id}`;
   const [matchNamespace, setMatchNamespace] = useState("");
   const [showBracket, setShowBracket] = useState(true);
@@ -96,7 +95,7 @@ const GamePlayPage = () => {
       {
         event: "config",
         handler: (data) => {
-          setMatchConfig({ ...matchData, config: data });
+          setMatchData({ ...matchData, config: data }); // setMatchConfig -> setMatchData로 수정
         },
       },
     ]);
@@ -107,9 +106,9 @@ const GamePlayPage = () => {
     const idx_in_rank = data.players.findIndex((rank) =>
       rank.some((pair) => pair.some((player) => player.intra_id === myPlayerId))
     );
-    const matchNamespace = `${roomNamespace}/${rank}/${idx_in_rank}`;
-    setMatchNamespace(matchNamespace);
-    connectMatchSocket(matchNamespace);
+    const newMatchNamespace = `${roomNamespace}/${rank}/${idx_in_rank}`;
+    setMatchNamespace(newMatchNamespace);
+    connectMatchSocket(newMatchNamespace);
     setBracketData(data);
     setShowBracket(true);
   };
@@ -118,9 +117,10 @@ const GamePlayPage = () => {
     if (!roomData || !roomData.id) {
       alert("게임에 입장할 수 없습니다.");
       navigate(-1);
+      return;
     }
 
-    setupEventListeners(namespace, [
+    setupEventListeners(roomNamespace, [
       {
         event: "update_tournament",
         handler: updateBracketHandler,
@@ -128,23 +128,10 @@ const GamePlayPage = () => {
     ]);
 
     return () => {
-      removeEventListeners(roomNamespace, ["update_room"]);
+      removeEventListeners(roomNamespace, ["update_tournament"]);
       disconnectNamespace(roomNamespace);
     };
-  }, [roomNamespace]);
-
-  useEffect(() => {
-    const handleBeforeUnload = (event) => {
-      event.preventDefault();
-      event.returnValue = "";
-      // todo: 게임 플레이 중 나가는 경우 백측과 협의
-      // sockets[].emitWithTime("leave", { my_player_id: myPlayerId });
-    };
-    window.addEventListener("beforeunload", handleBeforeUnload);
-    return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-    };
-  }, []);
+  }, [roomNamespace, navigate, setupEventListeners, removeEventListeners, disconnectNamespace, updateBracketHandler]);
 
   useEffect(() => {
     setupMatchEventListeners(matchNamespace);
@@ -153,13 +140,9 @@ const GamePlayPage = () => {
       removeEventListeners(matchNamespace, ["start", "config"]);
       disconnectNamespace(matchNamespace);
     };
-  }, sockets[matchNamespace]);
+  }, [matchNamespace, setupMatchEventListeners, removeEventListeners, disconnectNamespace]);
 
-  return (
-    <div className="GamePlayPage">
-      <div>{showBracket ? <BracketPage /> : <PongScenePage />}</div>
-    </div>
-  );
+  return <div className="GamePlayPage">{showBracket ? <BracketPage /> : <PongScenePage />}</div>;
 };
 
 export default GamePlayPage;
