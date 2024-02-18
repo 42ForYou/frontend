@@ -13,38 +13,6 @@ const player = (intra_id, nickname, avatar) => {
   };
 };
 
-const dummy4Players = {
-  players: [
-    [
-      [
-        player("intra_id_0_0_0", "nickname_0_0_0", "avatar_0_0_0"),
-        player("intra_id_0_0_1", "nickname_0_0_1", "avatar_0_0_1"),
-      ],
-    ],
-    [
-      [
-        player("intra_id_1_0_0", "nickname_1_0_0", "avatar_1_0_0"),
-        player("intra_id_1_0_1", "nickname_1_0_1", "avatar_1_0_1"),
-      ],
-      [
-        player("intra_id_1_1_0", "nickname_1_1_0", "avatar_1_1_0"),
-        player("intra_id_1_1_1", "nickname_1_1_1", "avatar_1_1_1"),
-      ],
-    ],
-  ],
-};
-
-const dummy2Players = {
-  players: [
-    [
-      [
-        player("intra_id_0_0_0", "nickname_0_0_0", "avatar_0_0_0"),
-        player("intra_id_0_0_1", "nickname_0_0_1", "avatar_0_0_1"),
-      ],
-    ],
-  ],
-};
-
 // todo: PongScenePage, BracketPage 차후 별도의 파일로 분리
 
 const PongScenePage = () => {
@@ -98,7 +66,7 @@ const PongScenePage = () => {
 const BracketPage = () => {
   const { bracketData } = useTournament();
 
-  return <Bracket players={bracketData.players} />;
+  return <Bracket subgames={bracketData.subgames} />;
 };
 
 const GamePlayPage = () => {
