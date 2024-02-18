@@ -41,19 +41,15 @@ const GameWaitingRoomPage = () => {
 
   useEffect(() => {
     if (!roomData || !roomData.id) {
-      alert("입장할 수 없는 방입니다.");
-      navigate("/game/list");
-      return;
+      alert("방에 입장할 수 없습니다.");
+      navigate(-1);
     }
     connectNamespace(namespace, {
-      onConnect: () => console.log(`${namespace} connected`),
-      onConnectError: (err) => {
-        console.error("소켓 연결 에러", err);
+      onConnectError: () => {
         alert("실시간 통신 연결에 실패하였습니다.");
         handleAbortExit();
       },
-      onDisconnect: (reason) => {
-        console.log(`${namespace} disconnected`, reason);
+      onDisconnect: () => {
         resetTournamentData();
       },
     });
