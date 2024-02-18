@@ -48,6 +48,50 @@ const dummy2Players = {
 // todo: PongScenePage, BracketPage 차후 별도의 파일로 분리
 
 const PongScenePage = () => {
+  const { bracketData, roomData } = useTournament();
+  const rank = bracketData.rank_ongoing;
+  const idx_in_rank = bracketData.players.findIndex((rank) =>
+    rank.some((pair) => pair.some((player) => player.intra_id === myPlayerId))
+  );
+  const roomNamespace = `/game/room/${roomData?.id}`;
+  const matchNamespace = `${roomNamespace}/${rank}/${idx_in_rank}`;
+
+  useEffect(() => {
+    setupEventListeners(matchNamespace, [
+      {
+        event: "update_time_left",
+        handler: null,
+      },
+      {
+        event: "ended",
+        handler: null,
+      },
+      {
+        event: "update_scores",
+        handler: null,
+      },
+      {
+        event: "update_track_ball",
+        handler: null,
+      },
+      {
+        event: "update_track_paddle",
+        handler: null,
+      },
+    ]);
+
+    return () => {
+      removeEventListeners(matchNamespace, [
+        "update_time_left",
+        "ended",
+        "update_scores",
+        "update_track_ball",
+        "update_track_paddle",
+      ]);
+      // disconnectNamespace(matchNamespace);
+    };
+  }, [matchNamespace]);
+
   return <PongScene />;
 };
 
