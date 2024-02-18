@@ -1,7 +1,10 @@
 import React from "react";
 import Avatar from "../common/Avatar";
+import { useAuth } from "../../context/AuthContext";
 
 const BracketPlayer = ({ playerData, columnCnt, nthColumn, topPos }) => {
+  const { loggedIn } = useAuth();
+  const isMine = loggedIn && playerData.intra_id === loggedIn.intra_id;
   const { nickname, avatar } = playerData;
   const diameter = 130;
   const leftPos = (nthColumn / columnCnt) * 100;
@@ -14,7 +17,7 @@ const BracketPlayer = ({ playerData, columnCnt, nthColumn, topPos }) => {
         className={"text-center"}
         style={{ width: `${diameter}px`, height: `${diameter}px`, transform: "translate(-50%, -50%)" }}>
         <Avatar src={avatar} diameter={130} />
-        <p>{nickname}</p>
+        <p style={{ color: `${isMine ? "yellow" : ""}` }}> {nickname}</p>
       </div>
     </div>
   );
