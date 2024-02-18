@@ -1,67 +1,9 @@
 import React, { useEffect, useState } from "react";
-import Bracket from "../components/game/Bracket";
-import PongScene from "../components/game/PongScene";
 import { useTournament } from "../context/TournamentContext";
 import { useNavigate } from "react-router-dom";
 import { useSocket } from "../context/SocketContext";
-
-const player = (intra_id, nickname, avatar) => {
-  return {
-    intra_id: intra_id,
-    nickname: nickname,
-    avatar: avatar,
-  };
-};
-
-const PongScenePage = () => {
-  const { roomData, matchData } = useTournament();
-  const roomNamespace = `/game/room/${roomData?.id}`;
-
-  useEffect(() => {
-    const matchNamespace = `${roomNamespace}/${matchData.rank}/${matchData.idx_in_rank}`;
-    setupEventListeners(matchNamespace, [
-      {
-        event: "update_time_left",
-        handler: null,
-      },
-      {
-        event: "ended",
-        handler: null,
-      },
-      {
-        event: "update_scores",
-        handler: null,
-      },
-      {
-        event: "update_track_ball",
-        handler: null,
-      },
-      {
-        event: "update_track_paddle",
-        handler: null,
-      },
-    ]);
-
-    return () => {
-      removeEventListeners(matchNamespace, [
-        "update_time_left",
-        "ended",
-        "update_scores",
-        "update_track_ball",
-        "update_track_paddle",
-      ]);
-      // disconnectNamespace(matchNamespace);
-    };
-  }, [matchNamespace, matchData]);
-
-  return <PongScene />;
-};
-
-const BracketPage = () => {
-  const { bracketData } = useTournament();
-
-  return <Bracket subgames={bracketData.subgames} />;
-};
+import BracketPage from "./BracketPage";
+import PongScenePage from "./PongScenePage";
 
 // todo: 게임 플레이 중 나가는 경우 백측과 협의 후 처리 필요
 const GamePlayPage = () => {
