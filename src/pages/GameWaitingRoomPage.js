@@ -9,8 +9,18 @@ import { useAuth } from "../context/AuthContext";
 
 const GameWaitingRoomPage = () => {
   const { loggedIn } = useAuth();
-  const { setGameData, setRoomData, setPlayersData, gameData, roomData, playersData, myPlayerId, resetTournamentData } =
-    useTournament();
+  const {
+    setGameData,
+    setRoomData,
+    setPlayersData,
+    gameData,
+    roomData,
+    playersData,
+    myPlayerId,
+    bracketData,
+    setBracketData,
+    resetTournamentData,
+  } = useTournament();
   const navigate = useNavigate();
   const { sockets, connectNamespace, disconnectNamespace, setupEventListeners, removeEventListeners } = useSocket();
   const namespace = `/game/room/${roomData?.id}`;
@@ -25,6 +35,11 @@ const GameWaitingRoomPage = () => {
   const roomDestroyedHandler = () => {
     if (loggedIn.nickname !== roomData.host) alert("호스트가 나가 방이 사라졌습니다.");
     navigate("/game/list");
+  };
+
+  const updateBracketHandler = (data) => {
+    setBracketData(data);
+    navigate(`/game/play/${gameData.id}`);
   };
 
   // todo: 소켓 통신 연결 실패하고 방 나가기 요청도 실패할시 처리가 안됨
@@ -54,9 +69,23 @@ const GameWaitingRoomPage = () => {
       },
     });
 
+    setupEventListeners(namespace, [
+      {
+        event: "update_room",
+        handler: updateRoomHandler,
+      },
+      { event: "destroyed", handler: roomDestroyedHandler },
+      {
+        event: "update_tournament",
+        handler: updateBracketHandler,
+      },
+    ]);
+
     return () => {
-      removeEventListeners(namespace);
-      disconnectNamespace(namespace);
+      removeEventListeners(namespace, ["update_room", "destroyed", "updateBracketHandler"]);
+      if (!bracketData) {
+        disconnectNamespace(namespace);
+      }
     };
   }, [namespace]);
 
