@@ -6,14 +6,22 @@ const LoginCallbackPage = () => {
   const queryParams = new URLSearchParams(useLocation().search);
   const paramValue = queryParams.get("code");
   const hasQueryParam = queryParams.has("code");
-  const { login } = useAuth();
+  const { login, loggedIn } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
     const authCodeRedirection = async () => {
-      if (hasQueryParam) {
-        await login(paramValue);
+      if (!hasQueryParam) {
+        alert("잘못된 접근입니다.");
+        navigate("/login");
+        return;
+      }
+
+      await login(paramValue);
+      if (loggedIn) {
         navigate("/");
+      } else {
+        navigate("/login");
       }
     };
     authCodeRedirection();
