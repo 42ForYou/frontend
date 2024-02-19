@@ -1,6 +1,20 @@
 import React from "react";
 
-const TwoFactorAuthPage = ({ code2FA, setCode2FA, handle2FAcodeSubmit, status2FA, emailFor2FA }) => {
+const TwoFactorAuthPage = () => {
+  const { dataFor2FA } = useContext(AuthContext);
+  const [code2FA, setCode2FA] = useState("");
+  const [status2FA, setStatus2FA] = useState("");
+
+  const handle2FAcodeSubmit = () => {
+    const validate2FAcode = async (code) => {
+      //
+    };
+    // 2FA 코드 제출 처리
+  };
+
+  // todo: 재전송 로직 추가
+  const resend2FAcode = () => {};
+
   return (
     <div className="LoginPage">
       <div>

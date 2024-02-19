@@ -2,29 +2,35 @@ import React, { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
-const LoginCallbackPage = () => {
+const OauthCallbackPage = () => {
   const queryParams = new URLSearchParams(useLocation().search);
   const paramValue = queryParams.get("code");
   const hasQueryParam = queryParams.has("code");
-  const { login, loggedIn } = useAuth();
+  const { authenticateWithOAuth, loggedIn, is2FA } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
-    const authCodeRedirection = async () => {
+    const handleOAuthRedirect = async () => {
       if (!hasQueryParam) {
         alert("잘못된 접근입니다.");
         navigate("/login");
         return;
       }
 
-      await login(paramValue);
+      await authenticateWithOAuth(paramValue);
       if (loggedIn) {
+        console.log("OAuth 로그인 성공");
         navigate("/");
+      } else if (is2FA) {
+        console.log("OAuth 로그인 성공, 2FA 인증 필요");
+        navigate("/2fa");
       } else {
+        console.log("OAuth 로그인 실패");
         navigate("/login");
       }
     };
-    authCodeRedirection();
+
+    handleOAuthRedirect();
   }, [paramValue, hasQueryParam]);
 
   return (
@@ -34,4 +40,4 @@ const LoginCallbackPage = () => {
   );
 };
 
-export default LoginCallbackPage;
+export default OauthCallbackPage;
