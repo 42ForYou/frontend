@@ -1,8 +1,11 @@
 export const API_ENDPOINTS = {
-  LOGIN: "/login",
+  OAUTH_LOGIN: "/login",
   OAUTH_TOKEN_EXCHANGE: (code) => `/oauth/?code=${code}`,
-  VALID: "/valid",
-  VALIDATE_2FA: (code) => `/valid/2fa?code=${code}`,
+  VALIDATE_TOKEN: "/valid",
+  VALIDATE_2FA: (code) => {
+    if (code) return `/2fa?code=${code}`;
+    return "/2fa";
+  },
   USER_PROFILE: (nickname) => `api/accounts/profiles/${nickname}/`,
   USER_SEARCH: (page, page_size, keyword) => {
     return `/api/accounts/search?search=${keyword}&page=${page}&page_size=${page_size}`;
