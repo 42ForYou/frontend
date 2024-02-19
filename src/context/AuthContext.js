@@ -7,67 +7,38 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [loggedIn, setLoggedIn] = useState(null);
-  const [is2FAVerified, setIs2FAVerified] = useState(false);
-
-  // todo: 2FA 검증 API 구현 후 변경
-  const validate2FAcode = async (code) => {
-    setIsLoading(true);
-    try {
-      // const resData = await get(API_ENDPOINTS.VALIDATE_2FA(code));
-      // const user = resData.data.user;
-      // setLoggedIn(user);
-      if (!(code === "dev")) throw new Error("2FA 인증에 실패했습니다.");
-      console.log("2FA 검증 성공");
-      setIs2FAVerified(true);
-      return { success: true, user: null };
-    } catch (error) {
-      console.log("2FA 검증 실패: ", error);
-    } finally {
-      setIsLoading(false);
-    }
-    setIs2FAVerified(false);
-    return { success: false };
-  };
-
-  const validateTokenInCookies = async () => {
-    setIsLoading(true);
-    try {
-      const resData = await get(API_ENDPOINTS.VALID);
-      const user = resData.data.user;
-      setLoggedIn(user);
-      setIs2FAVerified(!user.two_factor_auth);
-      return { success: true, user: user };
-    } catch (error) {
-      console.log("쿠키 속 토큰 유효성 검사 실패: ", error);
-    } finally {
-      setIsLoading(false);
-    }
-    setLoggedIn(null);
-    return { success: false };
-  };
-
-  const login = async (code) => {
-    setIsLoading(true);
-    try {
-      const resData = await get(API_ENDPOINTS.OAUTH_REDIRECT(code));
-      const user = resData.data.profile;
-      setLoggedIn(user);
-      setIs2FAVerified(!user.two_factor_auth);
-      console.log("로그인 성공");
-    } catch (error) {
-      console.log("로그인 실패: ", error);
-      setLoggedIn(null);
-      setIs2FAVerified(false);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const [is2FA, setIs2FA] = useState(false);
+  const [dataFor2FA, setDataFor2FA] = useState({}); // {email, intra_id}
 
   // todo: 쿠키 삭제 API 구현 후 변경
   const logout = async () => {
     setLoggedIn(null);
-    setIs2FAVerified(false);
     console.log("로그아웃 성공");
+  };
+
+  const authenticateWithOAuth = async (code) => {
+    try {
+      const resData = await get(API_ENDPOINTS.OAUTH_TOKEN_EXCHANGE(code));
+      const user = resData.data.profile;
+      setLoggedIn(user);
+      setIs2FA(false);
+    } catch (error) {
+      if (error.response?.status === 428) {
+        setIs2FA(true);
+        setDataFor2FA(error.response.data);
+      }
+    }
+  };
+
+  const validateTokenInCookies = async () => {
+    try {
+      const resData = await get(API_ENDPOINTS.VALID);
+      const user = resData.data.user;
+      setLoggedIn(user);
+      setIs2FA(user.two_factor_auth);
+    } catch (error) {
+      console.log("쿠키에 저장된 토큰 유효성 검사 실패: ", error);
+    }
   };
 
   // 컴포넌트 마운트 시 쿠키에 저장된 토큰의 유효성 검사
@@ -78,14 +49,13 @@ export const AuthProvider = ({ children }) => {
   return (
     <AuthContext.Provider
       value={{
-        loggedIn,
-        setLoggedIn,
         isLoading,
-        is2FAVerified,
-        login,
+        loggedIn,
         logout,
         validateTokenInCookies,
         validate2FAcode,
+        authenticateWithOAuth,
+        is2FA,
       }}>
       {children}
     </AuthContext.Provider>
