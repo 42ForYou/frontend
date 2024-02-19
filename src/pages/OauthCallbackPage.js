@@ -18,20 +18,18 @@ const OauthCallbackPage = () => {
       }
 
       await authenticateWithOAuth(paramValue);
-      if (loggedIn) {
-        console.log("OAuth 로그인 성공");
-        navigate("/");
-      } else if (is2FA) {
-        console.log("OAuth 로그인 성공, 2FA 인증 필요");
-        navigate("/2fa");
-      } else {
-        console.log("OAuth 로그인 실패");
-        navigate("/login");
-      }
     };
 
     handleOAuthRedirect();
-  }, [paramValue, hasQueryParam]);
+  }, [paramValue, hasQueryParam, authenticateWithOAuth, navigate]);
+
+  useEffect(() => {
+    if (loggedIn && !loggedIn.two_factor_auth) {
+      navigate("/");
+    } else if (loggedIn && loggedIn.two_factor_auth) {
+      navigate("/2fa");
+    }
+  }, [loggedIn]);
 
   return (
     <div className="CallbackPage">

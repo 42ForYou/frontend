@@ -1,15 +1,22 @@
-import React from "react";
+import React, { useEffect } from "react";
 import StyledButton from "../components/common/StyledButton";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import { getWithoutCredentials } from "../utils/apiBase";
+import { API_ENDPOINTS } from "../utils/apiEndpoints";
 
 const OAuthLoginPage = () => {
-  const { validateTokenInCookies, authenticateWithOAuth, is2FA } = useContext(AuthContext);
+  const { validateTokenInCookies, loggedIn } = useAuth();
   const navigate = useNavigate();
 
   const handleLogin = async () => {
+    await validateTokenInCookies();
+  };
+
+  useEffect(() => {
     const redirectToOAuthPage = async () => {
       try {
-        const resData = await getWithoutCredentials(API_ENDPOINTS.LOGIN);
+        const resData = await getWithoutCredentials(API_ENDPOINTS.OAUTH_LOGIN);
         const authorizationURL = resData.data.url;
         window.location.href = authorizationURL;
       } catch (error) {
@@ -17,17 +24,16 @@ const OAuthLoginPage = () => {
       }
     };
 
-    await validateTokenInCookies();
-
-    if (loggedIn && !is2FA) {
+    if (loggedIn && !loggedIn.two_factor_auth) {
       navigate("/");
       return;
-    } else if (loggedIn && is2FA) {
+    } else if (loggedIn && loggedIn.two_factor_auth) {
       navigate("/2fa");
       return;
     }
+
     redirectToOAuthPage();
-  };
+  }, [loggedIn]);
 
   return (
     <div className="LoginPage">

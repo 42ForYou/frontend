@@ -41,19 +41,15 @@ export const AuthProvider = ({ children }) => {
 
   const validateTokenInCookies = async () => {
     try {
-      const resData = await get(API_ENDPOINTS.VALID);
+      const resData = await get(API_ENDPOINTS.VALIDATE_TOKEN);
       const user = resData.data.user;
       setLoggedIn(user);
       setIs2FA(user.two_factor_auth);
     } catch (error) {
       console.log("쿠키에 저장된 토큰 유효성 검사 실패: ", error);
+      setLoggedIn(null);
     }
   };
-
-  // 컴포넌트 마운트 시 쿠키에 저장된 토큰의 유효성 검사
-  useEffect(() => {
-    validateTokenInCookies();
-  }, []);
 
   return (
     <AuthContext.Provider
