@@ -30,6 +30,15 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const resend2FACode = async () => {
+    await patch(API_ENDPOINTS.TWO_FA(), { email: dataFor2FA.email, intra_id: dataFor2FA.intra_id });
+  };
+
+  const validate2FAcode = async (code2FA) => {
+    const resData = await get(API_ENDPOINTS.TWO_FA(dataFor2FA.intra_id, code2FA));
+    setLoggedIn(resData.data.profile);
+  };
+
   const validateTokenInCookies = async () => {
     try {
       const resData = await get(API_ENDPOINTS.VALID);
@@ -56,6 +65,7 @@ export const AuthProvider = ({ children }) => {
         validate2FAcode,
         authenticateWithOAuth,
         is2FA,
+        resend2FACode,
       }}>
       {children}
     </AuthContext.Provider>
