@@ -4,32 +4,31 @@ import { useAuth } from "../context/AuthContext";
 
 const OauthCallbackPage = () => {
   const queryParams = new URLSearchParams(useLocation().search);
-  const paramValue = queryParams.get("code");
-  const hasQueryParam = queryParams.has("code");
-  const { authenticateWithOAuth, loggedIn, is2FA } = useAuth();
+  const code = queryParams.get("code");
+  const { authenticateWithOAuth, loggedIn, is2FA, isLoading } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
-    const handleOAuthRedirect = async () => {
-      if (!hasQueryParam) {
-        alert("잘못된 접근입니다.");
-        navigate("/login");
-        return;
-      }
-
-      await authenticateWithOAuth(paramValue);
-    };
-
-    handleOAuthRedirect();
-  }, [paramValue, hasQueryParam, authenticateWithOAuth, navigate]);
+    if (code) {
+      authenticateWithOAuth(code);
+    } else {
+      alert("잘못된 접근입니다.");
+      navigate("/login");
+    }
+  }, [code, authenticateWithOAuth, navigate]);
 
   useEffect(() => {
-    if (loggedIn && !loggedIn.two_factor_auth) {
-      navigate("/");
-    } else if (loggedIn && loggedIn.two_factor_auth) {
-      navigate("/2fa");
+    if (!isLoading) {
+      if (loggedIn && !is2FA) {
+        navigate("/");
+      } else if (loggedIn && is2FA) {
+        navigate("/2fa");
+      } else if (!loggedIn) {
+        alert("잘못된 접근입니다.");
+        navigate("/login");
+      }
     }
-  }, [loggedIn]);
+  }, [loggedIn, isLoading, is2FA, navigate]);
 
   return (
     <div className="CallbackPage">

@@ -17,6 +17,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const authenticateWithOAuth = async (code) => {
+    setIsLoading(true);
     try {
       const resData = await get(API_ENDPOINTS.OAUTH_TOKEN_EXCHANGE(code));
       const user = resData.data.profile;
@@ -27,6 +28,23 @@ export const AuthProvider = ({ children }) => {
         setIs2FA(true);
         setDataFor2FA(error.response.data);
       }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const validateTokenInCookies = async () => {
+    setIsLoading(true);
+    try {
+      const resData = await get(API_ENDPOINTS.VALIDATE_TOKEN);
+      const user = resData.data.user;
+      setLoggedIn(user);
+      setIs2FA(user.two_factor_auth);
+    } catch (error) {
+      console.log("쿠키에 저장된 토큰 유효성 검사 실패: ", error);
+      setLoggedIn(null);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -37,18 +55,6 @@ export const AuthProvider = ({ children }) => {
   const validate2FAcode = async (code2FA) => {
     const resData = await get(API_ENDPOINTS.TWO_FA(dataFor2FA.intra_id, code2FA));
     setLoggedIn(resData.data.profile);
-  };
-
-  const validateTokenInCookies = async () => {
-    try {
-      const resData = await get(API_ENDPOINTS.VALIDATE_TOKEN);
-      const user = resData.data.user;
-      setLoggedIn(user);
-      setIs2FA(user.two_factor_auth);
-    } catch (error) {
-      console.log("쿠키에 저장된 토큰 유효성 검사 실패: ", error);
-      setLoggedIn(null);
-    }
   };
 
   return (
