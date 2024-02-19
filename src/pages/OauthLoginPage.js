@@ -9,6 +9,14 @@ const OAuthLoginPage = () => {
   const { loggedIn } = useAuth();
   const navigate = useNavigate();
 
+  // 이미 로그인 한 유저가 로그인 페이지에 접속하는 경우 리다이렉트
+  // todo: 추후 테스트 필요
+  useEffect(() => {
+    if (loggedIn) {
+      navigate("/");
+    }
+  }, [loggedIn, navigate]);
+
   const handleLogin = async () => {
     try {
       const resData = await getWithoutCredentials(API_ENDPOINTS.OAUTH_LOGIN);
