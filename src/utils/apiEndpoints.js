@@ -1,6 +1,6 @@
 export const API_ENDPOINTS = {
   LOGIN: "/login",
-  OAUTH_REDIRECT: (code) => `/oauth/?code=${code}`,
+  OAUTH_TOKEN_EXCHANGE: (code) => `/oauth/?code=${code}`,
   VALID: "/valid",
   VALIDATE_2FA: (code) => `/valid/2fa?code=${code}`,
   USER_PROFILE: (nickname) => `api/accounts/profiles/${nickname}/`,
