@@ -6,34 +6,18 @@ import { getWithoutCredentials } from "../utils/apiBase";
 import { API_ENDPOINTS } from "../utils/apiEndpoints";
 
 const OAuthLoginPage = () => {
-  const { validateTokenInCookies, loggedIn } = useAuth();
+  const { loggedIn } = useAuth();
   const navigate = useNavigate();
 
   const handleLogin = async () => {
-    await validateTokenInCookies();
-  };
-
-  useEffect(() => {
-    const redirectToOAuthPage = async () => {
-      try {
-        const resData = await getWithoutCredentials(API_ENDPOINTS.OAUTH_LOGIN);
-        const authorizationURL = resData.data.url;
-        window.location.href = authorizationURL;
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    if (loggedIn && !loggedIn.two_factor_auth) {
-      navigate("/");
-      return;
-    } else if (loggedIn && loggedIn.two_factor_auth) {
-      navigate("/2fa");
-      return;
+    try {
+      const resData = await getWithoutCredentials(API_ENDPOINTS.OAUTH_LOGIN);
+      const authorizationURL = resData.data.url;
+      window.location.href = authorizationURL;
+    } catch (error) {
+      console.log(error);
     }
-
-    redirectToOAuthPage();
-  }, [loggedIn]);
+  };
 
   return (
     <div className="LoginPage">
