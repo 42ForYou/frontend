@@ -12,7 +12,7 @@ export const SocketProvider = ({ children }) => {
     const { onConnect, onConnectError, onDisconnect } = lifecycleHandlers || {};
 
     if (!sockets[namespace]) {
-      const newSocket = io(`${process.env.SOCKET_URL}${namespace}`, {
+      const newSocket = io(`${process.env.SOCKET_BASE_URL}${namespace}`, {
         withCredentials: true,
         reconnection: true, // 재연결 활성화
         reconnectionAttempts: 5, // 최대 재연결 시도 횟수
