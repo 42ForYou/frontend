@@ -47,8 +47,7 @@ const TwoFactorAuthPage = () => {
   return (
     <div className="LoginPage">
       <div>
-        <h1>Welcome to the PlanetPong!</h1>
-        <p>2차 인증 코드를 입력해주세요:</p>
+        <h3 style={{ textShadow: "2px 2px 4px #000000" }}>{twoFactorData.email}로 2차 인증 코드가 전송되었습니다.</h3>
         <div className="d-flex justify-content-center">
           <input
             type="text"
@@ -60,7 +59,7 @@ const TwoFactorAuthPage = () => {
             제출
           </button>
         </div>
-        <button onClick={handleResend2FACode}>코드 재전송</button> {/* 코드 재전송 버튼 추가 */}
+        <button onClick={handleResend2FACode}>코드 재전송</button>
         <p>{status2FA}</p>
       </div>
     </div>
