@@ -14,7 +14,7 @@ const Avatar = ({
     // todo: process.env.ASSETS_URL값이 존재하나 유효하지 않은 경우 처리
     if (!process.env.ASSETS_URL) return;
     if (!src || src === "") return `${process.env.ASSETS_URL}/images/default-avatar.jpg`;
-    return `${process.env.API_BASE_URL}/images/avatar/${src}`;
+    return `${process.env.AVATAR_BASE_URL}/images/avatar/${src}`;
   };
 
   const handleImageLoadFailed = (e) => {
