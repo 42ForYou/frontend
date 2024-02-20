@@ -18,7 +18,7 @@ const OauthCallbackPage = () => {
     if (loggedIn) {
       navigate("/");
     } else if (twoFactorData?.two_factor_auth) {
-      navigate("/2fa");
+      navigate("/login/2fa");
     } else {
       alert("잘못된 접근입니다.");
       navigate("/login");

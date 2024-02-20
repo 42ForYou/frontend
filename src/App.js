@@ -48,8 +48,8 @@ const AppContent = () => {
     <div className="App">
       <Routes>
         <Route path="/login" element={<OAuthLoginPage />} />
-        <Route path="/2fa" element={<TwoFactorAuthPage />} />
-        <Route path="/callback" element={<OauthCallbackPage />} />
+        <Route path="/login/2fa" element={<TwoFactorAuthPage />} />
+        <Route path="/login/callback" element={<OauthCallbackPage />} />
         <Route path="/chat" element={<ChatPage />} />
         {/* Protect routes */}
         <Route element={<ProtectedRoute />}>
