@@ -66,6 +66,7 @@ export const AuthProvider = ({ children }) => {
     <AuthContext.Provider
       value={{
         isLoading,
+        setLoggedIn,
         loggedIn,
         logout,
         validateTokenInCookies,
