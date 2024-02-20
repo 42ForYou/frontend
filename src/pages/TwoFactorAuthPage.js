@@ -8,6 +8,7 @@ const TwoFactorAuthPage = () => {
   const [code2FA, setCode2FA] = useState("");
   const [status2FA, setStatus2FA] = useState("");
   const navigate = useNavigate();
+  const [isProcessing, setIsProcessing] = useState(false);
 
   useEffect(() => {
     if (loggedIn) {
@@ -22,6 +23,7 @@ const TwoFactorAuthPage = () => {
   const handle2FAcodeSubmit = async () => {
     setStatus2FA("");
     try {
+      setIsProcessing(true);
       await validate2FAcode(code2FA);
       navigate("/");
     } catch (error) {
@@ -30,15 +32,20 @@ const TwoFactorAuthPage = () => {
           ? "인증 시간이 초과되었습니다. 다시 시도해주세요."
           : "2FA 인증에 실패했습니다. 다시 시도해주세요.";
       setStatus2FA(errorMessage);
+    } finally {
+      setIsProcessing(false);
     }
   };
 
   const handleResend2FACode = async () => {
     try {
+      setIsProcessing(true);
       await resend2FACode();
       setStatus2FA("2FA 코드가 재전송되었습니다. 이메일을 확인해주세요.");
     } catch (error) {
       setStatus2FA("2FA 코드 재전송에 실패했습니다. 다시 시도해주세요.");
+    } finally {
+      setIsProcessing(false);
     }
   };
 
@@ -47,7 +54,10 @@ const TwoFactorAuthPage = () => {
   return (
     <div className="LoginPage">
       <div>
-        <h3 style={{ textShadow: "2px 2px 4px #000000" }}>{twoFactorData.email}로 2차 인증 코드가 전송되었습니다.</h3>
+        <h4 style={{ textShadow: "2px 2px 4px #000000" }}>
+          {twoFactorData.email}로<br />
+          2차 인증 코드가 전송되었습니다. (제한시간: 3분)
+        </h4>
         <div className="d-flex justify-content-center">
           <input
             type="text"
@@ -59,8 +69,10 @@ const TwoFactorAuthPage = () => {
             제출
           </button>
         </div>
-        <button onClick={handleResend2FACode}>코드 재전송</button>
-        <p>{status2FA}</p>
+        <button onClick={handleResend2FACode}>재전송</button>
+        <p className="pt-1" style={{ textShadow: "2px 2px 4px #000000" }}>
+          {isProcessing ? "처리 중입니다. 잠시만 기다려주세요..." : status2FA}
+        </p>
       </div>
     </div>
   );
