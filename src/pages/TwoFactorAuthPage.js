@@ -1,12 +1,23 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import LoadingPage from "./LoadingPage";
 
 const TwoFactorAuthPage = () => {
-  const { validate2FAcode, resend2FACode } = useAuth();
+  const { validate2FAcode, resend2FACode, loggedIn, twoFactorData, isLoading } = useAuth();
   const [code2FA, setCode2FA] = useState("");
   const [status2FA, setStatus2FA] = useState("");
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (loggedIn) {
+      alert("이미 로그인 된 상태입니다.");
+      navigate("/");
+    } else if (!twoFactorData) {
+      alert("잘못된 접근입니다.");
+      navigate("/login");
+    }
+  }, []);
 
   const handle2FAcodeSubmit = async () => {
     setStatus2FA("");
@@ -30,6 +41,8 @@ const TwoFactorAuthPage = () => {
       setStatus2FA("2FA 코드 재전송에 실패했습니다. 다시 시도해주세요.");
     }
   };
+
+  if (isLoading) return <LoadingPage />;
 
   return (
     <div className="LoginPage">
