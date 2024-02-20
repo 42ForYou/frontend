@@ -1,20 +1,20 @@
 export const API_ENDPOINTS = {
-  OAUTH_LOGIN: "/login",
+  OAUTH_LOGIN: "/login/",
   OAUTH_TOKEN_EXCHANGE: (code) => `/oauth/?code=${code}`,
-  VALIDATE_TOKEN: "/valid",
+  VALIDATE_TOKEN: "/valid/",
   VALIDATE_2FA: (intra_id, code) => {
     if (intra_id && code) return `/2fa?intra_id=${intra_id}&code=${code}`;
-    return "/2fa";
+    return "/2fa/";
   },
   USER_PROFILE: (nickname) => `/accounts/profiles/${nickname}/`,
   USER_SEARCH: (page, page_size, keyword) => {
-    return `/accounts/search?search=${keyword}&page=${page}&page_size=${page_size}`;
+    return `/accounts/search?search=${keyword}&page=${page}&page_size=${page_size}/`;
   },
-  ROOM: (roomId) => `/game/game_rooms/${roomId}`,
+  ROOM: (roomId) => `/game/game_rooms/${roomId}/`,
   ROOM_LIST: (filter, page, page_size) => {
     if (filter && page && page_size) {
-      if (filter === "all") return `/game/game_rooms/?page=${page}&page_size=${page_size}`;
-      else return `/game/game_rooms/?filter=${filter}&page=${page}&page_size=${page_size}`;
+      if (filter === "all") return `/game/game_rooms/?page=${page}&page_size=${page_size}/`;
+      else return `/game/game_rooms/?filter=${filter}&page=${page}&page_size=${page_size}/`;
     }
     return "/game/game_rooms/";
   },
@@ -24,9 +24,9 @@ export const API_ENDPOINTS = {
   },
   FRIENDS: (filter, page, page_size) => {
     if (filter && page && page_size) {
-      if (filter === "all") return `/friends/?page=${page}&page_size=${page_size}`;
-      else return `/friends/?filter=${filter}&page=${page}&page_size=${page_size}`;
+      if (filter === "all") return `/friends/?page=${page}&page_size=${page_size}/`;
+      else return `/friends/?filter=${filter}&page=${page}&page_size=${page_size}/`;
     }
-    return "/friends";
+    return "/friends/";
   },
 };
