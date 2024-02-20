@@ -3,9 +3,9 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 // context
 import { AuthProvider } from "./context/AuthContext";
-import { SocketProvider } from "./context/SocketContext";
+import { SocketProviderWrapper } from "./context/SocketContext";
 import { GameProviderWrapper } from "./context/GameContext";
-import { OnlineStatusProvider } from "./context/OnlineStatusContext";
+import { OnlineStatusProviderWrapper } from "./context/OnlineStatusContext";
 
 // page
 import HomePage from "./pages/HomePage";
@@ -30,11 +30,7 @@ const App = () => {
   return (
     <BrowserRouter>
       <AuthProvider>
-        <SocketProvider>
-          <OnlineStatusProvider>
-            <AppContent />
-          </OnlineStatusProvider>
-        </SocketProvider>
+        <AppContent />
       </AuthProvider>
     </BrowserRouter>
   );
@@ -51,22 +47,26 @@ const AppContent = () => {
         <Route path="/chat" element={<ChatPage />} />
         {/* Protect routes */}
         <Route element={<ProtectedRoute />}>
-          <Route element={<MainLayout />}>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/profile" element={<MyProfilePage />} />
-            <Route path="/profile/users/:intra_id" element={<UserProfilePage />} />
-            <Route path="/users" element={<UserSearchPage />} />
-            <Route path="/friends" element={<FriendsPage />} />
-          </Route>
-          <Route element={<GameProviderWrapper />}>
+          <Route element={<SocketProviderWrapper />}>
             <Route element={<MainLayout />}>
-              <Route path="/game/list" element={<GameRoomListPage />} />
+              <Route path="/" element={<HomePage />} />
+              <Route path="/profile" element={<MyProfilePage />} />
+              <Route path="/profile/users/:intra_id" element={<UserProfilePage />} />
+              <Route path="/users" element={<UserSearchPage />} />
+              <Route element={<OnlineStatusProviderWrapper />}>
+                <Route path="/friends" element={<FriendsPage />} />
+              </Route>
             </Route>
-            <Route path="/game/waiting/:room_id" element={<GameWaitingRoomPage />} />
-            <Route path="/game/play/:game_id" element={<GamePlayPage />} />
+            <Route element={<GameProviderWrapper />}>
+              <Route element={<MainLayout />}>
+                <Route path="/game/list" element={<GameRoomListPage />} />
+              </Route>
+              <Route path="/game/waiting/:room_id" element={<GameWaitingRoomPage />} />
+              <Route path="/game/play/:game_id" element={<GamePlayPage />} />
+            </Route>
+            {/* fallback page */}
+            <Route path="*" element={<NotFoundPage />} />
           </Route>
-          {/* fallback page */}
-          <Route path="*" element={<NotFoundPage />} />
         </Route>
       </Routes>
     </div>

@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { useSocket } from "./SocketContext";
+import { Outlet } from "react-router-dom";
 
 const OnlineStatusContext = createContext();
 
@@ -27,3 +28,11 @@ export const OnlineStatusProvider = ({ children }) => {
 };
 
 export const useOnlineStatus = () => useContext(OnlineStatusContext);
+
+export const OnlineStatusProviderWrapper = () => {
+  return (
+    <OnlineStatusProvider>
+      <Outlet />
+    </OnlineStatusProvider>
+  );
+};
