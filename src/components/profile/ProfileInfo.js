@@ -38,7 +38,7 @@ const InfoDisplay = ({ profileData, isEditing, onChangeNickname, onChangeEmail, 
           isEditing={isEditing}
           onChange={onChangeNickname}
         />
-        {profileData.email && (
+        {(profileData.email || isEditing) && (
           <ProfileTextLine label="Email" value={profileData.email} isEditing={isEditing} onChange={onChangeEmail} />
         )}
       </div>

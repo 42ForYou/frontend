@@ -3,7 +3,7 @@ import { useSocket } from "../context/SocketContext";
 
 const TokenRequestButton = () => {
   const requestToken = async () => {
-    const response = await fetch(`${process.env.SOCKET_URL}/issue-token`, {
+    const response = await fetch(`${process.env.SOCKET_BASE_URL}/issue-token`, {
       method: "GET",
       credentials: "include",
     });
