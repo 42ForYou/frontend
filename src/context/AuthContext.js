@@ -52,7 +52,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const resend2FACode = async () => {
-    await patch(API_ENDPOINTS.VALIDATE_2FA(), { email: twoFactorData.email, intra_id: twoFactorData.intra_id });
+    await patch(API_ENDPOINTS.VALIDATE_2FA(), { data: { intra_id: twoFactorData.intra_id } });
   };
 
   const validate2FAcode = async (code2FA) => {
