@@ -1,4 +1,6 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { useSocket } from "./SocketContext";
+import { Outlet } from "react-router-dom";
 
 const Game = React.createContext();
 
@@ -49,3 +51,11 @@ export const GameProvider = ({ children }) => {
 };
 
 export const useGame = () => useContext(Game);
+
+export const GameProviderWrapper = () => {
+  return (
+    <GameProvider>
+      <Outlet />
+    </GameProvider>
+  );
+};
