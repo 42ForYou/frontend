@@ -11,7 +11,7 @@ import { OnlineStatusProvider } from "./context/OnlineStatusContext";
 import HomePage from "./pages/HomePage";
 import GamePlayPage from "./pages/GamePlayPage";
 import FriendsPage from "./pages/FriendsPage";
-import OauthCallbackPage from "./pages/OauthCallbackPage";
+import OauthCallbackPage from "./pages/auth/OauthCallbackPage";
 import UserProfilePage from "./pages/UserProfilePage";
 import MyProfilePage from "./pages/MyProfilePage";
 import GameWaitingRoomPage from "./pages/GameWaitingRoomPage";
@@ -22,8 +22,8 @@ import NotFoundPage from "./pages/error/NotFoundPage";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import MainLayout from "./components/layout/MainLayout";
 import ChatPage from "./pages/ChatPage";
-import TwoFactorAuthPage from "./pages/TwoFactorAuthPage";
-import OAuthLoginPage from "./pages/OAuthLoginPage";
+import TwoFactorAuthPage from "./pages/auth/TwoFactorAuthPage";
+import OAuthLoginPage from "./pages/auth/OauthLoginPage";
 
 // todo: Tournament, OnlineStatus는 필요한 컴포넌트에만 공급 검토
 const App = () => {

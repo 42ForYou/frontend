@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
-import StyledButton from "../components/common/StyledButton";
+import StyledButton from "../../components/common/StyledButton";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
-import { getWithoutCredentials } from "../utils/apiBase";
-import { API_ENDPOINTS } from "../utils/apiEndpoints";
+import { useAuth } from "../../context/AuthContext";
+import { getWithoutCredentials } from "../../utils/apiBase";
+import { API_ENDPOINTS } from "../../utils/apiEndpoints";
 
 const OAuthLoginPage = () => {
   const { loggedIn } = useAuth();

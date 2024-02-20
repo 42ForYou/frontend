@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
-import LoadingPage from "./LoadingPage";
+import { useAuth } from "../../context/AuthContext";
+import LoadingPage from "../LoadingPage";
 
 const TwoFactorAuthPage = () => {
   const { validate2FAcode, resend2FACode, loggedIn, twoFactorData, isLoading } = useAuth();
