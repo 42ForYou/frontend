@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import PongScene from "../components/game/PongScene";
 
 const PongScenePage = () => {
-  const { roomData, matchData } = useTournament();
+  const { roomData, matchData } = useGame();
   const roomNamespace = `/game/room/${roomData?.id}`;
 
   useEffect(() => {

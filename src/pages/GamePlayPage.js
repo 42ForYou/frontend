@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useTournament } from "../context/TournamentContext";
+import { useGame } from "../context/GameContext";
 import { useNavigate } from "react-router-dom";
 import { useSocket } from "../context/SocketContext";
 import BracketPage from "./BracketPage";
@@ -8,7 +8,7 @@ import PongScenePage from "./PongScenePage";
 // todo: 게임 플레이 중 나가는 경우 백측과 협의 후 처리 필요
 const GamePlayPage = () => {
   const navigate = useNavigate();
-  const { roomData, myPlayerId, resetTournamentData, setBracketData, setMatchData, matchData } = useTournament();
+  const { roomData, myPlayerId, resetWaitingRoomData, setBracketData, setMatchData, matchData } = useGame();
   const { connectNamespace, disconnectNamespace, setupEventListeners, removeEventListeners } = useSocket();
   const roomNamespace = `/game/room/${roomData?.id}`;
   const [matchNamespace, setMatchNamespace] = useState("");
@@ -21,7 +21,7 @@ const GamePlayPage = () => {
         handleAbortExit();
       },
       onDisconnect: () => {
-        resetTournamentData();
+        resetWaitingRoomData();
       },
     });
   };

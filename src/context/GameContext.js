@@ -1,23 +1,24 @@
 import React, { useContext, useState } from "react";
 
-const Tournament = React.createContext();
+const Game = React.createContext();
 
-export const TournamentProvider = ({ children }) => {
+export const GameProvider = ({ children }) => {
+  // todo: 각 객체별 구조를 알 수 있도록 초기값 설정
   const [gameData, setGameData] = useState(null);
   const [roomData, setRoomData] = useState(null);
   const [playersData, setPlayersData] = useState(null);
   const [myPlayerId, setMyPlayerId] = useState(null);
   const [matchData, setMatchData] = useState({ config: null, rank: null, idx_in_rank: null });
+  const [bracketData, setBracketData] = useState(null);
 
-  const setTournamentData = async (data) => {
-    const { game, room, players, my_player_id } = data;
-    setGameData(game);
-    setRoomData(room);
-    setPlayersData(players);
-    setMyPlayerId(my_player_id);
+  const setWaitingRoomData = async (data) => {
+    data.game && setGameData(data.game);
+    data.room && setRoomData(data.room);
+    data.players && setPlayersData(data.players);
+    data.my_player_id && setMyPlayerId(data.my_player_id);
   };
 
-  const resetTournamentData = () => {
+  const resetWaitingRoomData = () => {
     setGameData(null);
     setRoomData(null);
     setPlayersData(null);
@@ -25,7 +26,7 @@ export const TournamentProvider = ({ children }) => {
   };
 
   return (
-    <Tournament.Provider
+    <Game.Provider
       value={{
         gameData,
         roomData,
@@ -35,14 +36,16 @@ export const TournamentProvider = ({ children }) => {
         setRoomData,
         setPlayersData,
         setMyPlayerId,
-        setTournamentData,
-        resetTournamentData,
+        setWaitingRoomData,
+        resetWaitingRoomData,
         matchData,
         setMatchData,
+        setBracketData,
+        bracketData,
       }}>
       {children}
-    </Tournament.Provider>
+    </Game.Provider>
   );
 };
 
-export const useTournament = () => useContext(Tournament);
+export const useGame = () => useContext(Game);

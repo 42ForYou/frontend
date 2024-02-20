@@ -1,12 +1,12 @@
 import React from "react";
 import StyledButton from "../common/StyledButton";
 import { useNavigate } from "react-router-dom";
-import { useTournament } from "../../context/TournamentContext";
+import { useGame } from "../../context/GameContext";
 import { useSocket } from "../../context/SocketContext";
 
 const ExitRoomButton = () => {
   const navigate = useNavigate();
-  const { roomData, myPlayerId } = useTournament();
+  const { roomData, myPlayerId } = useGame();
   const namespace = `/game/room/${roomData?.id}`;
   const { sockets } = useSocket();
 

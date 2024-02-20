@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useSocket } from "../context/SocketContext";
 import { del } from "../utils/apiBase";
 import { API_ENDPOINTS } from "../utils/apiEndpoints";
-import { useTournament } from "../context/TournamentContext";
+import { useGame } from "../context/GameContext";
 import { useAuth } from "../context/AuthContext";
 
 const GameWaitingRoomPage = () => {
@@ -19,8 +19,8 @@ const GameWaitingRoomPage = () => {
     myPlayerId,
     bracketData,
     setBracketData,
-    resetTournamentData,
-  } = useTournament();
+    resetWaitingRoomData,
+  } = useGame();
   const navigate = useNavigate();
   const { sockets, connectNamespace, disconnectNamespace, setupEventListeners, removeEventListeners } = useSocket();
   const namespace = `/game/room/${roomData?.id}`;
@@ -65,7 +65,7 @@ const GameWaitingRoomPage = () => {
         handleAbortExit();
       },
       onDisconnect: () => {
-        resetTournamentData();
+        resetWaitingRoomData();
       },
     });
 

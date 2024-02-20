@@ -4,7 +4,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 // context
 import { AuthProvider } from "./context/AuthContext";
 import { SocketProvider } from "./context/SocketContext";
-import { TournamentProvider } from "./context/TournamentContext";
+import { GameProvider } from "./context/GameContext";
 import { OnlineStatusProvider } from "./context/OnlineStatusContext";
 
 // page
@@ -31,11 +31,11 @@ const App = () => {
     <BrowserRouter>
       <AuthProvider>
         <SocketProvider>
-          <TournamentProvider>
+          <GameProvider>
             <OnlineStatusProvider>
               <AppContent />
             </OnlineStatusProvider>
-          </TournamentProvider>
+          </GameProvider>
         </SocketProvider>
       </AuthProvider>
     </BrowserRouter>
