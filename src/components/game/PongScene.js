@@ -7,6 +7,7 @@ const PongScene = () => {
   const mountRef = useRef(null);
   const sceneRef = useRef(null); // Three.js 씬을 저장하기 위한 ref
   const [currentSegmentIndex, setCurrentSegmentIndex] = useState(0);
+  const [currentTime, setCurrentTime] = useState(0);
 
   useEffect(() => {
     sceneRef.current = new THREE.Scene();
@@ -75,50 +76,58 @@ const PongScene = () => {
       scene.background = texture;
     });
 
-    const animate = () => {
+    let lastTime = 0;
+    const animate = (time) => {
       requestAnimationFrame(animate);
+      const deltaTime = (time - lastTime) / 1000;
+      lastTime = time;
+
+      // 여기에 애니메이션 관련 업데이트 로직 추가
+      updateBallPosition(deltaTime);
+      updatePaddlePosition();
+
       renderer.render(scene, camera);
     };
 
-    animate();
+    requestAnimationFrame(animate);
 
     return () => {
       window.removeEventListener("resize", onResize);
-      if (mountRef.current) {
-        mountRef.current.removeChild(renderer.domElement);
-      }
+      mountRef.current.removeChild(renderer.domElement);
     };
   }, []);
 
-  useEffect(() => {
-    if (!trackBall) return;
-    const ball = sceneRef.current.getObjectByName("ball");
-    if (ball && trackBall && trackBall.segments.length > 0) {
-      let segment = trackBall.segments[currentSegmentIndex];
-      const segmentTime = trackBall.t_end - trackBall.t_event;
-      const elapsedTime = (Date.now() / 1000 - trackBall.t_event) % segmentTime;
-      let progress = elapsedTime / segmentTime;
-      if (progress > 1) {
-        progress = 1;
-        setCurrentSegmentIndex((prevIndex) => (prevIndex + 1) % trackBall.segments.length);
-        segment = trackBall.segments[currentSegmentIndex];
-      }
-      const x = segment.x_s + (segment.x_e - segment.x_s) * progress;
-      const y = segment.y_s + (segment.y_e - segment.y_s) * progress;
-      ball.position.set(x, 0.15, y);
-    }
-  }, [trackBall, currentSegmentIndex]);
+  // 공의 위치를 업데이트하는 함수
+  const updateBallPosition = (deltaTime) => {
+    if (!trackBall || trackBall.segments.length === 0) return;
 
-  useEffect(() => {
-    if (!trackPaddle) return;
-    const paddleName = trackPaddle.player === "A" ? "paddle_a" : "paddle_b";
-    const paddle = sceneRef.current.getObjectByName(paddleName);
-    if (paddle && trackPaddle) {
-      const targetY = trackPaddle.y;
-      const currentY = paddle.position.y;
-      paddle.position.y += (targetY - currentY) * 0.1;
+    const ball = sceneRef.current.getObjectByName("ball");
+    const segment = trackBall.segments[currentSegmentIndex];
+
+    const progress = deltaTime * segment.dx;
+    const x = ball.position.x + progress;
+    const y = segment.y_s + segment.dy * (Date.now() / 1000 - trackBall.t_event);
+
+    // 공의 위치를 업데이트
+    ball.position.set(x, 0.15, y);
+
+    // 공이 세그먼트의 끝에 도달했는지 확인
+    if ((segment.dx > 0 && x >= segment.x_e) || (segment.dx < 0 && x <= segment.x_e)) {
+      setCurrentSegmentIndex((prevIndex) => (prevIndex + 1) % trackBall.segments.length);
+      setCurrentTime(0); // 시간 초기화
+    } else {
+      setCurrentTime(currentTime + deltaTime);
     }
-  }, [trackPaddle]);
+  };
+
+  // 패들의 위치를 업데이트하는 함수
+  const updatePaddlePosition = () => {
+    if (trackPaddle) {
+      const paddle = sceneRef.current.getObjectByName(trackPaddle.player === "A" ? "paddle_a" : "paddle_b");
+      const targetY = trackPaddle.y;
+      paddle.position.y += (targetY - paddle.position.y) * 0.05; // 보간 속도 조절
+    }
+  };
 
   return <div ref={mountRef} className="flex-grow-1" style={{ width: "100%", height: "100%", overflow: "hidden" }} />;
 };
