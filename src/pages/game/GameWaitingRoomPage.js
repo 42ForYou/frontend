@@ -5,14 +5,14 @@ import { useGame } from "../../context/GameContext";
 import LoadingPage from "../LoadingPage";
 
 const GameWaitingRoomPage = () => {
-  const { roomSocket, gameData, roomData, playersData, connectRoomSocket, setupListenersRoomSocket } = useGame();
+  const { roomSocket, gameData, roomData, playersData, myPlayerData, connectRoomSocket, setupListenersRoomSocket } =
+    useGame();
   const navigate = useNavigate();
   const { room_id } = useParams();
 
   // 마운트시에 room 소켓 연결 수립
   useEffect(() => {
     connectRoomSocket(room_id);
-    console.log("연결 수립 시도");
   }, []);
 
   // room 소켓의 연결이 수립되면 리스너를 세팅
@@ -36,7 +36,7 @@ const GameWaitingRoomPage = () => {
   return (
     <div className="GameWaitingRoomPage">
       {gameData && roomData && playersData && (
-        <WaitingRoomBox gameData={gameData} roomData={roomData} playersData={playersData} />
+        <WaitingRoomBox gameData={gameData} roomData={roomData} playersData={playersData} myPlayerData={myPlayerData} />
       )}
     </div>
   );

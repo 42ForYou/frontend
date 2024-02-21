@@ -5,11 +5,10 @@ import WaitingPlayersGrid from "./WaitingPlayerGrid";
 import StartGameButton from "./StartGameButton";
 import ExitRoomButton from "./ExitRoomButton";
 
-const WaitingRoomBox = ({ gameData, roomData, playersData }) => {
+const WaitingRoomBox = ({ gameData, roomData, playersData, myPlayerData }) => {
   const { loggedIn } = useAuth();
   const { game_id, is_tournament, game_point, time_limit, n_players } = gameData;
   const { id: room_id, title, host, join_players } = roomData;
-  const amIHost = host === loggedIn.nickname;
 
   return (
     <div className="WaitingRoomBox d-flex-col full-height">
@@ -21,9 +20,13 @@ const WaitingRoomBox = ({ gameData, roomData, playersData }) => {
         nPlayers={n_players}
         joinPlayers={join_players}
       />
-      <WaitingPlayersGrid players={playersData} host={host} isTournament={is_tournament || n_players === 4} />
+      <WaitingPlayersGrid
+        players={playersData}
+        amIHost={myPlayerData.host}
+        isTournament={is_tournament || n_players === 4}
+      />
       <div className="WaitingRoomButtons d-flex justify-content-end">
-        {amIHost && <StartGameButton isActive={n_players === join_players} />}
+        {myPlayerData.host && <StartGameButton isActive={n_players === join_players} />}
         <ExitRoomButton />
       </div>
     </div>
