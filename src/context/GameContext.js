@@ -82,7 +82,6 @@ export const GameProvider = ({ children }) => {
     };
 
     const newRoomNamespace = `/game/room/${newRoomId}`;
-    const listeningEventList = ["update_room", "destroyed", "update_tournament", "config"];
 
     if (sockets[newRoomNamespace]) return;
     setRoomNamespace(newRoomNamespace);
@@ -99,7 +98,6 @@ export const GameProvider = ({ children }) => {
         handleAbortExitRoom();
       },
       onDisconnect: () => {
-        removeEventListenersNamespace(listeningEventList);
         clearWaitingRoomData();
       },
     });
@@ -125,7 +123,6 @@ export const GameProvider = ({ children }) => {
     };
 
     const newSubgameNamespace = `${roomNamespace}${getSubgameNamespace(newBracketData)}`;
-    const listeningEventList = ["start", "ended", "update_time_left", "update_scores", "update_track_paddle"];
 
     if (sockets[newSubgameNamespace]) return;
 
@@ -140,7 +137,6 @@ export const GameProvider = ({ children }) => {
         handleAbortExit();
       },
       onDisconnect: () => {
-        removeEventListenersNamespace(listeningEventList);
         clearTournamentData();
       },
     });
@@ -149,7 +145,10 @@ export const GameProvider = ({ children }) => {
   const disconnectRoomSocket = () => {
     if (!sockets[roomNamespace]) return;
 
+    const listeningEventList = ["update_room", "destroyed", "update_tournament", "config"];
+
     roomSocket.emitWithTime("exited", { my_player_id: myPlayerData.id });
+    removeEventListenersNamespace(roomNamespace, listeningEventList);
     disconnectNamespace(roomNamespace);
     setRoomSocket(null);
   };
@@ -157,7 +156,10 @@ export const GameProvider = ({ children }) => {
   const disconnectSubgameSocket = () => {
     if (!sockets[subgameNamespace]) return;
 
-    disconnectNamespace(sockets[subgameNamespace]);
+    const listeningEventList = ["start", "ended", "update_time_left", "update_scores", "update_track_paddle"];
+
+    removeEventListenersNamespace(subgameNamespace, listeningEventList);
+    disconnectNamespace(subgameNamespace);
     setSubgameNamespace(null);
   };
 
@@ -203,33 +205,41 @@ export const GameProvider = ({ children }) => {
       {
         event: "start", // 서브게임 시작
         handler: (data) => {
-          console.log("start 이벤트 수신");
+          console.log("start 이벤트 수신: ", data);
           setSubgameData({ is_start: true, is_ended: false, start_time: data.t_event, winner: null });
         },
       },
       {
         event: "ended", // 서브게임 종료
         handler: (data) => {
-          console.log("ended 이벤트 수신");
+          // console.log("ended 이벤트 수신: ", data);
           setSubgameData({ is_start: false, is_ended: true, start_time: null, winner: data.winner });
           disconnectSubgameSocket();
         },
       },
       {
         event: "update_time_left",
-        handler: (data) => {},
+        handler: (data) => {
+          // console.log("update_time_left 이벤트 수신: ", data);
+        },
       },
       {
         event: "update_scores",
-        handler: (data) => {},
+        handler: (data) => {
+          // console.log("update_scores 이벤트 수신: ", data);
+        },
       },
       {
         event: "update_track_ball",
-        handler: (data) => {},
+        handler: (data) => {
+          // console.log("update_track_ball 이벤트 수신: ", data);
+        },
       },
       {
         event: "update_track_paddle",
-        handler: (data) => {},
+        handler: (data) => {
+          // console.log("update_track_paddle 이벤트 수신: ", data);
+        },
       },
     ]);
   };
