@@ -6,7 +6,7 @@ const OnlineStatusContext = createContext();
 
 export const OnlineStatusProvider = ({ children }) => {
   const [onlineStatuses, setOnlineStatuses] = useState({});
-  const { setupEventListeners, removeEventListeners } = useSocket();
+  const { setupEventListenersNamespace, removeEventListenersNamespace } = useSocket();
 
   useEffect(() => {
     const handleOnlineStatusUpdate = (data) => {
@@ -17,12 +17,12 @@ export const OnlineStatusProvider = ({ children }) => {
       }));
     };
 
-    setupEventListeners("/online_status", [{ event: "update_friends", handler: handleOnlineStatusUpdate }]);
+    setupEventListenersNamespace("/online_status", [{ event: "update_friends", handler: handleOnlineStatusUpdate }]);
 
     return () => {
-      removeEventListeners("/online_status", ["update_friends"]);
+      removeEventListenersNamespace("/online_status", ["update_friends"]);
     };
-  }, [setupEventListeners, removeEventListeners]);
+  }, [setupEventListenersNamespace, removeEventListenersNamespace]);
 
   return <OnlineStatusContext.Provider value={onlineStatuses}>{children}</OnlineStatusContext.Provider>;
 };
