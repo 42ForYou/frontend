@@ -1,47 +1,72 @@
 import React, { useEffect, useState } from "react";
 import { useGame } from "../context/GameContext";
 import BracketPage from "./BracketPage";
-import LoadingPage from "./LoadingPage";
+import PongScenePage from "./PongScenePage";
+import { useNavigate } from "react-router-dom";
+import GameResultModal from "../components/game/GameResultModal";
 
-// todo: 게임 플레이 중 나가는 경우 백측과 협의 후 처리 필요
 const GamePlayPage = () => {
-  const { bracketData, subgameData, connectNextSubgameSocket } = useGame();
+  const navigate = useNavigate();
+  const { roomSocket, bracketData, subgameData, connectNextSubgameSocket } = useGame();
   const [showBracket, setShowBracket] = useState(true);
+  const [showModal, setShowModal] = useState(false);
   const [rankOngoing, setRankOngoing] = useState(null);
 
-  // 새로운 대진표가 올 때마다 "강"이 끝났는지 확인 후 업데이트
+  useEffect(() => {
+    if (!roomSocket) {
+      alert("입장이 불가한 게임입니다.");
+      navigate("/game/list");
+    }
+  });
+
+  // 새로운 대진표가 옴
   useEffect(() => {
     if (!bracketData) return;
+
+    console.log("대진표 데이터가 갱신되었습니다.");
+
     const newRank = bracketData.rank_ongoing;
+    // 1. 현재 "강"의 대진표가 갱신
     if (rankOngoing === newRank) return;
+    // 2. 토너먼트 종료
     else if (newRank < 0) {
-      // 토너먼트 종료 후 처리 (결과 팝업창 띄우기)
       alert("토너먼트가 종료되었습니다.");
-    } else {
+      setShowBracket(true);
+      setShowModal(true);
+      // 결과 팝업창 띄우기
+    }
+    // 3. 다음 "강"으로 넘어감
+    else {
       connectNextSubgameSocket(bracketData);
       setRankOngoing(newRank);
-    }
-  }, [bracketData]);
-
-  useEffect(() => {
-    if (bracketData) {
-      console.log("대진표 데이터가 갱신되었습니다. 대진표를 띄웁니다");
       setShowBracket(true);
     }
   }, [bracketData]);
 
   useEffect(() => {
-    if (subgameData.is_start && subgameData.config) {
-      console.log("매치가 시작하고 설정 데이터가 도착했습니다. 퐁 장면을 띄웁니다");
-      // todo: 매치 시작 시간을 기다렸다가 퐁 장면을 띄우도록 수정
+    if (!subgameData.is_start) return;
+
+    const now = new Date().getTime();
+    const delay = subgameData.start_time * 1000 - now;
+    console.log("서브게임 시작 시간: ", subgameData.start_time * 1000);
+    console.log("현재 시간: ", now);
+    if (delay > 0) {
+      setTimeout(() => {
+        setShowBracket(false);
+      }, delay);
+    } else {
+      // todo: 예외 처리
+      console.log("delay가 0보다 작습니다.");
       setShowBracket(false);
     }
   }, [subgameData]);
 
-  if (!bracketData) return <LoadingPage />;
-
-  return <div className="GamePlayPage">{showBracket ? <BracketPage /> : "PongScene Page"}</div>;
-  // return <div className="GamePlayPage">{showBracket ? <BracketPage /> : <PongScenePage />}</div>;
+  return (
+    <div className="GamePlayPage">
+      {showBracket ? <BracketPage /> : <PongScenePage />}
+      {showModal && <GameResultModal result={"게임 결과"} />}
+    </div>
+  );
 };
 
 export default GamePlayPage;
