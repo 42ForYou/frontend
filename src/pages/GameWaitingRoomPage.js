@@ -17,10 +17,10 @@ const GameWaitingRoomPage = () => {
 
   // room 소켓의 연결이 수립되면 리스너를 세팅
   useEffect(() => {
-    if (!roomSocket) return;
+    if (!roomSocket || !gameData) return;
 
     const navigateToPlayPage = () => {
-      navigate(`/game/play/${gameData.id}`);
+      navigate(`/game/play/${gameData.game_id}`);
     };
 
     setupListenersRoomSocket();
@@ -29,7 +29,7 @@ const GameWaitingRoomPage = () => {
     return () => {
       roomSocket.off("update_tournament", navigateToPlayPage);
     };
-  }, [roomSocket]);
+  }, [roomSocket, gameData]);
 
   if (!roomData) return <LoadingPage />;
 
