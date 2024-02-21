@@ -8,7 +8,6 @@ import { useGame } from "../../context/GameContext";
 // 스타일을 가지는 박스
 // 일단은 1대1도 토너먼트 스타일과 통일
 const RoomItem = ({ game, room }) => {
-  const { setWaitingRoomData } = useGame();
   const navigate = useNavigate();
   const { game_id, is_tournament, game_point, time_limit, n_players } = game;
   const { id: room_id, title, is_playing, join_players, host } = room;
@@ -17,8 +16,6 @@ const RoomItem = ({ game, room }) => {
     const postJoinRequest = async () => {
       try {
         const resData = await post(API_ENDPOINTS.PLAYERS(), { game_id: gameId });
-        const waitingRoomData = resData.data;
-        await setWaitingRoomData(waitingRoomData);
         navigate(`/game/waiting/${room_id}`);
         console.log("방 참가 요청 성공: ", resData);
       } catch (error) {

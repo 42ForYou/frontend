@@ -101,7 +101,6 @@ const RoomGameOptionForm = ({ updateRoomData }) => {
 
 const CreateRoomModal = ({ handleClose }) => {
   const navigate = useNavigate();
-  const { setWaitingRoomData } = useGame();
   const [roomData, setRoomData] = useState({});
 
   const handleUpdateRoomData = (path, value) => {
@@ -114,7 +113,6 @@ const CreateRoomModal = ({ handleClose }) => {
       try {
         const resData = await post(API_ENDPOINTS.ROOM_LIST(), roomData);
         const waitingRoomData = resData.data;
-        await setWaitingRoomData(waitingRoomData);
         navigate(`/game/waiting/${waitingRoomData.room.id}`);
         handleClose();
         console.log("방 생성 요청 성공");

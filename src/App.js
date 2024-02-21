@@ -55,12 +55,10 @@ const AppContent = () => {
               <Route path="/users" element={<UserSearchPage />} />
               <Route element={<OnlineStatusProviderWrapper />}>
                 <Route path="/friends" element={<FriendsPage />} />
+                <Route path="/game/list" element={<GameRoomListPage />} />
               </Route>
             </Route>
             <Route element={<GameProviderWrapper />}>
-              <Route element={<MainLayout />}>
-                <Route path="/game/list" element={<GameRoomListPage />} />
-              </Route>
               <Route path="/game/waiting/:room_id" element={<GameWaitingRoomPage />} />
               <Route path="/game/play/:game_id" element={<GamePlayPage />} />
             </Route>
