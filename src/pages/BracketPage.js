@@ -1,5 +1,7 @@
 import React from "react";
 import Bracket from "../components/game/Bracket";
+import { useGame } from "../context/GameContext";
+import LoadingPage from "./LoadingPage";
 
 const player = (intra_id, nickname, avatar) => {
   return {
@@ -10,9 +12,11 @@ const player = (intra_id, nickname, avatar) => {
 };
 
 const BracketPage = () => {
-  const { bracketData } = useTournament();
+  const { bracketData } = useGame();
 
-  return <Bracket subgames={bracketData.subgames} />;
+  if (!bracketData) return <LoadingPage />;
+
+  return <Bracket nRanks={bracketData.n_ranks} subgames={bracketData.subgames} />;
 };
 
 export default BracketPage;
