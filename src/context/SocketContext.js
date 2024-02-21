@@ -63,6 +63,27 @@ export const SocketProvider = ({ children }) => {
     });
   };
 
+  // 네임스페이스와 event 객체 배열을 받아서 해당 소켓에 이벤트 리스너를 등록
+  // 하나의 이벤트 객체 구조는 { event: string, handler: function } 형태
+  const setupEventListeners = (namespace, events) => {
+    const socket = sockets[namespace];
+    if (socket) {
+      events.forEach(({ event, handler }) => {
+        socket.on(event, handler);
+      });
+    }
+  };
+
+  // 이벤트 명만 넘기면 됨
+  const removeEventListeners = (namespace, events) => {
+    const socket = sockets[namespace];
+    if (socket) {
+      events.forEach((event) => {
+        socket.off(event);
+      });
+    }
+  };
+
   const disconnectAllSockets = () => {
     console.log("모든 소켓 객체의 연결을 해제합니다.");
     Object.values(socketsRef.current).forEach((socket) => {
@@ -88,8 +109,8 @@ export const SocketProvider = ({ children }) => {
         sockets,
         connectNamespace,
         disconnectNamespace,
-        setupEventListeners: () => {},
-        removeEventListeners: () => {},
+        setupEventListeners,
+        removeEventListeners,
       }}>
       {children}
     </SocketContext.Provider>
