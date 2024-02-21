@@ -80,8 +80,10 @@ const PongScene = () => {
 
     // 컴포넌트 언마운트 시 리소스 정리
     return () => {
-      mountRef.current.removeChild(renderer.domElement); // DOM에서 렌더러 제거
-      // 필요한 경우 추가 리소스 정리 작업 수행
+      if (mountRef.current) {
+        mountRef.current.removeChild(renderer.domElement); // DOM에서 렌더러 제거
+        // 필요한 경우 추가 리소스 정리 작업 수행
+      }
     };
   }, []);
 
