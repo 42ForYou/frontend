@@ -94,7 +94,7 @@ export const GameProvider = ({ children }) => {
     if (sockets[namespace]) disconnectNamespace(namespace);
   };
 
-  const connectMatchSocket = (namespace) => {
+  const connectSubgameSocket = (namespace) => {
     if (!sockets[namespace]) {
       connectNamespace(namespace, {
         onConnectError: () => {
@@ -110,7 +110,7 @@ export const GameProvider = ({ children }) => {
     }
   };
 
-  const connectNextMatchSocket = (namespace) => {
+  const connectNextSubgameSocket = (namespace) => {
     if (!sockets[namespace]) {
       connectNamespace(namespace, {
         onConnectError: () => {
@@ -149,7 +149,7 @@ export const GameProvider = ({ children }) => {
     ]);
   };
 
-  const disconnectMatchSocket = (namespace) => {
+  const disconnectSubgameSocket = (namespace) => {
     if (sockets[namespace]) disconnectNamespace(namespace);
   };
 
@@ -173,10 +173,10 @@ export const GameProvider = ({ children }) => {
         setupEventListenersRoomSocket,
         setupEventListenersMatchSocket,
         connectRoomSocket,
-        connectMatchSocket,
+        connectSubgameSocket,
         disconnectRoomSocket,
-        disconnectMatchSocket,
-        connectNextMatchSocket,
+        disconnectSubgameSocket,
+        connectNextSubgameSocket,
       }}>
       {children}
     </Game.Provider>
