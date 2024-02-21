@@ -2,10 +2,18 @@ import React from "react";
 import Avatar from "../common/Avatar";
 import { useAuth } from "../../context/AuthContext";
 
-const BracketPlayer = ({ playerData, columnCnt, nthColumn, topPos }) => {
+const getSubgameWinner = (subgame) => {
+  if (!subgame["winner"]) return null;
+  else if (subgame["winner"] === "A") return "player_a";
+  else return "player_b";
+};
+
+const BracketPlayer = ({ player, columnCnt, nthColumn, topPos }) => {
+  if (!player) return null;
+
   const { loggedIn } = useAuth();
-  const isMine = loggedIn && playerData.intra_id === loggedIn.intra_id;
-  const { nickname, avatar } = playerData;
+  const isMine = loggedIn && player.intra_id === loggedIn.intra_id;
+  const { nickname, avatar } = player;
   const diameter = 130;
   const leftPos = (nthColumn / columnCnt) * 100;
 
@@ -43,62 +51,83 @@ const BracketRow = ({ children }) => {
   );
 };
 
-const Bracket4Players = ({ players }) => (
-  <>
-    <div className="bracket container-fluid p-0">
-      <BracketRow>
-        <BracketPlayer playerData={{ nickname: "winner" }} columnCnt={2} nthColumn={1} topPos={75} />
-        <BracketBoxNonBorder />
-        <BracketBoxNonBorder />
-      </BracketRow>
+const BracketSubgame = ({ subgame }) => {};
 
-      <BracketRow>
-        <BracketPlayer playerData={players[0][0][0]} columnCnt={4} nthColumn={1} topPos={75} />
-        <BracketPlayer playerData={players[0][0][1]} columnCnt={4} nthColumn={3} topPos={75} />
-        <BracketBoxNonBorder />
-        <BracketBoxLeftTopBorder />
-        <BracketBoxRightTopBorder />
-        <BracketBoxNonBorder />
-      </BracketRow>
+// todo: 하드코딩 제거
+const Bracket4Players = ({ subgames }) => {
+  const winner00 = getSubgameWinner(subgames[0][0]);
+  const winner10 = getSubgameWinner(subgames[1][0]);
+  const winner11 = getSubgameWinner(subgames[1][1]);
 
-      <BracketRow>
-        <BracketBoxNonBorder />
-        <BracketBoxLeftTopBorder />
-        <BracketBoxRightTopBorder />
-        <BracketBoxNonBorder />
-        <BracketBoxNonBorder />
-        <BracketBoxLeftTopBorder />
-        <BracketBoxRightTopBorder />
-        <BracketBoxNonBorder />
-      </BracketRow>
+  return (
+    <>
+      <div className="bracket container-fluid p-0">
+        <BracketRow>
+          <BracketPlayer player={subgames[0][0][winner00]} columnCnt={2} nthColumn={1} topPos={75} />
+          <BracketBoxNonBorder />
+          <BracketBoxNonBorder />
+        </BracketRow>
 
-      <BracketRow>
-        <BracketPlayer playerData={players[1][0][0]} columnCnt={8} nthColumn={1} topPos={0} />
-        <BracketPlayer playerData={players[1][0][1]} columnCnt={8} nthColumn={3} topPos={0} />
-        <BracketPlayer playerData={players[1][1][0]} columnCnt={8} nthColumn={5} topPos={0} />
-        <BracketPlayer playerData={players[1][1][1]} columnCnt={8} nthColumn={7} topPos={0} />
-        <BracketBoxNonBorder />
-        <BracketBoxNonBorder />
-        <BracketBoxNonBorder />
-        <BracketBoxNonBorder />
-      </BracketRow>
-    </div>
-  </>
-);
+        <BracketRow>
+          <BracketPlayer
+            player={winner10 ? subgames[1][0][winner10] : subgames[0][0]["player_a"]}
+            columnCnt={4}
+            nthColumn={1}
+            topPos={75}
+          />
+          <BracketPlayer
+            player={winner11 ? subgames[1][1][winner11] : subgames[0][0]["player_b"]}
+            columnCnt={4}
+            nthColumn={3}
+            topPos={75}
+          />
+          <BracketBoxNonBorder />
+          <BracketBoxLeftTopBorder />
+          <BracketBoxRightTopBorder />
+          <BracketBoxNonBorder />
+        </BracketRow>
 
-// todo: 구현
-const Bracket2Players = ({ players }) => {
+        <BracketRow>
+          <BracketBoxNonBorder />
+          <BracketBoxLeftTopBorder />
+          <BracketBoxRightTopBorder />
+          <BracketBoxNonBorder />
+          <BracketBoxNonBorder />
+          <BracketBoxLeftTopBorder />
+          <BracketBoxRightTopBorder />
+          <BracketBoxNonBorder />
+        </BracketRow>
+
+        <BracketRow>
+          <BracketPlayer player={subgames[1][0]["player_a"]} columnCnt={8} nthColumn={1} topPos={0} />
+          <BracketPlayer player={subgames[1][0]["player_b"]} columnCnt={8} nthColumn={3} topPos={0} />
+          <BracketPlayer player={subgames[1][1]["player_a"]} columnCnt={8} nthColumn={5} topPos={0} />
+          <BracketPlayer player={subgames[1][1]["player_b"]} columnCnt={8} nthColumn={7} topPos={0} />
+          <BracketBoxNonBorder />
+          <BracketBoxNonBorder />
+          <BracketBoxNonBorder />
+          <BracketBoxNonBorder />
+        </BracketRow>
+      </div>
+    </>
+  );
+};
+
+// todo: subgames[0][0]["winner"] 값이 "A"라면 A의 정보를 가져와야함
+const Bracket2Players = ({ subgames }) => {
+  const winner00 = getSubgameWinner(subgames[0][0]);
+
   return (
     <div className="bracket container-fluid p-0">
       <BracketRow>
-        <BracketPlayer playerData={{ nickname: "winner" }} columnCnt={2} nthColumn={1} topPos={75} />
+        <BracketPlayer player={subgames[0][0][winner00]} columnCnt={2} nthColumn={1} topPos={75} />
         <BracketBoxNonBorder />
         <BracketBoxNonBorder />
       </BracketRow>
 
       <BracketRow>
-        <BracketPlayer playerData={players[0][0][0]} columnCnt={4} nthColumn={1} topPos={75} />
-        <BracketPlayer playerData={players[0][0][1]} columnCnt={4} nthColumn={3} topPos={75} />
+        <BracketPlayer player={subgames[0][0]["player_a"]} columnCnt={4} nthColumn={1} topPos={75} />
+        <BracketPlayer player={subgames[0][0]["player_b"]} columnCnt={4} nthColumn={3} topPos={75} />
         <BracketBoxNonBorder />
         <BracketBoxLeftTopBorder />
         <BracketBoxRightTopBorder />
@@ -108,16 +137,11 @@ const Bracket2Players = ({ players }) => {
   );
 };
 
-const Bracket = ({ players }) => {
-  if (!players) return null;
-
-  const playersArr = players.players;
-  const nPlayers = playersArr[playersArr.length - 1].length * 2;
-
+const Bracket = ({ subgames, nRanks }) => {
   return (
     <>
-      {nPlayers === 2 && <Bracket2Players players={playersArr} />}
-      {nPlayers === 4 && <Bracket4Players players={playersArr} />}
+      {nRanks === 1 && <Bracket2Players subgames={subgames} />}
+      {nRanks === 2 && <Bracket4Players subgames={subgames} />}
     </>
   );
 };
