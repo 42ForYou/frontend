@@ -8,7 +8,7 @@ const ProtectedRoute = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    validateTokenInCookies();
+    if (!loggedIn) validateTokenInCookies();
   }, []);
 
   useEffect(() => {
