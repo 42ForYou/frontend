@@ -1,19 +1,13 @@
 import React from "react";
 import StyledButton from "../common/StyledButton";
 import { useGame } from "../../context/GameContext";
-import { useSocket } from "../../context/SocketContext";
-import { useNavigate } from "react-router-dom";
 
 const StartGameButton = ({ isActive }) => {
-  const navigate = useNavigate();
-  const { roomData, gameData } = useGame();
-  const namespace = `/game/room/${roomData?.id}`;
-  const socket = useSocket().sockets[namespace];
+  const { roomSocket } = useGame();
 
   const handleStartGame = () => {
     if (!window.confirm("게임을 시작하시겠습니까?")) return;
-    socket.emitWithTime("start");
-    navigate(`/game/play/${gameData.game_id}`);
+    roomSocket.emitWithTime("start");
   };
 
   return (
