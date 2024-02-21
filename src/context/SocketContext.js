@@ -63,9 +63,25 @@ export const SocketProvider = ({ children }) => {
     });
   };
 
+  const setupEventListenersSocket = (socket, events) => {
+    if (socket) {
+      events.forEach(({ event, handler }) => {
+        socket.on(event, handler);
+      });
+    }
+  };
+
+  const removeEventListenersSocket = (socket, events) => {
+    if (socket) {
+      events.forEach((event) => {
+        socket.off(event);
+      });
+    }
+  };
+
   // 네임스페이스와 event 객체 배열을 받아서 해당 소켓에 이벤트 리스너를 등록
   // 하나의 이벤트 객체 구조는 { event: string, handler: function } 형태
-  const setupEventListeners = (namespace, events) => {
+  const setupEventListenersNamespace = (namespace, events) => {
     const socket = sockets[namespace];
     if (socket) {
       events.forEach(({ event, handler }) => {
@@ -75,7 +91,7 @@ export const SocketProvider = ({ children }) => {
   };
 
   // 이벤트 명만 넘기면 됨
-  const removeEventListeners = (namespace, events) => {
+  const removeEventListenersNamespace = (namespace, events) => {
     const socket = sockets[namespace];
     if (socket) {
       events.forEach((event) => {
@@ -109,8 +125,10 @@ export const SocketProvider = ({ children }) => {
         sockets,
         connectNamespace,
         disconnectNamespace,
-        setupEventListeners,
-        removeEventListeners,
+        setupEventListenersNamespace,
+        removeEventListenersNamespace,
+        setupEventListenersSocket,
+        removeEventListenersSocket,
       }}>
       {children}
     </SocketContext.Provider>
