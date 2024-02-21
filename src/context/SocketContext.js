@@ -22,7 +22,7 @@ export const SocketProvider = ({ children }) => {
 
       newSocket.on("connect", () => {
         console.log(`Socket[${namespace}] connected: `, newSocket.id);
-        if (onConnect) onConnect();
+        if (onConnect) onConnect(newSocket);
       });
 
       newSocket.on("connect_error", (err) => {
