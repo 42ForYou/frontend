@@ -1,7 +1,7 @@
 import React from "react";
-import Bracket from "../components/game/Bracket";
-import { useGame } from "../context/GameContext";
-import LoadingPage from "./LoadingPage";
+import Bracket from "../../components/game/Bracket";
+import { useGame } from "../../context/GameContext";
+import LoadingPage from "../LoadingPage";
 
 const player = (intra_id, nickname, avatar) => {
   return {

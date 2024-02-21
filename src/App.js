@@ -9,21 +9,22 @@ import { OnlineStatusProviderWrapper } from "./context/OnlineStatusContext";
 
 // page
 import HomePage from "./pages/HomePage";
-import GamePlayPage from "./pages/GamePlayPage";
-import FriendsPage from "./pages/FriendsPage";
+import OAuthLoginPage from "./pages/auth/OAuthLoginPage";
 import OauthCallbackPage from "./pages/auth/OauthCallbackPage";
-import UserProfilePage from "./pages/UserProfilePage";
-import MyProfilePage from "./pages/MyProfilePage";
-import GameWaitingRoomPage from "./pages/GameWaitingRoomPage";
-import GameRoomListPage from "./pages/GameRoomListPage";
-import UserSearchPage from "./pages/UserSearchPage";
-import NotFoundPage from "./pages/error/NotFoundPage";
-
-import ProtectedRoute from "./components/auth/ProtectedRoute";
-import MainLayout from "./components/layout/MainLayout";
-import ChatPage from "./pages/ChatPage";
 import TwoFactorAuthPage from "./pages/auth/TwoFactorAuthPage";
-import OAuthLoginPage from "./pages/auth/OauthLoginPage";
+import ChatPage from "./pages/menu/ChatPage";
+import RoomListPage from "./pages/menu/RoomListPage";
+import GameWaitingRoomPage from "./pages/game/GameWaitingRoomPage";
+import GamePlayPage from "./pages/game/GamePlayPage";
+import NotFoundPage from "./pages/NotFoundPage";
+import FriendsPage from "./pages/menu/FriendsPage";
+import UserSearchPage from "./pages/menu/UserSearchPage";
+import MyProfilePage from "./pages/profile/MyProfilePage";
+import UserProfilePage from "./pages/profile/UserProfilePage";
+
+// layout
+import MainLayout from "./components/layout/MainLayout";
+import ProtectedRoute from "./components/auth/ProtectedRoute";
 
 // todo: Tournament, OnlineStatus는 필요한 컴포넌트에만 공급 검토
 const App = () => {
@@ -55,7 +56,7 @@ const AppContent = () => {
               <Route path="/users" element={<UserSearchPage />} />
               <Route element={<OnlineStatusProviderWrapper />}>
                 <Route path="/friends" element={<FriendsPage />} />
-                <Route path="/game/list" element={<GameRoomListPage />} />
+                <Route path="/game/list" element={<RoomListPage />} />
               </Route>
             </Route>
             <Route element={<GameProviderWrapper />}>
