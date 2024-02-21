@@ -2,12 +2,12 @@ import React, { useEffect } from "react";
 import PongScene from "../components/game/PongScene";
 
 const PongScenePage = () => {
-  const { roomData, matchData } = useGame();
+  const { roomData, subgameData } = useGame();
   const roomNamespace = `/game/room/${roomData?.id}`;
 
   useEffect(() => {
-    const matchNamespace = `${roomNamespace}/${matchData.rank}/${matchData.idx_in_rank}`;
-    setupEventListeners(matchNamespace, [
+    const matchNamespace = `${roomNamespace}/${subgameData.rank}/${subgameData.idx_in_rank}`;
+    setupEventListenersNamespace(matchNamespace, [
       {
         event: "update_time_left",
         handler: null,
@@ -31,7 +31,7 @@ const PongScenePage = () => {
     ]);
 
     return () => {
-      removeEventListeners(matchNamespace, [
+      removeEventListenersNamespace(matchNamespace, [
         "update_time_left",
         "ended",
         "update_scores",
@@ -40,7 +40,7 @@ const PongScenePage = () => {
       ]);
       // disconnectNamespace(matchNamespace);
     };
-  }, [matchNamespace, matchData]);
+  }, [matchNamespace, subgameData]);
 
   return <PongScene />;
 };
