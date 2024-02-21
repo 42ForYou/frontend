@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
-import WaitingRoomBox from "../components/waiting_room/WaitingRoomBox";
+import WaitingRoomBox from "../../components/waiting_room/WaitingRoomBox";
 import { useParams, useNavigate } from "react-router-dom";
-import { useGame } from "../context/GameContext";
-import LoadingPage from "./LoadingPage";
+import { useGame } from "../../context/GameContext";
+import LoadingPage from "../LoadingPage";
 
 const GameWaitingRoomPage = () => {
   const { roomSocket, gameData, roomData, playersData, connectRoomSocket, setupListenersRoomSocket } = useGame();

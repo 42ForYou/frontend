@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { useGame } from "../context/GameContext";
+import { useGame } from "../../context/GameContext";
 import BracketPage from "./BracketPage";
 import PongScenePage from "./PongScenePage";
 import { useNavigate } from "react-router-dom";
-import GameResultModal from "../components/game/GameResultModal";
+import GameResultModal from "../../components/game/GameResultModal";
 
 const GamePlayPage = () => {
   const navigate = useNavigate();

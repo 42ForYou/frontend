@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
-import ProfileBox from "../components/profile/ProfileBox";
+import ProfileBox from "../../components/profile/ProfileBox";
 import { useParams, useNavigate } from "react-router-dom";
-import LoadingPage from "./LoadingPage";
-import useFetchProfileData from "../hooks/useFetchProfileData";
-import ContentContainer from "../components/layout/ContentContainer";
-import ContentTitle from "../components/layout/ContentTitle";
-import ContentBody from "../components/layout/ContentBody";
+import LoadingPage from "../LoadingPage";
+import useFetchProfileData from "../../hooks/useFetchProfileData";
+import ContentContainer from "../../components/layout/ContentContainer";
+import ContentTitle from "../../components/layout/ContentTitle";
+import ContentBody from "../../components/layout/ContentBody";
 
 const UserProfilePage = () => {
   const { intra_id } = useParams();
