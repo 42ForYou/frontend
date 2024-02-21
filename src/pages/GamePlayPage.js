@@ -1,90 +1,47 @@
 import React, { useEffect, useState } from "react";
 import { useGame } from "../context/GameContext";
-import { useNavigate } from "react-router-dom";
-import { useSocket } from "../context/SocketContext";
 import BracketPage from "./BracketPage";
-import PongScenePage from "./PongScenePage";
+import LoadingPage from "./LoadingPage";
 
 // todo: 게임 플레이 중 나가는 경우 백측과 협의 후 처리 필요
 const GamePlayPage = () => {
-  const navigate = useNavigate();
-  const { roomData, myPlayerId, resetWaitingRoomData, setBracketData, setMatchData, matchData } = useGame();
-  const { connectNamespace, disconnectNamespace, setupEventListeners, removeEventListeners } = useSocket();
-  const roomNamespace = `/game/room/${roomData?.id}`;
-  const [matchNamespace, setMatchNamespace] = useState("");
+  const { bracketData, subgameData, connectNextSubgameSocket } = useGame();
   const [showBracket, setShowBracket] = useState(true);
+  const [rankOngoing, setRankOngoing] = useState(null);
 
-  const connectMatchSocket = (matchNamespace) => {
-    connectNamespace(matchNamespace, {
-      onConnectError: () => {
-        alert("실시간 통신 연결에 실패하였습니다.");
-        handleAbortExit();
-      },
-      onDisconnect: () => {
-        resetWaitingRoomData();
-      },
-    });
-  };
-
-  const setupMatchEventListeners = (matchNamespace) => {
-    setupEventListeners(matchNamespace, [
-      {
-        event: "start",
-        handler: () => {
-          setShowBracket(false);
-        },
-      },
-      {
-        event: "config",
-        handler: (data) => {
-          setMatchData({ ...matchData, config: data }); // setMatchConfig -> setMatchData로 수정
-        },
-      },
-    ]);
-  };
-
-  const updateBracketHandler = (data) => {
-    const rank = data.rank_ongoing;
-    const idx_in_rank = data.players.findIndex((rank) =>
-      rank.some((pair) => pair.some((player) => player.intra_id === myPlayerId))
-    );
-    const newMatchNamespace = `${roomNamespace}/${rank}/${idx_in_rank}`;
-    setMatchNamespace(newMatchNamespace);
-    connectMatchSocket(newMatchNamespace);
-    setBracketData(data);
-    setShowBracket(true);
-  };
-
+  // 새로운 대진표가 올 때마다 "강"이 끝났는지 확인 후 업데이트
   useEffect(() => {
-    if (!roomData || !roomData.id) {
-      alert("게임에 입장할 수 없습니다.");
-      navigate(-1);
-      return;
+    if (!bracketData) return;
+    const newRank = bracketData.rank_ongoing;
+    if (rankOngoing === newRank) return;
+    else if (newRank < 0) {
+      // 토너먼트 종료 후 처리 (결과 팝업창 띄우기)
+      alert("토너먼트가 종료되었습니다.");
+    } else {
+      connectNextSubgameSocket(bracketData);
+      setRankOngoing(newRank);
     }
-
-    setupEventListeners(roomNamespace, [
-      {
-        event: "update_tournament",
-        handler: updateBracketHandler,
-      },
-    ]);
-
-    return () => {
-      removeEventListeners(roomNamespace, ["update_tournament"]);
-      disconnectNamespace(roomNamespace);
-    };
-  }, [roomNamespace, navigate, setupEventListeners, removeEventListeners, disconnectNamespace, updateBracketHandler]);
+  }, [bracketData]);
 
   useEffect(() => {
-    setupMatchEventListeners(matchNamespace);
+    if (bracketData) {
+      console.log("대진표 데이터가 갱신되었습니다. 대진표를 띄웁니다");
+      setShowBracket(true);
+    }
+  }, [bracketData]);
 
-    return () => {
-      removeEventListeners(matchNamespace, ["start", "config"]);
-      disconnectNamespace(matchNamespace);
-    };
-  }, [matchNamespace, setupMatchEventListeners, removeEventListeners, disconnectNamespace]);
+  useEffect(() => {
+    if (subgameData.is_start && subgameData.config) {
+      console.log("매치가 시작하고 설정 데이터가 도착했습니다. 퐁 장면을 띄웁니다");
+      // todo: 매치 시작 시간을 기다렸다가 퐁 장면을 띄우도록 수정
+      setShowBracket(false);
+    }
+  }, [subgameData]);
 
-  return <div className="GamePlayPage">{showBracket ? <BracketPage /> : <PongScenePage />}</div>;
+  if (!bracketData) return <LoadingPage />;
+
+  return <div className="GamePlayPage">{showBracket ? <BracketPage /> : "PongScene Page"}</div>;
+  // return <div className="GamePlayPage">{showBracket ? <BracketPage /> : <PongScenePage />}</div>;
 };
 
 export default GamePlayPage;
