@@ -10,7 +10,7 @@ import { OnlineStatusProviderWrapper } from "./context/OnlineStatusContext";
 // page
 import HomePage from "./pages/HomePage";
 import OAuthLoginPage from "./pages/auth/OAuthLoginPage";
-import OauthCallbackPage from "./pages/auth/OauthCallbackPage";
+import OAuthCallbackPage from "./pages/auth/OAuthCallbackPage";
 import TwoFactorAuthPage from "./pages/auth/TwoFactorAuthPage";
 import ChatPage from "./pages/menu/ChatPage";
 import RoomListPage from "./pages/menu/RoomListPage";
@@ -44,7 +44,7 @@ const AppContent = () => {
       <Routes>
         <Route path="/login" element={<OAuthLoginPage />} />
         <Route path="/login/2fa" element={<TwoFactorAuthPage />} />
-        <Route path="/login/callback" element={<OauthCallbackPage />} />
+        <Route path="/login/callback" element={<OAuthCallbackPage />} />
         <Route path="/chat" element={<ChatPage />} />
         {/* Protect routes */}
         <Route element={<ProtectedRoute />}>

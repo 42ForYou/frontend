@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 
-const OauthCallbackPage = () => {
+const OAuthCallbackPage = () => {
   const queryParams = new URLSearchParams(useLocation().search);
   const code = queryParams.get("code");
   const { authenticateWithOAuth, loggedIn, isLoading, twoFactorData } = useAuth();
@@ -32,4 +32,4 @@ const OauthCallbackPage = () => {
   );
 };
 
-export default OauthCallbackPage;
+export default OAuthCallbackPage;
