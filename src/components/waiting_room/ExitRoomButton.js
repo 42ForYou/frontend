@@ -1,15 +1,12 @@
 import React from "react";
 import StyledButton from "../common/StyledButton";
 import { useNavigate } from "react-router-dom";
-import { useGame } from "../../context/GameContext";
 
 const ExitRoomButton = () => {
   const navigate = useNavigate();
-  const { roomSocket, myPlayerData } = useGame();
 
   const handleNormalExit = async () => {
     if (!window.confirm("게임 대기 방을 나가시겠습니까?")) return;
-    roomSocket.emitWithTime("exited", { my_player_id: myPlayerData.id });
     navigate("/game/list");
     console.log("방 나가기 성공");
   };

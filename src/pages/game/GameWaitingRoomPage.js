@@ -3,40 +3,67 @@ import WaitingRoomBox from "../../components/waiting_room/WaitingRoomBox";
 import { useParams, useNavigate } from "react-router-dom";
 import { useGame } from "../../context/GameContext";
 import LoadingPage from "../LoadingPage";
+import { get } from "../../utils/apiBase";
+import { API_ENDPOINTS } from "../../utils/apiEndpoints";
 
 const GameWaitingRoomPage = () => {
-  const { roomSocket, gameData, roomData, playersData, connectRoomSocket, setupListenersRoomSocket } = useGame();
+  const {
+    roomNamespace,
+    gameData,
+    roomData,
+    playersData,
+    myPlayerData,
+    connectRoomSocket,
+    setupListenersRoomSocket,
+    removeListenersRoomSocket,
+  } = useGame();
   const navigate = useNavigate();
   const { room_id } = useParams();
 
-  // 마운트시에 room 소켓 연결 수립
+  // 마운트시에 해당 방의 참가자인지 확인하고 room 소켓 연결 수립
   useEffect(() => {
-    connectRoomSocket(room_id);
-    console.log("연결 수립 시도");
-  }, []);
+    const checkIamInRoom = async (roomId) => {
+      try {
+        await get(API_ENDPOINTS.ROOM(roomId));
+        return true;
+      } catch (error) {
+        if (error.response.status === 404) alert("해당 방이 존재하지 않습니다.");
+        else if (error.response.status === 400) alert("해당 방의 참가자가 아닙니다.");
+        console.error(error);
+        navigate("/game/list");
+        return false;
+      }
+    };
+
+    (async () => {
+      const isInRoom = await checkIamInRoom(room_id);
+      if (isInRoom) {
+        connectRoomSocket(room_id);
+      }
+    })();
+  }, [room_id]);
 
   // room 소켓의 연결이 수립되면 리스너를 세팅
   useEffect(() => {
-    if (!roomSocket || !gameData) return;
+    if (!roomNamespace || !gameData) return;
 
     const navigateToPlayPage = () => {
       navigate(`/game/play/${gameData.game_id}`);
     };
-
-    setupListenersRoomSocket();
-    roomSocket.on("update_tournament", navigateToPlayPage);
+    const events = [{ event: "update_tournament", handler: navigateToPlayPage }];
+    setupListenersRoomSocket(events);
 
     return () => {
-      roomSocket.off("update_tournament", navigateToPlayPage);
+      removeListenersRoomSocket(events);
     };
-  }, [roomSocket, gameData]);
+  }, [roomNamespace, gameData]);
 
   if (!roomData) return <LoadingPage />;
 
   return (
     <div className="GameWaitingRoomPage">
       {gameData && roomData && playersData && (
-        <WaitingRoomBox gameData={gameData} roomData={roomData} playersData={playersData} />
+        <WaitingRoomBox gameData={gameData} roomData={roomData} playersData={playersData} myPlayerData={myPlayerData} />
       )}
     </div>
   );

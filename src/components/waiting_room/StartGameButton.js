@@ -3,11 +3,11 @@ import StyledButton from "../common/StyledButton";
 import { useGame } from "../../context/GameContext";
 
 const StartGameButton = ({ isActive }) => {
-  const { roomSocket } = useGame();
+  const { emitRoomSocket } = useGame();
 
   const handleStartGame = () => {
     if (!window.confirm("게임을 시작하시겠습니까?")) return;
-    roomSocket.emitWithTime("start");
+    emitRoomSocket("start");
   };
 
   return (

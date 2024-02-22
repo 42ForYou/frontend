@@ -44,7 +44,7 @@ const WaitingPlayersRow = ({ players, playersPerRow, host, loggedIn }) => {
             <WaitingPlayer
               nickname={player.nickname}
               avatar={player.avatar}
-              isHost={player.nickname === host}
+              isHost={host === player.nickname}
               isMine={player.nickname === loggedIn.nickname}
             />
           ) : (
