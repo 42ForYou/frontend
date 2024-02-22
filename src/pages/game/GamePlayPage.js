@@ -7,17 +7,17 @@ import GameResultModal from "../../components/game/GameResultModal";
 
 const GamePlayPage = () => {
   const navigate = useNavigate();
-  const { roomSocket, bracketData, subgameData, connectNextSubgameSocket } = useGame();
+  const { roomNamespace, bracketData, subgameData, connectNextSubgameSocket } = useGame();
   const [showBracket, setShowBracket] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [rankOngoing, setRankOngoing] = useState(null);
 
   useEffect(() => {
-    if (!roomSocket) {
+    if (!roomNamespace) {
       alert("입장이 불가한 게임입니다.");
       navigate("/game/list");
     }
-  });
+  }, []);
 
   // 새로운 대진표가 옴
   useEffect(() => {
