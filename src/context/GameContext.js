@@ -13,7 +13,6 @@ export const GameProvider = ({ children }) => {
   // import
   const navigate = useNavigate();
   const {
-    sockets,
     isNamespaceConnected,
     connectNamespace,
     disconnectNamespace,
@@ -26,11 +25,8 @@ export const GameProvider = ({ children }) => {
   const { loggedIn } = useAuth();
 
   // todo: 각 객체별 구조를 알 수 있도록 초기값 설정
-  // todo: 추후 분리
-
-  // 추후 "대기방" 객체와 "토너먼트" 객체로 데이터 묶기
+  // todo: 추후 "대기방" 객체와 "토너먼트" 객체로 데이터 묶기
   // waiting room data
-  // todo: 추후 am_i_host 적용
   const [gameData, setGameData] = useState(null);
   const [roomData, setRoomData] = useState(null);
   const [playersData, setPlayersData] = useState(null);
@@ -131,8 +127,8 @@ export const GameProvider = ({ children }) => {
     data.game && setGameData(data.game);
     data.room && setRoomData(data.room);
     data.players && setPlayersData(data.players);
-    data.my_player_id && setMyPlayerData({ ...myPlayerData, id: data.my_player_id });
-    data.am_i_host && setMyPlayerData({ ...myPlayerData, host: data.am_i_host });
+    data.my_player_id && setMyPlayerData((prevState) => ({ ...prevState, id: data.my_player_id }));
+    data.am_i_host && setMyPlayerData((prevState) => ({ ...prevState, host: data.am_i_host }));
   };
 
   const clearWaitingRoomData = () => {
