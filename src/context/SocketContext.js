@@ -115,6 +115,17 @@ export const SocketProvider = ({ children }) => {
     socketsRef.current = {};
   };
 
+  const isNamespaceConnected = (namespace) => {
+    return !!socketsRef.current[namespace];
+  };
+
+  const emitNamespace = (namespace, event, data) => {
+    const socket = socketsRef.current[namespace];
+    if (socket) {
+      socket.emitWithTime(event, data);
+    }
+  };
+
   useEffect(() => {
     connectNamespace("/");
     connectNamespace("/online_status");
@@ -126,9 +137,12 @@ export const SocketProvider = ({ children }) => {
   return (
     <SocketContext.Provider
       value={{
+        // todo: 추후 sockets는 공급자 컴포넌트에서만 사용하도록 변경
         sockets,
+        isNamespaceConnected,
         connectNamespace,
         disconnectNamespace,
+        emitNamespace,
         setupEventListenersNamespace,
         removeEventListenersNamespace,
         setupEventListenersSocket,
