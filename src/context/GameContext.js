@@ -56,7 +56,7 @@ export const GameProvider = ({ children }) => {
           navigate("/game/list");
         }
         setWaitingRoomData(data);
-        console.log("update_room 이벤트 수신: ", data);
+        // console.log("update_room 이벤트 수신: ", data);
       },
     },
     {
