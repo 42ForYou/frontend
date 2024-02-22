@@ -5,31 +5,38 @@ import { useGame } from "../../context/GameContext";
 import LoadingPage from "../LoadingPage";
 
 const GameWaitingRoomPage = () => {
-  const { roomSocket, gameData, roomData, playersData, myPlayerData, connectRoomSocket, setupListenersRoomSocket } =
-    useGame();
+  const {
+    roomNamespace,
+    gameData,
+    roomData,
+    playersData,
+    myPlayerData,
+    connectRoomSocket,
+    setupListenersRoomSocket,
+    removeListenersRoomSocket,
+  } = useGame();
   const navigate = useNavigate();
   const { room_id } = useParams();
 
   // 마운트시에 room 소켓 연결 수립
   useEffect(() => {
     connectRoomSocket(room_id);
-  }, []);
+  }, [room_id]);
 
   // room 소켓의 연결이 수립되면 리스너를 세팅
   useEffect(() => {
-    if (!roomSocket || !gameData) return;
+    if (!roomNamespace || !gameData) return;
 
     const navigateToPlayPage = () => {
       navigate(`/game/play/${gameData.game_id}`);
     };
-
-    setupListenersRoomSocket();
-    roomSocket.on("update_tournament", navigateToPlayPage);
+    const events = [{ event: "update_tournament", handler: navigateToPlayPage }];
+    setupListenersRoomSocket(events);
 
     return () => {
-      roomSocket.off("update_tournament", navigateToPlayPage);
+      removeListenersRoomSocket(events);
     };
-  }, [roomSocket, gameData]);
+  }, [roomNamespace, gameData]);
 
   if (!roomData) return <LoadingPage />;
 
