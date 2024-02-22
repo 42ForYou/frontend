@@ -73,8 +73,12 @@ export const SocketProvider = ({ children }) => {
 
   const removeEventListenersSocket = (socket, events) => {
     if (socket) {
-      events.forEach((event) => {
-        socket.off(event);
+      events.forEach(({ event, handler }) => {
+        if (handler) {
+          socket.off(event, handler);
+        } else {
+          socket.off(event);
+        }
       });
     }
   };
