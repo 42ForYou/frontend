@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSocket } from "./SocketContext";
 import { Outlet } from "react-router-dom";
@@ -14,23 +14,19 @@ export const GameProvider = ({ children }) => {
   const navigate = useNavigate();
   const {
     sockets,
+    isNamespaceConnected,
     connectNamespace,
     disconnectNamespace,
     setupEventListenersNamespace,
     removeEventListenersNamespace,
     setupEventListenersSocket,
     removeEventListenersSocket,
+    emitNamespace,
   } = useSocket();
   const { loggedIn } = useAuth();
 
   // todo: 각 객체별 구조를 알 수 있도록 초기값 설정
   // todo: 추후 분리
-
-  // sockets (room / subgame)
-  const [roomSocket, setRoomSocket] = useState(null);
-  const [subgameSocket, setSubgameSocket] = useState(null);
-  const [roomNamespace, setRoomNamespace] = useState("");
-  const [subgameNamespace, setSubgameNamespace] = useState("");
 
   // 추후 "대기방" 객체와 "토너먼트" 객체로 데이터 묶기
   // waiting room data
@@ -47,6 +43,89 @@ export const GameProvider = ({ children }) => {
   const [bracketData, setBracketData] = useState(null);
   const [subgameData, setSubgameData] = useState({ is_start: false, is_ended: false, start_time: null, winner: null });
 
+  // socket namespace
+  const [roomNamespace, setRoomNamespace] = useState("");
+  const [subgameNamespace, setSubgameNamespace] = useState("");
+  const roomNamespaceRef = useRef(roomNamespace);
+  const subgameNamespaceRef = useRef(subgameNamespace);
+
+  // socket events
+  const roomDefaultEvents = [
+    {
+      event: "update_room",
+      handler: (data) => {
+        if (!data) {
+          // 방에 입장해있는 사람이 아닌 경우
+          alert("접속이 불가한 방입니다.");
+          navigate("/game/list");
+        }
+        setWaitingRoomData(data);
+        console.log("update_room 이벤트 수신: ", data);
+      },
+    },
+    {
+      event: "destroyed",
+      handler: () => {
+        if (myPlayerData.host === false) alert("호스트가 나가 방이 사라졌습니다.");
+        navigate("/game/list");
+      },
+    },
+    {
+      event: "update_tournament",
+      handler: (data) => {
+        setBracketData(data);
+        console.log("update_tournament 이벤트 수신: ", data);
+      },
+    },
+    {
+      event: "config",
+      handler: (data) => {
+        setConfigData(data);
+      },
+    },
+  ];
+  const subgameDefualtEvents = [
+    {
+      event: "start", // 서브게임 시작
+      handler: (data) => {
+        console.log("start 이벤트 수신: ", data);
+        setSubgameData({ is_start: true, is_ended: false, start_time: data.t_event, winner: null });
+      },
+    },
+    {
+      event: "ended", // 서브게임 종료
+      handler: (data) => {
+        // console.log("ended 이벤트 수신: ", data);
+        setSubgameData({ is_start: false, is_ended: true, start_time: null, winner: data.winner });
+        disconnectSubgameSocket();
+      },
+    },
+    {
+      event: "update_time_left",
+      handler: (data) => {
+        // console.log("update_time_left 이벤트 수신: ", data);
+      },
+    },
+    {
+      event: "update_scores",
+      handler: (data) => {
+        // console.log("update_scores 이벤트 수신: ", data);
+      },
+    },
+    {
+      event: "update_track_ball",
+      handler: (data) => {
+        // console.log("update_track_ball 이벤트 수신: ", data);
+      },
+    },
+    {
+      event: "update_track_paddle",
+      handler: (data) => {
+        // console.log("update_track_paddle 이벤트 수신: ", data);
+      },
+    },
+  ];
+
   const setWaitingRoomData = async (data) => {
     if (!data) return;
     data.game && setGameData(data.game);
@@ -60,7 +139,7 @@ export const GameProvider = ({ children }) => {
     setGameData(null);
     setRoomData(null);
     setPlayersData(null);
-    setMyPlayerData(useState({ id: null, host: false }));
+    setMyPlayerData({ id: null, host: false });
   };
 
   const clearTournamentData = () => {
@@ -80,21 +159,22 @@ export const GameProvider = ({ children }) => {
         console.log("들어갔었던 방이 끝나기 전까지 다른 방에 들어갈 수 없음");
       }
     };
+    const setupRoomListeners = (newSocket) => {
+      setupEventListenersSocket(newSocket, roomDefaultEvents);
+    };
 
     const newRoomNamespace = `/game/room/${newRoomId}`;
-
-    if (sockets[newRoomNamespace]) return;
-    setRoomNamespace(newRoomNamespace);
+    if (isNamespaceConnected(newRoomNamespace)) return;
 
     connectNamespace(newRoomNamespace, {
       onConnect: (newSocket) => {
-        setRoomSocket(newSocket);
-        setupListenersRoomSocket(newSocket);
+        setupRoomListeners(newSocket);
+        setRoomNamespace(newRoomNamespace);
         newSocket.emit("entered", {});
         console.log("룸 소켓 세팅 완료");
       },
       onConnectError: () => {
-        alert("실시간 통신 연결에 실패하였습니다.");
+        alert("실시간 통신 연결에 실패하였습니다. (룸 소켓)");
         handleAbortExitRoom();
       },
       onDisconnect: () => {
@@ -121,19 +201,21 @@ export const GameProvider = ({ children }) => {
       const idx_in_rank = findMatchIndex(bracketData, loggedIn.intra_id);
       return `/${rank}/${idx_in_rank}`;
     };
+    const setupSubgameListeners = (newSocket) => {
+      setupEventListenersSocket(newSocket, subgameDefualtEvents);
+    };
 
     const newSubgameNamespace = `${roomNamespace}${getSubgameNamespace(newBracketData)}`;
-
-    if (sockets[newSubgameNamespace]) return;
+    if (isNamespaceConnected(newSubgameNamespace)) return;
 
     connectNamespace(newSubgameNamespace, {
       onConnect: (newSocket) => {
-        setSubgameSocket(newSocket);
-        setupListenersSubgameSocket(newSocket);
+        setupSubgameListeners(newSocket);
+        setSubgameNamespace(newSubgameNamespace);
         console.log("서브게임 소켓 세팅 완료");
       },
       onConnectError: () => {
-        alert("실시간 통신 연결에 실패하였습니다.");
+        alert("실시간 통신 연결에 실패하였습니다. (서브게임 소켓)");
         handleAbortExit();
       },
       onDisconnect: () => {
@@ -143,106 +225,70 @@ export const GameProvider = ({ children }) => {
   };
 
   const disconnectRoomSocket = () => {
-    if (!sockets[roomNamespace]) return;
+    const roomNamespace = roomNamespaceRef.current;
+    if (!isNamespaceConnected(roomNamespace)) return;
 
     const listeningEventList = ["update_room", "destroyed", "update_tournament", "config"];
 
-    roomSocket.emitWithTime("exited", { my_player_id: myPlayerData.id });
+    emitNamespace(roomNamespace, "exited", { my_player_id: myPlayerData.id });
     removeEventListenersNamespace(roomNamespace, listeningEventList);
     disconnectNamespace(roomNamespace);
-    setRoomSocket(null);
   };
 
   const disconnectSubgameSocket = () => {
-    if (!sockets[subgameNamespace]) return;
+    const subgameNamespace = subgameNamespaceRef.current;
+    if (!isNamespaceConnected(subgameNamespace)) return;
 
     const listeningEventList = ["start", "ended", "update_time_left", "update_scores", "update_track_paddle"];
 
     removeEventListenersNamespace(subgameNamespace, listeningEventList);
     disconnectNamespace(subgameNamespace);
-    setSubgameNamespace(null);
   };
 
-  const setupListenersRoomSocket = (newRoomSocket) => {
-    setupEventListenersSocket(newRoomSocket, [
-      {
-        event: "update_room",
-        handler: (data) => {
-          if (!data) {
-            // 방에 입장해있는 사람이 아닌 경우
-            alert("접속이 불가한 방입니다.");
-            navigate("/game/list");
-          }
-          setWaitingRoomData(data);
-          console.log("update_room 이벤트 수신: ", data);
-        },
-      },
-      {
-        event: "destroyed",
-        handler: () => {
-          if (myPlayerData.host === false) alert("호스트가 나가 방이 사라졌습니다.");
-          navigate("/game/list");
-        },
-      },
-      {
-        event: "update_tournament",
-        handler: (data) => {
-          setBracketData(data);
-          console.log("update_tournament 이벤트 수신: ", data);
-        },
-      },
-      {
-        event: "config",
-        handler: (data) => {
-          setConfigData(data);
-        },
-      },
-    ]);
+  const setupListenersRoomSocket = (events) => {
+    setupEventListenersNamespace(roomNamespace, events);
   };
 
-  const setupListenersSubgameSocket = (newSubgameSocket) => {
-    setupEventListenersSocket(newSubgameSocket, [
-      {
-        event: "start", // 서브게임 시작
-        handler: (data) => {
-          console.log("start 이벤트 수신: ", data);
-          setSubgameData({ is_start: true, is_ended: false, start_time: data.t_event, winner: null });
-        },
-      },
-      {
-        event: "ended", // 서브게임 종료
-        handler: (data) => {
-          // console.log("ended 이벤트 수신: ", data);
-          setSubgameData({ is_start: false, is_ended: true, start_time: null, winner: data.winner });
-          disconnectSubgameSocket();
-        },
-      },
-      {
-        event: "update_time_left",
-        handler: (data) => {
-          // console.log("update_time_left 이벤트 수신: ", data);
-        },
-      },
-      {
-        event: "update_scores",
-        handler: (data) => {
-          // console.log("update_scores 이벤트 수신: ", data);
-        },
-      },
-      {
-        event: "update_track_ball",
-        handler: (data) => {
-          // console.log("update_track_ball 이벤트 수신: ", data);
-        },
-      },
-      {
-        event: "update_track_paddle",
-        handler: (data) => {
-          // console.log("update_track_paddle 이벤트 수신: ", data);
-        },
-      },
-    ]);
+  const setupListenersSubgameSocket = (events) => {
+    setupEventListenersNamespace(subgameNamespace, events);
   };
+
+  const removeListenersRoomSocket = (events) => {
+    removeEventListenersNamespace(roomNamespace, events);
+  };
+
+  const removeListenersSubgameSocket = (events) => {
+    removeEventListenersNamespace(subgameNamespace, events);
+  };
+
+  const emitRoomSocket = (event, data) => {
+    emitNamespace(roomNamespace, event, data);
+  };
+
+  const emitSubgameSocket = (event, data) => {
+    emitNamespace(subgameNamespace, event, data);
+  };
+
+  useEffect(() => {
+    roomNamespaceRef.current = roomNamespace;
+  }, [roomNamespace]);
+
+  useEffect(() => {
+    subgameNamespaceRef.current = subgameNamespace;
+  }, [subgameNamespace]);
+
+  // 상태에 의존한 클린업 수행을 위해 useRef 사용
+  useEffect(() => {
+    return () => {
+      console.log("값 초기화 및 소켓 연결 해제");
+      disconnectRoomSocket();
+      disconnectSubgameSocket();
+      clearWaitingRoomData();
+      clearTournamentData();
+      setRoomNamespace("");
+      setSubgameNamespace("");
+    };
+  }, []);
 
   return (
     <Game.Provider
@@ -256,14 +302,17 @@ export const GameProvider = ({ children }) => {
         bracketData,
         subgameData,
         // socket
-        roomSocket,
-        subgameSocket,
         roomNamespace,
+        subgameNamespace,
         connectRoomSocket,
         connectNextSubgameSocket,
         disconnectRoomSocket,
         setupListenersRoomSocket,
         setupListenersSubgameSocket,
+        removeListenersRoomSocket,
+        removeListenersSubgameSocket,
+        emitRoomSocket,
+        emitSubgameSocket,
       }}>
       {children}
     </Game.Provider>
