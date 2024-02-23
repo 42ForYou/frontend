@@ -25,6 +25,7 @@ import UserProfilePage from "./pages/profile/UserProfilePage";
 // layout
 import MainLayout from "./components/layout/MainLayout";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
+import PongScenePage from "./pages/game/PongScenePage";
 
 // todo: Tournament, OnlineStatus는 필요한 컴포넌트에만 공급 검토
 const App = () => {
@@ -62,6 +63,7 @@ const AppContent = () => {
             <Route element={<GameProviderWrapper />}>
               <Route path="/game/waiting/:room_id" element={<GameWaitingRoomPage />} />
               <Route path="/game/play/:game_id" element={<GamePlayPage />} />
+              <Route path="/test" element={<PongScenePage />} />
             </Route>
             {/* fallback page */}
             <Route path="*" element={<NotFoundPage />} />
