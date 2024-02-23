@@ -37,7 +37,21 @@ export const GameProvider = ({ children }) => {
   // tournament data
   const [configData, setConfigData] = useState(null);
   const [bracketData, setBracketData] = useState(null);
-  const [subgameData, setSubgameData] = useState({ is_start: false, is_ended: false, start_time: null, winner: null });
+
+  // todo: 추후 subgame context 로 분리
+  // subgame data
+  const [subgameStatus, setSubgameStatus] = useState({
+    is_start: false,
+    is_ended: false,
+    start_time: null,
+    player_a: null,
+    player_b: null,
+    winner: "",
+  });
+  const [leftTime, setLeftTime] = useState(0); // pong scene
+  const [scores, setScores] = useState(null); // pong scene
+  const [trackBall, setTrackBall] = useState(null); // pong scene
+  const [trackPaddle, setTrackPaddle] = useState(null); // pong scene
 
   // socket namespace
   const [roomNamespace, setRoomNamespace] = useState("");
@@ -69,8 +83,32 @@ export const GameProvider = ({ children }) => {
     {
       event: "update_tournament",
       handler: (data) => {
-        setBracketData(data);
         console.log("update_tournament 이벤트 수신: ", data);
+        const findSubgameByPlayerNickname = (subgames, nickname) => {
+          for (let n = subgames.length - 1; n >= 0; n--) {
+            for (let m = 0; m < subgames[n].length; m++) {
+              const subgame = subgames[n][m];
+              if (subgame.player_a?.nickname === nickname || subgame.player_b?.nickname === nickname) {
+                return subgame;
+              }
+            }
+          }
+          return null;
+        };
+
+        // 다음 강으로 넘어갔다면 subgameStatus 값 업데이트
+        if (data.rank_ongoing < bracketData.rank_ongoing) {
+          const mySubgame = findSubgameByPlayerNickname(data.subgames, loggedIn.nickname);
+          setSubgameStatus({
+            is_start: false,
+            is_ended: false,
+            start_time: null,
+            player_a: mySubgame?.player_a,
+            player_b: mySubgame?.player_b,
+            winner: "",
+          });
+        }
+        setBracketData(data);
       },
     },
     {
@@ -85,14 +123,14 @@ export const GameProvider = ({ children }) => {
       event: "start", // 서브게임 시작
       handler: (data) => {
         console.log("start 이벤트 수신: ", data);
-        setSubgameData({ is_start: true, is_ended: false, start_time: data.t_event, winner: null });
+        setSubgameStatus({ ...subgameStatus, is_start: true, start_time: data.t_event });
       },
     },
     {
       event: "ended", // 서브게임 종료
       handler: (data) => {
         // console.log("ended 이벤트 수신: ", data);
-        setSubgameData({ is_start: false, is_ended: true, start_time: null, winner: data.winner });
+        setSubgameStatus({ ...subgameStatus, is_ended: true, winner: data.winner });
         disconnectSubgameSocket();
       },
     },
@@ -100,24 +138,28 @@ export const GameProvider = ({ children }) => {
       event: "update_time_left",
       handler: (data) => {
         // console.log("update_time_left 이벤트 수신: ", data);
+        setLeftTime(data);
       },
     },
     {
       event: "update_scores",
       handler: (data) => {
         // console.log("update_scores 이벤트 수신: ", data);
+        setScores(data);
       },
     },
     {
       event: "update_track_ball",
       handler: (data) => {
         // console.log("update_track_ball 이벤트 수신: ", data);
+        setTrackBall(data);
       },
     },
     {
       event: "update_track_paddle",
       handler: (data) => {
         // console.log("update_track_paddle 이벤트 수신: ", data);
+        setTrackPaddle(data);
       },
     },
   ];
@@ -141,7 +183,7 @@ export const GameProvider = ({ children }) => {
   const clearTournamentData = () => {
     setConfigData(null);
     setBracketData(null);
-    setSubgameData({ is_start: false, is_ended: false, start_time: null, winner: null });
+    setSubgameStatus({ is_start: false, is_ended: false, start_time: null, winner: null });
   };
 
   const connectRoomSocket = (newRoomId) => {
@@ -296,7 +338,11 @@ export const GameProvider = ({ children }) => {
         myPlayerData,
         configData,
         bracketData,
-        subgameData,
+        subgameStatus,
+        leftTime,
+        scores,
+        trackBall,
+        trackPaddle,
         // socket
         roomNamespace,
         subgameNamespace,
