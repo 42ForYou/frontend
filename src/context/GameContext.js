@@ -35,11 +35,11 @@ export const GameProvider = ({ children }) => {
   const [myPlayerData, setMyPlayerData] = useState({ id: null, host: false });
 
   // tournament data
-  const [configData, setConfigData] = useState(null);
   const [bracketData, setBracketData] = useState(null);
 
   // todo: 추후 subgame context 로 분리
   // subgame data
+  const [subgameConfig, setSubgameConfig] = useState(null);
   const [subgameStatus, setSubgameStatus] = useState({
     is_start: false,
     is_ended: false,
@@ -97,7 +97,7 @@ export const GameProvider = ({ children }) => {
         };
 
         // 다음 강으로 넘어갔다면 subgameStatus 값 업데이트
-        if (data.rank_ongoing < bracketData.rank_ongoing) {
+        if (!bracketData || data.rank_ongoing < bracketData.rank_ongoing) {
           const mySubgame = findSubgameByPlayerNickname(data.subgames, loggedIn.nickname);
           setSubgameStatus({
             is_start: false,
@@ -107,6 +107,7 @@ export const GameProvider = ({ children }) => {
             player_b: mySubgame?.player_b,
             winner: "",
           });
+          console.log("다음 강으로 넘어가 subgameStatus 값 업데이트");
         }
         setBracketData(data);
       },
@@ -114,7 +115,7 @@ export const GameProvider = ({ children }) => {
     {
       event: "config",
       handler: (data) => {
-        setConfigData(data);
+        setSubgameConfig(data);
       },
     },
   ];
@@ -181,7 +182,7 @@ export const GameProvider = ({ children }) => {
   };
 
   const clearTournamentData = () => {
-    setConfigData(null);
+    setSubgameConfig(null);
     setBracketData(null);
     setSubgameStatus({ is_start: false, is_ended: false, start_time: null, winner: null });
   };
@@ -336,8 +337,8 @@ export const GameProvider = ({ children }) => {
         roomData,
         playersData,
         myPlayerData,
-        configData,
         bracketData,
+        subgameConfig,
         subgameStatus,
         leftTime,
         scores,

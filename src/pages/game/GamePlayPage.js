@@ -7,7 +7,7 @@ import GameResultModal from "../../components/game/GameResultModal";
 
 const GamePlayPage = () => {
   const navigate = useNavigate();
-  const { roomNamespace, bracketData, subgameData, connectNextSubgameSocket } = useGame();
+  const { roomNamespace, bracketData, subgameStatus, connectNextSubgameSocket } = useGame();
   const [showBracket, setShowBracket] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [rankOngoing, setRankOngoing] = useState(null);
@@ -44,11 +44,11 @@ const GamePlayPage = () => {
   }, [bracketData]);
 
   useEffect(() => {
-    if (!subgameData.is_start) return;
+    if (!subgameStatus.is_start) return;
 
     const now = new Date().getTime();
-    const delay = subgameData.start_time * 1000 - now;
-    console.log("서브게임 시작 시간: ", subgameData.start_time * 1000);
+    const delay = subgameStatus.start_time * 1000 - now;
+    console.log("서브게임 시작 시간: ", subgameStatus.start_time * 1000);
     console.log("현재 시간: ", now);
     if (delay > 0) {
       setTimeout(() => {
@@ -59,7 +59,7 @@ const GamePlayPage = () => {
       console.log("delay가 0보다 작습니다.");
       setShowBracket(false);
     }
-  }, [subgameData]);
+  }, [subgameStatus]);
 
   return (
     <div className="GamePlayPage">
