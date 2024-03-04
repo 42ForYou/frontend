@@ -84,12 +84,8 @@ const PongScene = () => {
   // 오브젝트 추가
   useEffect(() => {
     if (scene && renderer && camera && subgameConfig) {
-      // const fieldWidth = subgameConfig.x_max - subgameConfig.x_min;
-      // const fieldHeight = subgameConfig.y_max - subgameConfig.y_min;
-
-      const fieldWidth = 800;
-      const fieldHeight = 600;
-
+      const fieldWidth = subgameConfig.x_max - subgameConfig.x_min;
+      const fieldHeight = subgameConfig.y_max - subgameConfig.y_min;
       const fieldGeometry = new THREE.BoxGeometry(fieldWidth, 0.2, fieldHeight);
       const fieldMaterial = new THREE.MeshPhysicalMaterial({
         transmission: 1,
@@ -99,7 +95,6 @@ const PongScene = () => {
 
       const field = new THREE.Mesh(fieldGeometry, fieldMaterial);
       field.position.set(0, 0, 0);
-      // field.rotation.x = -Math.PI / 2;
       scene.add(field);
 
       const light = new THREE.PointLight(0xffffff, 1, 100);
