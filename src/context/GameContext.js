@@ -155,7 +155,27 @@ export const GameProvider = ({ children }) => {
       event: "update_track_ball",
       handler: (data) => {
         console.log("update_track_ball 이벤트 수신: ", data);
-        ballTrajectory.current = data;
+
+        const calculateSegmentTimes = (trajectory) => {
+          let accumulatedTime = 0;
+          const newSegments = trajectory.segments.map((segment) => {
+            const length = Math.sqrt(Math.pow(segment.x_e - segment.x_s, 2) + Math.pow(segment.y_e - segment.y_s, 2));
+            const duration = length / trajectory.velocity;
+            const newSegment = {
+              ...segment,
+              t_start: accumulatedTime, // 해당 세그먼트의 시작 시간 (맨 처음 세그먼트의 시작 시간은 0)
+              duration: duration, // 해당 세그먼트를 통과하는 데 걸리는 시간
+            };
+            accumulatedTime += duration;
+            return newSegment;
+          });
+
+          return { ...trajectory, segments: newSegments };
+        };
+
+        ballTrajectory.current = calculateSegmentTimes(data);
+        // console.log("original ballTrajectory: ", data);
+        // console.log("calculated ballTrajectory: ", ballTrajectory.current);
         setTrajectoryVersion((version) => version + 1);
       },
     },
