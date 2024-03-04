@@ -50,8 +50,9 @@ export const GameProvider = ({ children }) => {
   });
   const [leftTime, setLeftTime] = useState(0); // pong scene
   const [scores, setScores] = useState(null); // pong scene
-  const [trackBall, setTrackBall] = useState(null); // pong scene
-  const [trackPaddle, setTrackPaddle] = useState(null); // pong scene
+
+  const ballTrajectory = useRef(null);
+  const [trajectoryVersion, setTrajectoryVersion] = useState(0);
 
   // socket namespace
   const [roomNamespace, setRoomNamespace] = useState("");
@@ -115,7 +116,8 @@ export const GameProvider = ({ children }) => {
     {
       event: "config",
       handler: (data) => {
-        setSubgameConfig(data);
+        console.log("config 이벤트 수신: ", data);
+        setSubgameConfig(data.config);
       },
     },
   ];
@@ -152,8 +154,9 @@ export const GameProvider = ({ children }) => {
     {
       event: "update_track_ball",
       handler: (data) => {
-        // console.log("update_track_ball 이벤트 수신: ", data);
-        setTrackBall(data);
+        console.log("update_track_ball 이벤트 수신: ", data);
+        ballTrajectory.current = data;
+        setTrajectoryVersion((version) => version + 1);
       },
     },
     {
@@ -342,8 +345,8 @@ export const GameProvider = ({ children }) => {
         subgameStatus,
         leftTime,
         scores,
-        trackBall,
-        trackPaddle,
+        ballTrajectory,
+        trajectoryVersion,
         // socket
         roomNamespace,
         subgameNamespace,
