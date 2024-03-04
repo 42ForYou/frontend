@@ -25,8 +25,6 @@ const config = {
   y_min: -300
 };
 
-
-
 */
 
 /*
@@ -54,10 +52,7 @@ const PongScene = () => {
     const ball = ballRef.current;
     let currentSegmentIndex = currentSegmentIndexRef.current;
 
-    if (currentSegmentIndex >= ballTrajectory.segments.length) {
-      // 모든 세그먼트를 처리했으면 더 이상 업데이트하지 않음
-      return;
-    }
+    if (currentSegmentIndex >= ballTrajectory.segments.length) return;
 
     let segment = ballTrajectory.segments[currentSegmentIndex];
     const eventElapsedTime = Date.now() / 1000 - ballTrajectory.t_event; // 이벤트 발생 후 경과시간
@@ -67,14 +62,10 @@ const PongScene = () => {
     while (segmentElapsedTime > segment.duration && currentSegmentIndex < ballTrajectory.segments.length) {
       segmentElapsedTime -= segment.duration;
       currentSegmentIndex++;
-
-      // 모든 세그먼트를 처리한 경우 루프 종료
       if (currentSegmentIndex >= ballTrajectory.segments.length) {
         break;
       }
-
       segment = ballTrajectory.segments[currentSegmentIndex];
-      // 다음 세그먼트의 시작 시간을 빼는 것은 불필요함
     }
 
     currentSegmentIndexRef.current = currentSegmentIndex;
@@ -121,7 +112,7 @@ const PongScene = () => {
     };
   }, []);
 
-  // 오브젝트 추가
+  // 오브젝트 추가 (필드, 라이트, 패들, 공)
   useEffect(() => {
     if (scene && renderer && camera && subgameConfig) {
       const fieldWidth = subgameConfig.x_max - subgameConfig.x_min;
@@ -142,14 +133,15 @@ const PongScene = () => {
       light.position.set(0, 0, 10);
       scene.add(light);
 
-      const paddleGeometry = new THREE.BoxGeometry(subgameConfig.len_paddle, 0.1, 0.5);
-      const paddleMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
-      const paddleA = new THREE.Mesh(paddleGeometry, paddleMaterial);
-      paddleA.position.set(-2, subgameConfig.y_init_paddle, 0);
-      scene.add(paddleA);
-      const paddleB = new THREE.Mesh(paddleGeometry, paddleMaterial);
-      paddleB.position.set(2, subgameConfig.y_init_paddle, 0);
-      scene.add(paddleB);
+      // const paddleDepth = 10;
+      // const paddleGeometry = new THREE.BoxGeometry(subgameConfig.len_paddle, paddleDepth, paddleDepth);
+      // const paddleMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+      // const paddleA = new THREE.Mesh(paddleGeometry, paddleMaterial);
+      // paddleA.position.set(-2, subgameConfig.y_init_paddle, 0);
+      // scene.add(paddleA);
+      // const paddleB = new THREE.Mesh(paddleGeometry, paddleMaterial);
+      // paddleB.position.set(2, subgameConfig.y_init_paddle, 0);
+      // scene.add(paddleB);
 
       const ballRadius = 30;
       const ballGeometry = new THREE.SphereGeometry(ballRadius, 32, 32);
@@ -173,6 +165,10 @@ const PongScene = () => {
       requestAnimationFrame(animate);
     }
   }, [trajectoryVersion, scene, renderer, camera]);
+
+  useEffect(() => {
+    currentSegmentIndexRef.current = 0;
+  }, [trajectoryVersion]);
 
   return <div ref={mountRef} className="flex-grow-1" style={{ width: "100%", height: "100%", overflow: "hidden" }} />;
 };
