@@ -3,6 +3,33 @@ import * as THREE from "three";
 import { useGame } from "../../context/GameContext";
 
 /*
+데이터 예시
+
+const config = {
+  delay_rank_end: 5,
+  delay_rank_start: 5,
+  delay_subgame_start: 3,
+  len_paddle: 50,
+  match_point: 3,
+  player_a_init_point: 0,
+  player_b_init_point: 0,
+  time_limit: 30,
+  v_ball: 200,
+  v_paddle: 100,
+  x_init_ball: 0,
+  x_max: 400,
+  x_min: -400,
+  y_init_ball: 0,
+  y_init_paddle: 100,
+  y_max: 300,
+  y_min: -300
+};
+
+
+
+*/
+
+/*
 - 오른손 좌표계 사용 (y축이 위로 향하고, z축은 화면 밖으로 나옴)
 - 필드의 중심 (0, 0, 0)
 - 필드의 크기: x_min, x_max, y_min, y_max
@@ -11,6 +38,7 @@ import { useGame } from "../../context/GameContext";
 - 패들의 초기 위치: y_init_paddle
 - 공의 속도: v_ball
 */
+// todo: 헷갈리므로 전체를 group으로 묶어서 위가 z축이 되도록 회전시키기
 const PongScene = () => {
   const { ballTrajectory, trajectoryVersion, subgameConfig } = useGame();
   const mountRef = useRef(null);
@@ -18,32 +46,44 @@ const PongScene = () => {
   const [scene, setScene] = useState(null);
   const [camera, setCamera] = useState(null);
   const [renderer, setRenderer] = useState(null);
-  const lastTimeRef = useRef(0);
   const currentSegmentIndexRef = useRef(0);
 
   const updateBallPosition = (ballTrajectory) => {
-    // console.log("ballTrajectory: ", ballTrajectory);
-    // console.log("version: ", trajectoryVersion);
-
-    if (trajectoryVersion > 3) return;
     if (!ballTrajectory || ballTrajectory.segments.length === 0) return;
 
     const ball = ballRef.current;
-    const currentSegmentIndex = currentSegmentIndexRef.current;
-    const segment = ballTrajectory.segments[currentSegmentIndex];
+    let currentSegmentIndex = currentSegmentIndexRef.current;
 
-    const elapsedTime = Date.now() / 1000 - ballTrajectory.t_event;
-    const segmentTime = elapsedTime - (segment.t_start || 0);
+    if (currentSegmentIndex >= ballTrajectory.segments.length) {
+      // 모든 세그먼트를 처리했으면 더 이상 업데이트하지 않음
+      return;
+    }
 
-    const x = segment.x_s + segment.dx * segmentTime;
-    const y = segment.y_s + segment.dy * segmentTime;
+    let segment = ballTrajectory.segments[currentSegmentIndex];
+    const eventElapsedTime = Date.now() / 1000 - ballTrajectory.t_event; // 이벤트 발생 후 경과시간
+    let segmentElapsedTime = eventElapsedTime - segment.t_start; // 해당 세그먼트 내에서 경과한 시간
 
-    ball.position.set(x, 0.3, y);
-    // console.log("ball.position: ", ball.position);
+    // 세그먼트 지속 시간을 초과한 경우 다음 세그먼트로 이동
+    while (segmentElapsedTime > segment.duration && currentSegmentIndex < ballTrajectory.segments.length) {
+      segmentElapsedTime -= segment.duration;
+      currentSegmentIndex++;
 
-    // 공이 세그먼트의 끝에 도달했는지 확인하고, 필요한 경우 인덱스 업데이트
-    if ((segment.dx > 0 && x >= segment.x_e) || (segment.dx < 0 && x <= segment.x_e)) {
-      currentSegmentIndexRef.current = (currentSegmentIndex + 1) % ballTrajectory.segments.length;
+      // 모든 세그먼트를 처리한 경우 루프 종료
+      if (currentSegmentIndex >= ballTrajectory.segments.length) {
+        break;
+      }
+
+      segment = ballTrajectory.segments[currentSegmentIndex];
+      // 다음 세그먼트의 시작 시간을 빼는 것은 불필요함
+    }
+
+    currentSegmentIndexRef.current = currentSegmentIndex;
+
+    if (currentSegmentIndex < ballTrajectory.segments.length) {
+      const newX = segment.x_s + segment.dx * segmentElapsedTime;
+      const newY = segment.y_s + segment.dy * segmentElapsedTime;
+      ball.position.set(newX, ball.position.y, newY);
+      console.log(newX, newY);
     }
   };
 
@@ -86,7 +126,8 @@ const PongScene = () => {
     if (scene && renderer && camera && subgameConfig) {
       const fieldWidth = subgameConfig.x_max - subgameConfig.x_min;
       const fieldHeight = subgameConfig.y_max - subgameConfig.y_min;
-      const fieldGeometry = new THREE.BoxGeometry(fieldWidth, 0.2, fieldHeight);
+      const fieldDepth = 10;
+      const fieldGeometry = new THREE.BoxGeometry(fieldWidth, fieldDepth, fieldHeight);
       const fieldMaterial = new THREE.MeshPhysicalMaterial({
         transmission: 1,
         thickness: 5,
@@ -110,10 +151,11 @@ const PongScene = () => {
       paddleB.position.set(2, subgameConfig.y_init_paddle, 0);
       scene.add(paddleB);
 
-      const ballGeometry = new THREE.SphereGeometry(0.15, 32, 32);
+      const ballRadius = 30;
+      const ballGeometry = new THREE.SphereGeometry(ballRadius, 32, 32);
       const ballMaterial = new THREE.MeshBasicMaterial({ color: 0x0000ff });
       const ball = new THREE.Mesh(ballGeometry, ballMaterial);
-      ball.position.set(subgameConfig.x_init_ball, 0.15, subgameConfig.y_init_ball);
+      ball.position.set(subgameConfig.x_init_ball, ballRadius, subgameConfig.y_init_ball);
       scene.add(ball);
       ballRef.current = ball;
     }
@@ -122,15 +164,8 @@ const PongScene = () => {
   // 애니메이션
   useEffect(() => {
     if (scene && renderer && camera && ballRef.current && ballTrajectory.current) {
-      const animate = (time) => {
-        if (!lastTimeRef.current) {
-          lastTimeRef.current = time;
-        }
-
-        const deltaTime = (time - lastTimeRef.current) / 1000; // 시간 차이 계산
-        lastTimeRef.current = time; // 현재 시간을 lastTime으로 업데이트
-
-        // updateBallPosition(deltaTime, ballTrajectory.current);
+      const animate = () => {
+        updateBallPosition(ballTrajectory.current);
         renderer.render(scene, camera);
         requestAnimationFrame(animate);
       };
