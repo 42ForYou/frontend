@@ -5,9 +5,9 @@ import LoadingPage from "../LoadingPage";
 
 // todo: 렌더에 필요한 데이터 추가
 const PongScenePage = () => {
-  const { configData, trackBall } = useGame();
+  const { subgameConfig } = useGame();
 
-  if (!configData || !trackBall) return <LoadingPage />;
+  if (!subgameConfig) return <LoadingPage />;
 
   return <PongScene />;
 };
