@@ -2,20 +2,21 @@ import React, { useRef, useEffect, useState } from "react";
 import * as THREE from "three";
 import { useGame } from "../../context/GameContext";
 
-/*
-- 오른손 좌표계 사용 (y축이 위로 향하고, z축은 화면 밖으로 나옴)
-- 필드의 중심 (0, 0, 0)
-- 필드의 크기: x_min, x_max, y_min, y_max
-- 패들의 길이: len_paddle
-- 공의 초기 위치: x_init_ball, y_init_ball
-- 패들의 초기 위치: y_init_paddle
-- 공의 속도: v_ball
-*/
-// todo: 헷갈리므로 전체를 group으로 묶어서 위가 z축이 되도록 회전시키기
 const PongScene = () => {
-  const { ballTrajectory, trajectoryVersion, subgameConfig } = useGame();
+  const {
+    subgameConfig,
+    ballTrajectory,
+    paddleATrajectory,
+    paddleBTrajectory,
+    ballTrajectoryVersion,
+    // todo: 패들의 궤적 버전 사용 검토 (필요 없을 듯)
+    paddleATrajectoryVersion,
+    paddleBTrajectoryVersion,
+  } = useGame();
   const mountRef = useRef(null);
   const ballRef = useRef();
+  const paddleARef = useRef();
+  const paddleBRef = useRef();
   const [scene, setScene] = useState(null);
   const [root, setRoot] = useState(null);
   const [camera, setCamera] = useState(null);
@@ -28,9 +29,10 @@ const PongScene = () => {
     const ball = ballRef.current;
     const currentSegmentIndex = currentSegmentIndexRef.current;
     if (currentSegmentIndex >= ballTrajectory.segments.length) return;
-
     const segment = ballTrajectory.segments[currentSegmentIndex];
-    const eventElapsedTime = Date.now() / 1000 - ballTrajectory.t_event;
+
+    const currentTime = Date.now() / 1000;
+    const eventElapsedTime = currentTime - ballTrajectory.t_event;
     const segmentElapsedTime = eventElapsedTime - segment.t_start;
 
     // 세그먼트 내에서의 위치 비율 계산
@@ -43,8 +45,27 @@ const PongScene = () => {
 
     const newX = segment.x_s + (segment.x_e - segment.x_s) * progress;
     const newY = segment.y_s + (segment.y_e - segment.y_s) * progress;
-
     ball.position.set(newX, newY, ball.position.z);
+  };
+
+  const updatePaddlePosition = (paddleTrajectory, paddleRef) => {
+    if (!paddleTrajectory || !paddleRef.current) return;
+
+    const paddle = paddleRef.current;
+
+    const elapsedTime = Date.now() / 1000 - paddleTrajectory.t_event;
+    const newY = paddleTrajectory.y + paddleTrajectory.dy * elapsedTime;
+
+    // 새로운 y값이 목표 위치를 넘어가지 않도록 조정
+    if (paddleTrajectory.dy > 0) {
+      newY = Math.min(newY, paddleTrajectory.y);
+    } else {
+      newY = Math.max(newY, paddleTrajectory.y);
+    }
+
+    if (paddle.position.y !== newY) {
+      paddle.position.set(paddle.position.x, newY, paddle.position.z);
+    }
   };
 
   // 장면, 루트 그룹, 렌더러, 카메라 생성
@@ -142,6 +163,8 @@ const PongScene = () => {
       paddleB.position.set(x_max + paddleWidth / 2, y_init_paddle, paddleDepth / 2);
       root.add(paddleA);
       root.add(paddleB);
+      paddleARef.current = paddleA;
+      paddleBRef.current = paddleB;
 
       // 공
       const ballRadius = 15;
@@ -159,17 +182,19 @@ const PongScene = () => {
     if (scene && renderer && camera && ballRef.current && ballTrajectory.current) {
       const animate = () => {
         updateBallPosition(ballTrajectory.current);
+        updatePaddlePosition(paddleATrajectory.current, paddleARef);
+        updatePaddlePosition(paddleBTrajectory.current, paddleBRef);
         renderer.render(scene, camera);
         requestAnimationFrame(animate);
       };
 
       requestAnimationFrame(animate);
     }
-  }, [trajectoryVersion, scene, renderer, camera]);
+  }, [ballTrajectoryVersion, scene, renderer, camera]);
 
   useEffect(() => {
     currentSegmentIndexRef.current = 0;
-  }, [trajectoryVersion]);
+  }, [ballTrajectoryVersion]);
 
   return <div ref={mountRef} className="flex-grow-1" style={{ width: "100%", height: "100%", overflow: "hidden" }} />;
 };
