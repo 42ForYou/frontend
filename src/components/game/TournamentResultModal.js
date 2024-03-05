@@ -3,11 +3,11 @@ import StyledButton from "../common/StyledButton";
 import CustomModal from "../common/CustomModal";
 import { useNavigate } from "react-router-dom";
 
-const GameResultModal = ({ result }) => {
+const TournamentResultModal = ({ content }) => {
   const navigate = useNavigate();
 
   return (
-    <div className="GameResultModal">
+    <div className="TournamentResultModal">
       <CustomModal
         hasCloseButton={false}
         title={"게임 결과"}
@@ -16,10 +16,10 @@ const GameResultModal = ({ result }) => {
             <StyledButton name={"홈으로 이동"} styleType={"secondary"} onClick={() => navigate("/")} />
           </>
         }>
-        <div className="result">{result}</div>
+        <div className="content">{content}</div>
       </CustomModal>
     </div>
   );
 };
 
-export default GameResultModal;
+export default TournamentResultModal;
