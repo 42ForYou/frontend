@@ -52,7 +52,11 @@ export const GameProvider = ({ children }) => {
   const [scores, setScores] = useState(null); // pong scene
 
   const ballTrajectory = useRef(null);
-  const [trajectoryVersion, setTrajectoryVersion] = useState(0);
+  const paddleATrajectory = useRef(null);
+  const paddleBTrajectory = useRef(null);
+  const [ballTrajectoryVersion, setBallTrajectoryVersion] = useState(0);
+  const [paddleATrajectoryVersion, setpaddleATrajectoryVersion] = useState(0);
+  const [paddleBTrajectoryVersion, setpaddleBTrajectoryVersion] = useState(0);
 
   // socket namespace
   const [roomNamespace, setRoomNamespace] = useState("");
@@ -132,22 +136,25 @@ export const GameProvider = ({ children }) => {
     {
       event: "ended", // 서브게임 종료
       handler: (data) => {
-        // console.log("ended 이벤트 수신: ", data);
+        console.log("ended 이벤트 수신: ", data);
         setSubgameStatus({ ...subgameStatus, is_ended: true, winner: data.winner });
+        setBallTrajectoryVersion(0);
+        setpaddleATrajectoryVersion(0);
+        setpaddleBTrajectoryVersion(0);
         disconnectSubgameSocket();
       },
     },
     {
       event: "update_time_left",
       handler: (data) => {
-        // console.log("update_time_left 이벤트 수신: ", data);
+        console.log("update_time_left 이벤트 수신: ", data);
         setLeftTime(data);
       },
     },
     {
       event: "update_scores",
       handler: (data) => {
-        // console.log("update_scores 이벤트 수신: ", data);
+        console.log("update_scores 이벤트 수신: ", data);
         setScores(data);
       },
     },
@@ -174,16 +181,20 @@ export const GameProvider = ({ children }) => {
         };
 
         ballTrajectory.current = calculateSegmentTimes(data);
-        // console.log("original ballTrajectory: ", data);
-        // console.log("calculated ballTrajectory: ", ballTrajectory.current);
-        setTrajectoryVersion((version) => version + 1);
+        setBallTrajectoryVersion((version) => version + 1);
       },
     },
     {
       event: "update_track_paddle",
       handler: (data) => {
-        // console.log("update_track_paddle 이벤트 수신: ", data);
-        setTrackPaddle(data);
+        console.log("update_track_paddle 이벤트 수신: ", data);
+        if (data.player === "A") {
+          paddleATrajectory.current = data;
+          setpaddleATrajectoryVersion((version) => version + 1);
+        } else if (data.player === "B") {
+          paddleBTrajectory.current = data;
+          setpaddleBTrajectoryVersion((version) => version + 1);
+        }
       },
     },
   ];
@@ -366,7 +377,11 @@ export const GameProvider = ({ children }) => {
         leftTime,
         scores,
         ballTrajectory,
-        trajectoryVersion,
+        paddleATrajectory,
+        paddleBTrajectory,
+        ballTrajectoryVersion,
+        paddleATrajectoryVersion,
+        paddleBTrajectoryVersion,
         // socket
         roomNamespace,
         subgameNamespace,
