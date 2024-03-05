@@ -64,7 +64,7 @@ const PongScene = () => {
 
     // 카메라 생성
     const newCamera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    newCamera.position.set(0, 400, 400);
+    newCamera.position.set(0, 300, 500);
     newCamera.up.set(0, 0, 1); // 카메라의 업벡터를 z축으로 설정
     newCamera.lookAt(new THREE.Vector3(0, 0, 0));
     setCamera(newCamera);
@@ -106,8 +106,9 @@ const PongScene = () => {
       const fieldWidth = x_max - x_min;
       const fieldHeight = y_max - y_min;
       const fieldDepth = 10;
-      const fieldMargin = 30; // 필드의 가장자리에 있는 여유 공간 (프론트엔드에서만 존재)
-      const fieldGeometry = new THREE.BoxGeometry(
+      const fieldMargin = 100; // 필드의 가장자리에 있는 여유 공간 (프론트엔드에서만 존재)
+      const fieldGeometry = new THREE.BoxGeometry(fieldWidth, fieldHeight, fieldDepth);
+      const marginedFieldGeometry = new THREE.BoxGeometry(
         fieldWidth + 2 * fieldMargin,
         fieldHeight + 2 * fieldMargin,
         fieldDepth
@@ -117,12 +118,20 @@ const PongScene = () => {
         thickness: 5,
         color: 0x00ff00,
       });
+      const marginedFieldMaterial = new THREE.MeshPhysicalMaterial({
+        transmission: 1,
+        thickness: 5,
+        color: 0xffff00,
+      });
       const field = new THREE.Mesh(fieldGeometry, fieldMaterial);
+      const marginedField = new THREE.Mesh(marginedFieldGeometry, marginedFieldMaterial);
       field.position.set(0, 0, -fieldDepth / 2); // 필드의 바닥이 z=0이 되도록 설정
+      marginedField.position.set(0, 0, -fieldDepth); // 필드의 바닥이 z=0이 되도록 설정
       root.add(field);
+      root.add(marginedField);
 
       // 패들
-      const paddleWidth = fieldMargin / 2;
+      const paddleWidth = fieldMargin / 3;
       const paddleHeight = len_paddle;
       const paddleDepth = 10;
       const paddleGeometry = new THREE.BoxGeometry(paddleWidth, paddleHeight, paddleDepth);
@@ -135,7 +144,7 @@ const PongScene = () => {
       root.add(paddleB);
 
       // 공
-      const ballRadius = 30;
+      const ballRadius = 15;
       const ballGeometry = new THREE.SphereGeometry(ballRadius, 32, 32);
       const ballMaterial = new THREE.MeshBasicMaterial({ color: 0x0000ff });
       const ball = new THREE.Mesh(ballGeometry, ballMaterial);
