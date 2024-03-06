@@ -40,7 +40,7 @@ const PongScene = () => {
 
     if (progress > 1) {
       progress = 1;
-      currentSegmentIndexRef.current = (currentSegmentIndex + 1) % ballTrajectory.segments.length;
+      currentSegmentIndexRef.current = currentSegmentIndex + 1;
     }
 
     const newX = segment.x_s + (segment.x_e - segment.x_s) * progress;
