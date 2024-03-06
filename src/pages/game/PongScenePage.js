@@ -2,12 +2,13 @@ import React, { useEffect } from "react";
 import PongScene from "../../components/game/PongScene";
 import { useGame } from "../../context/GameContext";
 import LoadingPage from "../LoadingPage";
+import PongStatus from "../../components/game/PongStatus";
 
 // todo: 렌더에 필요한 데이터 추가
 const PongScenePage = () => {
-  const { subgameConfig, emitSubgameSocket } = useGame();
+  const { tournamentConfig, emitSubgameSocket } = useGame();
 
-  if (!subgameConfig) return <LoadingPage loadingMsg="게임 데이터를 불러오는 중입니다..." />;
+  if (!tournamentConfig) return <LoadingPage loadingMsg="게임 데이터를 불러오는 중입니다..." />;
 
   // 키를 누르고 떼는 이벤트를 감지하여 서버로 전송
   useEffect(() => {
@@ -42,7 +43,12 @@ const PongScenePage = () => {
     };
   }, []);
 
-  return <PongScene />;
+  return (
+    <div className="PongScenePage">
+      <PongStatus />
+      <PongScene />
+    </div>
+  );
 };
 
 export default PongScenePage;
