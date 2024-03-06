@@ -1,12 +1,16 @@
 import React from "react";
-import CustomModal from "../common/CustomModal";
+import SubgameModal from "./SubgameModal";
 
-const SubgameResultModal = ({ content }) => {
+const SubgameResultModal = ({ playerA, playerB, winner }) => {
   return (
     <div className="SubgameResultModal">
-      <CustomModal hasCloseButton={false} title={"서브게임 결과"}>
-        <div className="content">{content}</div>
-      </CustomModal>
+      <SubgameModal
+        title={"대전 결과"}
+        playerA={playerA}
+        playerB={playerB}
+        winner={winner}
+        message={"잠시만 기다려주세요..."}
+      />
     </div>
   );
 };
