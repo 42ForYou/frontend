@@ -35,11 +35,11 @@ export const GameProvider = ({ children }) => {
   const [myPlayerData, setMyPlayerData] = useState({ id: null, host: false });
 
   // tournament data
+  const [tournamentConfig, setTournamentConfig] = useState(null);
   const [bracketData, setBracketData] = useState(null);
 
   // todo: 추후 subgame context 로 분리
   // subgame data
-  const [subgameConfig, setSubgameConfig] = useState(null);
   const [subgameStatus, setSubgameStatus] = useState({
     is_start: false,
     is_ended: false,
@@ -122,7 +122,7 @@ export const GameProvider = ({ children }) => {
       event: "config",
       handler: (data) => {
         console.log("config 이벤트 수신: ", data);
-        setSubgameConfig(data.config);
+        setTournamentConfig(data.config);
       },
     },
   ];
@@ -217,7 +217,7 @@ export const GameProvider = ({ children }) => {
   };
 
   const clearTournamentData = () => {
-    setSubgameConfig(null);
+    setTournamentConfig(null);
     setBracketData(null);
     setSubgameStatus({ is_start: false, is_ended: false, start_time: null, winner: null });
   };
@@ -353,15 +353,15 @@ export const GameProvider = ({ children }) => {
 
   // 서브게임 시작 전 초기 config 설정
   useEffect(() => {
-    if (subgameConfig && bracketData) {
+    if (tournamentConfig && bracketData) {
       setSubgameStatus((prevState) => ({
         ...prevState,
-        time_left: subgameConfig?.time_limit,
-        score_a: subgameConfig?.player_a_init_point,
-        score_b: subgameConfig?.player_b_init_point,
+        time_left: tournamentConfig?.time_limit,
+        score_a: tournamentConfig?.player_a_init_point,
+        score_b: tournamentConfig?.player_b_init_point,
       }));
     }
-  }, [subgameConfig, bracketData]);
+  }, [tournamentConfig, bracketData]);
 
   // 상태에 의존한 클린업 수행을 위해 useRef 사용
   useEffect(() => {
@@ -385,7 +385,7 @@ export const GameProvider = ({ children }) => {
         playersData,
         myPlayerData,
         bracketData,
-        subgameConfig,
+        tournamentConfig,
         subgameStatus,
         ballTrajectory,
         paddleATrajectory,
