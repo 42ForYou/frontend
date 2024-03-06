@@ -7,7 +7,7 @@ import LoadingPage from "../LoadingPage";
 const PongScenePage = () => {
   const { subgameConfig, emitSubgameSocket } = useGame();
 
-  if (!subgameConfig) return <LoadingPage />;
+  if (!subgameConfig) return <LoadingPage loadingMsg="게임 데이터를 불러오는 중입니다..." />;
 
   // 키를 누르고 떼는 이벤트를 감지하여 서버로 전송
   useEffect(() => {
