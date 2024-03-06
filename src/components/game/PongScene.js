@@ -1,91 +1,200 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import * as THREE from "three";
+import { useGame } from "../../context/GameContext";
 
 const PongScene = () => {
+  const {
+    subgameConfig,
+    ballTrajectory,
+    paddleATrajectory,
+    paddleBTrajectory,
+    ballTrajectoryVersion,
+    // todo: 패들의 궤적 버전 사용 검토 (필요 없을 듯)
+    paddleATrajectoryVersion,
+    paddleBTrajectoryVersion,
+  } = useGame();
   const mountRef = useRef(null);
+  const ballRef = useRef();
+  const paddleARef = useRef();
+  const paddleBRef = useRef();
+  const [scene, setScene] = useState(null);
+  const [root, setRoot] = useState(null);
+  const [camera, setCamera] = useState(null);
+  const [renderer, setRenderer] = useState(null);
+  const currentSegmentIndexRef = useRef(0);
+
+  const updateBallPosition = (ballTrajectory) => {
+    if (!ballTrajectory || ballTrajectory.segments.length === 0) return;
+
+    const ball = ballRef.current;
+    const currentSegmentIndex = currentSegmentIndexRef.current;
+    if (currentSegmentIndex >= ballTrajectory.segments.length) return;
+    const segment = ballTrajectory.segments[currentSegmentIndex];
+
+    const currentTime = Date.now() / 1000;
+    const eventElapsedTime = currentTime - ballTrajectory.t_event;
+    const segmentElapsedTime = eventElapsedTime - segment.t_start;
+
+    // 세그먼트 내에서의 위치 비율 계산
+    let progress = segmentElapsedTime / segment.duration;
+
+    if (progress > 1) {
+      progress = 1;
+      currentSegmentIndexRef.current = (currentSegmentIndex + 1) % ballTrajectory.segments.length;
+    }
+
+    const newX = segment.x_s + (segment.x_e - segment.x_s) * progress;
+    const newY = segment.y_s + (segment.y_e - segment.y_s) * progress;
+    ball.position.set(newX, newY, ball.position.z);
+  };
+
+  const updatePaddlePosition = (paddleTrajectory, paddleRef) => {
+    if (!paddleTrajectory || !paddleRef.current) return;
+
+    const paddle = paddleRef.current;
+
+    const elapsedTime = Date.now() / 1000 - paddleTrajectory.t_event;
+    const newY = paddleTrajectory.y + paddleTrajectory.dy * elapsedTime;
+
+    // 새로운 y값이 목표 위치를 넘어가지 않도록 조정
+    if (paddleTrajectory.dy > 0) {
+      newY = Math.min(newY, paddleTrajectory.y);
+    } else {
+      newY = Math.max(newY, paddleTrajectory.y);
+    }
+
+    if (paddle.position.y !== newY) {
+      paddle.position.set(paddle.position.x, newY, paddle.position.z);
+    }
+  };
+
+  // 장면, 루트 그룹, 렌더러, 카메라 생성
+  // todo: 카메라의 좌표를 필드의 크기에 따라 설정
+  useEffect(() => {
+    if (!subgameConfig) return;
+
+    // 장면 생성
+    const newScene = new THREE.Scene();
+    const newRoot = new THREE.Group();
+    setScene(newScene);
+
+    // 루트 그룹 생성
+    setRoot(newRoot);
+    newRoot.rotation.x = -Math.PI / 2; // z축이 위를, y축이 안쪽을 향하도록 회전
+    newScene.add(newRoot);
+
+    // 카메라 생성
+    const newCamera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    newCamera.position.set(0, 300, 500);
+    newCamera.up.set(0, 0, 1); // 카메라의 업벡터를 z축으로 설정
+    newCamera.lookAt(new THREE.Vector3(0, 0, 0));
+    setCamera(newCamera);
+    newRoot.add(newCamera);
+
+    const newRenderer = new THREE.WebGLRenderer({ antialias: true });
+    newRenderer.setClearColor(0xbbffff);
+    newRenderer.setSize(window.innerWidth, window.innerHeight);
+    mountRef.current.appendChild(newRenderer.domElement);
+    setRenderer(newRenderer);
+
+    const onResize = () => {
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      newRenderer.setSize(width, height);
+      newCamera.aspect = width / height;
+      newCamera.updateProjectionMatrix();
+    };
+
+    window.addEventListener("resize", onResize, false);
+
+    return () => {
+      window.removeEventListener("resize", onResize);
+      mountRef.current.removeChild(newRenderer.domElement);
+    };
+  }, [subgameConfig]);
+
+  // 오브젝트 추가 (필드, 라이트, 패들, 공)
+  useEffect(() => {
+    if (root && renderer && camera && subgameConfig) {
+      const { x_max, x_min, y_max, y_min, x_init_ball, y_init_ball, y_init_paddle, len_paddle } = subgameConfig;
+
+      // 라이트
+      const light = new THREE.PointLight(0xffffff, 1, 100);
+      light.position.set(0, 0, 0);
+      root.add(light);
+
+      // 필드
+      const fieldWidth = x_max - x_min;
+      const fieldHeight = y_max - y_min;
+      const fieldDepth = 10;
+      const fieldMargin = 100; // 필드의 가장자리에 있는 여유 공간 (프론트엔드에서만 존재)
+      const fieldGeometry = new THREE.BoxGeometry(fieldWidth, fieldHeight, fieldDepth);
+      const marginedFieldGeometry = new THREE.BoxGeometry(
+        fieldWidth + 2 * fieldMargin,
+        fieldHeight + 2 * fieldMargin,
+        fieldDepth
+      );
+      const fieldMaterial = new THREE.MeshPhysicalMaterial({
+        transmission: 1,
+        thickness: 5,
+        color: 0x00ff00,
+      });
+      const marginedFieldMaterial = new THREE.MeshPhysicalMaterial({
+        transmission: 1,
+        thickness: 5,
+        color: 0xffff00,
+      });
+      const field = new THREE.Mesh(fieldGeometry, fieldMaterial);
+      const marginedField = new THREE.Mesh(marginedFieldGeometry, marginedFieldMaterial);
+      field.position.set(0, 0, -fieldDepth / 2); // 필드의 바닥이 z=0이 되도록 설정
+      marginedField.position.set(0, 0, -fieldDepth); // 필드의 바닥이 z=0이 되도록 설정
+      root.add(field);
+      root.add(marginedField);
+
+      // 패들
+      const paddleWidth = fieldMargin / 3;
+      const paddleHeight = len_paddle;
+      const paddleDepth = 10;
+      const paddleGeometry = new THREE.BoxGeometry(paddleWidth, paddleHeight, paddleDepth);
+      const paddleMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+      const paddleA = new THREE.Mesh(paddleGeometry, paddleMaterial);
+      const paddleB = new THREE.Mesh(paddleGeometry, paddleMaterial);
+      paddleA.position.set(x_min - paddleWidth / 2, y_init_paddle, paddleDepth / 2);
+      paddleB.position.set(x_max + paddleWidth / 2, y_init_paddle, paddleDepth / 2);
+      root.add(paddleA);
+      root.add(paddleB);
+      paddleARef.current = paddleA;
+      paddleBRef.current = paddleB;
+
+      // 공
+      const ballRadius = 15;
+      const ballGeometry = new THREE.SphereGeometry(ballRadius, 32, 32);
+      const ballMaterial = new THREE.MeshBasicMaterial({ color: 0x0000ff });
+      const ball = new THREE.Mesh(ballGeometry, ballMaterial);
+      ball.position.set(x_init_ball, y_init_ball, ballRadius);
+      root.add(ball);
+      ballRef.current = ball;
+    }
+  }, [root, renderer, camera, subgameConfig]);
+
+  // 애니메이션
+  useEffect(() => {
+    if (scene && renderer && camera && ballRef.current && ballTrajectory.current) {
+      const animate = () => {
+        updateBallPosition(ballTrajectory.current);
+        updatePaddlePosition(paddleATrajectory.current, paddleARef);
+        updatePaddlePosition(paddleBTrajectory.current, paddleBRef);
+        renderer.render(scene, camera);
+        requestAnimationFrame(animate);
+      };
+
+      requestAnimationFrame(animate);
+    }
+  }, [ballTrajectoryVersion, scene, renderer, camera]);
 
   useEffect(() => {
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
-    camera.position.set(0, 3, 3);
-    camera.lookAt(0, 0, 0);
-
-    const renderer = new THREE.WebGLRenderer();
-    renderer.setClearColor(0x000000); // 배경색 설정
-    mountRef.current.appendChild(renderer.domElement);
-
-    // 렌더러 크기 설정 및 resize 이벤트 리스너 추가 함수
-    const onResize = () => {
-      const width = mountRef.current.clientWidth;
-      const height = mountRef.current.clientHeight;
-      renderer.setSize(width, height);
-      camera.aspect = width / height;
-      camera.updateProjectionMatrix();
-    };
-    onResize();
-
-    // 게임 판 생성
-    const planeGeometry = new THREE.BoxGeometry(5, 3, 0.2);
-    const planeMaterial = new THREE.MeshPhysicalMaterial({
-      transmission: 1,
-      thickness: 5,
-      roughness: 0,
-      envMap: 3,
-      envMapIntensity: 3,
-      clearcoat: 1,
-      clearcoatRoughness: 0.1,
-    });
-
-    const plane = new THREE.Mesh(planeGeometry, planeMaterial);
-    plane.rotation.x = -Math.PI / 2; // X축을 기준으로 회전하여 수평 배치
-    scene.add(plane);
-
-    const light = new THREE.PointLight(0xffffff, 1, 100);
-    light.position.set(0, 0, 10);
-    scene.add(light);
-
-    // 패들 생성
-    const paddleGeometry = new THREE.BoxGeometry(0.3, 0.1, 0.5);
-    const paddleMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
-
-    // 플레이어 패들
-    const playerPaddle = new THREE.Mesh(paddleGeometry, paddleMaterial);
-    playerPaddle.position.set(-2, 0.15, 0);
-    scene.add(playerPaddle);
-
-    // 컴퓨터 패들
-    const computerPaddle = new THREE.Mesh(paddleGeometry, paddleMaterial);
-    computerPaddle.position.set(2, 0.15, 0);
-    scene.add(computerPaddle);
-
-    // 공 생성
-    const ballGeometry = new THREE.SphereGeometry(0.15, 32, 32);
-    const ballMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
-    const ball = new THREE.Mesh(ballGeometry, ballMaterial);
-    ball.position.set(0, 0.15, 0);
-    scene.add(ball);
-
-    const loader = new THREE.TextureLoader();
-    loader.load(`${process.env.ASSETS_URL}/stars-background.png`, (texture) => {
-      scene.background = texture;
-    });
-
-    const animate = () => {
-      requestAnimationFrame(animate);
-      // 여기에 애니메이션 업데이트 로직 추가
-      renderer.render(scene, camera);
-    };
-
-    animate();
-
-    // 컴포넌트 언마운트 시 리소스 정리
-    return () => {
-      if (mountRef.current) {
-        mountRef.current.removeChild(renderer.domElement); // DOM에서 렌더러 제거
-        // 필요한 경우 추가 리소스 정리 작업 수행
-      }
-    };
-  }, []);
+    currentSegmentIndexRef.current = 0;
+  }, [ballTrajectoryVersion]);
 
   return <div ref={mountRef} className="flex-grow-1" style={{ width: "100%", height: "100%", overflow: "hidden" }} />;
 };

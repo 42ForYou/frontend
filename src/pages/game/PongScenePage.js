@@ -1,8 +1,47 @@
 import React, { useEffect } from "react";
 import PongScene from "../../components/game/PongScene";
 import { useGame } from "../../context/GameContext";
+import LoadingPage from "../LoadingPage";
 
+// todo: 렌더에 필요한 데이터 추가
 const PongScenePage = () => {
+  const { subgameConfig, emitSubgameSocket } = useGame();
+
+  if (!subgameConfig) return <LoadingPage />;
+
+  // 키를 누르고 떼는 이벤트를 감지하여 서버로 전송
+  useEffect(() => {
+    // console.log("키 이벤트 전송을 위한 이벤트 리스너 설정");
+    const handleKeyPress = (event) => {
+      if (event.key === "ArrowUp") {
+        console.log("Arrow Up key pressed");
+        emitSubgameSocket("keyboard_input", { key: "UP", action: "PRESS" });
+      } else if (event.key === "ArrowDown") {
+        console.log("Arrow Down key pressed");
+        emitSubgameSocket("keyboard_input", { key: "DOWN", action: "PRESS" });
+      }
+    };
+
+    const handleKeyRelease = (event) => {
+      if (event.key === "ArrowUp") {
+        console.log("Arrow Up key released");
+        emitSubgameSocket("keyboard_input", { key: "UP", action: "RELEASE" });
+      } else if (event.key === "ArrowDown") {
+        console.log("Arrow Down key released");
+        emitSubgameSocket("keyboard_input", { key: "DOWN", action: "RELEASE" });
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyPress);
+    window.addEventListener("keyup", handleKeyRelease);
+
+    return () => {
+      // console.log("키 이벤트 전송을 위한 이벤트 리스너 해제");
+      window.removeEventListener("keydown", handleKeyPress);
+      window.removeEventListener("keyup", handleKeyRelease);
+    };
+  }, []);
+
   return <PongScene />;
 };
 

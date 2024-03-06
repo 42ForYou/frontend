@@ -35,9 +35,28 @@ export const GameProvider = ({ children }) => {
   const [myPlayerData, setMyPlayerData] = useState({ id: null, host: false });
 
   // tournament data
-  const [configData, setConfigData] = useState(null);
   const [bracketData, setBracketData] = useState(null);
-  const [subgameData, setSubgameData] = useState({ is_start: false, is_ended: false, start_time: null, winner: null });
+
+  // todo: 추후 subgame context 로 분리
+  // subgame data
+  const [subgameConfig, setSubgameConfig] = useState(null);
+  const [subgameStatus, setSubgameStatus] = useState({
+    is_start: false,
+    is_ended: false,
+    start_time: null,
+    player_a: null,
+    player_b: null,
+    winner: "",
+  });
+  const [leftTime, setLeftTime] = useState(0); // pong scene
+  const [scores, setScores] = useState(null); // pong scene
+
+  const ballTrajectory = useRef(null);
+  const paddleATrajectory = useRef(null);
+  const paddleBTrajectory = useRef(null);
+  const [ballTrajectoryVersion, setBallTrajectoryVersion] = useState(0);
+  const [paddleATrajectoryVersion, setpaddleATrajectoryVersion] = useState(0);
+  const [paddleBTrajectoryVersion, setpaddleBTrajectoryVersion] = useState(0);
 
   // socket namespace
   const [roomNamespace, setRoomNamespace] = useState("");
@@ -69,14 +88,40 @@ export const GameProvider = ({ children }) => {
     {
       event: "update_tournament",
       handler: (data) => {
-        setBracketData(data);
         console.log("update_tournament 이벤트 수신: ", data);
+        const findSubgameByPlayerNickname = (subgames, nickname) => {
+          for (let n = subgames.length - 1; n >= 0; n--) {
+            for (let m = 0; m < subgames[n].length; m++) {
+              const subgame = subgames[n][m];
+              if (subgame.player_a?.nickname === nickname || subgame.player_b?.nickname === nickname) {
+                return subgame;
+              }
+            }
+          }
+          return null;
+        };
+
+        // 다음 강으로 넘어갔다면 subgameStatus 값 업데이트
+        if (!bracketData || data.rank_ongoing < bracketData.rank_ongoing) {
+          const mySubgame = findSubgameByPlayerNickname(data.subgames, loggedIn.nickname);
+          setSubgameStatus({
+            is_start: false,
+            is_ended: false,
+            start_time: null,
+            player_a: mySubgame?.player_a,
+            player_b: mySubgame?.player_b,
+            winner: "",
+          });
+          console.log("다음 강으로 넘어가 subgameStatus 값 업데이트");
+        }
+        setBracketData(data);
       },
     },
     {
       event: "config",
       handler: (data) => {
-        setConfigData(data);
+        console.log("config 이벤트 수신: ", data);
+        setSubgameConfig(data.config);
       },
     },
   ];
@@ -85,39 +130,71 @@ export const GameProvider = ({ children }) => {
       event: "start", // 서브게임 시작
       handler: (data) => {
         console.log("start 이벤트 수신: ", data);
-        setSubgameData({ is_start: true, is_ended: false, start_time: data.t_event, winner: null });
+        setSubgameStatus({ ...subgameStatus, is_start: true, start_time: data.t_event });
       },
     },
     {
       event: "ended", // 서브게임 종료
       handler: (data) => {
-        // console.log("ended 이벤트 수신: ", data);
-        setSubgameData({ is_start: false, is_ended: true, start_time: null, winner: data.winner });
+        console.log("ended 이벤트 수신: ", data);
+        setSubgameStatus({ ...subgameStatus, is_ended: true, winner: data.winner });
+        setBallTrajectoryVersion(0);
+        setpaddleATrajectoryVersion(0);
+        setpaddleBTrajectoryVersion(0);
         disconnectSubgameSocket();
       },
     },
     {
       event: "update_time_left",
       handler: (data) => {
-        // console.log("update_time_left 이벤트 수신: ", data);
+        console.log("update_time_left 이벤트 수신: ", data);
+        setLeftTime(data);
       },
     },
     {
       event: "update_scores",
       handler: (data) => {
-        // console.log("update_scores 이벤트 수신: ", data);
+        console.log("update_scores 이벤트 수신: ", data);
+        setScores(data);
       },
     },
     {
       event: "update_track_ball",
       handler: (data) => {
-        // console.log("update_track_ball 이벤트 수신: ", data);
+        console.log("update_track_ball 이벤트 수신: ", data);
+
+        const calculateSegmentTimes = (trajectory) => {
+          let accumulatedTime = 0;
+          const newSegments = trajectory.segments.map((segment) => {
+            const length = Math.sqrt(Math.pow(segment.x_e - segment.x_s, 2) + Math.pow(segment.y_e - segment.y_s, 2));
+            const duration = length / trajectory.velocity;
+            const newSegment = {
+              ...segment,
+              t_start: accumulatedTime, // 해당 세그먼트의 시작 시간 (맨 처음 세그먼트의 시작 시간은 0)
+              duration: duration, // 해당 세그먼트를 통과하는 데 걸리는 시간
+            };
+            accumulatedTime += duration;
+            return newSegment;
+          });
+
+          return { ...trajectory, segments: newSegments };
+        };
+
+        ballTrajectory.current = calculateSegmentTimes(data);
+        setBallTrajectoryVersion((version) => version + 1);
       },
     },
     {
       event: "update_track_paddle",
       handler: (data) => {
-        // console.log("update_track_paddle 이벤트 수신: ", data);
+        console.log("update_track_paddle 이벤트 수신: ", data);
+        if (data.player === "A") {
+          paddleATrajectory.current = data;
+          setpaddleATrajectoryVersion((version) => version + 1);
+        } else if (data.player === "B") {
+          paddleBTrajectory.current = data;
+          setpaddleBTrajectoryVersion((version) => version + 1);
+        }
       },
     },
   ];
@@ -139,9 +216,9 @@ export const GameProvider = ({ children }) => {
   };
 
   const clearTournamentData = () => {
-    setConfigData(null);
+    setSubgameConfig(null);
     setBracketData(null);
-    setSubgameData({ is_start: false, is_ended: false, start_time: null, winner: null });
+    setSubgameStatus({ is_start: false, is_ended: false, start_time: null, winner: null });
   };
 
   const connectRoomSocket = (newRoomId) => {
@@ -294,9 +371,17 @@ export const GameProvider = ({ children }) => {
         roomData,
         playersData,
         myPlayerData,
-        configData,
         bracketData,
-        subgameData,
+        subgameConfig,
+        subgameStatus,
+        leftTime,
+        scores,
+        ballTrajectory,
+        paddleATrajectory,
+        paddleBTrajectory,
+        ballTrajectoryVersion,
+        paddleATrajectoryVersion,
+        paddleBTrajectoryVersion,
         // socket
         roomNamespace,
         subgameNamespace,
