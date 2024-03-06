@@ -15,6 +15,7 @@ const GamePlayPage = () => {
   const [showSubgameResultModal, setShowSubgameResultModal] = useState(false);
   const [showSubgameBracketModal, setShowSubgameBracketModal] = useState(false);
   const [rankOngoing, setRankOngoing] = useState(null);
+  const [remainingTime, setRemainingTime] = useState(0);
 
   useEffect(() => {
     if (!roomNamespace) {
@@ -49,20 +50,34 @@ const GamePlayPage = () => {
     if (!subgameStatus.is_start) return;
 
     const now = new Date().getTime();
-    const delay = subgameStatus.start_time * 1000 - now;
+    const startTime = subgameStatus.start_time * 1000;
+    const delay = startTime - now;
 
-    setShowSubgameBracketModal(true);
-    console.log("서브게임 시작까지 남은 시간: ", delay);
+    console.log("서브게임 시뮬레이션까지 대기시간: ", delay / 2);
 
-    if (delay > 0) {
-      setTimeout(() => {
+    const updateRemainingTime = () => {
+      const currentNow = new Date().getTime();
+      const timeLeft = Math.max(startTime - currentNow, 0) / 1000 / 2;
+      setRemainingTime(Math.ceil(timeLeft));
+
+      if (timeLeft > 0) {
+        setTimeout(updateRemainingTime, 1000); // 1초 후에 다시 업데이트
+      } else {
         setShowSubgameBracketModal(false);
         setShowBracket(false);
-      }, delay);
+      }
+    };
+
+    if (delay > 0) {
+      setRemainingTime(Math.ceil(delay / 1000 / 2)); // 처음에 남은 시간을 설정
+      setShowSubgameBracketModal(true);
+      setTimeout(updateRemainingTime, 1000); // 1초 후에 남은 시간 업데이트 시작
     } else {
       console.log("delay가 0보다 작습니다.");
     }
     console.log("서브게임 시작");
+
+    return () => clearTimeout(updateRemainingTime);
   }, [subgameStatus]);
 
   useEffect(() => {
@@ -73,9 +88,21 @@ const GamePlayPage = () => {
   return (
     <div className="GamePlayPage">
       {showBracket ? <BracketPage /> : <PongScenePage />}
-      {showTournamentResultModal && <TournamentResultModal content={"게임 결과"} />}
-      {showSubgameResultModal && <SubgameResultModal content={"서브게임 결과"} />}
-      {showSubgameBracketModal && <SubgameBracketModal content={"서브게임 대진표"} />}
+      {showTournamentResultModal && <TournamentResultModal bracketData={bracketData} />}
+      {showSubgameResultModal && (
+        <SubgameResultModal
+          playerA={subgameStatus.player_a}
+          playerB={subgameStatus.player_b}
+          winner={subgameStatus.winner}
+        />
+      )}
+      {showSubgameBracketModal && (
+        <SubgameBracketModal
+          playerA={subgameStatus.player_a}
+          playerB={subgameStatus.player_b}
+          remainingTime={remainingTime}
+        />
+      )}
     </div>
   );
 };
