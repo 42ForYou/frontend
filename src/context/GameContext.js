@@ -47,9 +47,10 @@ export const GameProvider = ({ children }) => {
     player_a: null,
     player_b: null,
     winner: "",
+    time_left: 0,
+    score_a: 0,
+    score_b: 0,
   });
-  const [leftTime, setLeftTime] = useState(0); // pong scene
-  const [scores, setScores] = useState(null); // pong scene
 
   const ballTrajectory = useRef(null);
   const paddleATrajectory = useRef(null);
@@ -130,14 +131,14 @@ export const GameProvider = ({ children }) => {
       event: "start", // 서브게임 시작
       handler: (data) => {
         console.log("start 이벤트 수신: ", data);
-        setSubgameStatus({ ...subgameStatus, is_start: true, start_time: data.t_event });
+        setSubgameStatus((prevState) => ({ ...prevState, is_start: true, start_time: data.t_event }));
       },
     },
     {
       event: "ended", // 서브게임 종료
       handler: (data) => {
         console.log("ended 이벤트 수신: ", data);
-        setSubgameStatus({ ...subgameStatus, is_ended: true, winner: data.winner });
+        setSubgameStatus((prevState) => ({ ...prevState, is_ended: true, winner: data.winner }));
         setBallTrajectoryVersion(0);
         setpaddleATrajectoryVersion(0);
         setpaddleBTrajectoryVersion(0);
@@ -148,14 +149,14 @@ export const GameProvider = ({ children }) => {
       event: "update_time_left",
       handler: (data) => {
         console.log("update_time_left 이벤트 수신: ", data);
-        setLeftTime(data);
+        setSubgameStatus((prevState) => ({ ...prevState, time_left: data.time_left }));
       },
     },
     {
       event: "update_scores",
       handler: (data) => {
         console.log("update_scores 이벤트 수신: ", data);
-        setScores(data);
+        setSubgameStatus((prevState) => ({ ...prevState, score_a: data.score_a, score_b: data.score_b }));
       },
     },
     {
@@ -350,6 +351,18 @@ export const GameProvider = ({ children }) => {
     subgameNamespaceRef.current = subgameNamespace;
   }, [subgameNamespace]);
 
+  // 서브게임 시작 전 초기 config 설정
+  useEffect(() => {
+    if (subgameConfig && bracketData) {
+      setSubgameStatus((prevState) => ({
+        ...prevState,
+        time_left: subgameConfig?.time_limit,
+        score_a: subgameConfig?.player_a_init_point,
+        score_b: subgameConfig?.player_b_init_point,
+      }));
+    }
+  }, [subgameConfig, bracketData]);
+
   // 상태에 의존한 클린업 수행을 위해 useRef 사용
   useEffect(() => {
     return () => {
@@ -374,8 +387,6 @@ export const GameProvider = ({ children }) => {
         bracketData,
         subgameConfig,
         subgameStatus,
-        leftTime,
-        scores,
         ballTrajectory,
         paddleATrajectory,
         paddleBTrajectory,
