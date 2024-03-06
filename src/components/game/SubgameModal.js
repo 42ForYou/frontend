@@ -1,6 +1,7 @@
 import React from "react";
 import CustomModal from "../common/CustomModal";
 import PlayerInModal from "./PlayerInModal";
+import { useAuth } from "../../context/AuthContext";
 
 const VStext = () => {
   return (
@@ -16,6 +17,8 @@ const VStext = () => {
 };
 
 const SubgameModal = ({ title, playerA, playerB, winner, message }) => {
+  const { loggedIn } = useAuth();
+
   return (
     <div className="SubgameModal">
       <CustomModal hasCloseButton={false} title={title}>
@@ -24,7 +27,7 @@ const SubgameModal = ({ title, playerA, playerB, winner, message }) => {
             <PlayerInModal
               nickname={playerA.nickname}
               avatar={playerA.avatar}
-              isMine={playerA.isMine}
+              isMine={playerA.nickname === loggedIn?.nickname}
               isWinner={winner ? winner === "A" : undefined}
             />
             {!winner && (
@@ -35,7 +38,7 @@ const SubgameModal = ({ title, playerA, playerB, winner, message }) => {
             <PlayerInModal
               nickname={playerB.nickname}
               avatar={playerB.avatar}
-              isMine={playerB.isMine}
+              isMine={playerB.nickname === loggedIn?.nickname}
               isWinner={winner ? winner === "B" : undefined}
             />
           </div>
