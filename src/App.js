@@ -65,6 +65,7 @@ const AppContent = () => {
             <Route element={<GameProviderWrapper />}>
               <Route path="/game/waiting/:room_id" element={<GameWaitingRoomPage />} />
               <Route path="/game/play/:game_id" element={<GamePlayPage />} />
+              <Route path="/test" element={<PongScenePage />} />
             </Route>
             {/* fallback page */}
             <Route path="*" element={<NotFoundPage />} />
