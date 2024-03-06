@@ -109,7 +109,10 @@ const PongScene = () => {
 
     return () => {
       window.removeEventListener("resize", onResize);
-      mountRef.current.removeChild(newRenderer.domElement);
+      // todo: 임시해결
+      if (mountRef.current && mountRef.current.contains(newRenderer.domElement)) {
+        mountRef.current.removeChild(newRenderer.domElement);
+      }
     };
   }, [subgameConfig]);
 

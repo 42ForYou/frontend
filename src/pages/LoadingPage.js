@@ -1,6 +1,6 @@
 import React from "react";
 
-const LoadingPage = () => {
+const LoadingPage = ({ loadingMsg }) => {
   return (
     <div
       className="LoadingPage text-center d-flex justify-content-center align-items-center"
@@ -9,7 +9,7 @@ const LoadingPage = () => {
         <div className="spinner-border" role="status" style={{ width: "3rem", height: "3rem", color: "white" }}>
           <span className="sr-only">Loading...</span>
         </div>
-        <p style={{ color: "white", marginTop: "20px" }}>Loading...</p>
+        <p style={{ color: "white", marginTop: "20px" }}>{loadingMsg ? loadingMsg : "Loading..."}</p>
       </div>
     </div>
   );
