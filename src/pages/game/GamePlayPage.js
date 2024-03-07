@@ -59,41 +59,44 @@ const GamePlayPage = () => {
   }, [bracketData]);
 
   useEffect(() => {
-    if (!subgameStatus.is_start) return;
+    if (!subgameStatus.is_start) {
+      setShowSubgameBracketModal(false);
+      setShowBracket(true);
+      return;
+    }
 
+    // 게임이 시작되면 실행될 로직
     const now = new Date().getTime();
-    const startTime = subgameStatus.start_time * 1000;
+    const startTime = new Date(subgameStatus.start_time * 1000).getTime();
     const delay = startTime - now;
 
     console.log("서브게임 시작 시간: ", startTime);
     console.log("현재 시간: ", now);
     console.log("서브게임 시뮬레이션까지 대기시간: ", delay);
 
-    const updateRemainingTime = () => {
-      const currentNow = new Date().getTime();
-      const timeLeft = Math.max(startTime - currentNow, 0) / 1000;
-      setRemainingTime(Math.ceil(timeLeft));
-
-      if (timeLeft > 0) {
-        setTimeout(updateRemainingTime, 1000); // 1초 후에 다시 업데이트
-      } else {
-        console.log("서브게임 시뮬레이션까지 대기시간이 끝났습니다.");
-        setShowSubgameBracketModal(false);
-        setShowBracket(false);
-      }
-    };
-
     if (delay > 0) {
-      setRemainingTime(Math.ceil(delay / 1000)); // 처음에 남은 시간을 설정
       setShowSubgameBracketModal(true);
-      setTimeout(updateRemainingTime, 1000); // 1초 후에 남은 시간 업데이트 시작
+      setShowBracket(false);
+
+      const intervalId = setInterval(() => {
+        const currentNow = new Date().getTime();
+        const timeLeft = Math.max(startTime - currentNow, 0) / 1000;
+        setRemainingTime(Math.ceil(timeLeft));
+
+        if (timeLeft <= 0) {
+          console.log("서브게임 시뮬레이션까지 대기시간이 끝났습니다.");
+          clearInterval(intervalId);
+          setShowSubgameBracketModal(false);
+          setShowBracket(false);
+        }
+      }, 1000);
+      return () => clearInterval(intervalId);
     } else {
       console.log("delay가 0보다 작습니다.");
+      setShowSubgameBracketModal(false);
+      setShowBracket(false);
     }
-    console.log("서브게임 시작");
-
-    return () => clearTimeout(updateRemainingTime);
-  }, [subgameStatus.is_start]);
+  }, [subgameStatus.is_start, subgameStatus.start_time]);
 
   //
   useEffect(() => {
