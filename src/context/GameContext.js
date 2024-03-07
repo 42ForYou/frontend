@@ -10,12 +10,9 @@ const Game = React.createContext();
 
 // 한 "강" 내의 서브게임 목록에서 자신의 서브게임 인덱스를 찾음
 const findFinalSubgameByIntraId = (subgames, intraId) => {
-  console.log("subgames: ", subgames);
   for (let i = 0; i < subgames.length; i++) {
     for (let j = 0; j < subgames[i].length; j++) {
       const subgame = subgames[i][j];
-      console.log("subgame: ", subgame);
-      console.log(intraId);
       if (subgame.player_a?.intra_id === intraId || subgame.player_b?.intra_id === intraId) {
         return { subgame: subgame, rank: i, idx_in_rank: j };
       }
@@ -218,21 +215,26 @@ export const GameProvider = ({ children }) => {
     data.am_i_host && setMyPlayerData((prevState) => ({ ...prevState, host: data.am_i_host }));
   };
 
-  const clearWaitingRoomData = () => {
+  const clearWaitingRoom = () => {
     setGameData(null);
     setRoomData(null);
     setPlayersData(null);
     setMyPlayerData({ id: null, host: false });
   };
 
-  const clearSubgameData = () => {
-    setBracketData(null);
-    setSubgameStatus({ is_start: false, is_ended: false, start_time: null, winner: null });
-  };
-
-  const clearTournamentData = () => {
+  const clearTournament = () => {
     setTournamentConfig(null);
-    clearSubgameData();
+    setSubgameStatus((prevState) => ({
+      is_start: false,
+      is_ended: false,
+      start_time: null,
+      player_a: null,
+      player_b: null,
+      winner: null,
+      time_left: 0,
+      score_a: 0,
+      score_b: 0,
+    }));
   };
 
   const connectRoomSocket = (newRoomId) => {
@@ -265,7 +267,7 @@ export const GameProvider = ({ children }) => {
         handleAbortExitRoom();
       },
       onDisconnect: () => {
-        clearWaitingRoomData();
+        clearWaitingRoom();
       },
     });
   };
@@ -291,7 +293,7 @@ export const GameProvider = ({ children }) => {
         handleAbortExit();
       },
       onDisconnect: () => {
-        clearSubgameData();
+        setBracketData(null);
       },
     });
   };
@@ -367,8 +369,8 @@ export const GameProvider = ({ children }) => {
       console.log("값 초기화 및 소켓 연결 해제");
       disconnectRoomSocket();
       disconnectSubgameSocket();
-      clearWaitingRoomData();
-      clearTournamentData();
+      clearWaitingRoom();
+      clearTournament();
       setRoomNamespace("");
       setSubgameNamespace("");
     };

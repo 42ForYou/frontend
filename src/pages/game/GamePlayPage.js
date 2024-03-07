@@ -91,9 +91,9 @@ const GamePlayPage = () => {
   }, [subgameStatus.is_start]);
 
   useEffect(() => {
-    if (!subgameStatus.is_ended) return;
-    setShowSubgameResultModal(true);
-  }, [subgameStatus]);
+    if (subgameStatus.is_ended && !showSubgameResultModal) setShowSubgameResultModal(true);
+    else if (!subgameStatus.is_ended && showSubgameResultModal) setShowSubgameResultModal(false);
+  }, [subgameStatus.is_ended]);
 
   return (
     <div className="GamePlayPage">
