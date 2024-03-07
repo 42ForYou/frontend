@@ -109,28 +109,24 @@ export const GameProvider = ({ children }) => {
         console.log("update_tournament 이벤트 수신: ", data);
 
         const isAllPlayersDecided = (subgames) => {
-          console.log("isAllPlayersDecided 함수 실행");
-          console.log(subgames);
+          // console.log("isAllPlayersDecided 함수 실행");
           subgames.forEach((subgame) => {
             if (!subgame.player_a || !subgame.player_b) {
-              console.log("모든 플레이어가 결정되지 않음");
+              // console.log("모든 플레이어가 결정되지 않음");
               return false;
             }
           });
-          console.log("모든 플레이어가 결정됨");
+          // console.log("모든 플레이어가 결정됨");
           return true;
         };
 
         // 대진표 데이터가 아예 없는 상황이거나(맨 처음 서브게임),
         // 다음 "강"으로 넘어갔고, 다음 "강"의 대진표가 완성되어 있다면 subgameStatus 값 업데이트
-        console.log("data", data);
-        console.log("bracketData", bracketData);
         // todo: bracketData가 null인 경우에만 실행되는 것 같은데, 이 부분 확인 필요
         if (
           !bracketData ||
           (data.rank_ongoing < bracketData.rank_ongoing && isAllPlayersDecided(data.subgames[data.rank_ongoing]))
         ) {
-          console.log("subgameStatus 업데이트");
           const myNewFinalSubgame = getMyFinalSubgameAndRank(data.subgames, loggedIn.intra_id);
           setSubgameStatus((prevState) => ({
             ...prevState,
@@ -174,21 +170,21 @@ export const GameProvider = ({ children }) => {
     {
       event: "update_time_left",
       handler: (data) => {
-        // console.log("update_time_left 이벤트 수신: ", data);
+        console.log("update_time_left 이벤트 수신: ", data);
         setSubgameStatus((prevState) => ({ ...prevState, time_left: data.time_left }));
       },
     },
     {
       event: "update_scores",
       handler: (data) => {
-        // console.log("update_scores 이벤트 수신: ", data);
+        console.log("update_scores 이벤트 수신: ", data);
         setSubgameStatus((prevState) => ({ ...prevState, score_a: data.score_a, score_b: data.score_b }));
       },
     },
     {
       event: "update_track_ball",
       handler: (data) => {
-        // console.log("update_track_ball 이벤트 수신: ", data);
+        console.log("update_track_ball 이벤트 수신: ", data);
 
         const calculateSegmentTimes = (trajectory) => {
           let accumulatedTime = 0;
@@ -313,7 +309,7 @@ export const GameProvider = ({ children }) => {
         handleAbortExit();
       },
       onDisconnect: () => {
-        // setBracketData(null);
+        setBracketData(null);
       },
     });
   };
