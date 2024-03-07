@@ -200,6 +200,25 @@ export const GameProvider = ({ children }) => {
     },
   ];
 
+  const findMySubgameIndex = (subgamesInRank) => {
+    for (let i = 0; i < subgamesInRank.length; i++) {
+      const subgame = subgamesInRank[i];
+      if (subgame.player_a?.intra_id === loggedIn.intra_id || subgame.player_b?.intra_id === loggedIn.intra_id) {
+        return i;
+      }
+    }
+    return -1; // 현재 "강" 대진표에 자신이 없는 경우 (=패배)
+  };
+
+  const findMyFinalSubgame = (subgames) => {
+    for (let i = 0; i < subgames.length; i++) {
+      const idx = findMySubgameIndex(subgames[i]);
+      if (idx !== -1) {
+        return { subgame: subgames[i][idx], rank: i, idx_in_rank: idx };
+      }
+    }
+  };
+
   const setWaitingRoomData = async (data) => {
     if (!data) return;
     data.game && setGameData(data.game);
@@ -258,29 +277,14 @@ export const GameProvider = ({ children }) => {
   };
 
   const connectNextSubgameSocket = (newBracketData) => {
-    const getSubgameNamespace = (bracketData) => {
-      const findMatchIndex = (data, playerId) => {
-        for (let i = 0; i < data.subgames.length; i++) {
-          const round = data.subgames[i];
-          for (let j = 0; j < round.length; j++) {
-            const match = round[j];
-            if (match.player_a.intra_id === playerId || match.player_b.intra_id === playerId) {
-              return j;
-            }
-          }
-        }
-        return -1;
-      };
-      const rank = bracketData.rank_ongoing;
-      const idx_in_rank = findMatchIndex(bracketData, loggedIn.intra_id);
-      return `/${rank}/${idx_in_rank}`;
-    };
     const setupSubgameListeners = (newSocket) => {
       setupEventListenersSocket(newSocket, subgameDefualtEvents);
     };
 
-    const newSubgameNamespace = `${roomNamespace}${getSubgameNamespace(newBracketData)}`;
-    if (isNamespaceConnected(newSubgameNamespace)) return;
+    const rank = bracketData.rank_ongoing;
+    const idx_in_rank = findMySubgameIndex(newBracketData.subgames[rank]);
+    const newSubgameNamespace = `${roomNamespace}/${rank}/${idx_in_rank}`;
+    if (idx_in_rank === -1 || isNamespaceConnected(newSubgameNamespace)) return;
 
     connectNamespace(newSubgameNamespace, {
       onConnect: (newSocket) => {
@@ -393,6 +397,9 @@ export const GameProvider = ({ children }) => {
         ballTrajectoryVersion,
         paddleATrajectoryVersion,
         paddleBTrajectoryVersion,
+        // function
+        findMySubgameIndex,
+        findMyFinalSubgame,
         // socket
         roomNamespace,
         subgameNamespace,
