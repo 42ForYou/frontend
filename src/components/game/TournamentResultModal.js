@@ -49,8 +49,8 @@ const TournamentMiddleResult = ({ myFinalSubgame }) => {
 };
 
 const TournamentResultModal = ({ bracketData }) => {
-  const { findMyFinalSubgame } = useGame();
-  const { subgame: myFinalSubgame, rank: myFinalRank } = findMyFinalSubgame(bracketData.subgames);
+  const { getMyFinalSubgameAndRank } = useGame();
+  const { subgame: myFinalSubgame, rank: myFinalRank } = getMyFinalSubgameAndRank(bracketData.subgames);
   const navigate = useNavigate();
 
   return (

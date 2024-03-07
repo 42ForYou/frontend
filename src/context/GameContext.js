@@ -8,6 +8,22 @@ import { API_ENDPOINTS } from "../utils/apiEndpoints";
 
 const Game = React.createContext();
 
+// 한 "강" 내의 서브게임 목록에서 자신의 서브게임 인덱스를 찾음
+const findFinalSubgameByIntraId = (subgames, intraId) => {
+  console.log("subgames: ", subgames);
+  for (let i = 0; i < subgames.length; i++) {
+    for (let j = 0; j < subgames[i].length; j++) {
+      const subgame = subgames[i][j];
+      console.log("subgame: ", subgame);
+      console.log(intraId);
+      if (subgame.player_a?.intra_id === intraId || subgame.player_b?.intra_id === intraId) {
+        return { subgame: subgame, rank: i, idx_in_rank: j };
+      }
+    }
+  }
+  return null; // 현재 "강" 대진표에 자신이 없는 경우 (=패배)
+};
+
 // todo: 참여자가 아닌 유저가 직접 주소창에 방 이름 입력하여 들어가는 케이스 걸러내기
 export const GameProvider = ({ children }) => {
   // import
@@ -65,6 +81,10 @@ export const GameProvider = ({ children }) => {
   const roomNamespaceRef = useRef(roomNamespace);
   const subgameNamespaceRef = useRef(subgameNamespace);
 
+  const getMyFinalSubgameAndRank = (subgames) => {
+    return findFinalSubgameByIntraId(subgames, loggedIn.intra_id);
+  };
+
   // socket events
   const roomDefaultEvents = [
     {
@@ -90,30 +110,19 @@ export const GameProvider = ({ children }) => {
       event: "update_tournament",
       handler: (data) => {
         console.log("update_tournament 이벤트 수신: ", data);
-        const findSubgameByPlayerNickname = (subgames, nickname) => {
-          for (let n = subgames.length - 1; n >= 0; n--) {
-            for (let m = 0; m < subgames[n].length; m++) {
-              const subgame = subgames[n][m];
-              if (subgame.player_a?.nickname === nickname || subgame.player_b?.nickname === nickname) {
-                return subgame;
-              }
-            }
-          }
-          return null;
-        };
 
-        // 다음 강으로 넘어갔다면 subgameStatus 값 업데이트
+        // 다음 "강"으로 넘어갔다면 subgameStatus 값 업데이트
         if (!bracketData || data.rank_ongoing < bracketData.rank_ongoing) {
-          const mySubgame = findSubgameByPlayerNickname(data.subgames, loggedIn.nickname);
+          const myNewFinalSubgame = getMyFinalSubgameAndRank(data.subgames, loggedIn.intra_id);
+          // if (myNewFinalSubgame.rank === data.rank_ongoing) return; // 내가 진출하지 못한 경우 무시
           setSubgameStatus({
             is_start: false,
             is_ended: false,
             start_time: null,
-            player_a: mySubgame?.player_a,
-            player_b: mySubgame?.player_b,
-            winner: "",
+            player_a: myNewFinalSubgame?.subgame.player_a,
+            player_b: myNewFinalSubgame?.subgame.player_b,
+            winner: myNewFinalSubgame?.subgame.winner,
           });
-          console.log("다음 강으로 넘어가 subgameStatus 값 업데이트");
         }
         setBracketData(data);
       },
@@ -200,25 +209,6 @@ export const GameProvider = ({ children }) => {
     },
   ];
 
-  const findMySubgameIndex = (subgamesInRank) => {
-    for (let i = 0; i < subgamesInRank.length; i++) {
-      const subgame = subgamesInRank[i];
-      if (subgame.player_a?.intra_id === loggedIn.intra_id || subgame.player_b?.intra_id === loggedIn.intra_id) {
-        return i;
-      }
-    }
-    return -1; // 현재 "강" 대진표에 자신이 없는 경우 (=패배)
-  };
-
-  const findMyFinalSubgame = (subgames) => {
-    for (let i = 0; i < subgames.length; i++) {
-      const idx = findMySubgameIndex(subgames[i]);
-      if (idx !== -1) {
-        return { subgame: subgames[i][idx], rank: i, idx_in_rank: idx };
-      }
-    }
-  };
-
   const setWaitingRoomData = async (data) => {
     if (!data) return;
     data.game && setGameData(data.game);
@@ -286,7 +276,7 @@ export const GameProvider = ({ children }) => {
     };
 
     const rank = bracketData.rank_ongoing;
-    const idx_in_rank = findMySubgameIndex(newBracketData.subgames[rank]);
+    const { idx_in_rank } = getMyFinalSubgameAndRank(newBracketData.subgames);
     const newSubgameNamespace = `${roomNamespace}/${rank}/${idx_in_rank}`;
     if (idx_in_rank === -1 || isNamespaceConnected(newSubgameNamespace)) return;
 
@@ -402,8 +392,7 @@ export const GameProvider = ({ children }) => {
         paddleATrajectoryVersion,
         paddleBTrajectoryVersion,
         // function
-        findMySubgameIndex,
-        findMyFinalSubgame,
+        getMyFinalSubgameAndRank,
         // socket
         roomNamespace,
         subgameNamespace,

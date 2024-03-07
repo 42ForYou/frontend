@@ -14,7 +14,7 @@ const GamePlayPage = () => {
     bracketData,
     subgameStatus,
     connectNextSubgameSocket,
-    findMySubgameIndex,
+    getMyFinalSubgameAndRank,
     disconnectRoomSocket,
   } = useGame();
   const [showBracket, setShowBracket] = useState(true);
@@ -37,12 +37,13 @@ const GamePlayPage = () => {
 
     const newRankOngoing = bracketData.rank_ongoing;
     if (rankOngoing === newRankOngoing) return; // 현재 진행중인 "강"이 같으면 무시
+    const myFinalSubgameAndRank = getMyFinalSubgameAndRank(bracketData.subgames);
 
     setShowBracket(true);
     if (newRankOngoing < 0) {
       // 모든 "강"이 끝남
       setShowTournamentResultModal(true);
-    } else if (findMySubgameIndex(bracketData.subgames[newRankOngoing]) === -1) {
+    } else if (myFinalSubgameAndRank.rank !== newRankOngoing) {
       // 패배하여 다음 "강"으로 넘어가지 못함
       setShowTournamentResultModal(true);
       disconnectRoomSocket();
