@@ -17,12 +17,9 @@ const GamePlayPage = () => {
     getMyFinalSubgameAndRank,
     disconnectRoomSocket,
   } = useGame();
-  const [showBracket, setShowBracket] = useState(true);
-  const [showTournamentResultModal, setShowTournamentResultModal] = useState(false);
-  const [showSubgameResultModal, setShowSubgameResultModal] = useState(false);
-  const [showSubgameBracketModal, setShowSubgameBracketModal] = useState(false);
+  const [currentPage, setCurrentPage] = useState(true); // "bracket" or "pongScene"
+  const [currentModal, setCurrentModal] = useState(null);
   const [rankOngoing, setRankOngoing] = useState(null);
-  const [remainingTime, setRemainingTime] = useState(0);
 
   useEffect(() => {
     if (!roomNamespace) {
@@ -31,100 +28,61 @@ const GamePlayPage = () => {
     }
   }, []);
 
-  // 새로운 대진표가 옴
+  // 갱신된 대진표 정보에 따라 모달 변경
   useEffect(() => {
-    if (!bracketData) return;
-
-    if (rankOngoing === bracketData.rank_ongoing) return; // 현재 진행중인 "강"이 같으면 무시
+    if (!bracketData || rankOngoing === bracketData.rank_ongoing) return; // 현재 진행중인 "강"이 같으면 무시
     const newRankOngoing = bracketData.rank_ongoing;
     const myFinalSubgameAndRank = getMyFinalSubgameAndRank(bracketData.subgames);
 
-    console.log("새로운 대진표가 왔습니다.");
-    console.log(newRankOngoing, myFinalSubgameAndRank);
-
-    setShowBracket(true);
-    setShowSubgameResultModal(false);
+    setCurrentPage("bracket");
     if (newRankOngoing < 0) {
       // 모든 "강"이 끝남
-      setShowTournamentResultModal(true);
+      setCurrentModal("tournamentResult");
     } else if (myFinalSubgameAndRank.rank !== newRankOngoing) {
       // 패배하여 다음 "강"으로 넘어가지 못함
-      setShowTournamentResultModal(true);
+      setCurrentModal("tournamentResult");
       disconnectRoomSocket();
     } else {
-      // 다음 "강"으로 넘어감
+      // 승리하여 다음 "강"으로 넘어감
+      setCurrentModal(null);
       connectNextSubgameSocket(bracketData);
       setRankOngoing(newRankOngoing);
     }
   }, [bracketData]);
 
+  // 서브게임 진행 상태에 따라 모달, 페이지 변경
   useEffect(() => {
-    if (!subgameStatus.is_start) {
-      setShowSubgameBracketModal(false);
-      setShowBracket(true);
-      return;
+    console.log("subgameStatus", subgameStatus);
+    if (subgameStatus.progress === "waiting") {
+      setCurrentPage("bracket");
+      setCurrentModal("subgameBracket");
+    } else if (subgameStatus.progress === "playing") {
+      setCurrentPage("pongScene");
+      setCurrentModal(null);
+    } else if (subgameStatus.progress === "ended") {
+      setCurrentPage("bracket");
+      setCurrentModal("subgameResult");
+    } else if (subgameStatus.progress === "none") {
+      setCurrentPage("bracket");
     }
-
-    // 게임이 시작되면 실행될 로직
-    const now = new Date().getTime();
-    const startTime = new Date(subgameStatus.start_time * 1000).getTime();
-    const delay = startTime - now;
-
-    console.log("서브게임 시작 시간: ", startTime);
-    console.log("현재 시간: ", now);
-    console.log("서브게임 시뮬레이션까지 대기시간: ", delay);
-
-    if (delay > 0) {
-      setShowSubgameBracketModal(true);
-      setShowBracket(false);
-
-      const intervalId = setInterval(() => {
-        const currentNow = new Date().getTime();
-        const timeLeft = Math.max(startTime - currentNow, 0) / 1000;
-        setRemainingTime(Math.ceil(timeLeft));
-
-        if (timeLeft <= 0) {
-          console.log("서브게임 시뮬레이션까지 대기시간이 끝났습니다.");
-          clearInterval(intervalId);
-          setShowSubgameBracketModal(false);
-          setShowBracket(false);
-        }
-      }, 1000);
-      return () => clearInterval(intervalId);
-    } else {
-      console.log("delay가 0보다 작습니다.");
-      setShowSubgameBracketModal(false);
-      setShowBracket(false);
-    }
-  }, [subgameStatus.is_start, subgameStatus.start_time]);
-
-  //
-  useEffect(() => {
-    if (subgameStatus.is_ended) {
-      if (!showSubgameResultModal) setShowSubgameResultModal(true);
-      console.log("서브게임 결과 모달창 띄우기");
-    } else {
-      if (showSubgameResultModal) setShowSubgameResultModal(false);
-      console.log("서브게임 결과 모달창 닫기");
-    }
-  }, [subgameStatus.is_ended]);
+  }, [subgameStatus.progress]);
 
   return (
     <div className="GamePlayPage">
-      {showBracket ? <BracketPage /> : <PongScenePage />}
-      {showTournamentResultModal && <TournamentResultModal bracketData={bracketData} />}
-      {showSubgameResultModal && (
+      {currentPage === "bracket" ? <BracketPage /> : <PongScenePage />}
+      {currentModal === "tournamentResult" && <TournamentResultModal bracketData={bracketData} />}
+      {currentModal === "subgameResult" && (
         <SubgameResultModal
           playerA={subgameStatus.player_a}
           playerB={subgameStatus.player_b}
           winner={subgameStatus.winner}
         />
       )}
-      {showSubgameBracketModal && (
+      {currentModal === "subgameBracket" && (
         <SubgameBracketModal
           playerA={subgameStatus.player_a}
           playerB={subgameStatus.player_b}
-          remainingTime={remainingTime}
+          remainingTime={subgameStatus.time_before_start}
         />
       )}
     </div>

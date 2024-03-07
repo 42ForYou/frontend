@@ -54,13 +54,13 @@ export const GameProvider = ({ children }) => {
   // todo: 추후 subgame context 로 분리
   // subgame data
   const [subgameStatus, setSubgameStatus] = useState({
-    is_start: false,
-    is_ended: false,
-    start_time: null,
+    progress: "none", // "none", "waiting", "playing", "ended"
+    time_start: null,
+    time_before_start: 0,
+    time_left: 0,
     player_a: null,
     player_b: null,
     winner: "",
-    time_left: 0,
     score_a: 0,
     score_b: 0,
   });
@@ -130,8 +130,8 @@ export const GameProvider = ({ children }) => {
           const myNewFinalSubgame = getMyFinalSubgameAndRank(data.subgames, loggedIn.intra_id);
           setSubgameStatus((prevState) => ({
             ...prevState,
-            is_start: false,
-            start_time: null,
+            progress: "none",
+            time_start: null,
             player_a: myNewFinalSubgame?.subgame.player_a,
             player_b: myNewFinalSubgame?.subgame.player_b,
             winner: myNewFinalSubgame?.subgame.winner,
@@ -153,14 +153,42 @@ export const GameProvider = ({ children }) => {
       event: "start", // 서브게임 시작
       handler: (data) => {
         console.log("start 이벤트 수신: ", data);
-        setSubgameStatus((prevState) => ({ ...prevState, is_start: true, is_ended: false, start_time: data.t_event }));
+        const waitingUntilStart = () => {
+          const now = new Date().getTime();
+          const startTime = new Date(data.t_event * 1000).getTime();
+          const delay = startTime - now;
+
+          console.log("startTime: ", startTime);
+          console.log("now: ", now);
+          console.log("delay: ", delay);
+
+          if (delay > 0) {
+            const intervalId = setInterval(() => {
+              const currentNow = new Date().getTime();
+              const timeLeft = Math.max(startTime - currentNow, 0) / 1000;
+              setSubgameStatus((prevState) => ({ ...prevState, time_before_start: Math.ceil(timeLeft) }));
+              if (timeLeft <= 0) {
+                console.log("서브게임 시뮬레이션까지 대기시간이 끝났습니다.");
+                clearInterval(intervalId);
+                setSubgameStatus((prevState) => ({ ...prevState, progress: "playing" }));
+              }
+            }, 1000);
+            return () => clearInterval(intervalId);
+          } else {
+            console.log("delay가 0보다 작습니다.");
+            setSubgameStatus((prevState) => ({ ...prevState, progress: "playing" }));
+          }
+        };
+
+        setSubgameStatus((prevState) => ({ ...prevState, progress: "waiting", time_start: data.t_event }));
+        waitingUntilStart();
       },
     },
     {
       event: "ended", // 서브게임 종료
       handler: (data) => {
         console.log("ended 이벤트 수신: ", data);
-        setSubgameStatus((prevState) => ({ ...prevState, is_ended: true, winner: data.winner }));
+        setSubgameStatus((prevState) => ({ ...prevState, progress: "ended", winner: data.winner }));
         setBallTrajectoryVersion(0);
         setpaddleATrajectoryVersion(0);
         setpaddleBTrajectoryVersion(0);
@@ -241,13 +269,13 @@ export const GameProvider = ({ children }) => {
   const clearTournament = () => {
     setTournamentConfig(null);
     setSubgameStatus((prevState) => ({
-      is_start: false,
-      is_ended: false,
-      start_time: null,
+      progress: "none",
+      time_start: null,
+      time_before_start: 0,
+      time_left: 0,
       player_a: null,
       player_b: null,
-      winner: null,
-      time_left: 0,
+      winner: "",
       score_a: 0,
       score_b: 0,
     }));
