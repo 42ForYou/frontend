@@ -148,21 +148,21 @@ export const GameProvider = ({ children }) => {
     {
       event: "update_time_left",
       handler: (data) => {
-        console.log("update_time_left 이벤트 수신: ", data);
+        // console.log("update_time_left 이벤트 수신: ", data);
         setSubgameStatus((prevState) => ({ ...prevState, time_left: data.time_left }));
       },
     },
     {
       event: "update_scores",
       handler: (data) => {
-        console.log("update_scores 이벤트 수신: ", data);
+        // console.log("update_scores 이벤트 수신: ", data);
         setSubgameStatus((prevState) => ({ ...prevState, score_a: data.score_a, score_b: data.score_b }));
       },
     },
     {
       event: "update_track_ball",
       handler: (data) => {
-        console.log("update_track_ball 이벤트 수신: ", data);
+        // console.log("update_track_ball 이벤트 수신: ", data);
 
         const calculateSegmentTimes = (trajectory) => {
           let accumulatedTime = 0;
@@ -235,10 +235,14 @@ export const GameProvider = ({ children }) => {
     setMyPlayerData({ id: null, host: false });
   };
 
-  const clearTournamentData = () => {
-    setTournamentConfig(null);
+  const clearSubgameData = () => {
     setBracketData(null);
     setSubgameStatus({ is_start: false, is_ended: false, start_time: null, winner: null });
+  };
+
+  const clearTournamentData = () => {
+    setTournamentConfig(null);
+    clearSubgameData();
   };
 
   const connectRoomSocket = (newRoomId) => {
@@ -297,7 +301,7 @@ export const GameProvider = ({ children }) => {
         handleAbortExit();
       },
       onDisconnect: () => {
-        clearTournamentData();
+        clearSubgameData();
       },
     });
   };
