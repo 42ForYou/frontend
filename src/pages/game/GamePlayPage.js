@@ -40,6 +40,7 @@ const GamePlayPage = () => {
     const myFinalSubgameAndRank = getMyFinalSubgameAndRank(bracketData.subgames);
 
     setShowBracket(true);
+    setShowSubgameResultModal(false);
     if (newRankOngoing < 0) {
       // 모든 "강"이 끝남
       setShowTournamentResultModal(true);
@@ -49,6 +50,7 @@ const GamePlayPage = () => {
       disconnectRoomSocket();
     } else {
       // 다음 "강"으로 넘어감
+      console.log("다음 강으로 넘어갑니다.");
       connectNextSubgameSocket(bracketData);
       setRankOngoing(newRankOngoing);
     }
@@ -90,9 +92,15 @@ const GamePlayPage = () => {
     return () => clearTimeout(updateRemainingTime);
   }, [subgameStatus.is_start]);
 
+  //
   useEffect(() => {
-    if (subgameStatus.is_ended && !showSubgameResultModal) setShowSubgameResultModal(true);
-    else if (!subgameStatus.is_ended && showSubgameResultModal) setShowSubgameResultModal(false);
+    if (subgameStatus.is_ended) {
+      if (!showSubgameResultModal) setShowSubgameResultModal(true);
+      console.log("서브게임 결과 모달창 띄우기");
+    } else {
+      if (showSubgameResultModal) setShowSubgameResultModal(false);
+      console.log("서브게임 결과 모달창 닫기");
+    }
   }, [subgameStatus.is_ended]);
 
   return (

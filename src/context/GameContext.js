@@ -108,18 +108,38 @@ export const GameProvider = ({ children }) => {
       handler: (data) => {
         console.log("update_tournament 이벤트 수신: ", data);
 
-        // 다음 "강"으로 넘어갔다면 subgameStatus 값 업데이트
-        if (!bracketData || data.rank_ongoing < bracketData.rank_ongoing) {
+        const isAllPlayersDecided = (subgames) => {
+          console.log("isAllPlayersDecided 함수 실행");
+          console.log(subgames);
+          subgames.forEach((subgame) => {
+            if (!subgame.player_a || !subgame.player_b) {
+              console.log("모든 플레이어가 결정되지 않음");
+              return false;
+            }
+          });
+          console.log("모든 플레이어가 결정됨");
+          return true;
+        };
+
+        // 대진표 데이터가 아예 없는 상황이거나(맨 처음 서브게임),
+        // 다음 "강"으로 넘어갔고, 다음 "강"의 대진표가 완성되어 있다면 subgameStatus 값 업데이트
+        console.log("data", data);
+        console.log("bracketData", bracketData);
+        // todo: bracketData가 null인 경우에만 실행되는 것 같은데, 이 부분 확인 필요
+        if (
+          !bracketData ||
+          (data.rank_ongoing < bracketData.rank_ongoing && isAllPlayersDecided(data.subgames[data.rank_ongoing]))
+        ) {
+          console.log("subgameStatus 업데이트");
           const myNewFinalSubgame = getMyFinalSubgameAndRank(data.subgames, loggedIn.intra_id);
-          // if (myNewFinalSubgame.rank === data.rank_ongoing) return; // 내가 진출하지 못한 경우 무시
-          setSubgameStatus({
+          setSubgameStatus((prevState) => ({
+            ...prevState,
             is_start: false,
-            is_ended: false,
             start_time: null,
             player_a: myNewFinalSubgame?.subgame.player_a,
             player_b: myNewFinalSubgame?.subgame.player_b,
             winner: myNewFinalSubgame?.subgame.winner,
-          });
+          }));
         }
         setBracketData(data);
       },
@@ -137,7 +157,7 @@ export const GameProvider = ({ children }) => {
       event: "start", // 서브게임 시작
       handler: (data) => {
         console.log("start 이벤트 수신: ", data);
-        setSubgameStatus((prevState) => ({ ...prevState, is_start: true, start_time: data.t_event }));
+        setSubgameStatus((prevState) => ({ ...prevState, is_start: true, is_ended: false, start_time: data.t_event }));
       },
     },
     {
@@ -293,7 +313,7 @@ export const GameProvider = ({ children }) => {
         handleAbortExit();
       },
       onDisconnect: () => {
-        setBracketData(null);
+        // setBracketData(null);
       },
     });
   };
