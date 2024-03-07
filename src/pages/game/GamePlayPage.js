@@ -9,7 +9,14 @@ import SubgameResultModal from "../../components/game/SubgameResultModal";
 
 const GamePlayPage = () => {
   const navigate = useNavigate();
-  const { roomNamespace, bracketData, subgameStatus, connectNextSubgameSocket } = useGame();
+  const {
+    roomNamespace,
+    bracketData,
+    subgameStatus,
+    connectNextSubgameSocket,
+    findMySubgameIndex,
+    disconnectRoomSocket,
+  } = useGame();
   const [showBracket, setShowBracket] = useState(true);
   const [showTournamentResultModal, setShowTournamentResultModal] = useState(false);
   const [showSubgameResultModal, setShowSubgameResultModal] = useState(false);
@@ -28,21 +35,21 @@ const GamePlayPage = () => {
   useEffect(() => {
     if (!bracketData) return;
 
-    console.log("대진표 데이터가 갱신되었습니다.");
+    const newRankOngoing = bracketData.rank_ongoing;
+    if (rankOngoing === newRankOngoing) return; // 현재 진행중인 "강"이 같으면 무시
 
-    const newRank = bracketData.rank_ongoing;
-    // 현재 진행중인 "강"의 대진표가 갱신 (데이터만 받고 띄우지는 않는다)
-    if (rankOngoing === newRank) return;
-
-    // 이번 강이 종료되었을 때
     setShowBracket(true);
-    if (newRank < 0) {
-      // 모든 "강" 종료
+    if (newRankOngoing < 0) {
+      // 모든 "강"이 끝남
       setShowTournamentResultModal(true);
+    } else if (findMySubgameIndex(bracketData.subgames[newRankOngoing]) === -1) {
+      // 패배하여 다음 "강"으로 넘어가지 못함
+      setShowTournamentResultModal(true);
+      disconnectRoomSocket();
     } else {
       // 다음 "강"으로 넘어감
       connectNextSubgameSocket(bracketData);
-      setRankOngoing(newRank);
+      setRankOngoing(newRankOngoing);
     }
   }, [bracketData]);
 
