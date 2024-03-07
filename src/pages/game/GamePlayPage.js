@@ -53,6 +53,8 @@ const GamePlayPage = () => {
     const startTime = subgameStatus.start_time * 1000;
     const delay = startTime - now;
 
+    console.log("서브게임 시작 시간: ", startTime);
+    console.log("현재 시간: ", now);
     console.log("서브게임 시뮬레이션까지 대기시간: ", delay / 2);
 
     const updateRemainingTime = () => {
@@ -78,7 +80,7 @@ const GamePlayPage = () => {
     console.log("서브게임 시작");
 
     return () => clearTimeout(updateRemainingTime);
-  }, [subgameStatus]);
+  }, [subgameStatus.is_start]);
 
   useEffect(() => {
     if (!subgameStatus.is_ended) return;

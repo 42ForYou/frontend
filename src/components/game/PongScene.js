@@ -4,7 +4,7 @@ import { useGame } from "../../context/GameContext";
 
 const PongScene = () => {
   const {
-    subgameConfig,
+    tournamentConfig,
     ballTrajectory,
     paddleATrajectory,
     paddleBTrajectory,
@@ -40,7 +40,7 @@ const PongScene = () => {
 
     if (progress > 1) {
       progress = 1;
-      currentSegmentIndexRef.current = (currentSegmentIndex + 1) % ballTrajectory.segments.length;
+      currentSegmentIndexRef.current = currentSegmentIndex + 1;
     }
 
     const newX = segment.x_s + (segment.x_e - segment.x_s) * progress;
@@ -71,7 +71,7 @@ const PongScene = () => {
   // 장면, 루트 그룹, 렌더러, 카메라 생성
   // todo: 카메라의 좌표를 필드의 크기에 따라 설정
   useEffect(() => {
-    if (!subgameConfig) return;
+    if (!tournamentConfig) return;
 
     // 장면 생성
     const newScene = new THREE.Scene();
@@ -114,12 +114,12 @@ const PongScene = () => {
         mountRef.current.removeChild(newRenderer.domElement);
       }
     };
-  }, [subgameConfig]);
+  }, [tournamentConfig]);
 
   // 오브젝트 추가 (필드, 라이트, 패들, 공)
   useEffect(() => {
-    if (root && renderer && camera && subgameConfig) {
-      const { x_max, x_min, y_max, y_min, x_init_ball, y_init_ball, y_init_paddle, len_paddle } = subgameConfig;
+    if (root && renderer && camera && tournamentConfig) {
+      const { x_max, x_min, y_max, y_min, x_init_ball, y_init_ball, y_init_paddle, len_paddle } = tournamentConfig;
 
       // 라이트
       const light = new THREE.PointLight(0xffffff, 1, 100);
@@ -178,7 +178,7 @@ const PongScene = () => {
       root.add(ball);
       ballRef.current = ball;
     }
-  }, [root, renderer, camera, subgameConfig]);
+  }, [root, renderer, camera, tournamentConfig]);
 
   // 애니메이션
   useEffect(() => {
