@@ -85,7 +85,7 @@ const PongScene = () => {
 
     // 카메라 생성
     const newCamera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    newCamera.position.set(0, 300, 500);
+    newCamera.position.set(0, -500, 700);
     newCamera.up.set(0, 0, 1); // 카메라의 업벡터를 z축으로 설정
     newCamera.lookAt(new THREE.Vector3(0, 0, 0));
     setCamera(newCamera);
@@ -199,7 +199,7 @@ const PongScene = () => {
     currentSegmentIndexRef.current = 0;
   }, [ballTrajectoryVersion]);
 
-  return <div ref={mountRef} className="flex-grow-1" style={{ width: "100%", height: "100%", overflow: "hidden" }} />;
+  return <div ref={mountRef} style={{ width: "100%", height: "100%", overflow: "hidden" }} />;
 };
 
 export default PongScene;

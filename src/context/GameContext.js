@@ -8,6 +8,19 @@ import { API_ENDPOINTS } from "../utils/apiEndpoints";
 
 const Game = React.createContext();
 
+// 한 "강" 내의 서브게임 목록에서 자신의 서브게임 인덱스를 찾음
+const findFinalSubgameByIntraId = (subgames, intraId) => {
+  for (let i = 0; i < subgames.length; i++) {
+    for (let j = 0; j < subgames[i].length; j++) {
+      const subgame = subgames[i][j];
+      if (subgame.player_a?.intra_id === intraId || subgame.player_b?.intra_id === intraId) {
+        return { subgame: subgame, rank: i, idx_in_rank: j };
+      }
+    }
+  }
+  return null; // 현재 "강" 대진표에 자신이 없는 경우 (=패배)
+};
+
 // todo: 참여자가 아닌 유저가 직접 주소창에 방 이름 입력하여 들어가는 케이스 걸러내기
 export const GameProvider = ({ children }) => {
   // import
@@ -41,13 +54,13 @@ export const GameProvider = ({ children }) => {
   // todo: 추후 subgame context 로 분리
   // subgame data
   const [subgameStatus, setSubgameStatus] = useState({
-    is_start: false,
-    is_ended: false,
-    start_time: null,
+    progress: "none", // "none", "waiting", "playing", "ended"
+    time_start: null,
+    time_before_start: 0,
+    time_left: 0,
     player_a: null,
     player_b: null,
     winner: "",
-    time_left: 0,
     score_a: 0,
     score_b: 0,
   });
@@ -64,6 +77,10 @@ export const GameProvider = ({ children }) => {
   const [subgameNamespace, setSubgameNamespace] = useState("");
   const roomNamespaceRef = useRef(roomNamespace);
   const subgameNamespaceRef = useRef(subgameNamespace);
+
+  const getMyFinalSubgameAndRank = (subgames) => {
+    return findFinalSubgameByIntraId(subgames, loggedIn.intra_id);
+  };
 
   // socket events
   const roomDefaultEvents = [
@@ -90,30 +107,35 @@ export const GameProvider = ({ children }) => {
       event: "update_tournament",
       handler: (data) => {
         console.log("update_tournament 이벤트 수신: ", data);
-        const findSubgameByPlayerNickname = (subgames, nickname) => {
-          for (let n = subgames.length - 1; n >= 0; n--) {
-            for (let m = 0; m < subgames[n].length; m++) {
-              const subgame = subgames[n][m];
-              if (subgame.player_a?.nickname === nickname || subgame.player_b?.nickname === nickname) {
-                return subgame;
-              }
+
+        const isAllPlayersDecided = (subgames) => {
+          // console.log("isAllPlayersDecided 함수 실행");
+          subgames.forEach((subgame) => {
+            if (!subgame.player_a || !subgame.player_b) {
+              // console.log("모든 플레이어가 결정되지 않음");
+              return false;
             }
-          }
-          return null;
+          });
+          // console.log("모든 플레이어가 결정됨");
+          return true;
         };
 
-        // 다음 강으로 넘어갔다면 subgameStatus 값 업데이트
-        if (!bracketData || data.rank_ongoing < bracketData.rank_ongoing) {
-          const mySubgame = findSubgameByPlayerNickname(data.subgames, loggedIn.nickname);
-          setSubgameStatus({
-            is_start: false,
-            is_ended: false,
-            start_time: null,
-            player_a: mySubgame?.player_a,
-            player_b: mySubgame?.player_b,
-            winner: "",
-          });
-          console.log("다음 강으로 넘어가 subgameStatus 값 업데이트");
+        // 대진표 데이터가 아예 없는 상황이거나(맨 처음 서브게임),
+        // 다음 "강"으로 넘어갔고, 다음 "강"의 대진표가 완성되어 있다면 subgameStatus 값 업데이트
+        // todo: bracketData가 null인 경우에만 실행되는 것 같은데, 이 부분 확인 필요
+        if (
+          !bracketData ||
+          (data.rank_ongoing < bracketData.rank_ongoing && isAllPlayersDecided(data.subgames[data.rank_ongoing]))
+        ) {
+          const myNewFinalSubgame = getMyFinalSubgameAndRank(data.subgames, loggedIn.intra_id);
+          setSubgameStatus((prevState) => ({
+            ...prevState,
+            progress: "none",
+            time_start: null,
+            player_a: myNewFinalSubgame?.subgame.player_a,
+            player_b: myNewFinalSubgame?.subgame.player_b,
+            winner: myNewFinalSubgame?.subgame.winner,
+          }));
         }
         setBracketData(data);
       },
@@ -131,14 +153,42 @@ export const GameProvider = ({ children }) => {
       event: "start", // 서브게임 시작
       handler: (data) => {
         console.log("start 이벤트 수신: ", data);
-        setSubgameStatus((prevState) => ({ ...prevState, is_start: true, start_time: data.t_event }));
+        const waitingUntilStart = () => {
+          const now = new Date().getTime();
+          const startTime = new Date(data.t_event * 1000).getTime();
+          const delay = startTime - now;
+
+          console.log("startTime: ", startTime);
+          console.log("now: ", now);
+          console.log("delay: ", delay);
+
+          if (delay > 0) {
+            const intervalId = setInterval(() => {
+              const currentNow = new Date().getTime();
+              const timeLeft = Math.max(startTime - currentNow, 0) / 1000;
+              setSubgameStatus((prevState) => ({ ...prevState, time_before_start: Math.ceil(timeLeft) }));
+              if (timeLeft <= 0) {
+                console.log("서브게임 시뮬레이션까지 대기시간이 끝났습니다.");
+                clearInterval(intervalId);
+                setSubgameStatus((prevState) => ({ ...prevState, progress: "playing" }));
+              }
+            }, 1000);
+            return () => clearInterval(intervalId);
+          } else {
+            console.log("delay가 0보다 작습니다.");
+            setSubgameStatus((prevState) => ({ ...prevState, progress: "playing" }));
+          }
+        };
+
+        setSubgameStatus((prevState) => ({ ...prevState, progress: "waiting", time_start: data.t_event }));
+        waitingUntilStart();
       },
     },
     {
       event: "ended", // 서브게임 종료
       handler: (data) => {
         console.log("ended 이벤트 수신: ", data);
-        setSubgameStatus((prevState) => ({ ...prevState, is_ended: true, winner: data.winner }));
+        setSubgameStatus((prevState) => ({ ...prevState, progress: "ended", winner: data.winner }));
         setBallTrajectoryVersion(0);
         setpaddleATrajectoryVersion(0);
         setpaddleBTrajectoryVersion(0);
@@ -209,17 +259,26 @@ export const GameProvider = ({ children }) => {
     data.am_i_host && setMyPlayerData((prevState) => ({ ...prevState, host: data.am_i_host }));
   };
 
-  const clearWaitingRoomData = () => {
+  const clearWaitingRoom = () => {
     setGameData(null);
     setRoomData(null);
     setPlayersData(null);
     setMyPlayerData({ id: null, host: false });
   };
 
-  const clearTournamentData = () => {
+  const clearTournament = () => {
     setTournamentConfig(null);
-    setBracketData(null);
-    setSubgameStatus({ is_start: false, is_ended: false, start_time: null, winner: null });
+    setSubgameStatus((prevState) => ({
+      progress: "none",
+      time_start: null,
+      time_before_start: 0,
+      time_left: 0,
+      player_a: null,
+      player_b: null,
+      winner: "",
+      score_a: 0,
+      score_b: 0,
+    }));
   };
 
   const connectRoomSocket = (newRoomId) => {
@@ -252,35 +311,20 @@ export const GameProvider = ({ children }) => {
         handleAbortExitRoom();
       },
       onDisconnect: () => {
-        clearWaitingRoomData();
+        clearWaitingRoom();
       },
     });
   };
 
   const connectNextSubgameSocket = (newBracketData) => {
-    const getSubgameNamespace = (bracketData) => {
-      const findMatchIndex = (data, playerId) => {
-        for (let i = 0; i < data.subgames.length; i++) {
-          const round = data.subgames[i];
-          for (let j = 0; j < round.length; j++) {
-            const match = round[j];
-            if (match.player_a.intra_id === playerId || match.player_b.intra_id === playerId) {
-              return j;
-            }
-          }
-        }
-        return -1;
-      };
-      const rank = bracketData.rank_ongoing;
-      const idx_in_rank = findMatchIndex(bracketData, loggedIn.intra_id);
-      return `/${rank}/${idx_in_rank}`;
-    };
     const setupSubgameListeners = (newSocket) => {
       setupEventListenersSocket(newSocket, subgameDefualtEvents);
     };
 
-    const newSubgameNamespace = `${roomNamespace}${getSubgameNamespace(newBracketData)}`;
-    if (isNamespaceConnected(newSubgameNamespace)) return;
+    const rank = bracketData.rank_ongoing;
+    const { idx_in_rank } = getMyFinalSubgameAndRank(newBracketData.subgames);
+    const newSubgameNamespace = `${roomNamespace}/${rank}/${idx_in_rank}`;
+    if (idx_in_rank === -1 || isNamespaceConnected(newSubgameNamespace)) return;
 
     connectNamespace(newSubgameNamespace, {
       onConnect: (newSocket) => {
@@ -293,7 +337,7 @@ export const GameProvider = ({ children }) => {
         handleAbortExit();
       },
       onDisconnect: () => {
-        clearTournamentData();
+        setBracketData(null);
       },
     });
   };
@@ -369,8 +413,8 @@ export const GameProvider = ({ children }) => {
       console.log("값 초기화 및 소켓 연결 해제");
       disconnectRoomSocket();
       disconnectSubgameSocket();
-      clearWaitingRoomData();
-      clearTournamentData();
+      clearWaitingRoom();
+      clearTournament();
       setRoomNamespace("");
       setSubgameNamespace("");
     };
@@ -393,6 +437,8 @@ export const GameProvider = ({ children }) => {
         ballTrajectoryVersion,
         paddleATrajectoryVersion,
         paddleBTrajectoryVersion,
+        // function
+        getMyFinalSubgameAndRank,
         // socket
         roomNamespace,
         subgameNamespace,

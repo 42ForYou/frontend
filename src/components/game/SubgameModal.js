@@ -19,6 +19,11 @@ const VStext = () => {
 const SubgameModal = ({ title, playerA, playerB, winner, message }) => {
   const { loggedIn } = useAuth();
 
+  if (!playerA || !playerB) {
+    console.log("SubgameModal: playerA or playerB is null");
+    return null;
+  }
+
   return (
     <div className="SubgameModal">
       <CustomModal hasCloseButton={false} title={title}>

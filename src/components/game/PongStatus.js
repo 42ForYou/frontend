@@ -10,7 +10,7 @@ const PongStatus = () => {
         <h2>
           {subgameStatus.score_a} : {subgameStatus.score_b}
         </h2>
-        <h3>남은 시간: {subgameStatus.time_left}초</h3>
+        <h3>{subgameStatus.time_left > 0 ? `남은 시간: ${subgameStatus.time_left}초` : "게임 종료"}</h3>
       </div>
     </div>
   );
