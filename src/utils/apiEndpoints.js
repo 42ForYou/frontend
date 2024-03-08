@@ -6,7 +6,9 @@ export const API_ENDPOINTS = {
     if (intra_id && code) return `/2fa?intra-id=${intra_id}&code=${code}`;
     return "/2fa/";
   },
-  USER_PROFILE: (nickname) => `/accounts/profiles/${nickname}/`,
+  USER_PROFILE: (intra_id) => `/accounts/profiles/${intra_id}/`,
+  USER_STATS: (intra_id) => `/accounts/stats/${intra_id}/`,
+  USER_HISTORY: (intra_id) => `/accounts/history/${intra_id}/`,
   USER_SEARCH: (page, page_size, keyword) => {
     return `/accounts/search?search=${keyword}&page=${page}&page_size=${page_size}/`;
   },
