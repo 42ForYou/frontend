@@ -76,7 +76,7 @@ const PongScene = () => {
 
     // 카메라 생성
     const newCamera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    newCamera.position.set(0, -500, 700);
+    newCamera.position.set(0, -100, 700);
     newCamera.up.set(0, 0, 1); // 카메라의 업벡터를 z축으로 설정
     newCamera.lookAt(new THREE.Vector3(0, 0, 0));
     setCamera(newCamera);
