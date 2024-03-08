@@ -54,7 +54,7 @@ const PongScene = () => {
     const paddle = paddleRef.current;
 
     const elapsedTime = Date.now() / 1000 - paddleTrajectory.t_event;
-    const newY = paddleTrajectory.y + paddleTrajectory.dy * elapsedTime;
+    let newY = paddleTrajectory.y + paddleTrajectory.dy * elapsedTime;
 
     // 새로운 y값이 목표 위치를 넘어가지 않도록 조정
     if (paddleTrajectory.dy > 0) {
