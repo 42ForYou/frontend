@@ -54,13 +54,11 @@ const GamePlayPage = () => {
   useEffect(() => {
     console.log("subgameStatus", subgameStatus);
     if (subgameStatus.progress === "waiting") {
-      setCurrentPage("bracket");
+      setCurrentPage("pongScene");
       setCurrentModal("subgameBracket");
     } else if (subgameStatus.progress === "playing") {
-      setCurrentPage("pongScene");
       setCurrentModal(null);
     } else if (subgameStatus.progress === "ended") {
-      setCurrentPage("bracket");
       setCurrentModal("subgameResult");
     } else if (subgameStatus.progress === "none") {
       setCurrentPage("bracket");
