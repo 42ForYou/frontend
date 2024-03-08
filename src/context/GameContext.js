@@ -69,8 +69,6 @@ export const GameProvider = ({ children }) => {
   const paddleATrajectory = useRef(null);
   const paddleBTrajectory = useRef(null);
   const [ballTrajectoryVersion, setBallTrajectoryVersion] = useState(0);
-  const [paddleATrajectoryVersion, setpaddleATrajectoryVersion] = useState(0);
-  const [paddleBTrajectoryVersion, setpaddleBTrajectoryVersion] = useState(0);
 
   // socket namespace
   const [roomNamespace, setRoomNamespace] = useState("");
@@ -190,8 +188,6 @@ export const GameProvider = ({ children }) => {
         console.log("ended 이벤트 수신: ", data);
         setSubgameStatus((prevState) => ({ ...prevState, progress: "ended", winner: data.winner }));
         setBallTrajectoryVersion(0);
-        setpaddleATrajectoryVersion(0);
-        setpaddleBTrajectoryVersion(0);
         disconnectSubgameSocket();
       },
     },
@@ -241,10 +237,8 @@ export const GameProvider = ({ children }) => {
         console.log("update_track_paddle 이벤트 수신: ", data);
         if (data.player === "A") {
           paddleATrajectory.current = data;
-          setpaddleATrajectoryVersion((version) => version + 1);
         } else if (data.player === "B") {
           paddleBTrajectory.current = data;
-          setpaddleBTrajectoryVersion((version) => version + 1);
         }
       },
     },
@@ -435,8 +429,6 @@ export const GameProvider = ({ children }) => {
         paddleATrajectory,
         paddleBTrajectory,
         ballTrajectoryVersion,
-        paddleATrajectoryVersion,
-        paddleBTrajectoryVersion,
         // function
         getMyFinalSubgameAndRank,
         // socket

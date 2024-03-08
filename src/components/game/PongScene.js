@@ -3,16 +3,7 @@ import * as THREE from "three";
 import { useGame } from "../../context/GameContext";
 
 const PongScene = () => {
-  const {
-    tournamentConfig,
-    ballTrajectory,
-    paddleATrajectory,
-    paddleBTrajectory,
-    ballTrajectoryVersion,
-    // todo: 패들의 궤적 버전 사용 검토 (필요 없을 듯)
-    paddleATrajectoryVersion,
-    paddleBTrajectoryVersion,
-  } = useGame();
+  const { tournamentConfig, ballTrajectory, paddleATrajectory, paddleBTrajectory, ballTrajectoryVersion } = useGame();
   const mountRef = useRef(null);
   const ballRef = useRef();
   const paddleARef = useRef();
