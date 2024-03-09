@@ -6,23 +6,28 @@ import { API_ENDPOINTS } from "../utils/apiEndpoints";
 // 이 훅을 사용하는 컴포넌트가 마운트될 때 자동으로 데이터를 가져와야 하므로 useEffect를 사용
 const useFetchProfileData = (intraId) => {
   const [profileData, setProfileData] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [statsData, setStatsData] = useState(null);
+  const [matchHistoryData, setMatchHistoryData] = useState(null);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchProfileData = async () => {
-      setIsLoading(true);
       setError(null);
       try {
-        const resData = await get(API_ENDPOINTS.USER_PROFILE(intraId));
-        setProfileData(resData.data.user);
-        setIsLoading(false);
+        // todo: 주석 해제
+        const resDataProfile = await get(API_ENDPOINTS.USER_PROFILE(intraId));
+        // const resDataStats = await get(API_ENDPOINTS.USER_STATS(intraId));
+        // const resDataHistory = await get(API_ENDPOINTS.USER_HISTORY(intraId));
+        setProfileData(resDataProfile.data.user);
+        // setStatsData(resDataStats);
+        // setMatchHistoryData(resDataHistory);
+        // console.log(resDataStats);
+        // console.log(resDataHistory);
       } catch (error) {
         setError({
           code: error.response?.status,
           msg: error.response?.data.message || error.message,
         });
-        setIsLoading(false);
       }
     };
 
@@ -31,7 +36,7 @@ const useFetchProfileData = (intraId) => {
     }
   }, [intraId]);
 
-  return { profileData, isLoading, error };
+  return { profileData, statsData, matchHistoryData, error };
 };
 
 export default useFetchProfileData;
