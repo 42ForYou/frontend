@@ -44,9 +44,9 @@ const randomColor = () => {
 const PieChartSection = ({ title, chartData }) => {
   return (
     <div className="text-center" style={{ width: "33%", display: "flex", flexDirection: "column", padding: "10px" }}>
-      <h3>{title}</h3>
+      <h5>{title}</h5>
       <div style={{ flex: 1, minHeight: "200px" }}>
-        <PieChart data={chartData} />
+        {chartData ? <PieChart data={chartData} /> : <p>데이터가 없습니다.</p>}
       </div>
     </div>
   );
@@ -54,14 +54,15 @@ const PieChartSection = ({ title, chartData }) => {
 
 const ProfileStats = ({ statsData }) => {
   const { modeData, dualData, rankData } = processData(statsData);
+  const { n_dual_match, n_tournaments } = statsData;
 
   return (
     <div>
       <h2>Statistics</h2>
       <div style={{ display: "flex", justifyContent: "space-around", flexWrap: "wrap" }}>
-        <PieChartSection title="플레이한 모드" chartData={modeData} />
-        <PieChartSection title="1vs1 승/패" chartData={dualData} />
-        <PieChartSection title="토너먼트 최종 진출 라운드" chartData={rankData} />
+        <PieChartSection title="플레이한 모드" chartData={n_dual_match + n_tournaments === 0 ? null : modeData} />
+        <PieChartSection title="1vs1 승/패" chartData={n_dual_match === 0 ? null : dualData} />
+        <PieChartSection title="토너먼트 최종 진출 라운드" chartData={n_tournaments === 0 ? null : rankData} />
       </div>
     </div>
   );
