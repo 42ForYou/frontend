@@ -2,11 +2,11 @@
 	font-family: 'Roboto', sans-serif;
 }
 
-.ProfileHistory p {
+.ProfileTrace p {
 	color: black;
 }
 
-.ProfileHistory div {
+.ProfileTrace div {
 	border-radius: 20px;
 }
 

@@ -9,7 +9,7 @@ import ContentBody from "../../components/layout/ContentBody";
 
 const UserProfilePage = () => {
   const { intra_id } = useParams();
-  const { profileData, isLoading, error } = useFetchProfileData(intra_id);
+  const { profileData, statsData, matchHistoryData, error } = useFetchProfileData(intra_id);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -19,12 +19,19 @@ const UserProfilePage = () => {
     }
   }, [error, navigate]);
 
+  if (!profileData || !statsData || !matchHistoryData) return <LoadingPage />;
+
   return (
     <div className="UserProfilePage">
       <ContentContainer>
         <ContentTitle title="User Profile" />
         <ContentBody>
-          {isLoading ? <LoadingPage /> : <ProfileBox isMine={false} profileData={profileData} />}
+          <ProfileBox
+            isMine={false}
+            profileData={profileData}
+            statsData={statsData}
+            matchHistoryData={matchHistoryData}
+          />
         </ContentBody>
       </ContentContainer>
     </div>
