@@ -7,6 +7,7 @@ import ContentTitle from "../../components/layout/ContentTitle";
 import ContentBody from "../../components/layout/ContentBody";
 import LoadingPage from "../LoadingPage";
 
+// todo: 더미 데이터 삭제
 const dummyHistoryData = [
   {
     game: {
@@ -220,8 +221,7 @@ const MyProfilePage = () => {
   const { loggedIn } = useAuth();
   const { profileData, statsData, matchHistoryData } = useFetchProfileData(loggedIn?.intra_id);
 
-  if (!profileData) return <LoadingPage />;
-  // if (!profileData || !statsData || !matchHistoryData) return <LoadingPage />;
+  if (!profileData || !statsData || !matchHistoryData) return <LoadingPage />;
 
   return (
     <div className="MyProfilePage">
@@ -231,10 +231,8 @@ const MyProfilePage = () => {
           <ProfileBox
             isMine={true}
             profileData={profileData}
-            statsData={dummyStatsData}
-            matchHistoryData={dummyHistoryData}
-            // statsData={statsData}
-            // matchHistoryData={matchHistoryData}
+            statsData={statsData}
+            matchHistoryData={matchHistoryData}
           />
         </ContentBody>
       </ContentContainer>

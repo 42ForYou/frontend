@@ -14,15 +14,12 @@ const useFetchProfileData = (intraId) => {
     const fetchProfileData = async () => {
       setError(null);
       try {
-        // todo: 주석 해제
         const resDataProfile = await get(API_ENDPOINTS.USER_PROFILE(intraId));
-        // const resDataStats = await get(API_ENDPOINTS.USER_STATS(intraId));
-        // const resDataHistory = await get(API_ENDPOINTS.USER_HISTORY(intraId));
+        const resDataStats = await get(API_ENDPOINTS.USER_STATS(intraId));
+        const resDataHistory = await get(API_ENDPOINTS.USER_HISTORY(intraId));
         setProfileData(resDataProfile.data.user);
-        // setStatsData(resDataStats);
-        // setMatchHistoryData(resDataHistory);
-        // console.log(resDataStats);
-        // console.log(resDataHistory);
+        setStatsData(resDataStats);
+        setMatchHistoryData(resDataHistory);
       } catch (error) {
         setError({
           code: error.response?.status,
