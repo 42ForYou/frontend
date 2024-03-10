@@ -2,7 +2,7 @@ export const API_ENDPOINTS = {
   OAUTH_LOGIN: "/login/",
   OAUTH_TOKEN_EXCHANGE: (code) => `/oauth/?code=${code}`,
   TOKEN_VERIFY: "/token/verify",
-  TOKEN_REFRESH: "/token/refresh",
+  TOKEN_REFRESH: "/token/refresh/",
   TWO_FACTOR_VERIFY: (intra_id, code) => {
     if (intra_id && code) return `/2fa?intra-id=${intra_id}&code=${code}`;
     return "/2fa/";
