@@ -1,5 +1,4 @@
 // todo: httpApiBase로 이름 변경
-// todo: 모든 데이터는 data로 감싸져오기 때문에 data.data로 반환하는 것 고려
 
 import axios from "axios";
 
@@ -8,6 +7,20 @@ const axiosInstance = axios.create({
   timeout: 10000,
   withCredentials: true,
 });
+
+// 에러 발생시 리프레시 토큰으로 재시도
+axiosInstance.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.config._retry) {
+      console.log("리프레시 토큰을 이용한 액세스 토큰 재발급에 실패했습니다.");
+    } else if (error.response && (error.response.status === 401 || error.response.status === 403)) {
+      console.log("토큰이 유효하지 않습니다. 리프레시 토큰으로 재시도합니다.");
+      error.config._retry = true;
+      window.dispatchEvent(new CustomEvent("invalid-access-token", { detail: error.config }));
+    }
+  }
+);
 
 const get = async (url) => {
   try {
@@ -93,4 +106,4 @@ const patchForm = async (url, formData) => {
   }
 };
 
-export { get, getWithoutCredentials, post, put, del, patch, patchForm };
+export { axiosInstance, get, getWithoutCredentials, post, put, del, patch, patchForm };
