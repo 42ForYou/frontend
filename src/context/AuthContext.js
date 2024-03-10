@@ -1,10 +1,12 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
-import { get, patch, post } from "../utils/apiBase";
+import { axiosInstance, get, patch, post } from "../utils/apiBase";
 import { API_ENDPOINTS } from "../utils/apiEndpoints";
+import { useNavigate } from "react-router-dom";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
   const [loggedIn, setLoggedIn] = useState(null);
   const [is2FA, setIs2FA] = useState(false);
@@ -55,7 +57,6 @@ export const AuthProvider = ({ children }) => {
     } catch (error) {
       console.log("쿠키에 저장되어 있는 액세스 토큰이 유효하지 않습니다.");
       setLoggedIn(null);
-      await refreshAccessToken();
     } finally {
       setIsLoading(false);
     }
@@ -71,10 +72,12 @@ export const AuthProvider = ({ children }) => {
     } catch (error) {
       console.log("액세스 토큰 갱신에 실패했습니다.");
       setLoggedIn(null);
+      alert("로그인이 필요합니다.");
+      navigate("/login");
+      return false;
     } finally {
       setIsLoading(false);
     }
-    return false;
   };
 
   const resend2FACode = async () => {
@@ -87,6 +90,25 @@ export const AuthProvider = ({ children }) => {
     console.log(resData);
     setLoggedIn(resData.data.profile);
   };
+
+  // 액세스 토큰이 유효하지 않거나 만료되었을 때 발생하는 이벤트를 처리
+  useEffect(() => {
+    const handleInvalidAccessToken = async (event) => {
+      const isSuccess = await refreshAccessToken();
+      if (!isSuccess) {
+        return;
+      }
+      // 갱신에 성공했을 경우만 원본 요청을 재시도
+      const originalRequest = event.detail;
+      axiosInstance(originalRequest);
+    };
+
+    window.addEventListener("invalid-access-token", handleInvalidAccessToken);
+
+    return () => {
+      window.removeEventListener("invalid-access-token", handleInvalidAccessToken);
+    };
+  }, []);
 
   return (
     <AuthContext.Provider
