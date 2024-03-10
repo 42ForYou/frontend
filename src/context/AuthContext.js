@@ -39,7 +39,7 @@ export const AuthProvider = ({ children }) => {
   const validateTokenInCookies = async () => {
     setIsLoading(true);
     try {
-      const resData = await get(API_ENDPOINTS.VALIDATE_TOKEN);
+      const resData = await get(API_ENDPOINTS.TOKEN_VERIFY);
       const user = resData.data.user;
       setLoggedIn(user);
       setIs2FA(user.two_factor_auth);
@@ -52,11 +52,11 @@ export const AuthProvider = ({ children }) => {
   };
 
   const resend2FACode = async () => {
-    await patch(API_ENDPOINTS.VALIDATE_2FA(), { data: { intra_id: twoFactorData.intra_id } });
+    await patch(API_ENDPOINTS.TWO_FACTOR_VERIFY(), { data: { intra_id: twoFactorData.intra_id } });
   };
 
   const validate2FAcode = async (code2FA) => {
-    const resData = await get(API_ENDPOINTS.VALIDATE_2FA(twoFactorData.intra_id, code2FA));
+    const resData = await get(API_ENDPOINTS.TWO_FACTOR_VERIFY(twoFactorData.intra_id, code2FA));
     console.log("2FA 인증 성공");
     console.log(resData);
     setLoggedIn(resData.data.profile);
