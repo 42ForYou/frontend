@@ -1,5 +1,5 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
-import { get, patch } from "../utils/apiBase";
+import { get, patch, post } from "../utils/apiBase";
 import { API_ENDPOINTS } from "../utils/apiEndpoints";
 
 const AuthContext = createContext();
@@ -44,11 +44,28 @@ export const AuthProvider = ({ children }) => {
       setLoggedIn(user);
       setIs2FA(user.two_factor_auth);
     } catch (error) {
-      console.log("쿠키에 저장된 토큰이 유효하지 않습니다.");
+      console.log("쿠키에 저장되어 있는 액세스 토큰이 유효하지 않습니다.");
+      setLoggedIn(null);
+      await refreshAccessToken();
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const refreshAccessToken = async () => {
+    setIsLoading(true);
+    try {
+      const resData = await post(API_ENDPOINTS.TOKEN_REFRESH);
+      setLoggedIn(resData.data.user);
+      console.log("액세스 토큰이 성공적으로 갱신되었습니다.");
+      return true;
+    } catch (error) {
+      console.log("액세스 토큰 갱신에 실패했습니다.");
       setLoggedIn(null);
     } finally {
       setIsLoading(false);
     }
+    return false;
   };
 
   const resend2FACode = async () => {
@@ -57,7 +74,7 @@ export const AuthProvider = ({ children }) => {
 
   const validate2FAcode = async (code2FA) => {
     const resData = await get(API_ENDPOINTS.TWO_FACTOR_VERIFY(twoFactorData.intra_id, code2FA));
-    console.log("2FA 인증 성공");
+    console.log("2FA 인증에 성공했습니다.");
     console.log(resData);
     setLoggedIn(resData.data.profile);
   };
@@ -71,6 +88,7 @@ export const AuthProvider = ({ children }) => {
         logout,
         validateTokenInCookies,
         validate2FAcode,
+        refreshAccessToken,
         authenticateWithOAuth,
         is2FA,
         resend2FACode,
