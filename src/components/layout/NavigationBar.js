@@ -33,9 +33,9 @@ const NavUser = () => {
   const { loggedIn, logout } = useAuth();
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    logout();
-    alert("로그아웃 되었습니다. (httpOnly 쿠키는 삭제되지 않음)\n로그인 페이지로 돌아갑니다");
+  const handleLogout = async () => {
+    await logout();
+    alert("로그아웃 되었습니다. \n로그인 페이지로 이동합니다");
     navigate("/login");
   };
 

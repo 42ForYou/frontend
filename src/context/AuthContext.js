@@ -10,10 +10,19 @@ export const AuthProvider = ({ children }) => {
   const [is2FA, setIs2FA] = useState(false);
   const [twoFactorData, setTwoFactorData] = useState(null); // {email, intra_id, two_factor_auth: true}
 
-  // todo: 쿠키 삭제 API 구현 후 변경
   const logout = async () => {
-    setLoggedIn(null);
-    console.log("로그아웃 성공");
+    try {
+      await get(API_ENDPOINTS.LOGOUT);
+      console.log("로그아웃 성공");
+    } catch (error) {
+      if (error.response?.status === 401) {
+        console.log("토큰을 발급받지 않은 사용자입니다.");
+      } else if (error.response?.status === 400) {
+        console.log("존재하지 않는 토큰입니다.");
+      }
+    } finally {
+      setLoggedIn(null);
+    }
   };
 
   const authenticateWithOAuth = async (code) => {

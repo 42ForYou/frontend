@@ -1,5 +1,6 @@
 export const API_ENDPOINTS = {
   OAUTH_LOGIN: "/login/",
+  LOGOUT: "/logout/",
   OAUTH_TOKEN_EXCHANGE: (code) => `/oauth/?code=${code}`,
   TOKEN_VERIFY: "/token/verify",
   TOKEN_REFRESH: "/token/refresh/",
