@@ -48,7 +48,7 @@ axiosInstance.interceptors.response.use(
 const get = async (url) => {
   try {
     const response = await axiosInstance.get(url);
-    return response.data;
+    return response?.data;
   } catch (error) {
     throw error;
   }
@@ -57,7 +57,7 @@ const get = async (url) => {
 const getWithoutCredentials = async (url) => {
   try {
     const response = await axiosInstance.get(url, { withCredentials: false });
-    return response.data;
+    return response?.data;
   } catch (error) {
     throw error;
   }
@@ -66,7 +66,7 @@ const getWithoutCredentials = async (url) => {
 const post = async (url, data) => {
   try {
     const response = await axiosInstance.post(url, { data });
-    return response.data;
+    return response?.data;
   } catch (error) {
     throw error;
   }
@@ -75,7 +75,7 @@ const post = async (url, data) => {
 const put = async (url, data) => {
   try {
     const response = await axiosInstance.put(url, data);
-    return response.data;
+    return response?.data;
   } catch (error) {
     throw error;
   }
@@ -84,7 +84,7 @@ const put = async (url, data) => {
 const del = async (url) => {
   try {
     const response = await axiosInstance.delete(url);
-    return response.data;
+    return response?.data;
   } catch (error) {
     throw error;
   }
@@ -93,7 +93,7 @@ const del = async (url) => {
 const patch = async (url, data) => {
   try {
     const response = await axiosInstance.patch(url, data);
-    return response.data;
+    return response?.data;
   } catch (error) {
     throw error;
   }
@@ -102,7 +102,7 @@ const patch = async (url, data) => {
 const patchForm = async (url, formData) => {
   try {
     const response = await axiosInstance.patch(url, formData);
-    return response.data;
+    return response?.data;
   } catch (error) {
     throw error;
   }
