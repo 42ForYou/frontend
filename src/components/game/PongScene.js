@@ -47,11 +47,10 @@ const PongScene = () => {
     const elapsedTime = Date.now() / 1000 - paddleTrajectory.t_event;
     let newY = paddleTrajectory.y + paddleTrajectory.dy * elapsedTime;
 
-    // 새로운 y값이 목표 위치를 넘어가지 않도록 조정
     if (paddleTrajectory.dy > 0) {
-      newY = Math.min(newY, paddleTrajectory.y);
+      newY = Math.min(newY, tournamentConfig.y_max);
     } else {
-      newY = Math.max(newY, paddleTrajectory.y);
+      newY = Math.max(newY, tournamentConfig.y_min);
     }
 
     if (paddle.position.y !== newY) {
