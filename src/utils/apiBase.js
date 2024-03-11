@@ -1,6 +1,7 @@
 // todo: httpApiBase로 이름 변경
 
 import axios from "axios";
+import { API_ENDPOINTS } from "./apiEndpoints";
 
 const axiosInstance = axios.create({
   baseURL: process.env.API_BASE_URL,
@@ -27,13 +28,19 @@ axiosInstance.interceptors.response.use(
     return response;
   },
   (error) => {
-    if (error.config && error.config._retry) {
-      console.log("리프레시 토큰을 이용한 액세스 토큰 재발급에 실패했습니다.");
-    } else if (error.response && (error.response.status === 401 || error.response.status === 403)) {
-      console.log("토큰이 유효하지 않습니다. 리프레시 토큰으로 재시도합니다.");
+    // 리프레시 토큰을 이용한 액세스 토큰 재발급 요청에 대한 응답 에러 처리
+    if (!error.config._retry && error.config.url === API_ENDPOINTS.TOKEN_REFRESH) {
+      return Promise.reject(error);
+    }
+
+    // 일반 API 요청에 대한 응답 에러 처리
+    if (!error.config._retry && (error.response.status === 401 || error.response.status === 403)) {
       error.config._retry = true;
       window.dispatchEvent(new CustomEvent("invalid-access-token", { detail: error.config }));
+      return Promise.reject(error);
     }
+
+    // 이미 재시도한 경우나 다른 상황에 대해서는 에러를 그대로 반환
     return Promise.reject(error);
   }
 );
