@@ -101,6 +101,7 @@ export const AuthProvider = ({ children }) => {
   // 1. 리프레시 토큰 유효 -> 액세스 토큰 재발급 -> 원본 요청 재시도
   // 2. 리프레시 토큰 만료 -> 로그아웃 처리
   useEffect(() => {
+    // console.log("AuthContext가 마운트되었습니다.");
     const handleInvalidAccessToken = async (event) => {
       const isSuccess = await refreshAccessToken();
       // 갱신에 성공했을 경우만 원본 요청을 재시도
@@ -116,6 +117,7 @@ export const AuthProvider = ({ children }) => {
     window.addEventListener("invalid-access-token", handleInvalidAccessToken);
 
     return () => {
+      // console.log("AuthContext가 언마운트되었습니다.");
       window.removeEventListener("invalid-access-token", handleInvalidAccessToken);
     };
   }, []);

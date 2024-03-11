@@ -127,9 +127,11 @@ export const SocketProvider = ({ children }) => {
   };
 
   useEffect(() => {
+    // console.log("SocketContext가 마운트되었습니다.");
     connectNamespace("/");
     connectNamespace("/online_status");
     return () => {
+      // console.log("SocketContext가 언마운트되었습니다.");
       disconnectAllSockets();
     };
   }, []);
