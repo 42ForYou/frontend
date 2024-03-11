@@ -4,7 +4,6 @@ import { useGame } from "../../context/GameContext";
 import LoadingPage from "../LoadingPage";
 import PongStatus from "../../components/game/PongStatus";
 
-// todo: 렌더에 필요한 데이터 추가
 const PongScenePage = () => {
   const { tournamentConfig, emitSubgameSocket } = useGame();
 

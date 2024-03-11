@@ -137,8 +137,6 @@ export const SocketProvider = ({ children }) => {
   return (
     <SocketContext.Provider
       value={{
-        // todo: 추후 sockets는 공급자 컴포넌트에서만 사용하도록 변경
-        sockets,
         isNamespaceConnected,
         connectNamespace,
         disconnectNamespace,
