@@ -12,10 +12,16 @@ export const AuthProvider = ({ children }) => {
   const [is2FA, setIs2FA] = useState(false);
   const [twoFactorData, setTwoFactorData] = useState(null); // {email, intra_id, two_factor_auth: true}
 
+  const handleUnauthenticated = () => {
+    alert("로그인이 필요합니다.");
+    navigate("/login");
+  };
+
   const logout = async () => {
+    console.log("로그아웃 시도: ");
     try {
       await get(API_ENDPOINTS.LOGOUT);
-      console.log("로그아웃 성공");
+      console.log("성공");
     } catch (error) {
       if (error.response?.status === 401) {
         console.log("토큰을 발급받지 않은 사용자입니다.");
@@ -55,7 +61,6 @@ export const AuthProvider = ({ children }) => {
       setLoggedIn(user);
       setIs2FA(user.two_factor_auth);
     } catch (error) {
-      console.log("쿠키에 저장되어 있는 액세스 토큰이 유효하지 않습니다.");
       setLoggedIn(null);
     } finally {
       setIsLoading(false);
@@ -63,21 +68,22 @@ export const AuthProvider = ({ children }) => {
   };
 
   const refreshAccessToken = async () => {
+    console.log("토큰이 유효하지 않습니다. 리프레시 토큰으로 재시도합니다.");
     setIsLoading(true);
+    let success = false;
     try {
       const resData = await post(API_ENDPOINTS.TOKEN_REFRESH);
       setLoggedIn(resData.data.user);
       console.log("액세스 토큰이 성공적으로 갱신되었습니다.");
-      return true;
+      success = true;
     } catch (error) {
-      console.log("액세스 토큰 갱신에 실패했습니다.");
+      console.log("리프레시 토큰이 만료되었습니다. 로그아웃 처리합니다.");
       setLoggedIn(null);
-      alert("로그인이 필요합니다.");
-      navigate("/login");
-      return false;
+      handleUnauthenticated();
     } finally {
       setIsLoading(false);
     }
+    return success;
   };
 
   const resend2FACode = async () => {
@@ -91,16 +97,20 @@ export const AuthProvider = ({ children }) => {
     setLoggedIn(resData.data.profile);
   };
 
-  // 액세스 토큰이 유효하지 않거나 만료되었을 때 발생하는 이벤트를 처리
+  // 액세스 토큰이 유효하지 않거나 만료되었을 때 리프레시 토큰을 이용하여 재발급하는 이벤트 핸들러
+  // 1. 리프레시 토큰 유효 -> 액세스 토큰 재발급 -> 원본 요청 재시도
+  // 2. 리프레시 토큰 만료 -> 로그아웃 처리
   useEffect(() => {
     const handleInvalidAccessToken = async (event) => {
       const isSuccess = await refreshAccessToken();
-      if (!isSuccess) {
-        return;
-      }
       // 갱신에 성공했을 경우만 원본 요청을 재시도
-      const originalRequest = event.detail;
-      axiosInstance(originalRequest);
+      if (isSuccess) {
+        console.log("액세스 토큰 재발급에 성공했습니다. 원본 요청을 재시도합니다.");
+        const originalRequest = event.detail;
+        axiosInstance(originalRequest);
+      } else {
+        console.log("액세스 토큰 재발급에 실패했습니다.");
+      }
     };
 
     window.addEventListener("invalid-access-token", handleInvalidAccessToken);
