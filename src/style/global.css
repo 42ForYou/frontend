@@ -24,8 +24,8 @@ body {
 }
 
 .icon {
-	width: 36px;
-  height: 36px;
+	width: max(36px, 5vh);
+	height: max(36px, 5vh);
 }
 
 .btn {

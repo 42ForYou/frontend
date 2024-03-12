@@ -17,3 +17,43 @@
 	min-width: 5rem;
 	min-height:10rem;
 }
+
+.TournamentResultModal .text-center {
+  text-align: center;
+  /* font-weight: bold; */
+}
+
+.TournamentResultModal h4 {
+	font-family: 'Orbit', sans-serif;
+  font-weight: bold;
+  font-size: 1.25em;
+	font-style: italic;
+}
+
+.TournamentResultModal img {
+  height: auto;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.player-in-modal {
+	font-family: 'Orbit', sans-serif;
+	font-weight: bold;
+	font-size: 1.25em;
+}
+
+.win-or-lose {
+	font-family: 'Orbitron', sans-serif;
+	font-size: 1.5em;
+	font-weight: bold;
+	font-style: italic;
+}
+
+.winner-text {
+  color: orange
+}
+
+.loser-text {
+  color: gray;
+}
