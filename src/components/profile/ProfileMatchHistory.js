@@ -50,8 +50,8 @@ const MatchHistoryTable = ({ matchHistoryData }) => {
 
 const ProfileMatchHistory = ({ matchHistoryData }) => {
   return (
-    <div className="mt-4">
-      <h2 className="mb-4">Match History</h2>
+    <div className="ProfileMatchHistory ContentContainer Content mt-4">
+      <h4 className="mb-4">Match History</h4>
       <MatchHistoryTable matchHistoryData={matchHistoryData} />
     </div>
   );

@@ -1,9 +1,18 @@
-.ProfileBox {
-	font-family: 'Roboto', sans-serif;
+.ProfileTextLine {
+	font-family: 'Orbit', sans-serif;
+}
+
+.profile-title p
+{
+	font-family: 'Orbitron', sans-serif;
+	font-weight: bold;
+	color:aliceblue;
+	font-size: 1.5rem;
 }
 
 .ProfileTrace p {
-	color: black;
+	font-family: 'Roboto', sans-serif;
+	color:aliceblue;
 }
 
 .ProfileTrace div {
@@ -12,4 +21,34 @@
 
 .ProfileBox input {
 	color: black;
+}
+
+.stats-container {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+
+.stats-section {
+  width: 33%;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  text-align: center;
+}
+
+.stats-chart {
+  flex: 1;
+  min-height: 200px;
+}
+
+.ProfileMatchHistory .table {
+  background-color: transparent;
+  color: white;
+}
+
+.ProfileMatchHistory .table th,
+.ProfileMatchHistory .table td {
+  background-color: transparent;
+  color: white;
 }
