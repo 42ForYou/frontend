@@ -2,15 +2,19 @@ import React from "react";
 import Avatar from "../common/Avatar";
 
 const WinOrLose = ({ isWinner }) => {
-  return <div style={{ fontWeight: "bold" }}>{isWinner ? "WINNER!" : "LOSER..."}</div>;
+  return (
+    <div className="win-or-lose">
+      {isWinner ? <p className="mb-2 winner-text">WINNER!</p> : <p className="mb-2 loser-text">LOSER...</p>}
+    </div>
+  );
 };
 
 const PlayerInModal = ({ nickname, avatar, isMine, isWinner = undefined }) => {
   return (
-    <div className="player-in-modal text-center">
+    <div className="d-flex-col player-in-modal text-center align-items-center justify-content-center">
       {isWinner !== undefined && <WinOrLose isWinner={isWinner} />}
       <Avatar src={avatar} diameter={130} />
-      <p className="pt-2 mb-0" style={{ color: `${isMine ? "yellow" : ""}` }}>
+      <p className="pt-2 mb-0" style={isMine ? { color: "#007bff", fontWeight: "bold" } : null}>
         {nickname}
       </p>
     </div>
