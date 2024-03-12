@@ -28,7 +28,6 @@ import MainLayout from "./components/layout/MainLayout";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import PongScenePage from "./pages/game/PongScenePage";
 
-// todo: Tournament, OnlineStatus는 필요한 컴포넌트에만 공급 검토
 const App = () => {
   return (
     <BrowserRouter>
@@ -39,7 +38,6 @@ const App = () => {
   );
 };
 
-// todo: 콜백 페이지 경로 변경
 const AppContent = () => {
   return (
     <div className="App">
