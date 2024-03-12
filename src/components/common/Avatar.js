@@ -1,15 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const Avatar = ({
-  src,
-  alt,
-  to,
-  isEditing = false,
-  onImageUploadClick = null,
-  diameter = 100,
-  onlineStatus = "None",
-}) => {
+const Avatar = ({ src, alt, to, isEditing = false, onImageUploadClick = null, diameter, onlineStatus = "None" }) => {
   const getImageSrc = (src) => {
     // todo: process.env.ASSETS_URL값이 존재하나 유효하지 않은 경우 처리
     if (!process.env.ASSETS_URL) return;
@@ -38,7 +30,7 @@ const Avatar = ({
   };
 
   return (
-    <div className="avatar" style={{ width: `${diameter}px`, height: `${diameter}px` }}>
+    <div className="avatar" style={diameter ? { width: `${diameter}px`, height: `${diameter}px` } : null}>
       {to ? <Link to={to}>{renderImage()}</Link> : renderImage()}
       {isEditing && (
         <button onClick={onImageUploadClick} className="edit-button">
