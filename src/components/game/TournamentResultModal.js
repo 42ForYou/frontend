@@ -5,10 +5,11 @@ import { useNavigate } from "react-router-dom";
 import PlayerInModal from "./PlayerInModal";
 import { useGame } from "../../context/GameContext";
 import { useAuth } from "../../context/AuthContext";
+import Avatar from "../common/Avatar";
 
-const getWinnerNickname = (subgame) => {
-  if (subgame.winner === "A") return subgame.player_a.nickname;
-  else return subgame.player_b.nickname;
+const getWinnerOfSubgame = (subgame) => {
+  if (subgame.winner === "A") return subgame.player_a;
+  else return subgame.player_b;
 };
 
 const rankToString = (rank) => {
@@ -16,41 +17,48 @@ const rankToString = (rank) => {
   else if (rank === 1) return "4강";
 };
 
-const TournamentFinalResult = ({ finalSubgame }) => {
-  const { loggedIn } = useAuth();
-  const winnerNickname = getWinnerNickname(finalSubgame);
+const TournamentWinnerContent = ({ finalSubgame }) => {
+  const winner = getWinnerOfSubgame(finalSubgame);
 
   return (
     <>
-      <h3 className="text-center">이번 토너먼트의 우승자: {winnerNickname}</h3>
-      <h3 className="text-center">
-        {winnerNickname === loggedIn.nickname ? "우승을 축하합니다!" : "아쉽게 우승을 놓쳤습니다."}
-      </h3>
-      {/* <div className="d-flex align-items-center justify-content-center px-4">
-        <PlayerInModal
-          nickname={winner.nickname}
-          avatar={winner.avatar}
-          isMine={winner.nickname === loggedIn?.nickname}
-          isWinner={true}
+      <h4 className="text-center">Congratulations!</h4>
+      <div className="d-flex align-items-center justify-content-between">
+        <img src={`${process.env.ASSETS_URL}/images/confetti-leftpng`} alt="confetti-left" style={{ width: "33%" }} />
+        <Avatar src={winner.avatar} diameter={130} />
+        <img
+          src={`${process.env.ASSETS_URL}/images/confetti-right.png`}
+          alt="confetti-right"
+          style={{ width: "33%" }}
         />
       </div>
-      <h3 className="text-center pt-3">The winner is {winner.nickname}!</h3> */}
+      <h4 className="text-center">You are the winner!</h4>
     </>
   );
 };
 
-const TournamentMiddleResult = ({ myFinalSubgame }) => {
+const TournamentOthersContent = ({ finalSubgame, myFinalRank }) => {
+  const opponent = getWinnerOfSubgame(finalSubgame);
+
   return (
     <>
-      <h3 className="text-center">You are out of the game</h3>
-      <h4 className="text-center">{getWinnerNickname(myFinalSubgame)}에게 패배했습니다.</h4>
+      <h4 className="text-center">Oops!</h4>
+      <img src={`${process.env.ASSETS_URL}/images/black-hole.png`} alt="black-hole" style={{ width: "33%" }} />
+      <h4 className="text-center">
+        You&apos;ve been absorbed
+        <br /> by the Black Hole...
+      </h4>
+      <p className="text-center mt-3">{opponent.nickname}에게 패배하여 블랙홀에 빨려 들어갔습니다.</p>
+      <p className="text-end">나의 최종 진출 라운드: {rankToString(myFinalRank)}</p>
     </>
   );
 };
 
 const TournamentResultModal = ({ bracketData }) => {
+  const { loggedIn } = useAuth();
   const { getMyFinalSubgameAndRank } = useGame();
   const { subgame: myFinalSubgame, rank: myFinalRank } = getMyFinalSubgameAndRank(bracketData.subgames);
+  const amIWinner = myFinalRank === 0 && getWinnerOfSubgame(myFinalSubgame).intra_id === loggedIn.intra_id;
   const navigate = useNavigate();
 
   return (
@@ -59,12 +67,11 @@ const TournamentResultModal = ({ bracketData }) => {
         hasCloseButton={false}
         title={"게임 결과"}
         footerButtons={<StyledButton name={"홈으로 이동"} styleType={"secondary"} onClick={() => navigate("/")} />}>
-        {bracketData.rank_ongoing === -1 ? (
-          <TournamentFinalResult finalSubgame={bracketData.subgames[0][0]} />
+        {amIWinner ? (
+          <TournamentWinnerContent finalSubgame={myFinalSubgame} />
         ) : (
-          <TournamentMiddleResult myFinalSubgame={myFinalSubgame} />
+          <TournamentOthersContent finalSubgame={myFinalSubgame} myFinalRank={myFinalRank} />
         )}
-        <h4 className="text-center">나의 최종 진출: {rankToString(myFinalRank)}</h4>
       </CustomModal>
     </div>
   );
