@@ -44,7 +44,6 @@ const AppContent = () => {
   return (
     <div className="App">
       <Routes>
-        <Route path="/test" element={<TestPage />} />
         <Route path="/login" element={<OAuthLoginPage />} />
         <Route path="/login/2fa" element={<TwoFactorAuthPage />} />
         <Route path="/login/callback" element={<OAuthCallbackPage />} />
@@ -63,6 +62,7 @@ const AppContent = () => {
               </Route>
             </Route>
             <Route element={<GameProviderWrapper />}>
+              <Route path="/test" element={<TestPage />} />
               <Route path="/game/waiting/:room_id" element={<GameWaitingRoomPage />} />
               <Route path="/game/play/:game_id" element={<GamePlayPage />} />
               <Route path="/test" element={<PongScenePage />} />
