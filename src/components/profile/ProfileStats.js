@@ -32,9 +32,15 @@ const processData = (stats) => {
     });
   });
 
-  rankDataAggregated["우승"].color = "#FFD700";
-  rankDataAggregated["결승전"].color = "#C0C0C0";
-  rankDataAggregated["4강"].color = "#CD7F32";
+  if (rankDataAggregated["우승"]) {
+    rankDataAggregated["우승"].color = "#FFD700";
+  }
+  if (rankDataAggregated["결승전"]) {
+    rankDataAggregated["결승전"].color = "#C0C0C0";
+  }
+  if (rankDataAggregated["4강"]) {
+    rankDataAggregated["4강"].color = "#CD7F32";
+  }
 
   const rankData = Object.values(rankDataAggregated);
 
