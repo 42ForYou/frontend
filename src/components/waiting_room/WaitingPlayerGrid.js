@@ -13,9 +13,10 @@ const VStext = () => {
 const WaitingPlayer = ({ nickname, avatar, isHost, isMine }) => {
   return (
     <div className="WaitingPlayer d-flex flex-column justify-content-center align-items-center p-3">
+      {isHost && <i className="fas fa-crown crown-icon"></i>}
       <Avatar src={avatar} alt={`${nickname}의 아바타`} diameter={150} />
-      <div className="mt-3">
-        <p className={`fs-4 ${isMine ? "text-primary" : ""}`}>{isHost ? `${nickname} (방장)` : nickname}</p>
+      <div className="mt-2">
+        <p className="fs-4">{nickname}</p>
       </div>
     </div>
   );
@@ -25,11 +26,11 @@ const WaitingPlayersRow = ({ players, playersPerRow, host }) => {
   const { loggedIn } = useAuth();
   const getClassName = (player) => {
     let className = "";
-    if (player === null) className += "empty";
+    if (player === null) className += " empty";
     else {
-      className += "full";
-      if (player.nickname === loggedIn.nickname) className += "mine";
-      if (host === player.nickname) className += "host";
+      className += " full";
+      if (player.nickname === loggedIn.nickname) className += " mine";
+      if (host === player.nickname) className += " host";
     }
     return className;
   };
@@ -41,7 +42,7 @@ const WaitingPlayersRow = ({ players, playersPerRow, host }) => {
       {players.map((player, index) => (
         <div
           key={index}
-          className={`col-${colSize} ${getClassName(player)} d-flex justify-content-center align-items-center border border-light }`}
+          className={`col-${colSize} ${getClassName(player)} d-flex justify-content-center align-items-center`}
           style={{ minHeight: "200px" }}>
           {player ? (
             <WaitingPlayer

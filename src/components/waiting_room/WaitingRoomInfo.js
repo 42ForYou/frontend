@@ -10,9 +10,9 @@ const WaitingRoomInfo = ({ title, host, point, time, nPlayers, joinPlayers }) =>
         </p>
       </div>
       <p className="d-flex justify-content-end">
-        목표 득점: {point}
+        목표 득점: {point}점
         <br />
-        제한 시간: {time}
+        제한 시간: {time}초
       </p>
     </div>
   );

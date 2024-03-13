@@ -40,23 +40,47 @@
 }
 
 .WaitingPlayersRows .empty {
-	background-color: #f0f2f544; /* 배경색 */
+	border: 2px solid white; 
+	background-color: #f0f2f566; /* 배경색 */
 	background-image: "";
 }
 
 .WaitingPlayersRows .full {
+	border: 2px solid white; 
 	background-color: rgba(100, 150, 200, 0.5); /* 배경색 */
   background-image: url('../../public/assets/images/spaceship-inner.jpg'); 
 	background-size: cover;
   background-position: center;
 }
 
-.WaitingPlayersRows .full .mine {
-	background-color: rgba(200, 200, 100, 0.5); /* 배경색 */
-  background-image: url('../../public/assets/images/spaceship-inner.jpg'); 
-	background-size: cover;
-  background-position: center;
+.WaitingPlayersRows .full.mine {
+	color: turquoise;
 }
+
+.WaitingPlayersRows .full.host {
+  position: relative;
+}
+
+.WaitingPlayer {
+  position: relative; /* 아바타 이미지를 포함하는 div에 상대 위치 설정 */
+}
+
+.WaitingPlayer .crown-icon {
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%); 
+  font-size: 36px;
+  color: gold;
+}
+
+/* .WaitingPlayersRows .full.host.mine {
+	border: 10px solid pink; 
+}
+
+.WaitingPlayersRows .full.mine {
+	border: 2px solid pink; 
+} */
 
 .WaitingPlayersRows .col-6 h5 {
 	color: white; /* 글자색 */
