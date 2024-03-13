@@ -55,7 +55,7 @@ const PieChartSection = ({ title, chartData }) => {
   return (
     <div className="text-center" style={{ width: "33%", display: "flex", flexDirection: "column", padding: "10px" }}>
       <h5>&lt;{title}&gt;</h5>
-      <div style={{ flex: 1, minHeight: "200px" }}>
+      <div className="d-flex align-items-center justify-content-center" style={{ minHeight: "200px" }}>
         {chartData ? <PieChart data={chartData} /> : <p>데이터가 없습니다.</p>}
       </div>
     </div>
