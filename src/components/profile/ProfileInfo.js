@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import usePatchProfile from "../../hooks/usePatchProfile";
 import { checkRegex } from "../../utils/checkRegex";
-import BootstrapButton from "../common/BootstrapButton";
 import ProfileAvatar from "./ProfileAvatar";
 import ProfileTextLine from "./ProfileTextLine";
 import { useAuth } from "../../context/AuthContext";
+import CustomButton from "../common/CustomButton";
 
 export const STATUS = {
   PROFILE: 0,
@@ -17,11 +17,11 @@ const EditProfileButtons = ({ isEditing, onExitClick, onSubmitClick, onEntryClic
     <div className="text-center mb-2">
       {isEditing ? (
         <>
-          <BootstrapButton styleType={"primary"} label={"확인"} onClick={onSubmitClick} />
-          <BootstrapButton styleType={"danger ms-2"} label={"취소"} onClick={onExitClick} />
+          <CustomButton label={"확인"} color={"green"} onClick={onSubmitClick} />
+          <CustomButton label={"취소"} color={"red"} onClick={onExitClick} />
         </>
       ) : (
-        <BootstrapButton styleType={"primary"} label={"정보 수정"} onClick={onEntryClick} />
+        <CustomButton label={"정보 수정"} color={"blue"} onClick={onEntryClick} />
       )}
     </div>
   );

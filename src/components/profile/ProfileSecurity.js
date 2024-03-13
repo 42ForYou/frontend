@@ -34,7 +34,8 @@ const ProfileSecurity = ({ initIs2FA }) => {
 
   return (
     <div className="ProfileSecurity d-flex justify-content-end mt-4">
-      <ToggleButton title="2FA" isToggled={is2FA} onToggle={handleClick2FAToggle} loading={loading} />
+      <span className="me-2">2FA</span>
+      <ToggleButton label="2FA" isToggled={is2FA} onToggle={handleClick2FAToggle} loading={loading} />
       {/* <BootstrapButton styleType="danger" onClick={handleDeleteAccount} name="Delete" /> */}
     </div>
   );

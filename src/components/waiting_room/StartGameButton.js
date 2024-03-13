@@ -1,6 +1,6 @@
 import React from "react";
-import BootstrapButton from "../common/BootstrapButton";
 import { useGame } from "../../context/GameContext";
+import CustomButton from "../common/CustomButton";
 
 const StartGameButton = ({ isActive }) => {
   const { emitRoomSocket } = useGame();
@@ -11,8 +11,8 @@ const StartGameButton = ({ isActive }) => {
   };
 
   return (
-    <BootstrapButton
-      styleType={"primary pb-5"}
+    <CustomButton
+      color={"blue"}
       label={"START"}
       onClick={isActive ? handleStartGame : null}
       overrideStyle={{

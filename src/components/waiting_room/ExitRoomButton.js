@@ -1,6 +1,6 @@
 import React from "react";
-import BootstrapButton from "../common/BootstrapButton";
 import { useNavigate } from "react-router-dom";
+import CustomButton from "../common/CustomButton";
 
 const ExitRoomButton = () => {
   const navigate = useNavigate();
@@ -12,8 +12,8 @@ const ExitRoomButton = () => {
   };
 
   return (
-    <BootstrapButton
-      styleType={"danger pb-5  ms-3 "}
+    <CustomButton
+      color="red"
       label={"EXIT"}
       onClick={handleNormalExit}
       overrideStyle={{

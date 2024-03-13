@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import Avatar from "../common/Avatar";
-import BootstrapButton from "../common/BootstrapButton";
 import { del, patch } from "../../utils/apiBase";
 import { API_ENDPOINTS } from "../../utils/apiEndpoints";
 import { useOnlineStatus } from "../../context/OnlineStatusContext";
+import CustomButton from "../common/CustomButton";
 
 const FriendItem = ({ id: friend_id, status, friend, onOccurChange }) => {
   console.log(status, friend);
@@ -76,13 +76,13 @@ const FriendItem = ({ id: friend_id, status, friend, onOccurChange }) => {
           {nickname}
           {status === "pending" && (
             <>
-              <BootstrapButton styleType={"blue"} label={"수락"} onClick={handleAcceptFriend} />
-              <BootstrapButton styleType={"red"} label={"거절"} onClick={handleRejectFriend} />
+              <CustomButton color={"blue"} label={"수락"} onClick={handleAcceptFriend} />
+              <CustomButton color={"red"} label={"거절"} onClick={handleRejectFriend} />
             </>
           )}
           {status === "friend" && (
             <>
-              <BootstrapButton styleType={"red"} label={"친구 삭제"} onClick={handleRejectFriend} />
+              <CustomButton color={"red"} label={"친구 삭제"} onClick={handleRejectFriend} />
             </>
           )}
         </div>
