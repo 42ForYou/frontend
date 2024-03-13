@@ -9,8 +9,8 @@ const UserListBox = () => {
   const searchBarProps = {
     searchable: true,
     placeholder: "검색할 유저의 닉네임을 입력하세요",
-    maxLength: 16,
-    alertMessage: "검색어 키워드를 16자 이하로 입력해주세요.",
+    validationRegex: /^[a-zA-Z0-9가-힣]{2,16}$/,
+    invalidMessage: "검색어는 2~16자의 영문자, 숫자, 한글만 포함할 수 있습니다.",
   };
 
   return (
