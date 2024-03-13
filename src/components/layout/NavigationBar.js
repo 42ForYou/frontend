@@ -8,10 +8,10 @@ import Icon from "../common/Icon";
 const NavItem = ({ label, to, icon }) => {
   return (
     <li className="NavItem flex-1 mb-4">
-      <div>
-        <Link to={to} className="d-flex ps-3">
+      <div className="d-flex justify-content-start">
+        <Link to={to} className="d-flex flex-grow justify-content-start">
           {icon && <Icon filename={`${icon}.png`} alt={label} invert={true} />}
-          <span className="nav-link flex-grow ms-3">{label}</span>
+          <p className="nav-link flex-grow ms-3 mb-0">{label}</p>
         </Link>
       </div>
     </li>
@@ -44,11 +44,16 @@ const NavUser = () => {
 
   return (
     <div className="NavUser d-flex flex-column align-items-center pb-3">
-      <div className="mb-3 text-center">{nickname}</div>
+      <p className="mb-3 text-center">{nickname}</p>
       <Avatar src={avatarSrc} to={"/profile"} diameter={120} />
-      <button className="btn btn-secondary mt-2 w-40" onClick={handleLogout}>
-        Sign Out
-      </button>
+      <div className="d-flex w-100 justify-content-end">
+        <button
+          className="btn btn-secondary mt-2 w-40 "
+          onClick={handleLogout}
+          style={{ border: "none", background: "none", padding: 0 }}>
+          <Icon filename={"logout-invert.png"} alt={"logout"} />
+        </button>
+      </div>
     </div>
   );
 };

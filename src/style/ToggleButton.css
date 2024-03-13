@@ -1,15 +1,9 @@
-.ToggleButton {
-		font-family: 'Noto Sans KR', sans-serif;
-  display: flex;
-  align-items: center;
-}
-
 .ToggleButton button {
   padding: 8px 16px;
   border: 1px solid #ccc;
   background-color: #fff;
   color: #333;
-  font-size: 14px;
+  font-size: 1.3rem;
   cursor: pointer;
   outline: none;
   transition: background-color 0.3s, color 0.3s;
