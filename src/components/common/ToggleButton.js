@@ -7,9 +7,11 @@ const ToggleButton = ({ title, isToggled, onToggle, loading }) => {
     }
   };
 
+  const buttonClasses = `btn ${loading ? "disabled" : ""}`;
+
   return (
     <div className="ToggleButton">
-      <button onClick={handleToggle} disabled={loading}>
+      <button onClick={handleToggle} className={buttonClasses} disabled={loading}>
         {loading ? "Loading..." : isToggled ? `${title} ON` : `${title} OFF`}
       </button>
     </div>

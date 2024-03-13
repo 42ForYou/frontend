@@ -8,7 +8,11 @@ const PieChart = ({ data }) => {
     const ctx = chartRef.current.getContext("2d");
     const pieData = data.map((item) => item.percent);
     const pieLabels = data.map((item) => item.label);
-    const backgroundColors = data.map((item) => item.color);
+    const backgroundColors = data.map((item) => {
+      const color = item.color;
+      const rgbaColor = `rgba(${parseInt(color.slice(1, 3), 16)}, ${parseInt(color.slice(3, 5), 16)}, ${parseInt(color.slice(5, 7), 16)}, 0.7)`;
+      return rgbaColor;
+    });
 
     const pieChart = new Chart(ctx, {
       type: "pie",
@@ -26,6 +30,16 @@ const PieChart = ({ data }) => {
       options: {
         responsive: true,
         maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            labels: {
+              color: "white",
+              font: {
+                size: 15,
+              },
+            },
+          },
+        },
       },
     });
 
