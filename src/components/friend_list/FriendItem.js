@@ -6,6 +6,7 @@ import { API_ENDPOINTS } from "../../utils/apiEndpoints";
 import { useOnlineStatus } from "../../context/OnlineStatusContext";
 
 const FriendItem = ({ id: friend_id, status, friend, onOccurChange }) => {
+  console.log(status, friend);
   const { intra_id, nickname, avatar } = friend;
   const [currentIsOnline, setCurrentIsOnline] = useState(friend.is_online);
   const onlineStatuses = useOnlineStatus();
@@ -54,6 +55,12 @@ const FriendItem = ({ id: friend_id, status, friend, onOccurChange }) => {
     }
   };
 
+  const getOnlineStatus = () => {
+    if (status !== "friend") return;
+    if (currentIsOnline) return "online";
+    else return "offline";
+  };
+
   return (
     <div className="FriendItem border border-primary w-100 p-3">
       <div className="row ps-3 pe-3">
@@ -62,7 +69,7 @@ const FriendItem = ({ id: friend_id, status, friend, onOccurChange }) => {
             src={avatar}
             alt={`친구 ${nickname}의 아바타`}
             to={`/profile/users/${intra_id}`}
-            onlineStatus={currentIsOnline ? "online" : "offline"}
+            onlineStatus={getOnlineStatus()}
           />
         </div>
         <div className="col">
