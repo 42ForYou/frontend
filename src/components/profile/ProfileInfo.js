@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import usePatchProfile from "../../hooks/usePatchProfile";
 import { checkRegex } from "../../utils/checkRegex";
-import StyledButton from "../common/StyledButton";
+import BootstrapButton from "../common/BootstrapButton";
 import ProfileAvatar from "./ProfileAvatar";
 import ProfileTextLine from "./ProfileTextLine";
 import { useAuth } from "../../context/AuthContext";
@@ -17,11 +17,11 @@ const EditProfileButtons = ({ isEditing, onExitClick, onSubmitClick, onEntryClic
     <div className="text-center mb-2">
       {isEditing ? (
         <>
-          <StyledButton styleType={"primary"} name={"확인"} onClick={onSubmitClick} />
-          <StyledButton styleType={"danger ms-2"} name={"취소"} onClick={onExitClick} />
+          <BootstrapButton styleType={"primary"} label={"확인"} onClick={onSubmitClick} />
+          <BootstrapButton styleType={"danger ms-2"} label={"취소"} onClick={onExitClick} />
         </>
       ) : (
-        <StyledButton styleType={"primary"} name={"정보 수정"} onClick={onEntryClick} />
+        <BootstrapButton styleType={"primary"} label={"정보 수정"} onClick={onEntryClick} />
       )}
     </div>
   );
@@ -144,7 +144,10 @@ export const MyProfileInfo = ({ initProfileData }) => {
 
 export const UserProfileInfo = ({ profileData }) => (
   <div className="ProfileInfo">
-    <InfoDisplay profileData={profileData} />
+    <div className="col"></div>
+    <div className="col">
+      <InfoDisplay profileData={profileData} />
+    </div>
   </div>
 );
 

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import ToggleButton from "../common/ToggleButton";
 import usePatchProfile from "../../hooks/usePatchProfile";
-import StyledButton from "../common/StyledButton";
 
 const ProfileSecurity = ({ initIs2FA }) => {
   const [is2FA, setIs2FA] = useState(initIs2FA);
@@ -36,7 +35,7 @@ const ProfileSecurity = ({ initIs2FA }) => {
   return (
     <div className="ProfileSecurity d-flex justify-content-end mt-4">
       <ToggleButton title="2FA" isToggled={is2FA} onToggle={handleClick2FAToggle} loading={loading} />
-      {/* <StyledButton styleType="danger" onClick={handleDeleteAccount} name="Delete" /> */}
+      {/* <BootstrapButton styleType="danger" onClick={handleDeleteAccount} name="Delete" /> */}
     </div>
   );
 };

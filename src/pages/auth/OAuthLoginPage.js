@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import StyledButton from "../../components/common/StyledButton";
+import BootstrapButton from "../../components/common/BootstrapButton";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { getWithoutCredentials } from "../../utils/apiBase";
@@ -31,7 +31,7 @@ const OAuthLoginPage = () => {
     <div className="LoginPage">
       <div>
         <h1>Welcome to the PlanetPong!</h1>
-        <StyledButton styleType="light" name={"Sign in with 42 OAuth"} onClick={handleLogin} />
+        <BootstrapButton styleType="light" label={"Sign in with 42 OAuth"} onClick={handleLogin} />
       </div>
     </div>
   );

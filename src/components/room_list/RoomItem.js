@@ -1,9 +1,8 @@
 import React from "react";
-import StyledButton from "../common/StyledButton";
+import BootstrapButton from "../common/BootstrapButton";
 import { post } from "../../utils/apiBase";
 import { API_ENDPOINTS } from "../../utils/apiEndpoints";
 import { useNavigate } from "react-router-dom";
-import { useGame } from "../../context/GameContext";
 
 // 스타일을 가지는 박스
 // 일단은 1대1도 토너먼트 스타일과 통일
@@ -53,9 +52,9 @@ const RoomItem = ({ game, room }) => {
         <div className="col d-flex flex-column justify-content-between align-items-end">
           <div className="row">{is_tournament ? "[토너먼트]" : "[1vs1]"}</div>
           <div className="row">
-            <StyledButton
+            <BootstrapButton
               styleType={"primary"}
-              name={"JOIN"}
+              label={"JOIN"}
               onClick={() => handleJoinClick(game_id)}
               disabled={is_playing}
             />

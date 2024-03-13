@@ -1,5 +1,5 @@
 import React from "react";
-import StyledButton from "../common/StyledButton";
+import BootstrapButton from "../common/BootstrapButton";
 import CustomModal from "../common/CustomModal";
 import { useNavigate } from "react-router-dom";
 import PlayerInModal from "./PlayerInModal";
@@ -66,7 +66,7 @@ const TournamentResultModal = ({ bracketData }) => {
       <CustomModal
         hasCloseButton={false}
         title={"게임 결과"}
-        footerButtons={<StyledButton name={"홈으로 이동"} styleType={"secondary"} onClick={() => navigate("/")} />}>
+        footerButtons={<BootstrapButton label={"홈으로 이동"} onClick={() => navigate("/")} />}>
         {amIWinner ? (
           <TournamentWinnerContent finalSubgame={myFinalSubgame} />
         ) : (

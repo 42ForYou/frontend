@@ -1,5 +1,5 @@
 import React from "react";
-import StyledButton from "../common/StyledButton";
+import BootstrapButton from "../common/BootstrapButton";
 
 const ListFilter = ({ filterTypes, currentFilter, onFilterClick, rightButton }) => {
   return (
@@ -7,8 +7,8 @@ const ListFilter = ({ filterTypes, currentFilter, onFilterClick, rightButton }) 
       <div>
         {filterTypes.map((type, index) => (
           <React.Fragment key={type.value}>
-            <StyledButton
-              name={type.label}
+            <BootstrapButton
+              label={type.label}
               styleType={`link ${currentFilter.value === type.value ? "selectedFilter" : ""}`}
               onClick={() => onFilterClick(type)}
             />

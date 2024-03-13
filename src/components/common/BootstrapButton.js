@@ -1,6 +1,6 @@
 import React from "react";
 
-const StyledButton = ({ styleType, name, onClick, overrideStyle, disabled }) => {
+const BootstrapButton = ({ styleType, label, onClick, overrideStyle, disabled }) => {
   const btnClass = `btn btn-${styleType}`;
   const buttonStyle = {
     ...overrideStyle,
@@ -10,13 +10,13 @@ const StyledButton = ({ styleType, name, onClick, overrideStyle, disabled }) => 
   return (
     <button
       type="button"
-      className={`StyledButton ${btnClass}`}
+      className={`BootstrapButton ${btnClass}`}
       onClick={onClick}
       style={buttonStyle}
       disabled={disabled}>
-      {name}
+      {label}
     </button>
   );
 };
 
-export default StyledButton;
+export default BootstrapButton;

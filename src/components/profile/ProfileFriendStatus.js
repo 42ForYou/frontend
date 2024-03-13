@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { post } from "../../utils/apiBase";
 import { API_ENDPOINTS } from "../../utils/apiEndpoints";
-import StyledButton from "../common/StyledButton";
+import BootstrapButton from "../common/BootstrapButton";
 
 // 1. 현재 친구 아님 -> 친구 신청 가능
 // 2. 현재 신청 상태 -> 별다른 기능 없이 '대기중'만 띄움
@@ -28,7 +28,7 @@ const ProfileFriendStatus = ({ initFriendStatus, nickname }) => {
   return (
     <div className="ProfileFriendStatus col-12 text-center">
       {friendStatus === "None" && (
-        <StyledButton styleType={"btn btn-primary"} name={"친구 신청"} onClick={handleAddFriend} />
+        <BootstrapButton styleType={"btn btn-primary"} label={"친구 신청"} onClick={handleAddFriend} />
       )}
       {friendStatus === "pending" && <span>친구 요청 상태</span>}
       {friendStatus === "friend" && <div className="border-box">친구 상태</div>}

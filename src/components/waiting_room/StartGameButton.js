@@ -1,5 +1,5 @@
 import React from "react";
-import StyledButton from "../common/StyledButton";
+import BootstrapButton from "../common/BootstrapButton";
 import { useGame } from "../../context/GameContext";
 
 const StartGameButton = ({ isActive }) => {
@@ -11,9 +11,9 @@ const StartGameButton = ({ isActive }) => {
   };
 
   return (
-    <StyledButton
+    <BootstrapButton
       styleType={"primary pb-5"}
-      name={"START"}
+      label={"START"}
       onClick={isActive ? handleStartGame : null}
       overrideStyle={{
         width: "150px",

@@ -1,5 +1,5 @@
 import React from "react";
-import StyledButton from "../common/StyledButton";
+import BootstrapButton from "../common/BootstrapButton";
 import { useNavigate } from "react-router-dom";
 
 const ExitRoomButton = () => {
@@ -12,9 +12,9 @@ const ExitRoomButton = () => {
   };
 
   return (
-    <StyledButton
+    <BootstrapButton
       styleType={"danger pb-5  ms-3 "}
-      name={"EXIT"}
+      label={"EXIT"}
       onClick={handleNormalExit}
       overrideStyle={{
         width: "120px",
