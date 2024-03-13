@@ -2,18 +2,18 @@ import React from "react";
 
 const WaitingRoomInfo = ({ title, host, point, time, nPlayers, joinPlayers }) => {
   return (
-    <div className="WaitingRoomInfo d-flex justify-content-between border bg-info p-3">
-      <div className="col">
-        <h5>
-          방 제목: {title} ({joinPlayers} / {nPlayers})
-        </h5>
-        방장: {host}
+    <div className="WaitingRoomInfo d-flex justify-content-between border p-3">
+      <div className="d-flex align-items-center">
+        <p className="title me-3">{title}</p>
+        <p>
+          ( {joinPlayers} / {nPlayers} )
+        </p>
       </div>
-      <div className="col d-flex justify-content-end">
+      <p className="d-flex justify-content-end">
         목표 득점: {point}
         <br />
         제한 시간: {time}
-      </div>
+      </p>
     </div>
   );
 };

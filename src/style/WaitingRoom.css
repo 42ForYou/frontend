@@ -1,0 +1,80 @@
+.WaitingRoomBox {
+  background-color: #f0f2f5; /* 배경색 */
+}
+
+.WaitingRoomInfo {
+	background-image: url('../../public/assets/images/silver-metal.jpg');
+	background-size: cover;
+	background-position: center;
+	color: #ffffff; /* 흰색 텍스트 */
+  font-family: 'Orbit', sans-serif; /* 깔끔한 산세리프 글꼴 */
+  font-size: 24px; /* 적절한 크기 */
+  font-weight: bold; /* 굵은 글자 */
+  text-shadow: 0 0 5px #00ffff, 0 0 10px blue, 0 0 10px #0f2b46;
+  text-shadow: 
+}
+
+.WaitingRoomInfo p {
+	margin: 0;
+	padding: 0;
+}
+
+.WaitingRoomInfo .title {
+	font-family: 'Roboto', sans-serif;
+	font-size: 2rem;
+	font-weight: normal;
+	font-style: italic;
+	text-align: center;
+	margin: 0;
+	padding: 0;
+}
+
+.WaitingPlayersGrid {
+	color: white; /* 글자색 */
+	font-family: 'orbit', sans-serif;
+	font-size: 1rem;
+	text-shadow: 2px 0px 3px rgba(1, 1, 1, 1);
+  background-image: url('../../public/assets/images/spaceship-outer.jpg'); 
+	background-size: cover;
+  background-position: center;
+}
+
+.WaitingPlayersRows .empty {
+	background-color: #f0f2f544; /* 배경색 */
+	background-image: "";
+}
+
+.WaitingPlayersRows .full {
+	background-color: rgba(100, 150, 200, 0.5); /* 배경색 */
+  background-image: url('../../public/assets/images/spaceship-inner.jpg'); 
+	background-size: cover;
+  background-position: center;
+}
+
+.WaitingPlayersRows .full .mine {
+	background-color: rgba(200, 200, 100, 0.5); /* 배경색 */
+  background-image: url('../../public/assets/images/spaceship-inner.jpg'); 
+	background-size: cover;
+  background-position: center;
+}
+
+.WaitingPlayersRows .col-6 h5 {
+	color: white; /* 글자색 */
+	font-family: 'orbitron', sans-serif;
+	font-size: 1.5rem;
+}
+
+.vs-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+	width: 20%;
+  z-index: 2;
+}
+
+.WaitingRoomButtons {
+	background-image: url('../../public/assets/images/silver-metal.jpg');
+	background-size: cover;
+	background-position: center;
+}

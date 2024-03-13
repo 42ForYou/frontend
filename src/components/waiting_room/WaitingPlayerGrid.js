@@ -4,18 +4,8 @@ import { useAuth } from "../../context/AuthContext";
 
 const VStext = () => {
   return (
-    <div
-      className="vs-text"
-      style={{
-        position: "absolute",
-        top: "55%",
-        left: "50%",
-        transform: "translate(-50%, -50%)",
-        fontSize: "5rem",
-        fontWeight: "bold",
-        zIndex: 2,
-      }}>
-      VS
+    <div className="vs-text">
+      <img src={`${process.env.ASSETS_URL}/images/versus.png`} alt="vs" />
     </div>
   );
 };
@@ -31,14 +21,27 @@ const WaitingPlayer = ({ nickname, avatar, isHost, isMine }) => {
   );
 };
 
-const WaitingPlayersRow = ({ players, playersPerRow, host, loggedIn }) => {
+const WaitingPlayersRow = ({ players, playersPerRow, host }) => {
+  const { loggedIn } = useAuth();
+  const getClassName = (player) => {
+    let className = "";
+    if (player === null) className += "empty";
+    else {
+      className += "full";
+      if (player.nickname === loggedIn.nickname) className += "mine";
+      if (host === player.nickname) className += "host";
+    }
+    return className;
+  };
+
   const colSize = 12 / playersPerRow;
+
   return (
     <div className="row m-0 flex-grow-1">
       {players.map((player, index) => (
         <div
           key={index}
-          className={`col-${colSize} d-flex justify-content-center align-items-center border border-info ${player && player.nickname === loggedIn.nickname ? "bg-warning" : "bg-light"}`}
+          className={`col-${colSize} ${getClassName(player)} d-flex justify-content-center align-items-center border border-light }`}
           style={{ minHeight: "200px" }}>
           {player ? (
             <WaitingPlayer
@@ -48,7 +51,7 @@ const WaitingPlayersRow = ({ players, playersPerRow, host, loggedIn }) => {
               isMine={player.nickname === loggedIn.nickname}
             />
           ) : (
-            <p className="text-muted">플레이어의 입장을 기다리고 있습니다...</p>
+            <p>플레이어의 입장을 기다리고 있습니다...</p>
           )}
         </div>
       ))}
@@ -65,26 +68,20 @@ const WaitingPlayersRows = ({ players, playersPerRow, host }) => {
     return chunkedArr;
   };
   const chunkedPlayers = chunkArray(players, playersPerRow);
-  const { loggedIn } = useAuth();
 
   return (
     <div className="WaitingPlayersRows flex-grow-1 d-flex-col">
       {chunkedPlayers.map((playerRow, rowIndex) => (
-        <WaitingPlayersRow
-          key={rowIndex}
-          players={playerRow}
-          playersPerRow={playersPerRow}
-          host={host}
-          loggedIn={loggedIn}
-        />
+        <WaitingPlayersRow key={rowIndex} players={playerRow} playersPerRow={playersPerRow} host={host} />
       ))}
     </div>
   );
 };
 
 const WaitingPlayersGrid = ({ players, host, isTournament }) => {
-  const gridItems = isTournament ? Array.from({ length: 4 }, (_, index) => players[index]) : players.slice(0, 2);
-
+  const gridItemsLength = isTournament ? 4 : 2;
+  const gridItems = players.concat(Array(gridItemsLength - players.length).fill(null));
+  console.log(gridItems);
   return (
     <div className="WaitingPlayersGrid d-flex-col flex-grow-1 position-relative p-0">
       <VStext />
