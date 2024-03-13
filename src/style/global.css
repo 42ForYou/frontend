@@ -18,7 +18,7 @@ img {
 }
 
 body {
-  background-image: url('https://media.wired.co.uk/photos/606dafcb687a704c2c362125/16:9/w_1920,h_1080,c_limit/space_11.jpg');
+  background-image: url('../../public/assets/images/background-home.png'); 
   background-size: cover; /* 배경 이미지가 전체 화면을 커버하도록 설정 */
   background-position: center; /* 초기 배경 위치를 중앙으로 설정 */
 }
