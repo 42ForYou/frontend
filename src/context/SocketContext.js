@@ -127,9 +127,11 @@ export const SocketProvider = ({ children }) => {
   };
 
   useEffect(() => {
+    // console.log("SocketContext가 마운트되었습니다.");
     connectNamespace("/");
     connectNamespace("/online_status");
     return () => {
+      // console.log("SocketContext가 언마운트되었습니다.");
       disconnectAllSockets();
     };
   }, []);
@@ -137,8 +139,6 @@ export const SocketProvider = ({ children }) => {
   return (
     <SocketContext.Provider
       value={{
-        // todo: 추후 sockets는 공급자 컴포넌트에서만 사용하도록 변경
-        sockets,
         isNamespaceConnected,
         connectNamespace,
         disconnectNamespace,

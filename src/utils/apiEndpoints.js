@@ -1,8 +1,10 @@
 export const API_ENDPOINTS = {
   OAUTH_LOGIN: "/login/",
+  LOGOUT: "/logout/",
   OAUTH_TOKEN_EXCHANGE: (code) => `/oauth/?code=${code}`,
-  VALIDATE_TOKEN: "/valid/",
-  VALIDATE_2FA: (intra_id, code) => {
+  TOKEN_VERIFY: "/token/verify",
+  TOKEN_REFRESH: "/token/refresh/",
+  TWO_FACTOR_VERIFY: (intra_id, code) => {
     if (intra_id && code) return `/2fa?intra-id=${intra_id}&code=${code}`;
     return "/2fa/";
   },
