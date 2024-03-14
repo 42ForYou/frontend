@@ -26,7 +26,7 @@ const ProfileBox = ({ isMine, profileData, statsData, matchHistoryData }) => {
           <ProfileStats statsData={statsData} />
         </div>
       </div>
-      <div className="ProfileTrace flex-grow-1">
+      <div className="ProfileTrace flex-grow-1 mt-4">
         <ProfileMatchHistory matchHistoryData={matchHistoryData} />
       </div>
       {isMine && (
@@ -48,7 +48,7 @@ const ProfileBox = ({ isMine, profileData, statsData, matchHistoryData }) => {
           nickname={profileData.nickname}
         />
       )}
-      <div className="ProfileTrace d-flex-col flex-grow-1">
+      <div className="ProfileTrace d-flex-col flex-grow-1 mt-4">
         <ProfileStats statsData={statsData} />
         <ProfileMatchHistory matchHistoryData={matchHistoryData} />
       </div>

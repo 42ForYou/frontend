@@ -4,9 +4,8 @@ import { useLayout } from "../../context/LayoutContext";
 
 const EditProfileButtons = ({ isEditing, onExitClick, onSubmitClick, onEntryClick }) => {
   const { isWide } = useLayout();
-
   return (
-    <div className={isWide ? "mt-3 text-end" : "text-center mb-3"}>
+    <div className={isWide ? "mt-3 text-end" : "text-center"}>
       {isEditing ? (
         <>
           <CustomButton label={"확인"} color={"green"} onClick={onSubmitClick} />

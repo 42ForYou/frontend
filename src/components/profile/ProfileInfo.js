@@ -72,6 +72,9 @@ const InfoDisplay = ({ profileData, isEditing, onChangeNickname, onChangeEmail, 
         {(profileData.email || isEditing) && (
           <ProfileTextLine label="Email" value={profileData.email} isEditing={isEditing} onChange={onChangeEmail} />
         )}
+        {profileData.friend_status && (
+          <ProfileTextLine label="Friend Status" value={getFriendStatusString(profileData.friend_status)} />
+        )}
       </div>
       <ProfileAvatar
         avatar={profileData.avatar}
