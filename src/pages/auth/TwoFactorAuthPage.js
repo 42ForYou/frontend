@@ -43,13 +43,21 @@ const TwoFactorAuthPage = () => {
   }, [countdown]);
 
   const handle2FAcodeSubmit = async () => {
+    if (code2FA.length === 0) {
+      alert("코드를 입력해주세요.");
+      return;
+    } else if (!code2FA.match(/^[a-zA-Z0-9]+$/)) {
+      alert("영문과 숫자만 입력 가능합니다.");
+      return;
+    }
+
     setStatus2FA("");
     try {
       setIsProcessing(true);
       await validate2FAcode(code2FA);
       navigate("/");
     } catch (error) {
-      setStatus2FA("2FA 인증에 실패했습니다. 다시 시도해주세요.");
+      setStatus2FA("2차 인증에 실패했습니다. 다시 시도해주세요.");
     } finally {
       setIsProcessing(false);
     }
@@ -61,9 +69,9 @@ const TwoFactorAuthPage = () => {
       await resend2FACode();
       setCountdown(180); // 타이머 리셋
       setTimerMessage("제한시간: 180초");
-      setStatus2FA("2FA 코드가 재전송되었습니다. 이메일을 확인해주세요.");
+      setStatus2FA("2차 인증 코드가 재전송되었습니다. 이메일을 확인해주세요.");
     } catch (error) {
-      setStatus2FA("2FA 코드 재전송에 실패했습니다. 다시 시도해주세요.");
+      setStatus2FA("2차 인증 코드 재전송에 실패했습니다. 다시 시도해주세요.");
     } finally {
       setIsProcessing(false);
     }
@@ -85,7 +93,7 @@ const TwoFactorAuthPage = () => {
             value={code2FA}
             onChange={(e) => setCode2FA(e.target.value)}
           />
-          <button className="twoFactorSubmit" onClick={handle2FAcodeSubmit}>
+          <button className="twoFactorSubmit mx-1" onClick={handle2FAcodeSubmit}>
             제출
           </button>
           <button className="twoFactorResend" onClick={handleResend2FACode}>
