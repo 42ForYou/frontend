@@ -4,7 +4,7 @@ import { checkRegex } from "../../utils/checkRegex";
 import ProfileAvatar from "./ProfileAvatar";
 import ProfileTextLine from "./ProfileTextLine";
 import { useAuth } from "../../context/AuthContext";
-import EditProfileButtons from "./EditProfileButtons";
+import ProfileEditButtons from "./ProfileEditButtons";
 import { useLayout } from "../../context/LayoutContext";
 
 export const STATUS = {
@@ -94,22 +94,7 @@ export const MyProfileInfo = ({ initProfileData }) => {
   const [editStatus, setEditStatus] = useState(null);
   const [nickname, setNickname] = useState(initNickname);
   const [email, setEmail] = useState(initEmail);
-
-  const validateProfile = (nickname, email) => {
-    const validations = {
-      nickname: checkRegex(nickname, /^[a-zA-Z0-9가-힣]{2,16}$/),
-      email: checkRegex(email, /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/),
-    };
-
-    const validateMsg = [
-      validations.nickname
-        ? ""
-        : "유효하지 않은 형식의 닉네임입니다. (한글, 영어, 숫자로 이루어진 2~16자의 문자열이어야 함)",
-      validations.email ? "" : "유효하지 않은 형식의 이메일입니다.",
-    ];
-
-    return { isValid: validations.nickname && validations.email, validateMsg };
-  };
+  const { isWide } = useLayout();
 
   const handleEntryEditClick = () => {
     setIsEditing(true);
@@ -123,31 +108,61 @@ export const MyProfileInfo = ({ initProfileData }) => {
     setEmail(initEmail);
   };
 
+  const validateProfile = (nickname, email) => {
+    const validations = {
+      nickname: checkRegex(nickname, /^[a-zA-Z0-9가-힣]{2,16}$/),
+      email: checkRegex(email, /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/),
+    };
+
+    const validateMsg = [
+      validations.nickname
+        ? ""
+        : "유효하지 않은 형식의 닉네임입니다. (한글, 영어, 숫자로 이루어진 2~16자의 문자열만 허용)",
+      validations.email ? "" : "유효하지 않은 형식의 이메일입니다.",
+    ];
+
+    return { isValid: validations.nickname && validations.email, validateMsg };
+  };
+
   const handleSubmitEditClick = async () => {
     const isChangeExist = !(nickname === initNickname && email === initEmail);
     const { isValid, validateMsg } = validateProfile(nickname, email);
-    const editStatusMsg = [...validateMsg, ""];
+    const editStatusMsg = ["", "", ""]; // STATUS에 따라 메시지를 저장할 배열 초기화
 
-    if (!isChangeExist) return setIsEditing(false);
-    else if (isValid) {
-      const result = await patchProfileInfo({ nickname, email }, (updatedProfile) => {
-        console.log("업데이트 결과: ", updatedProfile);
-        setLoggedIn(updatedProfile);
+    if (!isChangeExist) {
+      setIsEditing(false);
+      return;
+    }
+
+    if (!isValid) {
+      validateMsg.forEach((msg) => {
+        if (msg) alert(msg);
       });
+      return;
+    }
 
+    try {
+      const result = await patchProfileInfo({ nickname, email });
       if (result.success) {
         setIsEditing(false);
         editStatusMsg[STATUS.PROFILE] = "프로필 정보가 성공적으로 업데이트 되었습니다.";
       } else {
         editStatusMsg[STATUS.PROFILE] = "프로필 정보 업데이트가 실패하였습니다.";
-        // 409: Conflict
-        if (result.errcode === 409) {
-          if ("nickname" in result.errmsg) editStatusMsg[STATUS.NICKNAME] = "이미 사용 중인 닉네임입니다.";
-          if ("email" in result.errmsg) editStatusMsg[STATUS.EMAIL] = "이미 사용 중인 이메일입니다.";
+        if (result.errmsg && typeof result.errmsg === "object") {
+          if (result.errmsg.nickname) {
+            editStatusMsg[STATUS.NICKNAME] = "이미 사용 중인 닉네임입니다.";
+          }
+          if (result.errmsg.email) {
+            editStatusMsg[STATUS.EMAIL] = "이미 사용 중인 이메일입니다.";
+          }
         }
       }
+    } catch (error) {
+      console.error("프로필 업데이트 오류:", error);
+      editStatusMsg[STATUS.PROFILE] = "프로필 정보 업데이트 중 오류가 발생했습니다.";
+    } finally {
+      setEditStatus(editStatusMsg.filter((msg) => msg));
     }
-    setEditStatus(editStatusMsg);
   };
 
   return (
@@ -159,14 +174,14 @@ export const MyProfileInfo = ({ initProfileData }) => {
         onChangeEmail={setEmail}
         setEditStatus={setEditStatus}
       />
-      <EditProfileButtons
+      <ProfileEditButtons
         isEditing={isEditing}
         onEntryClick={handleEntryEditClick}
         onExitClick={handleExitEditClick}
         onSubmitClick={handleSubmitEditClick}
       />
       {editStatus && (
-        <div className="text-center">
+        <div className={`mt-2 ${isWide ? "text-end" : "text-center"}`}>
           {editStatus.map((status, i) => (
             <div key={i}>{status}</div>
           ))}

@@ -2,13 +2,13 @@ import React from "react";
 import CustomButton from "../common/CustomButton";
 import { useLayout } from "../../context/LayoutContext";
 
-const EditProfileButtons = ({ isEditing, onExitClick, onSubmitClick, onEntryClick }) => {
+const ProfileEditButtons = ({ isEditing, onExitClick, onSubmitClick, onEntryClick }) => {
   const { isWide } = useLayout();
   return (
     <div className={isWide ? "mt-3 text-end" : "text-center"}>
       {isEditing ? (
         <>
-          <CustomButton label={"확인"} color={"green"} onClick={onSubmitClick} />
+          <CustomButton label={"확인"} color={"green"} onClick={onSubmitClick} />{" "}
           <CustomButton label={"취소"} color={"red"} onClick={onExitClick} />
         </>
       ) : (
@@ -18,4 +18,4 @@ const EditProfileButtons = ({ isEditing, onExitClick, onSubmitClick, onEntryClic
   );
 };
 
-export default EditProfileButtons;
+export default ProfileEditButtons;
