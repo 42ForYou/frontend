@@ -34,14 +34,14 @@
 	font-family: 'orbit', sans-serif;
 	font-size: 1rem;
 	text-shadow: 2px 0px 3px rgba(1, 1, 1, 1);
-  background-image: url('../../public/assets/images/spaceship-lounge.jpg'); 
+  background-image: url('../../public/assets/images/background-home.png'); 
 	background-size: cover;
   background-position: center;
 }
 
 .WaitingPlayersRows .empty {
 	border: 2px solid white; 
-	background-color: #f0f2f566; /* 배경색 */
+	background-color: #f0f2f544; /* 배경색 */
 	background-image: "";
 }
 
