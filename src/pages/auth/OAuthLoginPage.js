@@ -31,7 +31,7 @@ const OAuthLoginPage = () => {
     <div className="LoginPage">
       <div>
         <h1>Welcome to the PlanetPong!</h1>
-        <BootstrapButton styleType="light" label={"Sign in with 42 OAuth"} onClick={handleLogin} />
+        <BootstrapButton label={"Sign in with 42 OAuth"} onClick={handleLogin} />
       </div>
     </div>
   );
