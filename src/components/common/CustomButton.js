@@ -4,15 +4,15 @@ const CustomButton = ({ label, color, onClick, overrideStyle, disabled, opacity 
   const getBackgroundColor = (color) => {
     switch (color) {
       case "red":
-        return "#F08080AA"; // 어두운 파스텔 빨강
+        return "#E57373AA";
       case "yellow":
-        return "#F0E68CAA"; // 어두운 파스텔 노랑
+        return "#D4E157AA";
       case "green":
-        return "#90EE90AA"; // 어두운 파스텔 초록
+        return "#81C784AA";
       case "blue":
-        return "#87CEFAAA"; // 어두운 파스텔 파랑
+        return "#64B5F6AA";
       default:
-        return "#E6E6FAAA"; // 기본값은 어두운 파스텔 하얀색 (라벤더)
+        return "#C5CAE9AA";
     }
   };
 
