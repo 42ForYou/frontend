@@ -4,7 +4,8 @@ import { checkRegex } from "../../utils/checkRegex";
 import ProfileAvatar from "./ProfileAvatar";
 import ProfileTextLine from "./ProfileTextLine";
 import { useAuth } from "../../context/AuthContext";
-import CustomButton from "../common/CustomButton";
+import EditProfileButtons from "./EditProfileButtons";
+import { useLayout } from "../../context/LayoutContext";
 
 export const STATUS = {
   PROFILE: 0,
@@ -12,22 +13,52 @@ export const STATUS = {
   EMAIL: 2,
 };
 
-const EditProfileButtons = ({ isEditing, onExitClick, onSubmitClick, onEntryClick }) => {
-  return (
-    <div className="text-center mb-2">
-      {isEditing ? (
-        <>
-          <CustomButton label={"확인"} color={"green"} onClick={onSubmitClick} />
-          <CustomButton label={"취소"} color={"red"} onClick={onExitClick} />
-        </>
-      ) : (
-        <CustomButton label={"정보 수정"} color={"blue"} onClick={onEntryClick} />
-      )}
-    </div>
-  );
-};
-
 const InfoDisplay = ({ profileData, isEditing, onChangeNickname, onChangeEmail, setEditStatus }) => {
+  const { isWide } = useLayout();
+
+  const getFriendStatusString = (status) => {
+    switch (status) {
+      case "None":
+        return "친구 아님";
+      case "pending":
+        return "친구 신청 중";
+      case "friend":
+        return "친구";
+      default:
+        return "알 수 없음";
+    }
+  };
+
+  if (isWide) {
+    return (
+      <div className="d-flex-col">
+        <ProfileAvatar
+          avatar={profileData.avatar}
+          nickname={profileData.nickname}
+          isEditing={isEditing}
+          setEditStatus={setEditStatus}
+        />
+        <div className="d-flex justify-content-between align-items-center">
+          <div className="flex-grow-1">
+            {profileData.intraId && <ProfileTextLine label="Intra ID" value={profileData.intraId} />}
+            <ProfileTextLine
+              label="Nickname"
+              value={profileData.nickname}
+              isEditing={isEditing}
+              onChange={onChangeNickname}
+            />
+            {(profileData.email || isEditing) && (
+              <ProfileTextLine label="Email" value={profileData.email} isEditing={isEditing} onChange={onChangeEmail} />
+            )}
+            {profileData.friend_status && (
+              <ProfileTextLine label="Friend Status" value={getFriendStatusString(profileData.friend_status)} />
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="d-flex justify-content-between align-items-center">
       <div className="flex-grow-1">

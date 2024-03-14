@@ -1,6 +1,6 @@
 import React from "react";
 
-const CustomButton = ({ label, color, onClick, overrideStyle, disabled }) => {
+const CustomButton = ({ label, color, onClick, overrideStyle, disabled, opacity }) => {
   const getBackgroundColor = (color) => {
     switch (color) {
       case "red":
@@ -16,13 +16,23 @@ const CustomButton = ({ label, color, onClick, overrideStyle, disabled }) => {
     }
   };
 
+  const getOpacity = (disabled, opacity) => {
+    if (opacity) {
+      return opacity;
+    }
+    if (disabled) {
+      return 0.5;
+    }
+    return 1;
+  };
+
   const buttonStyle = {
     color: "white", // 텍스트 색상
     backgroundColor: getBackgroundColor(color), // 배경색
     border: "solid 2px white", // 하얀색 테두리
     borderRadius: "10px",
     padding: "6px 10px",
-    opacity: disabled ? 0.5 : 1, // 비활성화 상태에 따른 투명도
+    opacity: getOpacity(disabled, opacity),
     ...overrideStyle,
   };
 

@@ -2,7 +2,6 @@ import React from "react";
 import BootstrapButton from "../common/BootstrapButton";
 import CustomModal from "../common/CustomModal";
 import { useNavigate } from "react-router-dom";
-import PlayerInModal from "./PlayerInModal";
 import { useGame } from "../../context/GameContext";
 import { useAuth } from "../../context/AuthContext";
 import Avatar from "../common/Avatar";
@@ -24,8 +23,9 @@ const TournamentWinnerContent = ({ finalSubgame }) => {
     <>
       <h4 className="text-center">Congratulations!</h4>
       <div className="d-flex align-items-center justify-content-between">
-        <img src={`${process.env.ASSETS_URL}/images/confetti-leftpng`} alt="confetti-left" style={{ width: "33%" }} />
+        <img src={`${process.env.ASSETS_URL}/images/confetti-left.png`} alt="confetti-left" style={{ width: "33%" }} />
         <Avatar src={winner.avatar} diameter={130} />
+        {winner.nickname}
         <img
           src={`${process.env.ASSETS_URL}/images/confetti-right.png`}
           alt="confetti-right"

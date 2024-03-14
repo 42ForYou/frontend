@@ -28,7 +28,7 @@
 }
 
 .toggle-button.toggled .toggle-button-circle {
-  left: calc(100% - 45px); /* 이동 위치 조정 */
+  left: calc(100% - 35px); /* 이동 위치 조정 */
 }
 
 .toggle-button span {
