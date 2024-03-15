@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import usePatchProfile from "../../hooks/usePatchProfile";
 import { checkRegex } from "../../utils/checkRegex";
 import ProfileAvatar from "./ProfileAvatar";
 import ProfileTextLine from "./ProfileTextLine";
-import { useAuth } from "../../context/AuthContext";
 import ProfileEditButtons from "./ProfileEditButtons";
 import { useLayout } from "../../context/LayoutContext";
 
@@ -13,21 +12,26 @@ export const STATUS = {
   EMAIL: 2,
 };
 
-const InfoDisplay = ({ profileData, isEditing, onChangeNickname, onChangeEmail, setEditStatus }) => {
-  const { isWide } = useLayout();
+const getFriendStatusString = (status) => {
+  switch (status) {
+    case "None":
+      return "친구 아님";
+    case "pending":
+      return "친구 아님 (요청 중)";
+    case "friend":
+      return "친구";
+    default:
+      return "알 수 없음";
+  }
+};
 
-  const getFriendStatusString = (status) => {
-    switch (status) {
-      case "None":
-        return "친구 아님";
-      case "pending":
-        return "친구 아님 (요청 중)";
-      case "friend":
-        return "친구";
-      default:
-        return "알 수 없음";
-    }
-  };
+const InfoDisplay = ({ profileData, isEditing, onChangeNickname, onChangeEmail, friendStatus, setEditStatus }) => {
+  const { isWide } = useLayout();
+  const [friendStatusString, setFriendStatusString] = useState(getFriendStatusString(friendStatus));
+
+  useEffect(() => {
+    setFriendStatusString(() => getFriendStatusString(friendStatus));
+  }, [friendStatus]);
 
   if (isWide) {
     return (
@@ -50,9 +54,7 @@ const InfoDisplay = ({ profileData, isEditing, onChangeNickname, onChangeEmail, 
             {(profileData.email || isEditing) && (
               <ProfileTextLine label="Email" value={profileData.email} isEditing={isEditing} onChange={onChangeEmail} />
             )}
-            {profileData.friend_status && (
-              <ProfileTextLine label="Friend Status" value={getFriendStatusString(profileData.friend_status)} />
-            )}
+            {profileData.friend_status && <ProfileTextLine label="Friend Status" value={friendStatusString} />}
           </div>
         </div>
       </div>
@@ -72,9 +74,7 @@ const InfoDisplay = ({ profileData, isEditing, onChangeNickname, onChangeEmail, 
         {(profileData.email || isEditing) && (
           <ProfileTextLine label="Email" value={profileData.email} isEditing={isEditing} onChange={onChangeEmail} />
         )}
-        {profileData.friend_status && (
-          <ProfileTextLine label="Friend Status" value={getFriendStatusString(profileData.friend_status)} />
-        )}
+        {profileData.friend_status && <ProfileTextLine label="Friend Status" value={friendStatusString} />}
       </div>
       <ProfileAvatar
         avatar={profileData.avatar}
@@ -190,11 +190,11 @@ export const MyProfileInfo = ({ initProfileData }) => {
   );
 };
 
-export const UserProfileInfo = ({ profileData }) => (
+export const UserProfileInfo = ({ profileData, friendStatus }) => (
   <div className="ProfileInfo">
     <div className="col"></div>
     <div className="col">
-      <InfoDisplay profileData={profileData} />
+      <InfoDisplay profileData={profileData} friendStatus={friendStatus} />
     </div>
   </div>
 );

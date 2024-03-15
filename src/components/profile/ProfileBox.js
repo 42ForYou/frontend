@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import ProfileMatchHistory from "./ProfileMatchHistory";
 import ProfileSecurity from "./ProfileSecurity";
 import { MyProfileInfo, UserProfileInfo } from "./ProfileInfo";
@@ -8,15 +8,21 @@ import { useLayout } from "../../context/LayoutContext";
 
 const ProfileBox = ({ isMine, profileData, statsData, matchHistoryData }) => {
   const { isWide } = useLayout();
+  const [friendStatus, setFriendStatus] = useState(profileData.friend_status);
 
   const wideLayout = (
     <div className="ProfileBox d-flex-col flex-grow-1 justify-content-between">
       <div className="d-flex">
         <div className="col mt-4 me-4">
-          {isMine ? <MyProfileInfo initProfileData={profileData} /> : <UserProfileInfo profileData={profileData} />}
+          {isMine ? (
+            <MyProfileInfo initProfileData={profileData} />
+          ) : (
+            <UserProfileInfo profileData={profileData} friendStatus={friendStatus} />
+          )}
           {!isMine && (
             <ProfileFriendButton
-              initFriendStatus={profileData.friend_status}
+              initFriendStatus={friendStatus}
+              setFriendStatus={setFriendStatus}
               friendId={profileData.friend_id}
               nickname={profileData.nickname}
             />
@@ -38,12 +44,17 @@ const ProfileBox = ({ isMine, profileData, statsData, matchHistoryData }) => {
   );
   const narrowLayout = (
     <div className="ProfileBox d-flex-col flex-grow-1">
-      {isMine ? <MyProfileInfo initProfileData={profileData} /> : <UserProfileInfo profileData={profileData} />}
+      {isMine ? (
+        <MyProfileInfo initProfileData={profileData} />
+      ) : (
+        <UserProfileInfo profileData={profileData} friendStatus={friendStatus} />
+      )}
       {!isMine && (
         <ProfileFriendButton
-          initFriendStatus={profileData.friend_status}
+          initFriendStatus={friendStatus}
           friendId={profileData.friend_id}
           nickname={profileData.nickname}
+          setFriendStatus={setFriendStatus}
         />
       )}
       <div className="ProfileTrace d-flex-col flex-grow-1 mt-4">
