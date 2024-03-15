@@ -21,7 +21,7 @@ const InfoDisplay = ({ profileData, isEditing, onChangeNickname, onChangeEmail, 
       case "None":
         return "친구 아님";
       case "pending":
-        return "친구 신청 중";
+        return "친구 아님 (요청 중)";
       case "friend":
         return "친구";
       default:

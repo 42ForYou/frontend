@@ -66,13 +66,7 @@ const FriendItem = ({ id: friend_id, status, friend, onOccurChange }) => {
         <div className="p-3">
           <div className="row ps-3 pe-3">
             <div className="col d-flex justify-content-center">
-              <Avatar
-                src={avatar}
-                alt={`친구 ${nickname}의 아바타`}
-                to={`/profile/users/${intra_id}`}
-                onlineStatus={getOnlineStatus()}
-                diameter={120}
-              />
+              <Avatar src={avatar} alt={`친구 ${nickname}의 아바타`} onlineStatus={getOnlineStatus()} diameter={120} />
             </div>
             <div className="col d-flex-col justify-content-between align-items-center my-2">
               {nickname}
