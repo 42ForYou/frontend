@@ -16,7 +16,9 @@ const FriendItem = ({ id: friend_id, status, friend, onOccurChange }) => {
     }
   }, [onlineStatuses, intra_id]);
 
-  const handleAcceptFriend = () => {
+  const handleAcceptFriend = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
     const patchFriend = async () => {
       try {
         const resData = await patch(`${API_ENDPOINTS.FRIENDS()}${friend_id}/`);
@@ -31,12 +33,14 @@ const FriendItem = ({ id: friend_id, status, friend, onOccurChange }) => {
     patchFriend();
   };
 
-  const handleRejectFriend = () => {
+  const handleRejectFriend = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
     const delFriend = async () => {
       try {
         const resData = await del(`${API_ENDPOINTS.FRIENDS()}${friend_id}/`);
         onOccurChange();
-        console.log("친구 삭제 성공:", resData);
+        console.log("친구 삭제 성공", resData);
       } catch (error) {
         console.log("친구 삭제 실패:", error);
         alert("친구 삭제에 실패하였습니다.");
