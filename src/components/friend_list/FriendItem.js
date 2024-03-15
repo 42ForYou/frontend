@@ -65,7 +65,7 @@ const FriendItem = ({ id: friend_id, status, friend, onOccurChange }) => {
   };
 
   return (
-    <div className="FriendItem border border-primary w-100 p-0">
+    <div className="FriendItem w-100 p-0">
       <a href={`/profile/users/${intra_id}`}>
         <div className="p-3">
           <div className="row ps-3 pe-3">
@@ -78,9 +78,9 @@ const FriendItem = ({ id: friend_id, status, friend, onOccurChange }) => {
                 {status === "pending" && (
                   <div className="d-flex">
                     <div className="me-2">
-                      <CustomButton color={"blue"} label={"수락"} onClick={handleAcceptFriend} />
+                      <CustomButton color={"blue"} label={"수락"} onClick={(e) => handleAcceptFriend(e)} />
                     </div>
-                    <CustomButton color={"red"} label={"거절"} onClick={handleRejectFriend} />
+                    <CustomButton color={"red"} label={"거절"} onClick={(e) => handleRejectFriend(e)} />
                   </div>
                 )}
                 {status === "friend" && (

@@ -3,7 +3,7 @@ import Avatar from "../common/Avatar";
 
 const UserItem = ({ intra_id, nickname, avatar }) => {
   return (
-    <div className="UserItem border border-primary w-100 p-0">
+    <div className="UserItem w-100 p-0">
       <a href={`/profile/users/${intra_id}`}>
         <div className="p-3">
           <div className="row ps-3 pe-3">
