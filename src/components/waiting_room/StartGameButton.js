@@ -12,7 +12,7 @@ const StartGameButton = ({ isActive }) => {
 
   return (
     <CustomButton
-      color={"blue"}
+      color={"dark blue"}
       label={"START"}
       onClick={isActive ? handleStartGame : null}
       overrideStyle={{
@@ -22,6 +22,7 @@ const StartGameButton = ({ isActive }) => {
         padding: "-10px 24px",
       }}
       disabled={!isActive}
+      opacity={isActive ? 1 : 0.5}
     />
   );
 };

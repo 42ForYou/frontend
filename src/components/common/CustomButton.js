@@ -11,11 +11,20 @@ const CustomButton = ({ label, color, onClick, overrideStyle, disabled, opacity 
         return "#81C784AA";
       case "blue":
         return "#64B5F6AA";
+      case "dark red":
+        return "#EB2323AB";
+      case "dark yellow":
+        return "#FDD835AA";
+      case "dark green":
+        return "#388E3CAA";
+      case "dark blue":
+        return "#1976D2AA";
       default:
         return "#C5CAE9AA";
     }
   };
 
+  // opacity 값이 존재하면 그 값을 사용하고, 없으면 disabled 상태에 따라 0.5 또는 1을 반환
   const getOpacity = (disabled, opacity) => {
     if (opacity) {
       return opacity;

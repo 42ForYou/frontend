@@ -13,7 +13,7 @@ const ExitRoomButton = () => {
 
   return (
     <CustomButton
-      color="red"
+      color="dark red"
       label={"EXIT"}
       onClick={handleNormalExit}
       overrideStyle={{
@@ -22,6 +22,7 @@ const ExitRoomButton = () => {
         fontSize: "30px",
         padding: "-10px 24px",
       }}
+      opacity={1}
     />
   );
 };

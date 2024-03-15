@@ -11,7 +11,6 @@
   font-size: 24px; /* 적절한 크기 */
   font-weight: bold; /* 굵은 글자 */
   text-shadow: 0 0 5px #00ffff, 0 0 10px blue, 0 0 10px #0f2b46;
-  text-shadow: 
 }
 
 .WaitingRoomInfo p {
@@ -20,7 +19,7 @@
 }
 
 .WaitingRoomInfo .title {
-	font-family: 'Roboto', sans-serif;
+	font-family: 'Orbitron', sans-serif;
 	font-size: 2rem;
 	font-weight: normal;
 	font-style: italic;
