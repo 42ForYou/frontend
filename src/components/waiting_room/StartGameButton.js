@@ -12,7 +12,7 @@ const StartGameButton = ({ isActive }) => {
 
   return (
     <CustomButton
-      color={"dark blue"}
+      color={"dark-blue"}
       label={"START"}
       onClick={isActive ? handleStartGame : null}
       overrideStyle={{

@@ -4,7 +4,7 @@ import BootstrapButton from "../common/BootstrapButton";
 const ListFilter = ({ filterTypes, currentFilter, onFilterClick, rightButton }) => {
   return (
     <div className="ListFilter d-flex justify-content-between py-1">
-      <div>
+      <div className="FilterType">
         {filterTypes.map((type, index) => (
           <React.Fragment key={type.value}>
             <BootstrapButton

@@ -8,7 +8,6 @@ import RadioSelector from "../common/RadioSelector";
 import DropdownSelector from "../common/DropdownSelector";
 import { hasKeys, updateProperty } from "../../utils/objectUtils";
 import BootstrapButton from "../common/BootstrapButton";
-import { useGame } from "../../context/GameContext";
 
 const RoomTitleForm = ({ updateRoomData }) => {
   const { loggedIn } = useAuth();
@@ -134,7 +133,7 @@ const CreateRoomModal = ({ handleClose }) => {
     <CustomModal
       hasCloseButton={false}
       handleClose={handleClose}
-      title={"게임 방 생성"}
+      title={"게임 방 만들기"}
       footerButtons={
         <>
           <BootstrapButton label={"취소"} styleType={"secondary"} onClick={handleClose} />

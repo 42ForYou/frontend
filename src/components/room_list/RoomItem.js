@@ -3,6 +3,7 @@ import BootstrapButton from "../common/BootstrapButton";
 import { post } from "../../utils/apiBase";
 import { API_ENDPOINTS } from "../../utils/apiEndpoints";
 import { useNavigate } from "react-router-dom";
+import CustomButton from "../common/CustomButton";
 
 // 스타일을 가지는 박스
 // 일단은 1대1도 토너먼트 스타일과 통일
@@ -10,6 +11,7 @@ const RoomItem = ({ game, room }) => {
   const navigate = useNavigate();
   const { game_id, is_tournament, game_point, time_limit, n_players } = game;
   const { id: room_id, title, is_playing, join_players, host } = room;
+  const cannotJoin = is_playing || join_players === n_players;
 
   const handleJoinClick = (gameId) => {
     const postJoinRequest = async () => {
@@ -33,7 +35,7 @@ const RoomItem = ({ game, room }) => {
   };
 
   return (
-    <div className={`RoomItem ${is_playing ? "RoomItemPlaying" : ""} w-100 p-3`}>
+    <div className={`RoomItem ${cannotJoin ? "cannot-join" : "can-join"} w-100 p-3`}>
       <div className="row ps-3 pe-3">
         <div className="col-8">
           <div className="row">
@@ -52,11 +54,12 @@ const RoomItem = ({ game, room }) => {
         <div className="col d-flex flex-column justify-content-between align-items-end">
           <div className="row">{is_tournament ? "[토너먼트]" : "[1vs1]"}</div>
           <div className="row">
-            <BootstrapButton
-              styleType={"primary"}
+            <CustomButton
               label={"JOIN"}
               onClick={() => handleJoinClick(game_id)}
-              disabled={is_playing}
+              disabled={cannotJoin}
+              opacity={1}
+              color={"dark-green"}
             />
           </div>
         </div>
