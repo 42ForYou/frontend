@@ -9,34 +9,21 @@ import DropdownSelector from "../common/DropdownSelector";
 import { hasKeys, updateProperty } from "../../utils/objectUtils";
 import BootstrapButton from "../common/BootstrapButton";
 
-const RoomTitleForm = ({ updateRoomData }) => {
-  const { loggedIn } = useAuth();
-  const initRoomTitle = loggedIn ? `${loggedIn.nickname}의 게임 방` : "";
-  const [roomTitle, setRoomTitle] = useState(initRoomTitle);
-
-  useEffect(() => {
-    updateRoomData("room.title", initRoomTitle);
-  }, []);
-
-  const handleChangeRoomTitle = (e) => {
-    const newRoomTitle = e.target.value;
-    setRoomTitle(newRoomTitle);
-    updateRoomData("room.title", newRoomTitle);
-  };
-
+const RoomTitleForm = ({ roomTitle, setRoomTitle, isValid }) => {
   return (
     <div className="form-group">
       <label htmlFor="roomTitle">
-        <b>방 이름</b>
+        <b>방 제목</b>
       </label>
       <input
         type="text"
-        className="form-control"
+        className={`form-control ${!isValid ? "is-invalid" : ""}`}
         id="roomTitle"
-        placeholder="방 이름을 입력하세요"
+        placeholder="방 제목을 입력하세요"
         value={roomTitle}
-        onChange={handleChangeRoomTitle}
+        onChange={(e) => setRoomTitle(e.target.value)}
       />
+      {!isValid && <div className="invalid-feedback">한글, 알파벳, 숫자를 포함한 20자 이내 문자열만 가능합니다.</div>}
     </div>
   );
 };
@@ -101,13 +88,15 @@ const RoomGameOptionForm = ({ updateRoomData }) => {
 const CreateRoomModal = ({ handleClose }) => {
   const navigate = useNavigate();
   const [roomData, setRoomData] = useState({});
+  const [roomTitle, setRoomTitle] = useState("");
+  const [isValid, setIsValid] = useState(true);
 
   const handleUpdateRoomData = (path, value) => {
     setRoomData((prevRoomData) => updateProperty(prevRoomData, path, value));
-    // 함수형 업데이트: 비동기적으로 수행되는 setState 함수가 이전 state값을 기반으로 동작하도록 보장
   };
 
   const handleSubmit = () => {
+    const isValidTitle = /^[a-zA-Z0-9\u3131-\uD79D]{1,20}$/.test(roomTitle);
     const postRoomData = async () => {
       try {
         const resData = await post(API_ENDPOINTS.ROOM_LIST(), roomData);
@@ -120,20 +109,31 @@ const CreateRoomModal = ({ handleClose }) => {
         alert("방 생성에 실패하였습니다.");
       }
     };
+    setIsValid(isValidTitle);
 
-    const keysToCheck = ["game.is_tournament", "game.time_limit", "game.game_point", "game.n_players", "room.title"];
-    if (!hasKeys(roomData, keysToCheck)) {
-      alert("모든 필드를 입력해주세요.");
-      return;
+    if (!isValidTitle) {
+      return; // 유효하지 않으면 여기서 처리를 중단
     }
-    postRoomData();
+
+    if (
+      isValidTitle &&
+      hasKeys(roomData, ["game.is_tournament", "game.time_limit", "game.game_point", "game.n_players"])
+    ) {
+      postRoomData();
+    } else {
+      alert("모든 필드를 입력해주세요.");
+    }
   };
+
+  useEffect(() => {
+    handleUpdateRoomData("room.title", roomTitle);
+  }, [roomTitle]);
 
   return (
     <CustomModal
       hasCloseButton={false}
       handleClose={handleClose}
-      title={"게임 방 만들기"}
+      title={"새로운 게임 방 만들기"}
       footerButtons={
         <>
           <BootstrapButton label={"취소"} styleType={"secondary"} onClick={handleClose} />
@@ -142,7 +142,7 @@ const CreateRoomModal = ({ handleClose }) => {
       }>
       <form>
         <div className="row">
-          <RoomTitleForm updateRoomData={handleUpdateRoomData} />
+          <RoomTitleForm roomTitle={roomTitle} setRoomTitle={setRoomTitle} isValid={isValid} setIsValid={setIsValid} />
         </div>
         <div className="row mt-3">
           <RoomModeSelectForm updateRoomData={handleUpdateRoomData} />

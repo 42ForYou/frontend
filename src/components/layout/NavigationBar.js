@@ -51,7 +51,7 @@ const NavUser = () => {
           className="btn btn-secondary mt-2 w-40 "
           onClick={handleLogout}
           style={{ border: "none", background: "none", padding: 0 }}>
-          <Icon filename={"logout-invert.png"} alt={"logout"} />
+          <Icon filename={"logout.png"} alt={"logout"} invert={true} />
         </button>
       </div>
     </div>

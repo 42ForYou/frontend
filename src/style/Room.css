@@ -57,3 +57,10 @@
 .room-detail-value {
   flex-grow: 1;
 }
+
+.RoomItem .icon {
+	width: max(36px, 4vh);
+	height: max(36px, 4vh);
+	margin-right: 1rem;
+	margin-bottom: 0.5rem;
+}
