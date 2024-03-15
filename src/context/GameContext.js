@@ -279,12 +279,11 @@ export const GameProvider = ({ children }) => {
     const handleAbortExitRoom = async () => {
       try {
         const resData = await del(API_ENDPOINTS.PLAYERS(myPlayerData.id));
-        navigate("/game/list");
         console.log("플레이어 DELETE 요청 성공", resData);
       } catch (error) {
         console.log("플레이어 DELETE 요청 실패: ", error);
-        console.log("들어갔었던 방이 끝나기 전까지 다른 방에 들어갈 수 없음");
       }
+      navigate("/game/list");
     };
     const setupRoomListeners = (newSocket) => {
       setupEventListenersSocket(newSocket, roomDefaultEvents);
@@ -404,7 +403,7 @@ export const GameProvider = ({ children }) => {
   // 상태에 의존한 클린업 수행을 위해 useRef 사용
   useEffect(() => {
     return () => {
-      console.log("값 초기화 및 소켓 연결 해제");
+      console.log("GameContext 언마운드: 게임 관련 소켓 연결 해제 및 값 초기화");
       disconnectRoomSocket();
       disconnectSubgameSocket();
       clearWaitingRoom();
