@@ -20,7 +20,7 @@ const SearchBar = ({ searchKeyword, placeholder, onSearch, validationRegex, inva
   };
 
   return (
-    <div className="SearchBar search-input-container d-flex">
+    <div className="SearchBar search-input-container d-flex mb-3">
       <input
         type="text"
         className="form-control"

@@ -88,7 +88,6 @@ const InfoDisplay = ({ profileData, isEditing, onChangeNickname, onChangeEmail, 
 
 export const MyProfileInfo = ({ initProfileData }) => {
   const { nickname: initNickname, email: initEmail } = initProfileData;
-  const { setLoggedIn } = useAuth();
   const { patchProfileInfo } = usePatchProfile();
   const [isEditing, setIsEditing] = useState(false);
   const [editStatus, setEditStatus] = useState(null);
