@@ -5,6 +5,12 @@ import { API_ENDPOINTS } from "../../utils/apiEndpoints";
 import { useNavigate } from "react-router-dom";
 import CustomButton from "../common/CustomButton";
 
+const RoomItemDetail = ({ label, value }) => (
+  <div className="room-detail">
+    <span className="room-detail-label">{label}</span>
+    <span className="room-detail-value">| {value}</span>
+  </div>
+);
 // 스타일을 가지는 박스
 // 일단은 1대1도 토너먼트 스타일과 통일
 const RoomItem = ({ game, room }) => {
@@ -41,15 +47,10 @@ const RoomItem = ({ game, room }) => {
           <div className="row">
             <h5 className="fst-italic">{title}</h5>
           </div>
-          <div className="row">
-            방장: {host}
-            <br />
-            인원 수: {join_players} / {n_players}
-            <br />
-            목표 득점: {game_point}점
-            <br />
-            제한 시간: {time_limit}초
-          </div>
+          <RoomItemDetail label="방장" value={host} />
+          <RoomItemDetail label="참여 인원" value={`${join_players} / ${n_players}`} />
+          <RoomItemDetail label="목표 득점" value={`${game_point}점`} />
+          <RoomItemDetail label="제한 시간" value={`${time_limit}초`} />
         </div>
         <div className="col d-flex flex-column justify-content-between align-items-end">
           <div className="row">{is_tournament ? "[토너먼트]" : "[1vs1]"}</div>

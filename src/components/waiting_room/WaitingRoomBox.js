@@ -6,7 +6,6 @@ import StartGameButton from "./StartGameButton";
 import ExitRoomButton from "./ExitRoomButton";
 
 const WaitingRoomBox = ({ gameData, roomData, playersData, myPlayerData }) => {
-  const { loggedIn } = useAuth();
   const { game_id, is_tournament, game_point, time_limit, n_players } = gameData;
   const { id: room_id, title, host, join_players } = roomData;
 

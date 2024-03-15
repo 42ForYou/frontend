@@ -22,7 +22,7 @@ const RoomListBox = () => {
         apiEndpoint={API_ENDPOINTS.ROOM_LIST}
         ItemComponent={RoomItem}
         filterTypes={filterTypes}
-        additionalButton={<CustomButton label={"Create Room"} color={"dark-blue"} onClick={handleCreateRoomClick} />}
+        additionalButton={<CustomButton label={"방 만들기"} color={"dark-blue"} onClick={handleCreateRoomClick} />}
         emptyMsg={"일치하는 게임 방이 없습니다."}
         itemsPerPage={4}
         itemsPerRow={2}
