@@ -36,8 +36,6 @@ const ProfileBox = ({ isMine, profileData, statsData, matchHistoryData }) => {
       )}
     </div>
   );
-  console.log("ProfileBox: ", profileData);
-  console.log(profileData.friend_id);
   const narrowLayout = (
     <div className="ProfileBox d-flex-col flex-grow-1">
       {isMine ? <MyProfileInfo initProfileData={profileData} /> : <UserProfileInfo profileData={profileData} />}
