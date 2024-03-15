@@ -19,7 +19,7 @@ const StartGameButton = ({ isActive }) => {
         width: "150px",
         height: "50px",
         fontSize: "30px",
-        padding: "-10px 24px",
+        padding: "0px 24px",
       }}
       disabled={!isActive}
       opacity={isActive ? 1 : 0.5}

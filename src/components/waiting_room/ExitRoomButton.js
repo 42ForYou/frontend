@@ -20,7 +20,7 @@ const ExitRoomButton = () => {
         width: "120px",
         height: "50px",
         fontSize: "30px",
-        padding: "-10px 24px",
+        padding: "0px 24px",
       }}
       opacity={1}
     />
