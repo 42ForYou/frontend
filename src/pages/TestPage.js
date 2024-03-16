@@ -4,6 +4,8 @@ import SubgameResultModal from "../components/game/SubgameResultModal";
 import TournamentResultModal from "../components/game/TournamentResultModal";
 import MyProfilePage from "./profile/MyProfilePage";
 import WaitingRoomBox from "../components/waiting_room/WaitingRoomBox";
+import BracketPage from "./game/BracketPage";
+import Bracket from "../components/game/Bracket";
 
 const dummyHistoryData = [
   {
@@ -437,7 +439,7 @@ const dummyDualPlayersData = [
 
 const TestPage = () => {
   return (
-    <div>
+    <>
       {/* <h1>TestPage</h1> */}
       {/* <TournamentResultModal bracketData={middleBracketData} /> */}
       {/* <TournamentResultModal bracketData={winBracketData} /> */}
@@ -453,7 +455,7 @@ const TestPage = () => {
         //     />
         // </div>
       }
-      {
+      {/* {
         <div className="GameWaitingRoomPage">
           <WaitingRoomBox
             gameData={dummyDualGameData}
@@ -463,8 +465,11 @@ const TestPage = () => {
             // myPlayerData={dummyNotHostMyPlayerData}
           />
         </div>
-      }
-    </div>
+      } */}
+      <div className="BracketPage d-flex align-items-center p-5">
+        <Bracket nRanks={middleBracketData.n_ranks} subgames={middleBracketData.subgames} />
+      </div>
+    </>
   );
 };
 

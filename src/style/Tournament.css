@@ -1,9 +1,23 @@
-.bracket-player {
-	color: white;
+.BracketPage {
+	height: 100vh;
+  background-image: url('../../public/assets/images/background-bracket.png'); 
+	background-size: cover;
+  background-position: center;
 }
 
-.bracket .col {
-	/* border: 1px solid white; */
+.Bracket {
+	background-color: rba(100, 150, 200, 0.5); /* 배경색 */
+}
+
+.Bracket .avatar {
+}
+
+.bracket-player {
+	color: white;
+	font-size: 1.5rem;
+	font-weight: bold;
+	font-family: 'Orbit', sans-serif;
+	text-shadow: 1px 2px 3px rgb(82 0 175);
 }
 
 .bracket .row {
