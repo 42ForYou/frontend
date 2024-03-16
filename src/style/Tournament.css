@@ -49,6 +49,11 @@
 	.Bracket {
 		margin-top: 5rem;
 	}
+
+	.BracketPage h1 {
+		border-bottom: 1px solid white;
+		padding-bottom: 2rem;
+	}
 }
 
 

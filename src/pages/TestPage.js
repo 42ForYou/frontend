@@ -491,7 +491,7 @@ const TestPage = () => {
       } */}
       <div className="BracketPage">
         <div className="d-flex-col justify-content-between p-5 flex-grow-1">
-          <h1 className="text-start">Bracket</h1>
+          <h1 className="text-start m-0">Bracket</h1>
           {/* <Bracket nRanks={middleDualBracketData.n_ranks} subgames={middleDualBracketData.subgames} /> */}
           <Bracket nRanks={middleTournamentBracketData.n_ranks} subgames={middleTournamentBracketData.subgames} />
         </div>
