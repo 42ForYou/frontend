@@ -91,7 +91,7 @@ export const GameProvider = ({ children }) => {
           navigate("/game/list");
         }
         setWaitingRoomData(data);
-        // console.log("update_room 이벤트 수신: ", data);
+        console.log("update_room 이벤트 수신: ", data);
       },
     },
     {
@@ -104,7 +104,7 @@ export const GameProvider = ({ children }) => {
     {
       event: "update_tournament",
       handler: (data) => {
-        // console.log("update_tournament 이벤트 수신: ", data);
+        console.log("update_tournament 이벤트 수신: ", data);
 
         const isAllPlayersDecided = (subgames) => {
           // console.log("isAllPlayersDecided 함수 실행");
@@ -141,7 +141,7 @@ export const GameProvider = ({ children }) => {
     {
       event: "config",
       handler: (data) => {
-        // console.log("config 이벤트 수신: ", data);
+        console.log("config 이벤트 수신: ", data);
         setTournamentConfig(data.config);
       },
     },
@@ -150,7 +150,9 @@ export const GameProvider = ({ children }) => {
     {
       event: "start", // 서브게임 시작
       handler: (data) => {
-        // console.log("start 이벤트 수신: ", data);
+        emitSubgameSocket("start_ack", {});
+
+        console.log("start 이벤트 수신: ", data);
         const waitingUntilStart = () => {
           const now = new Date().getTime();
           const startTime = new Date(data.t_event * 1000).getTime();
@@ -185,7 +187,9 @@ export const GameProvider = ({ children }) => {
     {
       event: "ended", // 서브게임 종료
       handler: (data) => {
-        // console.log("ended 이벤트 수신: ", data);
+        emitSubgameSocket("ended_ack", {});
+
+        console.log("ended 이벤트 수신: ", data);
         setSubgameStatus((prevState) => ({ ...prevState, progress: "ended", winner: data.winner }));
         setBallTrajectoryVersion(0);
         disconnectSubgameSocket();
