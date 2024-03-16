@@ -43,7 +43,7 @@ const ProfileFriendButton = ({ initFriendStatus, setFriendStatus, friendId, nick
   return (
     <div className={`ProfileFriendButton col-12 ${isWide ? "text-end mt-3" : "text-center"}`}>
       {initFriendStatus === "None" && <CustomButton label={"친구 신청"} color={"blue"} onClick={handleAddFriend} />}
-      {initFriendStatus === "pending" && <CustomButton label={"친구 신청 중..."} disabled={true} opacity={1} />}
+      {initFriendStatus === "pending" && <CustomButton label={"친구 대기 중..."} disabled={true} opacity={1} />}
       {initFriendStatus === "friend" && <CustomButton label={"친구 삭제"} color={"red"} onClick={handleRejectFriend} />}
     </div>
   );

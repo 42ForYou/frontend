@@ -17,7 +17,7 @@ const getFriendStatusString = (status) => {
     case "None":
       return "친구 아님";
     case "pending":
-      return "친구 아님 (요청 중)";
+      return "친구 아님 (대기중)";
     case "friend":
       return "친구";
     default:
