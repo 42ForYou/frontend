@@ -35,3 +35,30 @@ body {
 .CustomButton {
 	font-family: 'Noto Sans KR', sans-serif;
 }
+
+.SearchBar input {
+	font-family: 'Noto Sans KR', sans-serif;
+  border: 1px solid #ccc;
+  padding: 6px;
+	padding-left: 12px;
+	width: 100%;
+	color: black;
+}
+
+.search-input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.SearchBar .search-icon {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  color: #000000;
+  /* cursor: pointer; */
+	z-index: 10;
+}

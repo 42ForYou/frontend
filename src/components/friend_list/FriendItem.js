@@ -6,6 +6,7 @@ import { useOnlineStatus } from "../../context/OnlineStatusContext";
 import CustomButton from "../common/CustomButton";
 
 const FriendItem = ({ id: friend_id, status, friend, onOccurChange }) => {
+  console.log(status, friend);
   const { intra_id, nickname, avatar } = friend;
   const [currentIsOnline, setCurrentIsOnline] = useState(friend.is_online);
   const onlineStatuses = useOnlineStatus();

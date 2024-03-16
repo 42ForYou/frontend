@@ -20,7 +20,7 @@ const SearchBar = ({ searchKeyword, placeholder, onSearch, validationRegex, inva
   };
 
   return (
-    <div className="SearchBar search-input-container d-flex mb-3">
+    <div className="SearchBar search-input-container d-flex mb-3 mt-2 row justify-content-center align-items-center">
       <input
         type="text"
         className="form-control"
@@ -29,9 +29,7 @@ const SearchBar = ({ searchKeyword, placeholder, onSearch, validationRegex, inva
         onChange={(e) => setInputValue(e.target.value)}
         onKeyDown={handleKeyPress}
       />
-      <button className="btn btn-secondary" onClick={triggerSearch} style={{ width: "150px" }}>
-        검색
-      </button>
+      <i className="fa fa-search search-icon" onClick={triggerSearch}></i>
     </div>
   );
 };

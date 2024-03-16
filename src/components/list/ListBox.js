@@ -41,6 +41,11 @@ const ListBox = ({
     fetchListItems(state.currentFilter, state.currentPage, state.searchKeyword);
   };
 
+  const getEmptyMsg = () => {
+    if (searchBarProps?.searchable && state.searchKeyword === "") return "";
+    return emptyMsg;
+  };
+
   useEffect(() => {
     reloadListItems();
   }, [state.currentFilter, state.currentPage, state.searchKeyword]);
@@ -64,11 +69,17 @@ const ListBox = ({
       )}
       {/* 차후 로딩 애니메이션 고려 */}
       {/* {isLoading ? ( <Loading />) : (<ListItems/>)} */}
+      {searchBarProps && (
+        <div className="d-flex justify-content-between">
+          <span>검색어: {state.searchKeyword}</span>
+          <span>검색 결과: {itemsData ? `${itemsData.length}` : 0}건</span>
+        </div>
+      )}
       <ListItems
         itemsData={itemsData}
         ItemComponent={ItemComponent}
         itemsPerRow={itemsPerRow}
-        emptyMsg={emptyMsg}
+        emptyMsg={getEmptyMsg()}
         onOccurChange={reloadListItems}
       />
       {/* {!isLoading && itemsData && ( */}
