@@ -86,6 +86,7 @@ const RoomGameOptionForm = ({ updateRoomData }) => {
 };
 
 const CreateRoomModal = ({ handleClose }) => {
+  const { loggedIn } = useAuth();
   const navigate = useNavigate();
   const [roomData, setRoomData] = useState({});
   const [roomTitle, setRoomTitle] = useState("");
@@ -128,6 +129,10 @@ const CreateRoomModal = ({ handleClose }) => {
   useEffect(() => {
     handleUpdateRoomData("room.title", roomTitle);
   }, [roomTitle]);
+
+  useEffect(() => {
+    setRoomTitle(`${loggedIn.nickname}의 게임 방`);
+  }, []);
 
   return (
     <CustomModal
