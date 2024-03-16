@@ -14,20 +14,20 @@ const PongScenePage = () => {
     // console.log("키 이벤트 전송을 위한 이벤트 리스너 설정");
     const handleKeyPress = (event) => {
       if (event.key === "ArrowUp") {
-        console.log("Arrow Up key pressed");
+        // console.log("Arrow Up key pressed");
         emitSubgameSocket("keyboard_input", { key: "UP", action: "PRESS" });
       } else if (event.key === "ArrowDown") {
-        console.log("Arrow Down key pressed");
+        // console.log("Arrow Down key pressed");
         emitSubgameSocket("keyboard_input", { key: "DOWN", action: "PRESS" });
       }
     };
 
     const handleKeyRelease = (event) => {
       if (event.key === "ArrowUp") {
-        console.log("Arrow Up key released");
+        // console.log("Arrow Up key released");
         emitSubgameSocket("keyboard_input", { key: "UP", action: "RELEASE" });
       } else if (event.key === "ArrowDown") {
-        console.log("Arrow Down key released");
+        // console.log("Arrow Down key released");
         emitSubgameSocket("keyboard_input", { key: "DOWN", action: "RELEASE" });
       }
     };
