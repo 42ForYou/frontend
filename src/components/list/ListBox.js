@@ -70,7 +70,7 @@ const ListBox = ({
       {/* 차후 로딩 애니메이션 고려 */}
       {/* {isLoading ? ( <Loading />) : (<ListItems/>)} */}
       {searchBarProps && (
-        <div className="d-flex justify-content-between">
+        <div className="d-flex justify-content-between mx-4">
           <span>검색어: {state.searchKeyword}</span>
           <span>검색 결과: {itemsData ? `${itemsData.length}` : 0}건</span>
         </div>
