@@ -104,7 +104,7 @@ export const GameProvider = ({ children }) => {
     {
       event: "update_tournament",
       handler: (data) => {
-        console.log("update_tournament 이벤트 수신: ", data);
+        // console.log("update_tournament 이벤트 수신: ", data);
 
         const isAllPlayersDecided = (subgames) => {
           // console.log("isAllPlayersDecided 함수 실행");
@@ -141,7 +141,7 @@ export const GameProvider = ({ children }) => {
     {
       event: "config",
       handler: (data) => {
-        console.log("config 이벤트 수신: ", data);
+        // console.log("config 이벤트 수신: ", data);
         setTournamentConfig(data.config);
       },
     },
@@ -150,7 +150,7 @@ export const GameProvider = ({ children }) => {
     {
       event: "start", // 서브게임 시작
       handler: (data) => {
-        console.log("start 이벤트 수신: ", data);
+        // console.log("start 이벤트 수신: ", data);
         const waitingUntilStart = () => {
           const now = new Date().getTime();
           const startTime = new Date(data.t_event * 1000).getTime();
@@ -185,7 +185,7 @@ export const GameProvider = ({ children }) => {
     {
       event: "ended", // 서브게임 종료
       handler: (data) => {
-        console.log("ended 이벤트 수신: ", data);
+        // console.log("ended 이벤트 수신: ", data);
         setSubgameStatus((prevState) => ({ ...prevState, progress: "ended", winner: data.winner }));
         setBallTrajectoryVersion(0);
         disconnectSubgameSocket();
@@ -194,21 +194,21 @@ export const GameProvider = ({ children }) => {
     {
       event: "update_time_left",
       handler: (data) => {
-        console.log("update_time_left 이벤트 수신: ", data);
+        // console.log("update_time_left 이벤트 수신: ", data);
         setSubgameStatus((prevState) => ({ ...prevState, time_left: data.time_left }));
       },
     },
     {
       event: "update_scores",
       handler: (data) => {
-        console.log("update_scores 이벤트 수신: ", data);
+        // console.log("update_scores 이벤트 수신: ", data);
         setSubgameStatus((prevState) => ({ ...prevState, score_a: data.score_a, score_b: data.score_b }));
       },
     },
     {
       event: "update_track_ball",
       handler: (data) => {
-        console.log("update_track_ball 이벤트 수신: ", data);
+        // console.log("update_track_ball 이벤트 수신: ", data);
 
         const calculateSegmentTimes = (trajectory) => {
           let accumulatedTime = 0;
@@ -234,7 +234,7 @@ export const GameProvider = ({ children }) => {
     {
       event: "update_track_paddle",
       handler: (data) => {
-        console.log("update_track_paddle 이벤트 수신: ", data);
+        // console.log("update_track_paddle 이벤트 수신: ", data);
         if (data.player === "A") {
           paddleATrajectory.current = data;
         } else if (data.player === "B") {
