@@ -17,8 +17,9 @@ const BracketPage = () => {
   if (!bracketData) return <LoadingPage />;
 
   return (
-    <div className="BracketPage d-flex align-items-center p-5">
-      <div className="border border-white">
+    <div className="BracketPage">
+      <div className="d-flex-col justify-content-between p-5 flex-grow-1">
+        <h1 className="text-start">Bracket</h1>
         <Bracket nRanks={bracketData.n_ranks} subgames={bracketData.subgames} />
       </div>
     </div>
