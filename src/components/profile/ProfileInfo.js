@@ -5,6 +5,7 @@ import ProfileAvatar from "./ProfileAvatar";
 import ProfileTextLine from "./ProfileTextLine";
 import ProfileEditButtons from "./ProfileEditButtons";
 import { useLayout } from "../../context/LayoutContext";
+import { useAuth } from "../../context/AuthContext";
 
 export const STATUS = {
   PROFILE: 0,
@@ -87,6 +88,7 @@ const InfoDisplay = ({ profileData, isEditing, onChangeNickname, onChangeEmail, 
 };
 
 export const MyProfileInfo = ({ initProfileData }) => {
+  const { loggedIn, setLoggedIn } = useAuth();
   const { nickname: initNickname, email: initEmail } = initProfileData;
   const { patchProfileInfo } = usePatchProfile();
   const [isEditing, setIsEditing] = useState(false);
@@ -145,6 +147,7 @@ export const MyProfileInfo = ({ initProfileData }) => {
       if (result.success) {
         setIsEditing(false);
         editStatusMsg[STATUS.PROFILE] = "프로필 정보가 성공적으로 업데이트 되었습니다.";
+        setLoggedIn({ ...loggedIn, nickname, email });
       } else {
         editStatusMsg[STATUS.PROFILE] = "프로필 정보 업데이트가 실패하였습니다.";
         if (result.errmsg && typeof result.errmsg === "object") {
