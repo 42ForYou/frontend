@@ -96,7 +96,7 @@ const CreateRoomModal = ({ handleClose }) => {
   };
 
   const handleSubmit = () => {
-    const isValidTitle = /^[a-zA-Z0-9\u3131-\uD79D]{1,20}$/.test(roomTitle);
+    const isValidTitle = /^[a-zA-Z0-9\u3131-\uD79D\s]{1,20}$/.test(roomTitle);
     const postRoomData = async () => {
       try {
         const resData = await post(API_ENDPOINTS.ROOM_LIST(), roomData);
