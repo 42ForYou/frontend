@@ -96,3 +96,8 @@
 .loser-text {
   color: gray;
 }
+
+.TournamentResultModal span {
+	color: orange;
+	font-family: 'Orbit', sans-serif;
+}

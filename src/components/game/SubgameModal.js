@@ -10,6 +10,7 @@ const VStext = () => {
       style={{
         fontSize: "3rem",
         fontWeight: "bold",
+        fontFamily: "Noto Sans KR",
       }}>
       VS
     </div>
