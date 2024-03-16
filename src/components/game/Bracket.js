@@ -39,13 +39,23 @@ const BracketBoxNonBorder = () => {
 
 const BracketBoxLeftTopBorder = () => {
   return (
-    <div className="col bracket-box" style={{ borderLeft: "5px solid white", borderTop: "5px solid white" }}></div>
+    <div
+      className="col bracket-box"
+      style={{
+        borderLeft: "5px solid white",
+        borderTop: "5px solid white",
+      }}></div>
   );
 };
 
 const BracketBoxRightTopBorder = () => {
   return (
-    <div className="col bracket-box" style={{ borderRight: "5px solid white", borderTop: "5px solid white" }}></div>
+    <div
+      className="col bracket-box"
+      style={{
+        borderRight: "5px solid white",
+        borderTop: "5px solid white",
+      }}></div>
   );
 };
 
@@ -69,7 +79,7 @@ const Bracket4Players = ({ subgames }) => {
     <>
       <div className="Bracket container-fluid p-0">
         <BracketRow>
-          <BracketPlayer player={subgames[0][0][winner00]} columnCnt={2} nthColumn={1} topPos={75} />
+          <BracketPlayer player={subgames[0][0][winner00]} columnCnt={2} nthColumn={1} topPos={85} />
           <BracketBoxNonBorder />
           <BracketBoxNonBorder />
         </BracketRow>
@@ -79,13 +89,13 @@ const Bracket4Players = ({ subgames }) => {
             player={winner10 ? subgames[1][0][winner10] : subgames[0][0]["player_a"]}
             columnCnt={4}
             nthColumn={1}
-            topPos={75}
+            topPos={85}
           />
           <BracketPlayer
             player={winner11 ? subgames[1][1][winner11] : subgames[0][0]["player_b"]}
             columnCnt={4}
             nthColumn={3}
-            topPos={75}
+            topPos={85}
           />
           <BracketBoxNonBorder />
           <BracketBoxLeftTopBorder />
@@ -126,14 +136,14 @@ const Bracket2Players = ({ subgames }) => {
   return (
     <div className="Bracket container-fluid p-0">
       <BracketRow>
-        <BracketPlayer player={subgames[0][0][winner00]} columnCnt={2} nthColumn={1} topPos={75} />
+        <BracketPlayer player={subgames[0][0][winner00]} columnCnt={2} nthColumn={1} topPos={85} />
         <BracketBoxNonBorder />
         <BracketBoxNonBorder />
       </BracketRow>
 
       <BracketRow>
-        <BracketPlayer player={subgames[0][0]["player_a"]} columnCnt={4} nthColumn={1} topPos={75} />
-        <BracketPlayer player={subgames[0][0]["player_b"]} columnCnt={4} nthColumn={3} topPos={75} />
+        <BracketPlayer player={subgames[0][0]["player_a"]} columnCnt={4} nthColumn={1} topPos={85} />
+        <BracketPlayer player={subgames[0][0]["player_b"]} columnCnt={4} nthColumn={3} topPos={85} />
         <BracketBoxNonBorder />
         <BracketBoxLeftTopBorder />
         <BracketBoxRightTopBorder />

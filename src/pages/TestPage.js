@@ -240,7 +240,30 @@ const subgame = {
   winner: "A", // 경기가 끝나면 정해짐
 };
 
-const middleBracketData = {
+const middleDualBracketData = {
+  n_ranks: 1,
+  rank_ongoing: 1,
+  subgames: [
+    [
+      {
+        // 4강전 1경기
+        player_a: {
+          intra_id: "플레이어 1",
+          nickname: "yeonhkimbabo",
+          avatar: "./pengdori.jpg",
+        },
+        player_b: {
+          intra_id: "플레이어 2",
+          nickname: "baboyeonhkim",
+          avatar: "./pengdori.jpg",
+        },
+        winner: "A", // 경기가 끝나면 정해짐
+      },
+    ],
+  ],
+};
+
+const middleTournamentBracketData = {
   n_ranks: 2,
   rank_ongoing: 1,
   subgames: [
@@ -293,7 +316,7 @@ const middleBracketData = {
   ],
 };
 
-const winBracketData = {
+const winTournamentBracketData = {
   n_ranks: 2,
   rank_ongoing: -1,
   subgames: [
@@ -441,8 +464,8 @@ const TestPage = () => {
   return (
     <>
       {/* <h1>TestPage</h1> */}
-      {/* <TournamentResultModal bracketData={middleBracketData} /> */}
-      {/* <TournamentResultModal bracketData={winBracketData} /> */}
+      {/* <TournamentResultModal bracketData={middleTournamentBracketData} /> */}
+      {/* <TournamentResultModal bracketData={winTournamentBracketData} /> */}
       {/* <SubgameBracketModal playerA={subgame.player_a} playerB={subgame.player_b} remainingTime={42} /> */}
       {/* <SubgameResultModal playerA={subgame.player_a} playerB={subgame.player_b} winner={subgame.winner} /> */}
       {
@@ -466,8 +489,12 @@ const TestPage = () => {
           />
         </div>
       } */}
-      <div className="BracketPage d-flex align-items-center p-5">
-        <Bracket nRanks={middleBracketData.n_ranks} subgames={middleBracketData.subgames} />
+      <div className="BracketPage">
+        <div className="d-flex-col justify-content-between p-5 flex-grow-1">
+          <h1 className="text-start">Bracket</h1>
+          {/* <Bracket nRanks={middleDualBracketData.n_ranks} subgames={middleDualBracketData.subgames} /> */}
+          <Bracket nRanks={middleTournamentBracketData.n_ranks} subgames={middleTournamentBracketData.subgames} />
+        </div>
       </div>
     </>
   );

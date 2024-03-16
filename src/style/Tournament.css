@@ -5,6 +5,15 @@
   background-position: center;
 }
 
+.BracketPage h1 {
+	font-family: 'Orbitron', sans-serif;
+	font-size: 3rem;
+	font-weight: bold;
+	color: white;
+	text-shadow: 1px 2px 3px rgb(82 0 175);
+
+}
+
 .Bracket {
 	background-color: rba(100, 150, 200, 0.5); /* 배경색 */
 }
@@ -29,8 +38,19 @@
 
 .bracket-box {
 	min-width: 5rem;
-	min-height:10rem;
+	min-height:8rem;
 }
+
+@media (min-width: 2000px) {
+  .bracket-box {
+	min-height:10rem;
+  }
+
+	.Bracket {
+		margin-top: 5rem;
+	}
+}
+
 
 .TournamentResultModal .text-center {
   text-align: center;
