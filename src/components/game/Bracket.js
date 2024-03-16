@@ -11,8 +11,8 @@ const getSubgameWinner = (subgame) => {
 const BracketPlayer = ({ player, columnCnt, nthColumn, topPos }) => {
   if (!player) return null;
 
-  const { loggedIn } = useAuth();
-  const isMine = loggedIn && player.intra_id === loggedIn.intra_id;
+  const { loggedInUser } = useAuth();
+  const isMine = loggedInUser && player.intra_id === loggedInUser.intra_id;
   const { nickname, avatar } = player;
   const diameter = 130;
   const leftPos = (nthColumn / columnCnt) * 100;

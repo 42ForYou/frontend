@@ -52,7 +52,7 @@ const GamePlayPage = () => {
 
   // 서브게임 진행 상태에 따라 모달, 페이지 변경
   useEffect(() => {
-    console.log("subgameStatus", subgameStatus);
+    // console.log("subgameStatus", subgameStatus);
     if (subgameStatus.progress === "waiting") {
       setCurrentPage("pongScene");
       setCurrentModal("subgameBracket");

@@ -23,13 +23,13 @@ const WaitingPlayer = ({ nickname, avatar, isHost, isMine }) => {
 };
 
 const WaitingPlayersRow = ({ players, playersPerRow, host }) => {
-  const { loggedIn } = useAuth();
+  const { loggedInUser } = useAuth();
   const getClassName = (player) => {
     let className = "";
     if (player === null) className += " empty";
     else {
       className += " full";
-      if (player.nickname === loggedIn.nickname) className += " mine";
+      if (player.nickname === loggedInUser.nickname) className += " mine";
       if (host === player.nickname) className += " host";
     }
     return className;
@@ -49,7 +49,7 @@ const WaitingPlayersRow = ({ players, playersPerRow, host }) => {
               nickname={player.nickname}
               avatar={player.avatar}
               isHost={host === player.nickname}
-              isMine={player.nickname === loggedIn.nickname}
+              isMine={player.nickname === loggedInUser.nickname}
             />
           ) : (
             <p>플레이어의 입장을 기다리고 있습니다...</p>

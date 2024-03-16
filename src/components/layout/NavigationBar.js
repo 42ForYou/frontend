@@ -30,7 +30,7 @@ const NavItems = () => {
 };
 
 const NavUser = () => {
-  const { loggedIn, logout } = useAuth();
+  const { loggedInUser, logout } = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = async () => {
@@ -39,8 +39,8 @@ const NavUser = () => {
     navigate("/login");
   };
 
-  const avatarSrc = loggedIn ? loggedIn.avatar : null;
-  const nickname = loggedIn ? loggedIn.nickname : "Unknown User";
+  const avatarSrc = loggedInUser ? loggedInUser.avatar : null;
+  const nickname = loggedInUser ? loggedInUser.nickname : "Unknown User";
 
   return (
     <div className="NavUser d-flex flex-column align-items-center pb-3">

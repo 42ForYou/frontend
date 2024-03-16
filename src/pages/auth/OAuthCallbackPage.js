@@ -5,7 +5,7 @@ import { useAuth } from "../../context/AuthContext";
 const OAuthCallbackPage = () => {
   const queryParams = new URLSearchParams(useLocation().search);
   const code = queryParams.get("code");
-  const { authenticateWithOAuth, loggedIn, isLoading, twoFactorData } = useAuth();
+  const { authenticateWithOAuth, loggedInUser, isLoading, twoFactorData } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -15,7 +15,7 @@ const OAuthCallbackPage = () => {
   useEffect(() => {
     if (isLoading) return;
 
-    if (loggedIn) {
+    if (loggedInUser) {
       navigate("/");
     } else if (twoFactorData?.two_factor_auth) {
       navigate("/login/2fa");
@@ -23,7 +23,7 @@ const OAuthCallbackPage = () => {
       alert("잘못된 접근입니다.");
       navigate("/login");
     }
-  }, [isLoading, twoFactorData, loggedIn, navigate]);
+  }, [isLoading, twoFactorData, loggedInUser, navigate]);
 
   return (
     <div className="CallbackPage">

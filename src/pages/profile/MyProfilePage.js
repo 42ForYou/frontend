@@ -218,8 +218,8 @@ const dummyStatsData = {
 };
 
 const MyProfilePage = () => {
-  const { loggedIn } = useAuth();
-  const { profileData, statsData, matchHistoryData } = useFetchProfileData(loggedIn?.intra_id);
+  const { loggedInUser } = useAuth();
+  const { profileData, statsData, matchHistoryData } = useFetchProfileData(loggedInUser?.intra_id);
 
   if (!profileData || !statsData || !matchHistoryData) return <LoadingPage />;
 

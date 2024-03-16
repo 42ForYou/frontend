@@ -6,16 +6,16 @@ import { getWithoutCredentials } from "../../utils/apiBase";
 import { API_ENDPOINTS } from "../../utils/apiEndpoints";
 
 const OAuthLoginPage = () => {
-  const { loggedIn } = useAuth();
+  const { loggedInUser } = useAuth();
   const navigate = useNavigate();
 
   // 이미 로그인 한 유저가 로그인 페이지에 접속하는 경우 리다이렉트
   // todo: 추후 테스트 필요
   useEffect(() => {
-    if (loggedIn) {
+    if (loggedInUser) {
       navigate("/");
     }
-  }, [loggedIn, navigate]);
+  }, [loggedInUser, navigate]);
 
   const handleLogin = async () => {
     try {

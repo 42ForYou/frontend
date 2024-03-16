@@ -8,7 +8,7 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
-  const [loggedIn, setLoggedIn] = useState(null);
+  const [loggedInUser, setLoggedInUser] = useState(null);
   const [is2FA, setIs2FA] = useState(false);
   const [twoFactorData, setTwoFactorData] = useState(null); // {email, intra_id, two_factor_auth: true}
 
@@ -29,7 +29,7 @@ export const AuthProvider = ({ children }) => {
         console.log("존재하지 않는 토큰입니다.");
       }
     } finally {
-      setLoggedIn(null);
+      setLoggedInUser(null);
     }
   };
 
@@ -38,7 +38,7 @@ export const AuthProvider = ({ children }) => {
     try {
       const resData = await get(API_ENDPOINTS.OAUTH_TOKEN_EXCHANGE(code));
       const user = resData.data.profile;
-      setLoggedIn(user);
+      setLoggedInUser(user);
     } catch (error) {
       if (error.response?.status === 428) {
         console.log("2FA 인증이 필요한 사용자입니다.");
@@ -58,10 +58,10 @@ export const AuthProvider = ({ children }) => {
     try {
       const resData = await get(API_ENDPOINTS.TOKEN_VERIFY);
       const user = resData.data.user;
-      setLoggedIn(user);
+      setLoggedInUser(user);
       setIs2FA(user.two_factor_auth);
     } catch (error) {
-      setLoggedIn(null);
+      setLoggedInUser(null);
     } finally {
       setIsLoading(false);
     }
@@ -73,12 +73,12 @@ export const AuthProvider = ({ children }) => {
     let success = false;
     try {
       const resData = await post(API_ENDPOINTS.TOKEN_REFRESH);
-      setLoggedIn(resData.data.user);
+      setLoggedInUser(resData.data.user);
       console.log("액세스 토큰이 성공적으로 갱신되었습니다.");
       success = true;
     } catch (error) {
       console.log("리프레시 토큰이 만료되었습니다. 로그아웃 처리합니다.");
-      setLoggedIn(null);
+      setLoggedInUser(null);
       handleUnauthenticated();
     } finally {
       setIsLoading(false);
@@ -94,7 +94,7 @@ export const AuthProvider = ({ children }) => {
     const resData = await get(API_ENDPOINTS.TWO_FACTOR_VERIFY(twoFactorData.intra_id, code2FA));
     console.log("2FA 인증에 성공했습니다.");
     console.log(resData);
-    setLoggedIn(resData.data.profile);
+    setLoggedInUser(resData.data.profile);
   };
 
   // 액세스 토큰이 유효하지 않거나 만료되었을 때 리프레시 토큰을 이용하여 재발급하는 이벤트 핸들러
@@ -126,8 +126,8 @@ export const AuthProvider = ({ children }) => {
     <AuthContext.Provider
       value={{
         isLoading,
-        setLoggedIn,
-        loggedIn,
+        setLoggedInUser,
+        loggedInUser,
         logout,
         validateTokenInCookies,
         validate2FAcode,
