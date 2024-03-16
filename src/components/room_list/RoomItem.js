@@ -1,16 +1,26 @@
 import React from "react";
-import StyledButton from "../common/StyledButton";
+import BootstrapButton from "../common/BootstrapButton";
 import { post } from "../../utils/apiBase";
 import { API_ENDPOINTS } from "../../utils/apiEndpoints";
 import { useNavigate } from "react-router-dom";
-import { useGame } from "../../context/GameContext";
+import CustomButton from "../common/CustomButton";
+import Icon from "../common/Icon";
+import { useLayout } from "../../context/LayoutContext";
 
+const RoomItemDetail = ({ label, value }) => (
+  <div className="room-detail">
+    <span className="room-detail-label">{label}</span>
+    <span className="room-detail-value">| {value}</span>
+  </div>
+);
 // 스타일을 가지는 박스
 // 일단은 1대1도 토너먼트 스타일과 통일
 const RoomItem = ({ game, room }) => {
   const navigate = useNavigate();
   const { game_id, is_tournament, game_point, time_limit, n_players } = game;
   const { id: room_id, title, is_playing, join_players, host } = room;
+  const cannotJoin = is_playing || join_players === n_players;
+  const { isWide } = useLayout();
 
   const handleJoinClick = (gameId) => {
     const postJoinRequest = async () => {
@@ -34,33 +44,27 @@ const RoomItem = ({ game, room }) => {
   };
 
   return (
-    <div className={`RoomItem ${is_playing ? "RoomItemPlaying" : ""} w-100 p-3`}>
+    <div className={`RoomItem ${cannotJoin ? "cannot-join" : "can-join"} w-100 p-3`}>
       <div className="row ps-3 pe-3">
-        <div className="col-8">
-          <div className="row">
+        <div className="row border-bottom pb-3 d-flex align-items-end justify-content-between p-0 mb-2">
+          <div className="col-9 d-flex">
             <h5 className="fst-italic">{title}</h5>
           </div>
-          <div className="row">
-            방장: {host}
-            <br />
-            인원 수: {join_players} / {n_players}
-            <br />
-            목표 득점: {game_point}점
-            <br />
-            제한 시간: {time_limit}초
-          </div>
-        </div>
-        <div className="col d-flex flex-column justify-content-between align-items-end">
-          <div className="row">{is_tournament ? "[토너먼트]" : "[1vs1]"}</div>
-          <div className="row">
-            <StyledButton
-              styleType={"primary"}
-              name={"JOIN"}
+          <div className="col text-end p-0">
+            {isWide && <Icon filename={is_tournament ? "tournament.png" : "versus.png"} alt={"logout"} invert={true} />}
+            <CustomButton
+              label={"JOIN"}
               onClick={() => handleJoinClick(game_id)}
-              disabled={is_playing}
+              disabled={cannotJoin}
+              opacity={1}
+              color={"dark-green"}
             />
           </div>
         </div>
+        <RoomItemDetail label="방장" value={host} />
+        <RoomItemDetail label="참여 인원" value={`${join_players} / ${n_players}`} />
+        <RoomItemDetail label="목표 득점" value={`${game_point}점`} />
+        <RoomItemDetail label="제한 시간" value={`${time_limit}초`} />
       </div>
     </div>
   );

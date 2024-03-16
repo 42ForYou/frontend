@@ -28,6 +28,13 @@ axiosInstance.interceptors.response.use(
     return response;
   },
   (error) => {
+    const urlObject = new URL(error.config.url, window.location.origin);
+    const baseUrl = urlObject.pathname;
+
+    // 2차 인증 요청에 대한 응답 에러 처리
+    if (`${baseUrl}/` === API_ENDPOINTS.TWO_FACTOR_VERIFY()) {
+      return Promise.reject(error);
+    }
     // 리프레시 토큰을 이용한 액세스 토큰 재발급 요청에 대한 응답 에러 처리
     if (!error.config._retry && error.config.url === API_ENDPOINTS.TOKEN_REFRESH) {
       return Promise.reject(error);

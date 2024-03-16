@@ -82,7 +82,7 @@ const PongScene = () => {
     newRoot.add(newCamera);
 
     const newRenderer = new THREE.WebGLRenderer({ antialias: true });
-    newRenderer.setClearColor(0xbbffff);
+    newRenderer.setClearColor(0x000000); // 검은색 배경
     newRenderer.setSize(window.innerWidth, window.innerHeight);
     mountRef.current.appendChild(newRenderer.domElement);
     setRenderer(newRenderer);
@@ -128,10 +128,11 @@ const PongScene = () => {
         fieldDepth
       );
       const fieldMaterial = new THREE.MeshPhysicalMaterial({
-        transmission: 1,
-        thickness: 5,
         color: 0x00ff00,
+        transmission: 0.9, // 투명도 조절
+        reflectivity: 0.5, // 반사율 조절
       });
+
       const marginedFieldMaterial = new THREE.MeshPhysicalMaterial({
         transmission: 1,
         thickness: 5,
@@ -149,7 +150,7 @@ const PongScene = () => {
       const paddleHeight = len_paddle;
       const paddleDepth = 10;
       const paddleGeometry = new THREE.BoxGeometry(paddleWidth, paddleHeight, paddleDepth);
-      const paddleMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+      const paddleMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000, emissive: 0x222222 });
       const paddleA = new THREE.Mesh(paddleGeometry, paddleMaterial);
       const paddleB = new THREE.Mesh(paddleGeometry, paddleMaterial);
       paddleA.position.set(x_min - paddleWidth / 2, y_init_paddle, paddleDepth / 2);
@@ -162,7 +163,7 @@ const PongScene = () => {
       // 공
       const ballRadius = 15;
       const ballGeometry = new THREE.SphereGeometry(ballRadius, 32, 32);
-      const ballMaterial = new THREE.MeshBasicMaterial({ color: 0x0000ff });
+      const ballMaterial = new THREE.MeshBasicMaterial({ color: 0x0000ff, emissive: 0x222222 });
       const ball = new THREE.Mesh(ballGeometry, ballMaterial);
       ball.position.set(x_init_ball, y_init_ball, ballRadius);
       root.add(ball);

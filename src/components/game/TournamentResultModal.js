@@ -1,8 +1,7 @@
 import React from "react";
-import StyledButton from "../common/StyledButton";
+import BootstrapButton from "../common/BootstrapButton";
 import CustomModal from "../common/CustomModal";
 import { useNavigate } from "react-router-dom";
-import PlayerInModal from "./PlayerInModal";
 import { useGame } from "../../context/GameContext";
 import { useAuth } from "../../context/AuthContext";
 import Avatar from "../common/Avatar";
@@ -24,15 +23,18 @@ const TournamentWinnerContent = ({ finalSubgame }) => {
     <>
       <h4 className="text-center">Congratulations!</h4>
       <div className="d-flex align-items-center justify-content-between">
-        <img src={`${process.env.ASSETS_URL}/images/confetti-leftpng`} alt="confetti-left" style={{ width: "33%" }} />
-        <Avatar src={winner.avatar} diameter={130} />
+        <img src={`${process.env.ASSETS_URL}/images/confetti-left.png`} alt="confetti-left" style={{ width: "33%" }} />
+        <div className="d-flex-col text-center">
+          <Avatar src={winner.avatar} diameter={130} />
+          {/* <span className="winner-nickname">{winner.nickname}</span> */}
+        </div>
         <img
           src={`${process.env.ASSETS_URL}/images/confetti-right.png`}
           alt="confetti-right"
           style={{ width: "33%" }}
         />
       </div>
-      <h4 className="text-center">You are the winner!</h4>
+      <h4 className="text-center">{winner.nickname}, You are the winner!</h4>
     </>
   );
 };
@@ -48,8 +50,8 @@ const TournamentOthersContent = ({ finalSubgame, myFinalRank }) => {
         You&apos;ve been absorbed
         <br /> by the Black Hole...
       </h4>
-      <p className="text-center mt-3">{opponent.nickname}에게 패배하여 블랙홀에 빨려 들어갔습니다.</p>
-      <p className="text-end">나의 최종 진출 라운드: {rankToString(myFinalRank)}</p>
+      <p className="text-center mt-3 ">{opponent.nickname}에게 패배하여 블랙홀에 빨려 들어갔습니다.</p>
+      <p className="text-end fst-italic">나의 최종 진출 라운드: {rankToString(myFinalRank)}</p>
     </>
   );
 };
@@ -66,7 +68,7 @@ const TournamentResultModal = ({ bracketData }) => {
       <CustomModal
         hasCloseButton={false}
         title={"게임 결과"}
-        footerButtons={<StyledButton name={"홈으로 이동"} styleType={"secondary"} onClick={() => navigate("/")} />}>
+        footerButtons={<BootstrapButton label={"홈으로 이동"} styleType={"primary"} onClick={() => navigate("/")} />}>
         {amIWinner ? (
           <TournamentWinnerContent finalSubgame={myFinalSubgame} />
         ) : (

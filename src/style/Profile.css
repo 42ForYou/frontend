@@ -52,3 +52,28 @@
   background-color: transparent;
   color: white;
 }
+
+.ProfileTextLine {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.ProfileTextLine label,
+.ProfileTextLine span,
+.ProfileTextLine input[type="text"] {
+  width: auto;
+  margin: 0 10px;
+}
+
+.ProfileTextLine input[type="text"] {
+	font-family: 'Noto Sans KR', sans-serif;
+  padding: 5px;
+  border: 1px solid #ccc;
+}
+
+.ProfileTextLine span {
+  padding: 5px;
+  border-radius: 5px;
+}

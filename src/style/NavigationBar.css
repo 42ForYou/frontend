@@ -22,7 +22,7 @@
 	color: aliceblue;
 }
 .NavItems a:hover {
-  text-shadow: 0 0 8px #fff, 0 0 20px #fff, 0 0 24px #fff;
+  text-shadow: 0 0 8px #7da8ff, 0 0 20px #7da8ff, 0 0 24px #7da8ff;
 }
 .NavItems img {
 	filter: invert(100%);

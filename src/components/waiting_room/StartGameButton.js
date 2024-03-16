@@ -1,6 +1,6 @@
 import React from "react";
-import StyledButton from "../common/StyledButton";
 import { useGame } from "../../context/GameContext";
+import CustomButton from "../common/CustomButton";
 
 const StartGameButton = ({ isActive }) => {
   const { emitRoomSocket } = useGame();
@@ -11,17 +11,18 @@ const StartGameButton = ({ isActive }) => {
   };
 
   return (
-    <StyledButton
-      styleType={"primary pb-5"}
-      name={"START"}
+    <CustomButton
+      color={"dark-blue"}
+      label={"START"}
       onClick={isActive ? handleStartGame : null}
       overrideStyle={{
         width: "150px",
         height: "50px",
         fontSize: "30px",
-        padding: "-10px 24px",
+        padding: "0px 24px",
       }}
       disabled={!isActive}
+      opacity={isActive ? 1 : 0.5}
     />
   );
 };

@@ -25,12 +25,12 @@ const usePatchProfile = () => {
     } catch (error) {
       setError({
         code: error.response?.status,
-        msg: error.response?.data.message || error.message,
+        msg: error.response?.data || error,
       });
       return {
         success: false,
         errcode: error.response?.status,
-        errmsg: error.response?.data.message,
+        errmsg: error.response?.data,
       };
     }
   };

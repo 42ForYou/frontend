@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const SearchBar = ({ searchKeyword, placeholder, onSearch, maxLength, alertMessage }) => {
+const SearchBar = ({ searchKeyword, placeholder, onSearch, validationRegex, invalidMessage }) => {
   const [inputValue, setInputValue] = useState(searchKeyword);
 
   const handleKeyPress = (e) => {
@@ -10,15 +10,17 @@ const SearchBar = ({ searchKeyword, placeholder, onSearch, maxLength, alertMessa
   };
 
   const triggerSearch = () => {
-    if (inputValue.length > maxLength) {
-      alert(alertMessage);
+    const isValid = validationRegex.test(inputValue);
+
+    if (!isValid) {
+      alert(invalidMessage || "유효하지 않은 입력입니다.");
     } else {
       onSearch(inputValue);
     }
   };
 
   return (
-    <div className="SearchBar search-input-container d-flex">
+    <div className="SearchBar search-input-container d-flex mb-3">
       <input
         type="text"
         className="form-control"

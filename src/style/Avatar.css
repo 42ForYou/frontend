@@ -2,7 +2,7 @@
 
 .avatar-img {
   object-fit: cover;
-  border: 3px solid goldenrod;
+  border: 5px solid goldenrod;
 }
 
 .avatar {
@@ -11,13 +11,13 @@
 }
 
 .online-indicator {
-  width: 27px;
-  height: 27px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   position: absolute;
-  top: 0;
-  right: 0;
-  border: 3px solid white;
+  top: 3px;
+  right: 3px;
+  border: 4px solid white;
 }
 
 .online-indicator.online {

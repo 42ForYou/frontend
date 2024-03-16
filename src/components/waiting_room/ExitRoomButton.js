@@ -1,6 +1,6 @@
 import React from "react";
-import StyledButton from "../common/StyledButton";
 import { useNavigate } from "react-router-dom";
+import CustomButton from "../common/CustomButton";
 
 const ExitRoomButton = () => {
   const navigate = useNavigate();
@@ -12,16 +12,17 @@ const ExitRoomButton = () => {
   };
 
   return (
-    <StyledButton
-      styleType={"danger pb-5  ms-3 "}
-      name={"EXIT"}
+    <CustomButton
+      color="dark-red"
+      label={"EXIT"}
       onClick={handleNormalExit}
       overrideStyle={{
         width: "120px",
         height: "50px",
         fontSize: "30px",
-        padding: "-10px 24px",
+        padding: "0px 24px",
       }}
+      opacity={1}
     />
   );
 };

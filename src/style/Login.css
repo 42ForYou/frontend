@@ -27,6 +27,7 @@
   border-radius: 5px;
   border: 1px solid #ccc;
 	color: black;
+	z-index: 3;
 }
 
 .LoginPage button {
@@ -38,22 +39,45 @@
 	font-size: 1.5rem;
   background-color: #00b377;
   cursor: pointer;
+  box-shadow: 0 8px 10px rgba(0, 0, 0, 0.4);
 }
 
 .LoginPage button:hover {
-  color: #fff;
   background-color: #00895b;
+  color: #e0e0e0;
 }
 
-.LoginPage h1 {
-  margin-bottom: 20px; 
+.LoginPage .twoFactorSubmit {
+	height: 50px;
+	background-color: #007bff;
+	z-index: 2;
 }
 
-.LoginPage .twoFactorAuth {
-  height: 50px;
-  background-color: #007bff
+.LoginPage .twoFactorResend {
+	height: 50px;
+  background-color: #00b377;
+	z-index: 1;
 }
 
-.LoginPage .twoFactorAuth:hover {
-  background-color: #0056b3
+.LoginPage .twoFactorSubmit:hover {
+  background-color: #0056b3;
+  color: #e0e0e0;
+}
+
+.LoginPage .twoFactorResend:hover {
+  background-color: #00895b;
+  color: #e0e0e0;
+}
+
+.back-to-login-link {
+  position: fixed;
+	font-size: 1.3rem;
+  right: 20px;
+  bottom: 20px;
+	color: #fff;
+  text-decoration: none;
+}
+
+.back-to-login-link:hover {
+  text-decoration: underline;
 }

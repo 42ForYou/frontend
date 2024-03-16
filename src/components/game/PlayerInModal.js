@@ -14,7 +14,7 @@ const PlayerInModal = ({ nickname, avatar, isMine, isWinner = undefined }) => {
     <div className="d-flex-col player-in-modal text-center align-items-center justify-content-center">
       {isWinner !== undefined && <WinOrLose isWinner={isWinner} />}
       <Avatar src={avatar} diameter={130} />
-      <p className="pt-2 mb-0" style={isMine ? { color: "#007bff", fontWeight: "bold" } : null}>
+      <p className="pt-2 mb-0" style={isMine ? { color: "rgb(25 209 186)", fontWeight: "bold" } : null}>
         {nickname}
       </p>
     </div>

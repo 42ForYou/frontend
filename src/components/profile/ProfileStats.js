@@ -1,5 +1,5 @@
 import React from "react";
-import PieChart from "../common/PieChart";
+import BarChart from "../common/BarChart";
 
 const processData = (stats) => {
   // 모드 비율 데이터 생성
@@ -51,12 +51,12 @@ const randomColor = () => {
   return `#${Math.floor(Math.random() * 16777215).toString(16)}`;
 };
 
-const PieChartSection = ({ title, chartData }) => {
+const BarChartSection = ({ title, chartData }) => {
   return (
     <div className="text-center" style={{ width: "33%", display: "flex", flexDirection: "column", padding: "10px" }}>
       <h5>&lt;{title}&gt;</h5>
       <div className="d-flex align-items-center justify-content-center" style={{ minHeight: "200px" }}>
-        {chartData ? <PieChart data={chartData} /> : <p>데이터가 없습니다.</p>}
+        {chartData ? <BarChart data={chartData} /> : <p>데이터가 없습니다.</p>}
       </div>
     </div>
   );
@@ -70,9 +70,9 @@ const ProfileStats = ({ statsData }) => {
     <div className="ProfileStats ContentContainer Content">
       <h4 className="mb-4">Statistics</h4>
       <div style={{ display: "flex", justifyContent: "space-around", flexWrap: "wrap" }}>
-        <PieChartSection title="플레이한 모드" chartData={n_dual_match + n_tournaments === 0 ? null : modeData} />
-        <PieChartSection title="1vs1 승/패" chartData={n_dual_match === 0 ? null : dualData} />
-        <PieChartSection title="토너먼트 최종 진출 라운드" chartData={n_tournaments === 0 ? null : rankData} />
+        <BarChartSection title="플레이한 모드" chartData={n_dual_match + n_tournaments === 0 ? null : modeData} />
+        <BarChartSection title="1vs1 승/패" chartData={n_dual_match === 0 ? null : dualData} />
+        <BarChartSection title="토너먼트 성적" chartData={n_tournaments === 0 ? null : rankData} />
       </div>
     </div>
   );

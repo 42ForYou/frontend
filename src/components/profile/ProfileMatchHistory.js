@@ -16,7 +16,7 @@ const MatchHistoryTable = ({ matchHistoryData }) => {
     return `${2 ** (rank + 1)}강`;
   };
 
-  const getGameOption = (game) => `목표: ${game.game_point}점, 제한시간 ${game.time_limit}초`;
+  const getGameOption = (game) => `목표 득점: ${game.game_point}점, 제한 시간 ${game.time_limit}초`;
 
   return (
     <table className="table">
@@ -26,7 +26,7 @@ const MatchHistoryTable = ({ matchHistoryData }) => {
           <th>모드</th>
           <th>라운드</th>
           <th>게임 옵션</th>
-          <th>최종득점</th>
+          <th>최종 득점</th>
           <th>승리여부</th>
         </tr>
       </thead>
@@ -36,10 +36,10 @@ const MatchHistoryTable = ({ matchHistoryData }) => {
             <tr key={`${gameData.game.game_id}_${index}`}>
               <td>{formatDate(subgame.t_start)}</td>
               <td>{getMode(gameData.game)}</td>
-              <td>{getRank(subgame.rank)}</td>
+              <td>{gameData.is_tournament ? getRank(subgame.rank) : ""}</td>
               <td>{getGameOption(gameData.game)}</td>
               <td>{`${subgame.point_a} : ${subgame.point_b}`}</td>
-              <td>{subgame.game_player_won ? "승리" : "패배"}</td>
+              <td>{subgame.game_player_won ? "WIN" : "LOSE"}</td>
             </tr>
           ))
         )}

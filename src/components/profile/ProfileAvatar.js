@@ -3,6 +3,7 @@ import { STATUS } from "./ProfileInfo";
 import usePatchProfile from "../../hooks/usePatchProfile";
 import { useAuth } from "../../context/AuthContext";
 import Avatar from "../common/Avatar";
+import { useLayout } from "../../context/LayoutContext";
 
 const HiddenImageUploader = ({ imgInputRef, handleAvatarChange }) => {
   return (
@@ -15,6 +16,7 @@ const ProfileAvatar = ({ avatar, nickname, isEditing = false, setEditStatus }) =
   const { setLoggedIn } = useAuth();
   const [newAvatar, setNewAvatar] = useState(avatar);
   const imgInputRef = useRef(null);
+  const { isWide } = useLayout();
 
   const handleAvatarUploadClick = () => {
     if (imgInputRef.current) {
@@ -46,7 +48,7 @@ const ProfileAvatar = ({ avatar, nickname, isEditing = false, setEditStatus }) =
   };
 
   return (
-    <div className="ProfileAvatar ms-5">
+    <div className={`ProfileAvatar ${isWide ? "d-flex justify-content-center mb-3" : "ms-5"}`}>
       <Avatar
         src={newAvatar}
         alt={`${nickname}'s avatar`}

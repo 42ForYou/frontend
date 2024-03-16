@@ -22,10 +22,12 @@ const BracketPlayer = ({ player, columnCnt, nthColumn, topPos }) => {
       className="bracket-player p-0"
       style={{ position: "absolute", top: `${topPos}%`, left: `${leftPos}%`, zIndex: 100 }}>
       <div
-        className={"text-center"}
+        className={"text-center d-flex-col align-items-center"}
         style={{ width: `${diameter}px`, height: `${diameter}px`, transform: "translate(-50%, -50%)" }}>
         <Avatar src={avatar} diameter={130} />
-        <p style={{ color: `${isMine ? "yellow" : ""}` }}> {nickname}</p>
+        <div>
+          <p style={{ color: `${isMine ? "#29ffe4" : ""}` }}> {nickname}</p>
+        </div>
       </div>
     </div>
   );
@@ -36,11 +38,25 @@ const BracketBoxNonBorder = () => {
 };
 
 const BracketBoxLeftTopBorder = () => {
-  return <div className="col bracket-box" style={{ borderLeft: "3px solid red", borderTop: "3px solid red" }}></div>;
+  return (
+    <div
+      className="col bracket-box"
+      style={{
+        borderLeft: "5px solid white",
+        borderTop: "5px solid white",
+      }}></div>
+  );
 };
 
 const BracketBoxRightTopBorder = () => {
-  return <div className="col bracket-box" style={{ borderRight: "3px solid red", borderTop: "3px solid red" }}></div>;
+  return (
+    <div
+      className="col bracket-box"
+      style={{
+        borderRight: "5px solid white",
+        borderTop: "5px solid white",
+      }}></div>
+  );
 };
 
 const BracketRow = ({ children }) => {
@@ -61,9 +77,9 @@ const Bracket4Players = ({ subgames }) => {
 
   return (
     <>
-      <div className="bracket container-fluid p-0">
+      <div className="Bracket container-fluid p-0">
         <BracketRow>
-          <BracketPlayer player={subgames[0][0][winner00]} columnCnt={2} nthColumn={1} topPos={75} />
+          <BracketPlayer player={subgames[0][0][winner00]} columnCnt={2} nthColumn={1} topPos={85} />
           <BracketBoxNonBorder />
           <BracketBoxNonBorder />
         </BracketRow>
@@ -73,13 +89,13 @@ const Bracket4Players = ({ subgames }) => {
             player={winner10 ? subgames[1][0][winner10] : subgames[0][0]["player_a"]}
             columnCnt={4}
             nthColumn={1}
-            topPos={75}
+            topPos={85}
           />
           <BracketPlayer
             player={winner11 ? subgames[1][1][winner11] : subgames[0][0]["player_b"]}
             columnCnt={4}
             nthColumn={3}
-            topPos={75}
+            topPos={85}
           />
           <BracketBoxNonBorder />
           <BracketBoxLeftTopBorder />
@@ -118,16 +134,16 @@ const Bracket2Players = ({ subgames }) => {
   const winner00 = getSubgameWinner(subgames[0][0]);
 
   return (
-    <div className="bracket container-fluid p-0">
+    <div className="Bracket container-fluid p-0">
       <BracketRow>
-        <BracketPlayer player={subgames[0][0][winner00]} columnCnt={2} nthColumn={1} topPos={75} />
+        <BracketPlayer player={subgames[0][0][winner00]} columnCnt={2} nthColumn={1} topPos={85} />
         <BracketBoxNonBorder />
         <BracketBoxNonBorder />
       </BracketRow>
 
       <BracketRow>
-        <BracketPlayer player={subgames[0][0]["player_a"]} columnCnt={4} nthColumn={1} topPos={75} />
-        <BracketPlayer player={subgames[0][0]["player_b"]} columnCnt={4} nthColumn={3} topPos={75} />
+        <BracketPlayer player={subgames[0][0]["player_a"]} columnCnt={4} nthColumn={1} topPos={85} />
+        <BracketPlayer player={subgames[0][0]["player_b"]} columnCnt={4} nthColumn={3} topPos={85} />
         <BracketBoxNonBorder />
         <BracketBoxLeftTopBorder />
         <BracketBoxRightTopBorder />

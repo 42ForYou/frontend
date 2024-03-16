@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 // context
 import { AuthProvider } from "./context/AuthContext";
+import { LayoutProvider } from "./context/LayoutContext";
 import { SocketProviderWrapper } from "./context/SocketContext";
 import { GameProviderWrapper } from "./context/GameContext";
 import { OnlineStatusProviderWrapper } from "./context/OnlineStatusContext";
@@ -32,7 +33,9 @@ const App = () => {
   return (
     <BrowserRouter>
       <AuthProvider>
-        <AppContent />
+        <LayoutProvider>
+          <AppContent />
+        </LayoutProvider>
       </AuthProvider>
     </BrowserRouter>
   );
