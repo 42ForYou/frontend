@@ -4,7 +4,7 @@ import { useAuth } from "../../context/AuthContext";
 import LoadingPage from "../LoadingPage";
 
 const TwoFactorAuthPage = () => {
-  const { validate2FAcode, resend2FACode, loggedIn, twoFactorData, isLoading } = useAuth();
+  const { validate2FAcode, resend2FACode, loggedInUser, twoFactorData, isLoading } = useAuth();
   const [code2FA, setCode2FA] = useState("");
   const [status2FA, setStatus2FA] = useState("");
   const navigate = useNavigate();
@@ -13,7 +13,7 @@ const TwoFactorAuthPage = () => {
   const [timerMessage, setTimerMessage] = useState(`제한시간: ${countdown}초`);
 
   useEffect(() => {
-    if (loggedIn) {
+    if (loggedInUser) {
       alert("이미 로그인 된 상태입니다.");
       navigate("/");
     } else if (!twoFactorData) {
@@ -32,7 +32,7 @@ const TwoFactorAuthPage = () => {
 
     // 카운트다운 종료
     return () => clearInterval(interval);
-  }, [navigate, loggedIn, twoFactorData]);
+  }, [navigate, loggedInUser, twoFactorData]);
 
   useEffect(() => {
     if (countdown <= 0) {

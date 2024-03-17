@@ -5,6 +5,7 @@ import ProfileAvatar from "./ProfileAvatar";
 import ProfileTextLine from "./ProfileTextLine";
 import ProfileEditButtons from "./ProfileEditButtons";
 import { useLayout } from "../../context/LayoutContext";
+import { useAuth } from "../../context/AuthContext";
 
 export const STATUS = {
   PROFILE: 0,
@@ -17,7 +18,7 @@ const getFriendStatusString = (status) => {
     case "None":
       return "친구 아님";
     case "pending":
-      return "친구 아님 (요청 중)";
+      return "친구 아님 (대기중)";
     case "friend":
       return "친구";
     default:
@@ -87,6 +88,7 @@ const InfoDisplay = ({ profileData, isEditing, onChangeNickname, onChangeEmail, 
 };
 
 export const MyProfileInfo = ({ initProfileData }) => {
+  const { loggedInUser, setLoggedInUser } = useAuth();
   const { nickname: initNickname, email: initEmail } = initProfileData;
   const { patchProfileInfo } = usePatchProfile();
   const [isEditing, setIsEditing] = useState(false);
@@ -145,6 +147,7 @@ export const MyProfileInfo = ({ initProfileData }) => {
       if (result.success) {
         setIsEditing(false);
         editStatusMsg[STATUS.PROFILE] = "프로필 정보가 성공적으로 업데이트 되었습니다.";
+        setLoggedInUser({ ...loggedInUser, nickname, email });
       } else {
         editStatusMsg[STATUS.PROFILE] = "프로필 정보 업데이트가 실패하였습니다.";
         if (result.errmsg && typeof result.errmsg === "object") {

@@ -13,7 +13,7 @@ const HiddenImageUploader = ({ imgInputRef, handleAvatarChange }) => {
 
 const ProfileAvatar = ({ avatar, nickname, isEditing = false, setEditStatus }) => {
   const { patchProfileInfo } = usePatchProfile();
-  const { setLoggedIn } = useAuth();
+  const { setLoggedInUser } = useAuth();
   const [newAvatar, setNewAvatar] = useState(avatar);
   const imgInputRef = useRef(null);
   const { isWide } = useLayout();
@@ -36,7 +36,7 @@ const ProfileAvatar = ({ avatar, nickname, isEditing = false, setEditStatus }) =
       (updatedProfile) => {
         console.log("업데이트 결과: ", updatedProfile);
         setNewAvatar(updatedProfile.avatar);
-        setLoggedIn(updatedProfile);
+        setLoggedInUser(updatedProfile);
       },
       true
     );

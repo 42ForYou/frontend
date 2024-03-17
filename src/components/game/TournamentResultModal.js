@@ -57,10 +57,10 @@ const TournamentOthersContent = ({ finalSubgame, myFinalRank }) => {
 };
 
 const TournamentResultModal = ({ bracketData }) => {
-  const { loggedIn } = useAuth();
+  const { loggedInUser } = useAuth();
   const { getMyFinalSubgameAndRank } = useGame();
   const { subgame: myFinalSubgame, rank: myFinalRank } = getMyFinalSubgameAndRank(bracketData.subgames);
-  const amIWinner = myFinalRank === 0 && getWinnerOfSubgame(myFinalSubgame).intra_id === loggedIn.intra_id;
+  const amIWinner = myFinalRank === 0 && getWinnerOfSubgame(myFinalSubgame).intra_id === loggedInUser.intra_id;
   const navigate = useNavigate();
 
   return (

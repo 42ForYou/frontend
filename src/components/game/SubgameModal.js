@@ -18,7 +18,7 @@ const VStext = () => {
 };
 
 const SubgameModal = ({ title, playerA, playerB, winner, message }) => {
-  const { loggedIn } = useAuth();
+  const { loggedInUser } = useAuth();
 
   if (!playerA || !playerB) {
     console.log("SubgameModal: playerA or playerB is null");
@@ -33,7 +33,7 @@ const SubgameModal = ({ title, playerA, playerB, winner, message }) => {
             <PlayerInModal
               nickname={playerA.nickname}
               avatar={playerA.avatar}
-              isMine={playerA.nickname === loggedIn?.nickname}
+              isMine={playerA.nickname === loggedInUser?.nickname}
               isWinner={winner ? winner === "A" : undefined}
             />
             {!winner && (
@@ -44,7 +44,7 @@ const SubgameModal = ({ title, playerA, playerB, winner, message }) => {
             <PlayerInModal
               nickname={playerB.nickname}
               avatar={playerB.avatar}
-              isMine={playerB.nickname === loggedIn?.nickname}
+              isMine={playerB.nickname === loggedInUser?.nickname}
               isWinner={winner ? winner === "B" : undefined}
             />
           </div>

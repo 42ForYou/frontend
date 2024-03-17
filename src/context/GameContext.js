@@ -35,7 +35,7 @@ export const GameProvider = ({ children }) => {
     removeEventListenersSocket,
     emitNamespace,
   } = useSocket();
-  const { loggedIn } = useAuth();
+  const { loggedInUser } = useAuth();
 
   // todo: 각 객체별 구조를 알 수 있도록 초기값 설정
   // todo: 추후 "대기방" 객체와 "토너먼트" 객체로 데이터 묶기
@@ -77,7 +77,7 @@ export const GameProvider = ({ children }) => {
   const subgameNamespaceRef = useRef(subgameNamespace);
 
   const getMyFinalSubgameAndRank = (subgames) => {
-    return findFinalSubgameByIntraId(subgames, loggedIn.intra_id);
+    return findFinalSubgameByIntraId(subgames, loggedInUser.intra_id);
   };
 
   // socket events
@@ -125,7 +125,7 @@ export const GameProvider = ({ children }) => {
           !bracketData ||
           (data.rank_ongoing < bracketData.rank_ongoing && isAllPlayersDecided(data.subgames[data.rank_ongoing]))
         ) {
-          const myNewFinalSubgame = getMyFinalSubgameAndRank(data.subgames, loggedIn.intra_id);
+          const myNewFinalSubgame = getMyFinalSubgameAndRank(data.subgames, loggedInUser.intra_id);
           setSubgameStatus((prevState) => ({
             ...prevState,
             progress: "none",
@@ -377,11 +377,11 @@ export const GameProvider = ({ children }) => {
   };
 
   const emitRoomSocket = (event, data) => {
-    emitNamespace(roomNamespace, event, data);
+    emitNamespace(roomNamespaceRef.current, event, data);
   };
 
   const emitSubgameSocket = (event, data) => {
-    emitNamespace(subgameNamespace, event, data);
+    emitNamespace(subgameNamespaceRef.current, event, data);
   };
 
   useEffect(() => {

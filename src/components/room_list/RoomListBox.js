@@ -23,7 +23,7 @@ const RoomListBox = () => {
         ItemComponent={RoomItem}
         filterTypes={filterTypes}
         additionalButton={<CustomButton label={"방 만들기"} color={"dark-blue"} onClick={handleCreateRoomClick} />}
-        emptyMsg={"일치하는 게임 방이 없습니다."}
+        emptyMsg={"방 데이터가 없습니다."}
         itemsPerPage={4}
         itemsPerRow={2}
       />

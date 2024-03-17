@@ -86,6 +86,7 @@ const RoomGameOptionForm = ({ updateRoomData }) => {
 };
 
 const CreateRoomModal = ({ handleClose }) => {
+  const { loggedInUser } = useAuth();
   const navigate = useNavigate();
   const [roomData, setRoomData] = useState({});
   const [roomTitle, setRoomTitle] = useState("");
@@ -96,7 +97,7 @@ const CreateRoomModal = ({ handleClose }) => {
   };
 
   const handleSubmit = () => {
-    const isValidTitle = /^[a-zA-Z0-9\u3131-\uD79D]{1,20}$/.test(roomTitle);
+    const isValidTitle = /^[a-zA-Z0-9\u3131-\uD79D\s]{1,20}$/.test(roomTitle);
     const postRoomData = async () => {
       try {
         const resData = await post(API_ENDPOINTS.ROOM_LIST(), roomData);
@@ -128,6 +129,10 @@ const CreateRoomModal = ({ handleClose }) => {
   useEffect(() => {
     handleUpdateRoomData("room.title", roomTitle);
   }, [roomTitle]);
+
+  useEffect(() => {
+    setRoomTitle(`${loggedInUser.nickname}의 게임 방`);
+  }, []);
 
   return (
     <CustomModal

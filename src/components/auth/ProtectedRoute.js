@@ -6,13 +6,13 @@ import LoadingPage from "../../pages/LoadingPage";
 const ProtectedRoute = () => {
   if (process.env.NO_AUTH_PROTECTION === "true") return <Outlet />;
 
-  const { loggedIn, isLoading, validateTokenInCookies } = useAuth();
+  const { loggedInUser, isLoading, validateTokenInCookies } = useAuth();
 
   useEffect(() => {
-    if (!loggedIn) validateTokenInCookies();
-  }, [loggedIn]);
+    if (!loggedInUser) validateTokenInCookies();
+  }, [loggedInUser]);
 
-  if (isLoading || !loggedIn) {
+  if (isLoading || !loggedInUser) {
     return <LoadingPage />;
   }
 

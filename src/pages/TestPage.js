@@ -6,6 +6,7 @@ import MyProfilePage from "./profile/MyProfilePage";
 import WaitingRoomBox from "../components/waiting_room/WaitingRoomBox";
 import BracketPage from "./game/BracketPage";
 import Bracket from "../components/game/Bracket";
+import PongScene from "../components/game/PongScene";
 
 const dummyHistoryData = [
   {
@@ -463,6 +464,7 @@ const dummyDualPlayersData = [
 const TestPage = () => {
   return (
     <>
+      <PongScene />
       {/* <h1>TestPage</h1> */}
       {/* <TournamentResultModal bracketData={middleTournamentBracketData} /> */}
       {/* <TournamentResultModal bracketData={winTournamentBracketData} /> */}

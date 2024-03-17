@@ -10,6 +10,9 @@ const BarChart = ({ data }) => {
     const chartLabels = data.map((item) => item.label);
     const backgroundColors = data.map((item) => item.color);
 
+    // 전체 데이터 합 계산
+    const total = chartData.reduce((acc, cur) => acc + cur, 0);
+
     const barChart = new Chart(ctx, {
       type: "bar",
       data: {
@@ -21,7 +24,7 @@ const BarChart = ({ data }) => {
             backgroundColor: backgroundColors,
             borderColor: backgroundColors.map((color) => `${color}99`),
             borderWidth: 1,
-            barThickness: 20, // Adjust bar thickness here if needed
+            barThickness: 20,
           },
         ],
       },
@@ -36,7 +39,9 @@ const BarChart = ({ data }) => {
               label: function (context) {
                 let label = "";
                 if (context.parsed.y !== null) {
-                  label += `${context.raw} (${(context.parsed.y * 100).toFixed(2)}%)`;
+                  // 각 데이터 포인트에 대한 퍼센테이지 계산
+                  const percentage = ((context.parsed.y / total) * 100).toFixed(2);
+                  label += `${context.raw} (${percentage}%)`;
                 }
                 return label;
               },
@@ -48,9 +53,11 @@ const BarChart = ({ data }) => {
             beginAtZero: true,
             ticks: {
               callback: function (value) {
-                return (value * 100).toFixed(0) + "%";
+                // Y축의 퍼센테이지도 전체 합을 기준으로 계산
+                const percentage = ((value / total) * 100).toFixed(0);
+                return `${percentage}%`;
               },
-              stepSize: 0.2, // Here we set the step size to 20%
+              stepSize: 0.2,
             },
           },
         },
