@@ -96,8 +96,13 @@ export const GameProvider = ({ children }) => {
     },
     {
       event: "destroyed",
-      handler: () => {
-        if (myPlayerData.host === false) alert("호스트가 나가 방이 사라졌습니다.");
+      handler: (data) => {
+        console.log("destroyed 이벤트 수신: ", data);
+        if (data.destroyed_because === "host_left") alert("방장이 방을 나갔습니다.");
+        else if (data.destroyed_because === "host_closed") alert("방장이 방을 닫았습니다.");
+        else if (data.destroyed_because === "connection_lost") alert("서버와의 연결이 끊겼습니다.");
+        else if (data.destroyed_because === "internal_error") alert("서버 내부 오류로 방이 사라졌습니다.");
+        else alert("게임 방이 사라졌습니다.");
         navigate("/game/list");
       },
     },
