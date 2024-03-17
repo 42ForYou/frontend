@@ -39,7 +39,7 @@ const TournamentWinnerContent = ({ finalSubgame }) => {
   );
 };
 
-const TournamentOthersContent = ({ finalSubgame, myFinalRank }) => {
+const TournamentOthersContent = ({ finalSubgame, myFinalRank, isTournament }) => {
   const opponent = getWinnerOfSubgame(finalSubgame);
 
   return (
@@ -51,7 +51,7 @@ const TournamentOthersContent = ({ finalSubgame, myFinalRank }) => {
         <br /> by the Black Hole...
       </h4>
       <p className="text-center mt-3 ">{opponent.nickname}에게 패배하여 블랙홀에 빨려 들어갔습니다.</p>
-      <p className="text-end fst-italic">나의 최종 진출 라운드: {rankToString(myFinalRank)}</p>
+      {isTournament && <p className="text-end fst-italic">나의 최종 진출 라운드: {rankToString(myFinalRank)}</p>}
     </>
   );
 };
@@ -72,7 +72,11 @@ const TournamentResultModal = ({ bracketData }) => {
         {amIWinner ? (
           <TournamentWinnerContent finalSubgame={myFinalSubgame} />
         ) : (
-          <TournamentOthersContent finalSubgame={myFinalSubgame} myFinalRank={myFinalRank} />
+          <TournamentOthersContent
+            finalSubgame={myFinalSubgame}
+            myFinalRank={myFinalRank}
+            isTournament={bracketData.is_tournament}
+          />
         )}
       </CustomModal>
     </div>
