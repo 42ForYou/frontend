@@ -377,11 +377,11 @@ export const GameProvider = ({ children }) => {
   };
 
   const emitRoomSocket = (event, data) => {
-    emitNamespace(roomNamespace, event, data);
+    emitNamespace(roomNamespaceRef.current, event, data);
   };
 
   const emitSubgameSocket = (event, data) => {
-    emitNamespace(subgameNamespace, event, data);
+    emitNamespace(subgameNamespaceRef.current, event, data);
   };
 
   useEffect(() => {
