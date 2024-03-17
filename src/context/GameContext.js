@@ -63,6 +63,7 @@ export const GameProvider = ({ children }) => {
     winner: "",
     score_a: 0,
     score_b: 0,
+    sudden_death: false,
   });
 
   const ballTrajectory = useRef(null);
@@ -249,6 +250,13 @@ export const GameProvider = ({ children }) => {
         } else if (data.player === "B") {
           paddleBTrajectory.current = data;
         }
+      },
+    },
+    {
+      event: "time_up",
+      handler: (data) => {
+        console.log("time_up 이벤트 수신: ", data);
+        setSubgameStatus((prevState) => ({ ...prevState, sudden_death: true }));
       },
     },
   ];
