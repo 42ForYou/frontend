@@ -48,9 +48,9 @@ const PongScene = () => {
     let newY = paddleTrajectory.y + paddleTrajectory.dy * elapsedTime;
 
     if (paddleTrajectory.dy > 0) {
-      newY = Math.min(newY, tournamentConfig.y_max);
+      newY = Math.min(newY, tournamentConfig.y_max - tournamentConfig.len_paddle / 2);
     } else {
-      newY = Math.max(newY, tournamentConfig.y_min);
+      newY = Math.max(newY, tournamentConfig.y_min + tournamentConfig.len_paddle / 2);
     }
 
     if (paddle.position.y !== newY) {
