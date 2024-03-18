@@ -75,14 +75,16 @@ const PongScene = () => {
 
     // 카메라 생성
     const newCamera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    newCamera.position.set(0, -100, 700);
+    newCamera.position.set(0, -200, 500);
     newCamera.up.set(0, 0, 1); // 카메라의 업벡터를 z축으로 설정
     newCamera.lookAt(new THREE.Vector3(0, 0, 0));
     setCamera(newCamera);
     newRoot.add(newCamera);
 
-    const newRenderer = new THREE.WebGLRenderer({ antialias: true });
-    newRenderer.setClearColor(0xbbffff);
+    const newRenderer = new THREE.WebGLRenderer({
+      antialias: true,
+      alpha: true,
+    });
     newRenderer.setSize(window.innerWidth, window.innerHeight);
     mountRef.current.appendChild(newRenderer.domElement);
     setRenderer(newRenderer);
@@ -106,50 +108,69 @@ const PongScene = () => {
     };
   }, [tournamentConfig]);
 
-  // 오브젝트 추가 (필드, 라이트, 패들, 공)
   useEffect(() => {
     if (root && renderer && camera && tournamentConfig) {
       const { x_max, x_min, y_max, y_min, x_init_ball, y_init_ball, y_init_paddle, len_paddle } = tournamentConfig;
 
       // 라이트
-      const light = new THREE.PointLight(0xffffff, 1, 100);
-      light.position.set(0, 0, 0);
-      root.add(light);
+      const ambientLight = new THREE.AmbientLight(0x404040); // 약한 환경광
+      const pointLight = new THREE.PointLight(0xff0000, 1, 1000); // 밝은 점광원
+      pointLight.position.set(10, 10, 10);
+      root.add(ambientLight);
+      root.add(pointLight);
+
+      const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+      // directionalLight.position.set(0, 0, 0);
+      scene.add(directionalLight);
+
+      const pointLightHelper = new THREE.PointLightHelper(pointLight);
+      scene.add(pointLightHelper);
+
+      // 프론트 임의 변수값
+      const fieldMargin = 100; // 필드의 가장자리에 있는 여유 공간 (프론트엔드에서만 존재)
+      const paddleWidth = fieldMargin / 3;
 
       // 필드
+      // field: 필드의 가장자리에 여유 공간을 두지 않은 버전 (디버깅용)
+      // marginedField: 필드의 가장자리에 여유 공간을 둔 버전
       const fieldWidth = x_max - x_min;
       const fieldHeight = y_max - y_min;
-      const fieldDepth = 10;
-      const fieldMargin = 100; // 필드의 가장자리에 있는 여유 공간 (프론트엔드에서만 존재)
-      const fieldGeometry = new THREE.BoxGeometry(fieldWidth, fieldHeight, fieldDepth);
+      const fieldDepth = 100;
+      // const fieldGeometry = new THREE.BoxGeometry(fieldWidth, fieldHeight, fieldDepth);
+      // const fieldMaterial = new THREE.MeshPhongMaterial({
+      //   color: 0x00ff00,
+      //   emissive: 0x072534,
+      //   specular: 0x555555,
+      //   shininess: 30,
+      // });
+      // const field = new THREE.Mesh(fieldGeometry, fieldMaterial);
+      // field.position.set(0, 0, -fieldDepth); // 필드의 바닥이 z=0이 되도록 설정
+      // root.add(field);
       const marginedFieldGeometry = new THREE.BoxGeometry(
-        fieldWidth + 2 * fieldMargin,
-        fieldHeight + 2 * fieldMargin,
+        fieldWidth + (fieldMargin + paddleWidth) * 2,
+        fieldHeight,
         fieldDepth
       );
-      const fieldMaterial = new THREE.MeshPhysicalMaterial({
-        transmission: 1,
-        thickness: 5,
-        color: 0x00ff00,
+      const marginedFieldMaterial = new THREE.MeshPhongMaterial({
+        color: 0x00ffff,
+        emissive: 0x072534,
+        specular: 0x555555,
+        shininess: 30,
       });
-      const marginedFieldMaterial = new THREE.MeshPhysicalMaterial({
-        transmission: 1,
-        thickness: 5,
-        color: 0xffff00,
-      });
-      const field = new THREE.Mesh(fieldGeometry, fieldMaterial);
       const marginedField = new THREE.Mesh(marginedFieldGeometry, marginedFieldMaterial);
-      field.position.set(0, 0, -fieldDepth / 2); // 필드의 바닥이 z=0이 되도록 설정
       marginedField.position.set(0, 0, -fieldDepth); // 필드의 바닥이 z=0이 되도록 설정
-      root.add(field);
       root.add(marginedField);
 
       // 패들
-      const paddleWidth = fieldMargin / 3;
       const paddleHeight = len_paddle;
-      const paddleDepth = 10;
+      const paddleDepth = 20;
       const paddleGeometry = new THREE.BoxGeometry(paddleWidth, paddleHeight, paddleDepth);
-      const paddleMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+      const paddleMaterial = new THREE.MeshPhongMaterial({
+        color: 0xffffff,
+        emissive: 0x777777,
+        specular: 0x555555,
+        shininess: 30,
+      });
       const paddleA = new THREE.Mesh(paddleGeometry, paddleMaterial);
       const paddleB = new THREE.Mesh(paddleGeometry, paddleMaterial);
       paddleA.position.set(x_min - paddleWidth / 2, y_init_paddle, paddleDepth / 2);
@@ -160,9 +181,14 @@ const PongScene = () => {
       paddleBRef.current = paddleB;
 
       // 공
-      const ballRadius = 15;
+      const ballRadius = 20;
       const ballGeometry = new THREE.SphereGeometry(ballRadius, 32, 32);
-      const ballMaterial = new THREE.MeshBasicMaterial({ color: 0x0000ff });
+      const ballMaterial = new THREE.MeshPhongMaterial({
+        color: 0xffffff,
+        emissive: 0x072534,
+        specular: 0x555555,
+        shininess: 30,
+      });
       const ball = new THREE.Mesh(ballGeometry, ballMaterial);
       ball.position.set(x_init_ball, y_init_ball, ballRadius);
       root.add(ball);
@@ -172,7 +198,9 @@ const PongScene = () => {
 
   // 애니메이션
   useEffect(() => {
-    if (scene && renderer && camera && ballRef.current && ballTrajectory.current) {
+    // for test
+    // if (scene && renderer && camera && ballRef.current && ballTrajectory.current) {
+    if (scene && renderer && camera) {
       const animate = () => {
         updateBallPosition(ballTrajectory.current);
         updatePaddlePosition(paddleATrajectory.current, paddleARef);
