@@ -129,6 +129,7 @@ const PongScene = () => {
       // 프론트 임의 변수값
       const fieldMargin = 100; // 필드의 가장자리에 있는 여유 공간 (프론트엔드에서만 존재)
       const paddleWidth = fieldMargin / 3;
+      const ballRadius = 20;
 
       // 필드
       // field: 필드의 가장자리에 여유 공간을 두지 않은 버전 (디버깅용)
@@ -148,7 +149,7 @@ const PongScene = () => {
       // root.add(field);
       const marginedFieldGeometry = new THREE.BoxGeometry(
         fieldWidth + (fieldMargin + paddleWidth) * 2,
-        fieldHeight,
+        fieldHeight + ballRadius * 4,
         fieldDepth
       );
       const marginedFieldMaterial = new THREE.MeshPhongMaterial({
@@ -173,15 +174,14 @@ const PongScene = () => {
       });
       const paddleA = new THREE.Mesh(paddleGeometry, paddleMaterial);
       const paddleB = new THREE.Mesh(paddleGeometry, paddleMaterial);
-      paddleA.position.set(x_min - paddleWidth / 2, y_init_paddle, paddleDepth / 2);
-      paddleB.position.set(x_max + paddleWidth / 2, y_init_paddle, paddleDepth / 2);
+      paddleA.position.set(x_min - paddleWidth / 2 - ballRadius, y_init_paddle, paddleDepth / 2);
+      paddleB.position.set(x_max + paddleWidth / 2 + ballRadius, y_init_paddle, paddleDepth / 2);
       root.add(paddleA);
       root.add(paddleB);
       paddleARef.current = paddleA;
       paddleBRef.current = paddleB;
 
       // 공
-      const ballRadius = 20;
       const ballGeometry = new THREE.SphereGeometry(ballRadius, 32, 32);
       const ballMaterial = new THREE.MeshPhongMaterial({
         color: 0xffffff,
