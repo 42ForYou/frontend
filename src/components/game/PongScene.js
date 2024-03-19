@@ -149,7 +149,7 @@ const PongScene = () => {
       // root.add(field);
       const marginedFieldGeometry = new THREE.BoxGeometry(
         fieldWidth + (fieldMargin + paddleWidth) * 2,
-        fieldHeight + ballRadius * 4,
+        fieldHeight + ballRadius * 2,
         fieldDepth
       );
       const marginedFieldMaterial = new THREE.MeshPhongMaterial({
