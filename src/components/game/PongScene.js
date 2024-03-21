@@ -162,6 +162,61 @@ const PongScene = () => {
       marginedField.position.set(0, 0, -fieldDepth); // 필드의 바닥이 z=0이 되도록 설정
       root.add(marginedField);
 
+      // 벽
+      const wallGeometry = new THREE.BoxGeometry(fieldWidth + (fieldMargin + paddleWidth) * 2, wallDepth, wallHeight);
+      const wallMaterial = new THREE.MeshPhongMaterial({
+        color: 0x00ffff,
+        emissive: 0x072534,
+        specular: 0x555555,
+        shininess: 30,
+      });
+      const wallTop = new THREE.Mesh(wallGeometry, wallMaterial);
+      const wallBottom = new THREE.Mesh(wallGeometry, wallMaterial);
+      wallTop.position.set(0, y_max + ballRadius + wallDepth, -wallHeight / 2);
+      wallBottom.position.set(0, y_min - ballRadius - wallDepth, -wallHeight / 2);
+      root.add(wallTop);
+      root.add(wallBottom);
+
+      // 점선
+      const dashLineXPositionLeft = x_min;
+      const dashLineXPositionRight = x_max;
+
+      const startPointLeft = new THREE.Vector3(dashLineXPositionLeft, y_min, 0);
+      const endPointLeft = new THREE.Vector3(dashLineXPositionLeft, y_max, 0);
+      const startPointRight = new THREE.Vector3(dashLineXPositionRight, y_min, 0);
+      const endPointRight = new THREE.Vector3(dashLineXPositionRight, y_max, 0);
+      const startPointCenter = new THREE.Vector3(0, y_min, 0);
+      const endPointCenter = new THREE.Vector3(0, y_max, 0);
+
+      const dashLineGeometryLeft = new THREE.BufferGeometry().setFromPoints([startPointLeft, endPointLeft]);
+      const dashLineGeometryRight = new THREE.BufferGeometry().setFromPoints([startPointRight, endPointRight]);
+      const dashLineGeometryCenter = new THREE.BufferGeometry().setFromPoints([startPointCenter, endPointCenter]);
+
+      const dashLineMaterial = new THREE.LineBasicMaterial({
+        color: 0xffffff,
+        linewidth: 1,
+        linecap: "round", //ignored by WebGLRenderer
+        linejoin: "round", //ignored by WebGLRenderer
+      });
+
+      // const dashLineMaterial = new THREE.LineDashedMaterial({
+      //   color: 0xffffff, // 색상: 흰색
+      //   linewidth: 3, // 선의 너비
+      //   scale: 1, // 점선의 스케일
+      //   dashSize: 5, // 점선의 대시 크기
+      //   gapSize: 10, // 점선 사이의 간격
+      // });
+
+      const dashLineLeft = new THREE.Line(dashLineGeometryLeft, dashLineMaterial);
+      const dashLineRight = new THREE.Line(dashLineGeometryRight, dashLineMaterial);
+      const dashLineCenter = new THREE.Line(dashLineGeometryCenter, dashLineMaterial);
+      dashLineLeft.computeLineDistances();
+      dashLineCenter.computeLineDistances();
+      dashLineRight.computeLineDistances();
+      // root.add(dashLineLeft);
+      root.add(dashLineCenter);
+      // root.add(dashLineRight);
+
       // 패들
       const paddleHeight = len_paddle;
       const paddleDepth = 20;
