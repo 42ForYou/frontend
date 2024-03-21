@@ -252,18 +252,23 @@ const PongScene = () => {
     // if (scene && renderer && camera && ballRef.current && ballTrajectory.current) {
     if (scene && renderer && camera) {
       let prevFrameRenderTime = (Date.now() / 1000).toFixed(3);
+      let animationId = null;
       const animate = () => {
         updateBallPosition(ballTrajectory.current);
         updatePaddlePosition(paddleATrajectory.current, paddleARef, prevFrameRenderTime);
         updatePaddlePosition(paddleBTrajectory.current, paddleBRef, prevFrameRenderTime);
         renderer.render(scene, camera);
-        requestAnimationFrame(animate);
         prevFrameRenderTime = (Date.now() / 1000).toFixed(3);
+        animationId = requestAnimationFrame(animate);
       };
 
-      requestAnimationFrame(animate);
+      animationId = requestAnimationFrame(animate);
+
+      return () => {
+        cancelAnimationFrame(animationId);
+      };
     }
-  }, [ballTrajectoryVersion, scene, renderer, camera]);
+  }, [ballTrajectoryVersion, paddleATrajectoryVersion, paddleBTrajectoryVersion, scene, renderer, camera]);
 
   useEffect(() => {
     currentSegmentIndexRef.current = 0;
