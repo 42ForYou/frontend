@@ -160,8 +160,8 @@ const PongScene = () => {
       });
       const wallTop = new THREE.Mesh(wallGeometry, wallMaterial);
       const wallBottom = new THREE.Mesh(wallGeometry, wallMaterial);
-      wallTop.position.set(0, y_max + ballRadius + wallDepth, -wallHeight / 2);
-      wallBottom.position.set(0, y_min - ballRadius - wallDepth, -wallHeight / 2);
+      wallTop.position.set(0, y_max + (ballRadius + wallDepth / 2), -wallHeight / 2);
+      wallBottom.position.set(0, y_min - (ballRadius + wallDepth / 2), -wallHeight / 2);
       root.add(wallTop);
       root.add(wallBottom);
 
