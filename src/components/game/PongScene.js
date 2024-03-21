@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useState } from "react";
 import * as THREE from "three";
 import { useGame } from "../../context/GameContext";
 
+// todo: 1. 닉네임, 패들에 색깔 부여 2. 마우스 움직이면 카메라 각도 조정
 const PongScene = () => {
   const { tournamentConfig, ballTrajectory, paddleATrajectory, paddleBTrajectory, ballTrajectoryVersion } = useGame();
   const mountRef = useRef(null);
