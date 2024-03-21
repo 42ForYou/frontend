@@ -4,7 +4,15 @@ import { useGame } from "../../context/GameContext";
 
 // todo: 1. 닉네임, 패들에 색깔 부여 2. 마우스 움직이면 카메라 각도 조정
 const PongScene = () => {
-  const { tournamentConfig, ballTrajectory, paddleATrajectory, paddleBTrajectory, ballTrajectoryVersion } = useGame();
+  const {
+    tournamentConfig,
+    ballTrajectory,
+    paddleATrajectory,
+    paddleBTrajectory,
+    ballTrajectoryVersion,
+    paddleATrajectoryVersion,
+    paddleBTrajectoryVersion,
+  } = useGame();
   const mountRef = useRef(null);
   const ballRef = useRef();
   const paddleARef = useRef();
@@ -40,14 +48,18 @@ const PongScene = () => {
     ball.position.set(newX, newY, ball.position.z);
   };
 
-  const updatePaddlePosition = (paddleTrajectory, paddleRef) => {
+  /*
+	newY = 현재 y좌표값 + (흐른 시간 * 패들 속도)
+	흐른 시간 = (현재 시간 - 직전 프레임 렌더 시간)
+	*/
+  const updatePaddlePosition = (paddleTrajectory, paddleRef, prevFrameRenderTime) => {
     if (!paddleTrajectory || !paddleRef.current) return;
 
     const paddle = paddleRef.current;
 
     const currentTime = (Date.now() / 1000).toFixed(3);
-    const elapsedTime = currentTime - paddleTrajectory.t_event;
-    let newY = paddleTrajectory.y + paddleTrajectory.dy * elapsedTime;
+    const elapsedTime = currentTime - prevFrameRenderTime;
+    let newY = paddle.position.y + paddleTrajectory.dy * elapsedTime;
 
     if (paddleTrajectory.dy > 0) {
       newY = Math.min(newY, tournamentConfig.y_max - tournamentConfig.len_paddle / 2);
@@ -239,12 +251,14 @@ const PongScene = () => {
     // for test
     // if (scene && renderer && camera && ballRef.current && ballTrajectory.current) {
     if (scene && renderer && camera) {
+      let prevFrameRenderTime = (Date.now() / 1000).toFixed(3);
       const animate = () => {
         updateBallPosition(ballTrajectory.current);
-        updatePaddlePosition(paddleATrajectory.current, paddleARef);
-        updatePaddlePosition(paddleBTrajectory.current, paddleBRef);
+        updatePaddlePosition(paddleATrajectory.current, paddleARef, prevFrameRenderTime);
+        updatePaddlePosition(paddleBTrajectory.current, paddleBRef, prevFrameRenderTime);
         renderer.render(scene, camera);
         requestAnimationFrame(animate);
+        prevFrameRenderTime = (Date.now() / 1000).toFixed(3);
       };
 
       requestAnimationFrame(animate);
@@ -254,6 +268,35 @@ const PongScene = () => {
   useEffect(() => {
     currentSegmentIndexRef.current = 0;
   }, [ballTrajectoryVersion]);
+
+  /*
+	만약 지금 프레임이 첫 프레임이고, 오차값이 POS_MAX_ERROR를 넘으면 현재 y좌표값을 데이터의 y좌표값으로 수정한다.
+	오차 = |현재 y좌표값 - 데이터의 y좌표값|
+	(튕길 거면 한번에 튕기자)
+	*/
+  // todo: 추후 POS_MAX_ERROR값은 서버에서 받아오도록 수정
+  const POS_MAX_ERROR = 10;
+  // 패들 A의 위치 오차값을 확인하고, 오차값이 POS_MAX_ERROR를 넘으면 패들의 위치를 수정한다.
+  useEffect(() => {
+    if (paddleARef && paddleARef.current && paddleATrajectory) {
+      const paddle = paddleARef.current;
+      const posErrorValue = paddle.position.y - paddleATrajectory.current.y;
+      if (posErrorValue > POS_MAX_ERROR) {
+        paddle.position.y = paddleATrajectory.current.y;
+      }
+    }
+  }, [paddleATrajectoryVersion]);
+
+  // 패들 B의 위치 오차값을 확인하고, 오차값이 POS_MAX_ERROR를 넘으면 패들의 위치를 수정한다.
+  useEffect(() => {
+    if (paddleBRef && paddleBRef.current && paddleBTrajectory) {
+      const paddle = paddleBRef.current;
+      const posErrorValue = paddle.position.y - paddleBTrajectory.current.y;
+      if (posErrorValue > POS_MAX_ERROR) {
+        paddle.position.y = paddleBTrajectory.current.y;
+      }
+    }
+  }, [paddleBTrajectoryVersion]);
 
   return <div ref={mountRef} style={{ width: "100%", height: "100%", overflow: "hidden" }} />;
 };
