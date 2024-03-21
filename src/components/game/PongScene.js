@@ -108,9 +108,17 @@ const PongScene = () => {
     };
   }, [tournamentConfig]);
 
+  // 라이트, 필드, 패들, 공 생성
   useEffect(() => {
     if (root && renderer && camera && tournamentConfig) {
       const { x_max, x_min, y_max, y_min, x_init_ball, y_init_ball, y_init_paddle, len_paddle } = tournamentConfig;
+
+      // 프론트 임의 변수값
+      const fieldMargin = 100; // 필드의 가장자리에 있는 여유 공간
+      const paddleWidth = fieldMargin / 3; // 패들의 너비
+      const ballRadius = 20; // 공의 반지름
+      const wallHeight = 100; // 벽의 높이
+      const wallDepth = 30; // 벽의 두께
 
       // 라이트
       const ambientLight = new THREE.AmbientLight(0x440088); // 약한 환경광
@@ -127,16 +135,6 @@ const PongScene = () => {
       const fieldWidth = x_max - x_min;
       const fieldHeight = y_max - y_min;
       const fieldDepth = 100;
-      // const fieldGeometry = new THREE.BoxGeometry(fieldWidth, fieldHeight, fieldDepth);
-      // const fieldMaterial = new THREE.MeshPhongMaterial({
-      //   color: 0x00ff00,
-      //   emissive: 0x072534,
-      //   specular: 0x555555,
-      //   shininess: 30,
-      // });
-      // const field = new THREE.Mesh(fieldGeometry, fieldMaterial);
-      // field.position.set(0, 0, -fieldDepth); // 필드의 바닥이 z=0이 되도록 설정
-      // root.add(field);
       const marginedFieldGeometry = new THREE.BoxGeometry(
         fieldWidth + (fieldMargin + paddleWidth) * 2,
         fieldHeight + ballRadius * 2,
