@@ -27,10 +27,10 @@ const PongStatus = () => {
   return (
     <div className="PongStatus">
       <div style={{ position: "absolute", top: "2%", left: "10%", transform: "translate(-50%, 0%)" }}>
-        <PongPlayer player={subgameStatus.player_a} />
+        {subgameStatus.player_a && <PongPlayer player={subgameStatus.player_a} />}
       </div>
       <div style={{ position: "absolute", top: "2%", left: "90%", transform: "translate(-50%, 0%)" }}>
-        <PongPlayer player={subgameStatus.player_b} />
+        {subgameStatus.player_b && <PongPlayer player={subgameStatus.player_b} />}
       </div>
       <span
         className="text-center"
