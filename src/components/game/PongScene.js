@@ -280,7 +280,7 @@ const PongScene = () => {
   useEffect(() => {
     if (paddleARef && paddleARef.current && paddleATrajectory) {
       const paddle = paddleARef.current;
-      const posErrorValue = paddle.position.y - paddleATrajectory.current.y;
+      const posErrorValue = Math.abs(paddle.position.y - paddleATrajectory.current.y);
       if (posErrorValue > POS_MAX_ERROR) {
         paddle.position.y = paddleATrajectory.current.y;
       }
