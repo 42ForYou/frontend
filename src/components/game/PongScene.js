@@ -184,9 +184,9 @@ const PongScene = () => {
       // 공
       const ballGeometry = new THREE.SphereGeometry(ballRadius, 32, 32);
       const ballMaterial = new THREE.MeshPhongMaterial({
-        color: 0xffffff,
-        emissive: 0x072534,
-        specular: 0x555555,
+        color: 0xffff00,
+        emissive: 0x4f4f4f,
+        specular: 0x66bdff,
         shininess: 30,
       });
       const ball = new THREE.Mesh(ballGeometry, ballMaterial);
