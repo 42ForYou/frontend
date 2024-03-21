@@ -60,7 +60,10 @@ const PongScene = () => {
     const currentTime = (Date.now() / 1000).toFixed(3);
     const elapsedTime = currentTime - paddleTrajectory.t_start;
     let newY = paddleTrajectory.y + paddleTrajectory.dy * elapsedTime;
-    console.log(paddleTrajectory.y, paddleTrajectory.dy, elapsedTime, newY);
+
+    console.log(paddleTrajectory);
+    console.log("elapsedTime: ", elapsedTime);
+    console.log("newY: ", newY);
 
     if (paddleTrajectory.dy > 0) {
       newY = Math.min(newY, tournamentConfig.y_max - tournamentConfig.len_paddle / 2);
