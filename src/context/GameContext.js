@@ -281,6 +281,7 @@ export const GameProvider = ({ children }) => {
       event: "update_track_paddle",
       handler: (data) => {
         // console.log("update_track_paddle 이벤트 수신: ", data);
+        data.t_start = (Date.now() / 1000).toFixed(3);
         if (data.player === "A") {
           paddleATrajectory.current = data;
           setPaddleATrajectoryVersion((version) => version + 1);
