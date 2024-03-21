@@ -6,6 +6,49 @@ import { useAuth } from "./AuthContext";
 import { del } from "../utils/apiBase";
 import { API_ENDPOINTS } from "../utils/apiEndpoints";
 
+const dummySubgameStatus = {
+  progress: "playing",
+  time_start: 1710723029.423834,
+  time_before_start: 0,
+  time_left: 19,
+  player_a: {
+    intra_id: "intra_1",
+    nickname: "nick_intra_1",
+    avatar: "",
+  },
+  player_b: {
+    intra_id: "yeonhkim",
+    nickname: "yeonhkim",
+    avatar: "",
+  },
+  winner: null,
+  score_a: 0,
+  score_b: 1,
+  sudden_death: false,
+};
+
+const dummyTournamentConfig = {
+  match_point: 3,
+  player_a_init_point: 0,
+  player_b_init_point: 0,
+  time_limit: 30,
+  x_max: 400,
+  y_max: 300,
+  x_min: -400,
+  y_min: -300,
+  x_init_ball: 0,
+  y_init_ball: 0,
+  y_init_paddle: 0,
+  v_paddle: 300,
+  len_paddle: 300,
+  u_paddle: 0.1,
+  v_ball: 300,
+  delay_rank_start: 5,
+  delay_subgame_start: 5,
+  delay_scoring: 3,
+  delay_rank_end: 3,
+};
+
 const Game = React.createContext();
 
 // 한 "강" 내의 서브게임 목록에서 자신의 서브게임 인덱스를 찾음
@@ -48,23 +91,12 @@ export const GameProvider = ({ children }) => {
   const [myPlayerData, setMyPlayerData] = useState({ id: null, host: false });
 
   // tournament data
-  const [tournamentConfig, setTournamentConfig] = useState(null);
+  const [tournamentConfig, setTournamentConfig] = useState(dummyTournamentConfig);
   const [bracketData, setBracketData] = useState(null);
 
   // todo: 추후 subgame context 로 분리
   // subgame data
-  const [subgameStatus, setSubgameStatus] = useState({
-    progress: "none", // "none", "waiting", "playing", "ended"
-    time_start: null,
-    time_before_start: 0,
-    time_left: 0,
-    player_a: null,
-    player_b: null,
-    winner: "",
-    score_a: 0,
-    score_b: 0,
-    sudden_death: false,
-  });
+  const [subgameStatus, setSubgameStatus] = useState(dummySubgameStatus);
 
   const ballTrajectory = useRef(null);
   const paddleATrajectory = useRef(null);
@@ -408,6 +440,7 @@ export const GameProvider = ({ children }) => {
   // 서브게임 시작 전 초기 config 설정
   useEffect(() => {
     if (tournamentConfig && bracketData) {
+      console.log(tournamentConfig);
       setSubgameStatus((prevState) => ({
         ...prevState,
         time_left: tournamentConfig?.time_limit,
