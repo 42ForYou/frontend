@@ -22,7 +22,7 @@ const PongScene = () => {
     if (currentSegmentIndex >= ballTrajectory.segments.length) return;
     const segment = ballTrajectory.segments[currentSegmentIndex];
 
-    const currentTime = Date.now() / 1000;
+    const currentTime = (Date.now() / 1000).toFixed(3);
     const eventElapsedTime = currentTime - ballTrajectory.t_event;
     const segmentElapsedTime = eventElapsedTime - segment.t_start;
 
@@ -44,7 +44,8 @@ const PongScene = () => {
 
     const paddle = paddleRef.current;
 
-    const elapsedTime = Date.now() / 1000 - paddleTrajectory.t_event;
+    const currentTime = (Date.now() / 1000).toFixed(3);
+    const elapsedTime = currentTime - paddleTrajectory.t_event;
     let newY = paddleTrajectory.y + paddleTrajectory.dy * elapsedTime;
 
     if (paddleTrajectory.dy > 0) {
