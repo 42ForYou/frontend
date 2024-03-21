@@ -96,7 +96,17 @@ export const GameProvider = ({ children }) => {
 
   // todo: 추후 subgame context 로 분리
   // subgame data
-  const [subgameStatus, setSubgameStatus] = useState(null);
+  const [subgameStatus, setSubgameStatus] = useState({
+    progress: "none", // "none", "waiting", "playing", "ended"
+    time_start: null,
+    time_before_start: 0,
+    time_left: 0,
+    player_a: null,
+    player_b: null,
+    winner: "",
+    score_a: 0,
+    score_b: 0,
+  });
 
   const ballTrajectory = useRef(null);
   const paddleATrajectory = useRef(null);
