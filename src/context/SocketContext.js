@@ -36,7 +36,7 @@ export const SocketProvider = ({ children }) => {
       });
 
       newSocket.emitWithTime = (event, data) => {
-        const timestamp = Math.floor(Date.now() / 1000);
+        const timestamp = (Date.now() / 1000).toFixed(3);
         const dataWithTimestamp = { ...data, t_event: timestamp };
         newSocket.emit(event, dataWithTimestamp);
       };
