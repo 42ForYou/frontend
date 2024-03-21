@@ -180,20 +180,13 @@ const PongScene = () => {
       const dashLineGeometryRight = new THREE.BufferGeometry().setFromPoints([startPointRight, endPointRight]);
       const dashLineGeometryCenter = new THREE.BufferGeometry().setFromPoints([startPointCenter, endPointCenter]);
 
-      const dashLineMaterial = new THREE.LineBasicMaterial({
-        color: 0xffffff,
-        linewidth: 1,
-        linecap: "round", //ignored by WebGLRenderer
-        linejoin: "round", //ignored by WebGLRenderer
+      const dashLineMaterial = new THREE.LineDashedMaterial({
+        color: 0xffffff, // 색상: 흰색
+        linewidth: 3, // 선의 너비
+        scale: 1, // 점선의 스케일
+        dashSize: 5, // 점선의 대시 크기
+        gapSize: 10, // 점선 사이의 간격
       });
-
-      // const dashLineMaterial = new THREE.LineDashedMaterial({
-      //   color: 0xffffff, // 색상: 흰색
-      //   linewidth: 3, // 선의 너비
-      //   scale: 1, // 점선의 스케일
-      //   dashSize: 5, // 점선의 대시 크기
-      //   gapSize: 10, // 점선 사이의 간격
-      // });
 
       const dashLineLeft = new THREE.Line(dashLineGeometryLeft, dashLineMaterial);
       const dashLineRight = new THREE.Line(dashLineGeometryRight, dashLineMaterial);
