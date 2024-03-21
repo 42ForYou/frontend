@@ -222,9 +222,9 @@ const PongScene = () => {
       const paddleDepth = 20;
       const paddleGeometry = new THREE.BoxGeometry(paddleWidth, paddleHeight, paddleDepth);
       const paddleMaterial = new THREE.MeshPhongMaterial({
-        color: 0xffffff,
-        emissive: 0x777777,
-        specular: 0x555555,
+        color: 0xff0000,
+        emissive: 0x4f4f4f,
+        specular: 0x66bdff,
         shininess: 30,
       });
       const paddleA = new THREE.Mesh(paddleGeometry, paddleMaterial);
