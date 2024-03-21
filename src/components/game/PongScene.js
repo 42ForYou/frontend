@@ -113,26 +113,16 @@ const PongScene = () => {
       const { x_max, x_min, y_max, y_min, x_init_ball, y_init_ball, y_init_paddle, len_paddle } = tournamentConfig;
 
       // 라이트
-      const ambientLight = new THREE.AmbientLight(0x404040); // 약한 환경광
-      const pointLight = new THREE.PointLight(0xff0000, 1, 1000); // 밝은 점광원
-      pointLight.position.set(10, 10, 10);
+      const ambientLight = new THREE.AmbientLight(0x440088); // 약한 환경광
+      const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5); // 밝은 방향광
+      const pointLight = new THREE.PointLight(0xffffff, 1); // 밝은 점광원
+      pointLight.position.set(0, 0, 100);
+      directionalLight.position.set(0, 0, 100);
       root.add(ambientLight);
       root.add(pointLight);
-
-      const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
-      // directionalLight.position.set(0, 0, 0);
-      scene.add(directionalLight);
-
-      const pointLightHelper = new THREE.PointLightHelper(pointLight);
-      scene.add(pointLightHelper);
-
-      // 프론트 임의 변수값
-      const fieldMargin = 100; // 필드의 가장자리에 있는 여유 공간 (프론트엔드에서만 존재)
-      const paddleWidth = fieldMargin / 3;
-      const ballRadius = 20;
+      root.add(directionalLight);
 
       // 필드
-      // field: 필드의 가장자리에 여유 공간을 두지 않은 버전 (디버깅용)
       // marginedField: 필드의 가장자리에 여유 공간을 둔 버전
       const fieldWidth = x_max - x_min;
       const fieldHeight = y_max - y_min;
