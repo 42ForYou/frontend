@@ -91,12 +91,12 @@ export const GameProvider = ({ children }) => {
   const [myPlayerData, setMyPlayerData] = useState({ id: null, host: false });
 
   // tournament data
-  const [tournamentConfig, setTournamentConfig] = useState(dummyTournamentConfig);
+  const [tournamentConfig, setTournamentConfig] = useState(null);
   const [bracketData, setBracketData] = useState(null);
 
   // todo: 추후 subgame context 로 분리
   // subgame data
-  const [subgameStatus, setSubgameStatus] = useState(dummySubgameStatus);
+  const [subgameStatus, setSubgameStatus] = useState(null);
 
   const ballTrajectory = useRef(null);
   const paddleATrajectory = useRef(null);
