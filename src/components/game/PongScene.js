@@ -284,29 +284,29 @@ const PongScene = () => {
 	오차 = |현재 y좌표값 - 데이터의 y좌표값|
 	(튕길 거면 한번에 튕기자)
 	*/
-  // todo: 추후 POS_MAX_ERROR값은 서버에서 받아오도록 수정
-  const POS_MAX_ERROR = 10;
-  // 패들 A의 위치 오차값을 확인하고, 오차값이 POS_MAX_ERROR를 넘으면 패들의 위치를 수정한다.
+  // 패들 A의 위치 오차값을 확인하고, 오차값이 network_max_deviation를 넘으면 패들의 위치를 수정한다.
   useEffect(() => {
-    if (paddleARef && paddleARef.current && paddleATrajectory) {
+    if (tournamentConfig && paddleARef && paddleARef.current && paddleATrajectory) {
       const paddle = paddleARef.current;
       const posErrorValue = Math.abs(paddle.position.y - paddleATrajectory.current.y);
-      if (posErrorValue <= POS_MAX_ERROR) {
+      const maxErrorValue = tournamentConfig.network_max_deviation;
+      if (posErrorValue <= maxErrorValue) {
         paddleATrajectory.y = paddle.position.y; // 에러가 허용 범위 내라면, 현 y좌표값을 그대로 사용
       }
     }
-  }, [paddleATrajectoryVersion]);
+  }, [paddleATrajectoryVersion, tournamentConfig]);
 
-  // 패들 B의 위치 오차값을 확인하고, 오차값이 POS_MAX_ERROR를 넘으면 패들의 위치를 수정한다.
+  // 패들 B의 위치 오차값을 확인하고, 오차값이 network_max_deviation를 넘으면 패들의 위치를 수정한다.
   useEffect(() => {
-    if (paddleBRef && paddleBRef.current && paddleBTrajectory) {
+    if (tournamentConfig && paddleBRef.current && paddleBTrajectory) {
       const paddle = paddleBRef.current;
       const posErrorValue = Math.abs(paddle.position.y - paddleBTrajectory.current.y);
-      if (posErrorValue <= POS_MAX_ERROR) {
+      const maxErrorValue = tournamentConfig.network_max_deviation;
+      if (posErrorValue <= maxErrorValue) {
         paddleBTrajectory.y = paddle.position.y; // 에러가 허용 범위 내라면, 현 y좌표값을 그대로 사용
       }
     }
-  }, [paddleBTrajectoryVersion]);
+  }, [paddleBTrajectoryVersion, tournamentConfig]);
 
   return <div ref={mountRef} style={{ width: "100%", height: "100%", overflow: "hidden" }} />;
 };
