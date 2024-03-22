@@ -36,7 +36,7 @@ const MatchHistoryTable = ({ matchHistoryData }) => {
             <tr key={`${gameData.game.game_id}_${index}`}>
               <td>{formatDate(subgame.t_start)}</td>
               <td>{getMode(gameData.game)}</td>
-              <td>{gameData.is_tournament ? getRank(subgame.rank) : ""}</td>
+              <td>{gameData.game.is_tournament ? getRank(subgame.rank) : ""}</td>
               <td>{getGameOption(gameData.game)}</td>
               <td>{`${subgame.point_a} : ${subgame.point_b}`}</td>
               <td>{subgame.game_player_won ? "WIN" : "LOSE"}</td>
