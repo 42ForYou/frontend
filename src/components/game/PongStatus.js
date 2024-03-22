@@ -15,12 +15,12 @@ const PongStatus = () => {
   const { subgameStatus } = useGame();
 
   const getTimeString = (time_left, sudden_death) => {
-    if (sudden_death) {
+    if (sudden_death && time_left <= 0) {
       return <span className="SuddenDeath">Sudden Death</span>;
-    } else if (time_left > 0) {
-      return <span>Time: {time_left}</span>;
-    } else {
+    } else if (time_left === 0) {
       return <span>Game Over!</span>;
+    } else {
+      return <span>Time: {time_left}</span>;
     }
   };
 
