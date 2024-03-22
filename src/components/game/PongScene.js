@@ -2,8 +2,17 @@ import React, { useRef, useEffect, useState } from "react";
 import * as THREE from "three";
 import { useGame } from "../../context/GameContext";
 
+// todo: 1. 닉네임, 패들에 색깔 부여 2. 마우스 움직이면 카메라 각도 조정
 const PongScene = () => {
-  const { tournamentConfig, ballTrajectory, paddleATrajectory, paddleBTrajectory, ballTrajectoryVersion } = useGame();
+  const {
+    tournamentConfig,
+    ballTrajectory,
+    paddleATrajectory,
+    paddleBTrajectory,
+    ballTrajectoryVersion,
+    paddleATrajectoryVersion,
+    paddleBTrajectoryVersion,
+  } = useGame();
   const mountRef = useRef(null);
   const ballRef = useRef();
   const paddleARef = useRef();
@@ -22,7 +31,7 @@ const PongScene = () => {
     if (currentSegmentIndex >= ballTrajectory.segments.length) return;
     const segment = ballTrajectory.segments[currentSegmentIndex];
 
-    const currentTime = Date.now() / 1000;
+    const currentTime = (Date.now() / 1000).toFixed(3);
     const eventElapsedTime = currentTime - ballTrajectory.t_event;
     const segmentElapsedTime = eventElapsedTime - segment.t_start;
 
@@ -39,12 +48,17 @@ const PongScene = () => {
     ball.position.set(newX, newY, ball.position.z);
   };
 
+  /*
+	newY = (현재 처리하는 데이터가 들어왔을 시점의 y좌표) + (흐른 시간 * 패들 속도)
+	흐른 시간 = (현재 시간 - 현재 처리하는 데이터가 들어왔을 시점의 시간)
+	*/
   const updatePaddlePosition = (paddleTrajectory, paddleRef) => {
-    if (!paddleTrajectory || !paddleRef.current) return;
+    if (!paddleTrajectory || !paddleRef.current || !paddleTrajectory.t_start) return;
 
     const paddle = paddleRef.current;
 
-    const elapsedTime = Date.now() / 1000 - paddleTrajectory.t_event;
+    const currentTime = (Date.now() / 1000).toFixed(3);
+    const elapsedTime = currentTime - paddleTrajectory.t_start;
     let newY = paddleTrajectory.y + paddleTrajectory.dy * elapsedTime;
 
     if (paddleTrajectory.dy > 0) {
@@ -75,7 +89,7 @@ const PongScene = () => {
 
     // 카메라 생성
     const newCamera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);
-    newCamera.position.set(0, 0, 500);
+    newCamera.position.set(0, 0, 800);
     // newCamera.up.set(0, 0, 1); // 카메라의 업벡터를 z축으로 설정
     newCamera.lookAt(new THREE.Vector3(0, 0, 0));
     setCamera(newCamera);
@@ -237,21 +251,58 @@ const PongScene = () => {
     // for test
     // if (scene && renderer && camera && ballRef.current && ballTrajectory.current) {
     if (scene && renderer && camera) {
+      let animationId = null;
       const animate = () => {
         updateBallPosition(ballTrajectory.current);
         updatePaddlePosition(paddleATrajectory.current, paddleARef);
         updatePaddlePosition(paddleBTrajectory.current, paddleBRef);
         renderer.render(scene, camera);
-        requestAnimationFrame(animate);
+        animationId = requestAnimationFrame(animate);
       };
 
-      requestAnimationFrame(animate);
+      animationId = requestAnimationFrame(animate);
+
+      return () => {
+        cancelAnimationFrame(animationId);
+      };
     }
-  }, [ballTrajectoryVersion, scene, renderer, camera]);
+  }, [ballTrajectoryVersion, paddleATrajectoryVersion, paddleBTrajectoryVersion, scene, renderer, camera]);
 
   useEffect(() => {
     currentSegmentIndexRef.current = 0;
   }, [ballTrajectoryVersion]);
+
+  /*
+	만약 지금 프레임이 이번에 들어온 데이터의 첫 프레임이고,
+	오차값이 POS_MAX_ERROR를 넘으면 들어온 데이터의 y좌표값으로 패들의 y좌표값을 설정한다.
+	그렇지 않으면(=오차값이 허용범위 이내라면) 현재 패들의 y좌표값을 그대로 사용한다.
+	
+	오차 = |현재 y좌표값 - 데이터의 y좌표값|
+	(튕길 거면 한번에 튕기자)
+	*/
+  // 패들 A의 위치 오차값을 확인하고, 오차값이 network_max_deviation를 넘으면 패들의 위치를 수정한다.
+  useEffect(() => {
+    if (tournamentConfig && paddleARef && paddleARef.current && paddleATrajectory) {
+      const paddle = paddleARef.current;
+      const posErrorValue = Math.abs(paddle.position.y - paddleATrajectory.current.y);
+      const maxErrorValue = tournamentConfig.network_max_deviation;
+      if (posErrorValue <= maxErrorValue) {
+        paddleATrajectory.y = paddle.position.y; // 에러가 허용 범위 내라면, 현 y좌표값을 그대로 사용
+      }
+    }
+  }, [paddleATrajectoryVersion, tournamentConfig]);
+
+  // 패들 B의 위치 오차값을 확인하고, 오차값이 network_max_deviation를 넘으면 패들의 위치를 수정한다.
+  useEffect(() => {
+    if (tournamentConfig && paddleBRef.current && paddleBTrajectory) {
+      const paddle = paddleBRef.current;
+      const posErrorValue = Math.abs(paddle.position.y - paddleBTrajectory.current.y);
+      const maxErrorValue = tournamentConfig.network_max_deviation;
+      if (posErrorValue <= maxErrorValue) {
+        paddleBTrajectory.y = paddle.position.y; // 에러가 허용 범위 내라면, 현 y좌표값을 그대로 사용
+      }
+    }
+  }, [paddleBTrajectoryVersion, tournamentConfig]);
 
   return <div ref={mountRef} style={{ width: "100%", height: "100%", overflow: "hidden" }} />;
 };

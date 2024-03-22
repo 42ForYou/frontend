@@ -91,17 +91,29 @@ export const GameProvider = ({ children }) => {
   const [myPlayerData, setMyPlayerData] = useState({ id: null, host: false });
 
   // tournament data
-  const [tournamentConfig, setTournamentConfig] = useState(dummyTournamentConfig);
+  const [tournamentConfig, setTournamentConfig] = useState(null);
   const [bracketData, setBracketData] = useState(null);
 
   // todo: 추후 subgame context 로 분리
   // subgame data
-  const [subgameStatus, setSubgameStatus] = useState(dummySubgameStatus);
+  const [subgameStatus, setSubgameStatus] = useState({
+    progress: "none", // "none", "waiting", "playing", "ended"
+    time_start: null,
+    time_before_start: 0,
+    time_left: 0,
+    player_a: null,
+    player_b: null,
+    winner: "",
+    score_a: 0,
+    score_b: 0,
+  });
 
   const ballTrajectory = useRef(null);
   const paddleATrajectory = useRef(null);
   const paddleBTrajectory = useRef(null);
   const [ballTrajectoryVersion, setBallTrajectoryVersion] = useState(0);
+  const [paddleATrajectoryVersion, setPaddleATrajectoryVersion] = useState(0);
+  const [paddleBTrajectoryVersion, setPaddleBTrajectoryVersion] = useState(0);
 
   // socket namespace
   const [roomNamespace, setRoomNamespace] = useState("");
@@ -230,6 +242,8 @@ export const GameProvider = ({ children }) => {
         console.log("ended 이벤트 수신: ", data);
         setSubgameStatus((prevState) => ({ ...prevState, progress: "ended", winner: data.winner }));
         setBallTrajectoryVersion(0);
+        setPaddleATrajectoryVersion(0);
+        setPaddleBTrajectoryVersion(0);
         disconnectSubgameSocket();
       },
     },
@@ -277,10 +291,13 @@ export const GameProvider = ({ children }) => {
       event: "update_track_paddle",
       handler: (data) => {
         // console.log("update_track_paddle 이벤트 수신: ", data);
+        data.t_start = (Date.now() / 1000).toFixed(3);
         if (data.player === "A") {
           paddleATrajectory.current = data;
+          setPaddleATrajectoryVersion((version) => version + 1);
         } else if (data.player === "B") {
           paddleBTrajectory.current = data;
+          setPaddleBTrajectoryVersion((version) => version + 1);
         }
       },
     },
@@ -478,6 +495,8 @@ export const GameProvider = ({ children }) => {
         paddleATrajectory,
         paddleBTrajectory,
         ballTrajectoryVersion,
+        paddleATrajectoryVersion,
+        paddleBTrajectoryVersion,
         // function
         getMyFinalSubgameAndRank,
         // socket
