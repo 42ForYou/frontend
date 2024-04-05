@@ -3,17 +3,17 @@
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-image: url('../../public/assets/images/background-login.jpeg'); 
+  background-image: url("../../public/assets/images/background-login.jpeg");
   background-size: cover;
   background-position: center;
   color: #fff;
 }
 
 .LoginPage h1 {
-	font-family: 'Orbitron', sans-serif;
-	font-size: 3rem;
+  font-family: "Orbitron", sans-serif;
+  font-size: 3rem;
   color: #fff;
-	text-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
+  text-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
 }
 
 .LoginPage div {
@@ -21,13 +21,13 @@
 }
 
 .LoginPage input[type="text"] {
-	height: 50px;
+  height: 50px;
   margin-top: 10px;
   padding: 10px;
   border-radius: 5px;
   border: 1px solid #ccc;
-	color: black;
-	z-index: 3;
+  color: black;
+  z-index: 3;
 }
 
 .LoginPage button {
@@ -36,7 +36,7 @@
   border-radius: 5px;
   border: none;
   color: #fff;
-	font-size: 1.5rem;
+  font-size: 1.5rem;
   background-color: #00b377;
   cursor: pointer;
   box-shadow: 0 8px 10px rgba(0, 0, 0, 0.4);
@@ -48,15 +48,15 @@
 }
 
 .LoginPage .twoFactorSubmit {
-	height: 50px;
-	background-color: #007bff;
-	z-index: 2;
+  height: 50px;
+  background-color: #007bff;
+  z-index: 2;
 }
 
 .LoginPage .twoFactorResend {
-	height: 50px;
+  height: 50px;
   background-color: #00b377;
-	z-index: 1;
+  z-index: 1;
 }
 
 .LoginPage .twoFactorSubmit:hover {
@@ -71,10 +71,10 @@
 
 .back-to-login-link {
   position: fixed;
-	font-size: 1.3rem;
+  font-size: 1.3rem;
   right: 20px;
   bottom: 20px;
-	color: #fff;
+  color: #fff;
   text-decoration: none;
 }
 

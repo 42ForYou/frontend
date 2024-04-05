@@ -9,35 +9,35 @@
 
 /* Dynamic background colors based on props */
 .background-red {
-  background-color: #E57373AA;
+  background-color: #e57373aa;
 }
 
 .background-yellow {
-  background-color: #D4E157AA;
+  background-color: #d4e157aa;
 }
 
 .background-green {
-  background-color: #81C784AA;
+  background-color: #81c784aa;
 }
 
 .background-blue {
-  background-color: #64B5F6AA;
+  background-color: #64b5f6aa;
 }
 
 .background-dark-red {
-  background-color: #EB2323AB;
+  background-color: #eb2323ab;
 }
 
 .background-dark-yellow {
-  background-color: #FDD835AA;
+  background-color: #fdd835aa;
 }
 
 .background-dark-green {
-  background-color: #388E3CAA;
+  background-color: #388e3caa;
 }
 
 .background-dark-blue {
-  background-color: #1976D2AA;
+  background-color: #1976d2aa;
 }
 
 .background-default {

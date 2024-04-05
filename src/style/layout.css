@@ -1,4 +1,5 @@
-html, body {
+html,
+body {
   height: 100vh;
   margin: 0;
   /* overflow: hidden; */
@@ -11,29 +12,30 @@ html, body {
 }
 
 .ContentContainer {
-	padding: 20px;
+  padding: 20px;
 }
 
 .ContentContainer .Content {
-	background-color: rgba(13, 3, 21, 0.514);
-	border-radius: 20px;
-	border: 1px solid whitesmoke;
+  background-color: rgba(13, 3, 21, 0.514);
+  border-radius: 20px;
+  border: 1px solid whitesmoke;
 }
 
-.Content, .ContentBody {
+.Content,
+.ContentBody {
   overflow: auto; /* 내용이 넘칠 경우 스크롤바 표시 */
 }
 
 .ContentTitle {
-	font-family: 'Orbitron', sans-serif;
-	font-weight: bold;
-	color: aliceblue;
+  font-family: "Orbitron", sans-serif;
+  font-weight: bold;
+  color: aliceblue;
 }
 
 .ContentBody {
-	font-family: 'Orbit', sans-serif;
-	font-size: 1.3rem;
-	color: aliceblue;
+  font-family: "Orbit", sans-serif;
+  font-size: 1.3rem;
+  color: aliceblue;
 }
 
 .overflow-hidden {
@@ -41,8 +43,8 @@ html, body {
 }
 
 .full-height {
-	min-height: 100vh;
-	box-sizing: border-box;
+  min-height: 100vh;
+  box-sizing: border-box;
 }
 
 .flex-grow-1 {
@@ -50,11 +52,11 @@ html, body {
 }
 
 .d-flex-col {
-	display: flex;
-	flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .CustomModal {
-	color: black;
-	font-family: 'Noto Sans KR', sans-serif;
+  color: black;
+  font-family: "Noto Sans KR", sans-serif;
 }

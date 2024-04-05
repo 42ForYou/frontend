@@ -1,12 +1,12 @@
 LoadingPage {
-	color: white;
+  color: white;
 }
 
 #chat {
-	background-color: aliceblue;
-	color: black;
+  background-color: aliceblue;
+  color: black;
 }
 
 #chat-input {
-	color: black;
+  color: black;
 }
