@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link } from "../../lib/rrfs/index.js";
 
 const Avatar = ({ src, alt, to, isEditing = false, onImageUploadClick = null, diameter, onlineStatus = "None" }) => {
   const getImageSrc = (src) => {

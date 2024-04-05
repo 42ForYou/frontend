@@ -1,7 +1,7 @@
 import React from "react";
 import BootstrapButton from "../common/BootstrapButton";
 import CustomModal from "../common/CustomModal";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "../../lib/rrfs/index.js";
 import { useGame } from "../../context/GameContext";
 import { useAuth } from "../../context/AuthContext";
 import Avatar from "../common/Avatar";

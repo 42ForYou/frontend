@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { useSocket } from "./SocketContext";
-import { Outlet } from "react-router-dom";
+import { Outlet } from "../lib/rrfs/index.js";
 
 const OnlineStatusContext = createContext();
 

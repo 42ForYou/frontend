@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "../../lib/rrfs/index.js";
 import CustomButton from "../common/CustomButton";
 
 const ExitRoomButton = () => {

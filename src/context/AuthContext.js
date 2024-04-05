@@ -1,7 +1,7 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
 import { axiosInstance, get, patch, post } from "../utils/apiBase";
 import { API_ENDPOINTS } from "../utils/apiEndpoints";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "../lib/rrfs/index.js";
 
 const AuthContext = createContext();
 

@@ -1,5 +1,5 @@
 import React from "react";
-import { useLocation, Outlet } from "react-router-dom";
+import { useLocation, Outlet } from "../../lib/rrfs/index.js";
 import NavigationBar from "../layout/NavigationBar";
 import { shouldHideNavbar } from "../../utils/navigationUtils";
 

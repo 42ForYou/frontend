@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import ProfileBox from "../../components/profile/ProfileBox";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "../../lib/rrfs/index.js";
 import LoadingPage from "../LoadingPage";
 import useFetchProfileData from "../../hooks/useFetchProfileData";
 import ContentContainer from "../../components/layout/ContentContainer";
