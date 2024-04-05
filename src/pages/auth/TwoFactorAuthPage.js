@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "../../lib/rrfs/index.js";
+import { Link, useNavigate } from "../../lib/rrfs/index.js";
 import { useAuth } from "../../context/AuthContext";
 import LoadingPage from "../LoadingPage";
 
@@ -107,9 +107,9 @@ const TwoFactorAuthPage = () => {
           </p>
         </div>
       </div>
-      <a href="/login" className="back-to-login-link">
+      <Link to="/login" className="back-to-login-link">
         로그인 페이지로 돌아가기
-      </a>
+      </Link>
     </div>
   );
 };

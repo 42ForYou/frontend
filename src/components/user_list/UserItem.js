@@ -1,10 +1,11 @@
 import React from "react";
 import Avatar from "../common/Avatar";
+import { Link } from "../../lib/rrfs/index.js";
 
 const UserItem = ({ intra_id, nickname, avatar }) => {
   return (
     <div className="UserItem w-100 p-0">
-      <a href={`/profile/users/${intra_id}`}>
+      <Link to={`/profile/users/${intra_id}`}>
         <div className="p-3">
           <div className="row ps-3 pe-3">
             <div className="col d-flex justify-content-center">
@@ -13,7 +14,7 @@ const UserItem = ({ intra_id, nickname, avatar }) => {
             <div className="col text-center mt-2">{nickname}</div>
           </div>
         </div>
-      </a>
+      </Link>
     </div>
   );
 };

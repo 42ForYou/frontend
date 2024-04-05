@@ -4,6 +4,7 @@ import { del, patch } from "../../utils/apiBase";
 import { API_ENDPOINTS } from "../../utils/apiEndpoints";
 import { useOnlineStatus } from "../../context/OnlineStatusContext";
 import CustomButton from "../common/CustomButton";
+import { Link } from "../../lib/rrfs/index.js";
 
 const FriendItem = ({ id: friend_id, status, friend, onOccurChange }) => {
   console.log(status, friend);
@@ -67,7 +68,7 @@ const FriendItem = ({ id: friend_id, status, friend, onOccurChange }) => {
 
   return (
     <div className="FriendItem w-100 p-0">
-      <a href={`/profile/users/${intra_id}`}>
+      <Link to={`/profile/users/${intra_id}`}>
         <div className="p-3">
           <div className="row ps-3 pe-3">
             <div className="col d-flex justify-content-center">
@@ -93,7 +94,7 @@ const FriendItem = ({ id: friend_id, status, friend, onOccurChange }) => {
             </div>
           </div>
         </div>
-      </a>
+      </Link>
     </div>
   );
 };
