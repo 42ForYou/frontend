@@ -1,4 +1,4 @@
-import React from "react";
+import Rfs from "./lib/rfs/srcs/index.js";
 import { BrowserRouter, Routes, Route } from "./lib/rrfs/index.js";
 
 // context

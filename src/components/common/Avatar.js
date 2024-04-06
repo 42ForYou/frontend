@@ -1,4 +1,5 @@
-import React from "react";
+// import React from "react";
+import Rfs from "../../lib/rfs/srcs/index.js";
 import { Link } from "../../lib/rrfs/index.js";
 
 const Avatar = ({ src, alt, to, isEditing = false, onImageUploadClick = null, diameter, onlineStatus = "None" }) => {
