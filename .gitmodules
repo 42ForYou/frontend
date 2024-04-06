@@ -2,3 +2,7 @@
 	path = src/lib/rrfs
 	url = https://github.com/42foryou/rrfs
 	branch = main
+[submodule "src/lib/rfs"]
+	path = src/lib/rfs
+	url = https://github.com/42foryou/rfs
+	branch = main
