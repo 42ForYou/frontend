@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Outlet } from "../lib/rrfs/index.js";
 import { useSocket } from "./SocketContext";
-import { Outlet } from "react-router-dom";
 import { useAuth } from "./AuthContext";
 import { del } from "../utils/apiBase";
 import { API_ENDPOINTS } from "../utils/apiEndpoints";

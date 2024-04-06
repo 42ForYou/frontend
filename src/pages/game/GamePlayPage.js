@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useGame } from "../../context/GameContext";
 import BracketPage from "./BracketPage";
 import PongScenePage from "./PongScenePage";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "../../lib/rrfs/index.js";
 import TournamentResultModal from "../../components/game/TournamentResultModal";
 import SubgameBracketModal from "../../components/game/SubgameBracketModal";
 import SubgameResultModal from "../../components/game/SubgameResultModal";

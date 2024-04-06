@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import WaitingRoomBox from "../../components/waiting_room/WaitingRoomBox";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "../../lib/rrfs/index.js";
 import { useGame } from "../../context/GameContext";
 import LoadingPage from "../LoadingPage";
 import { get } from "../../utils/apiBase";

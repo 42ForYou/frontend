@@ -1,26 +1,25 @@
 .ProfileTextLine {
-	font-family: 'Orbit', sans-serif;
+  font-family: "Orbit", sans-serif;
 }
 
-.profile-title p
-{
-	font-family: 'Orbitron', sans-serif;
-	font-weight: bold;
-	color:aliceblue;
-	font-size: 1.5rem;
+.profile-title p {
+  font-family: "Orbitron", sans-serif;
+  font-weight: bold;
+  color: aliceblue;
+  font-size: 1.5rem;
 }
 
 .ProfileTrace p {
-	font-family: 'Roboto', sans-serif;
-	color:aliceblue;
+  font-family: "Roboto", sans-serif;
+  color: aliceblue;
 }
 
 .ProfileTrace div {
-	border-radius: 20px;
+  border-radius: 20px;
 }
 
 .ProfileBox input {
-	color: black;
+  color: black;
 }
 
 .stats-container {
@@ -68,7 +67,7 @@
 }
 
 .ProfileTextLine input[type="text"] {
-	font-family: 'Noto Sans KR', sans-serif;
+  font-family: "Noto Sans KR", sans-serif;
   padding: 5px;
   border: 1px solid #ccc;
 }

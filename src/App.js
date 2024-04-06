@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "./lib/rrfs/index.js";
 
 // context
 import { AuthProvider } from "./context/AuthContext";
@@ -28,18 +28,6 @@ import UserProfilePage from "./pages/profile/UserProfilePage";
 import MainLayout from "./components/layout/MainLayout";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import PongScenePage from "./pages/game/PongScenePage";
-
-const App = () => {
-  return (
-    <BrowserRouter>
-      <AuthProvider>
-        <LayoutProvider>
-          <AppContent />
-        </LayoutProvider>
-      </AuthProvider>
-    </BrowserRouter>
-  );
-};
 
 const AppContent = () => {
   return (
@@ -74,6 +62,18 @@ const AppContent = () => {
         </Route>
       </Routes>
     </div>
+  );
+};
+
+const App = () => {
+  return (
+    <BrowserRouter>
+      <AuthProvider>
+        <LayoutProvider>
+          <AppContent />
+        </LayoutProvider>
+      </AuthProvider>
+    </BrowserRouter>
   );
 };
 

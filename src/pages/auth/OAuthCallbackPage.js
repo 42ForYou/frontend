@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "../../lib/rrfs/index.js";
 import { useAuth } from "../../context/AuthContext";
 
 const OAuthCallbackPage = () => {

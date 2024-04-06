@@ -2,7 +2,7 @@ import React from "react";
 import BootstrapButton from "../common/BootstrapButton";
 import { post } from "../../utils/apiBase";
 import { API_ENDPOINTS } from "../../utils/apiEndpoints";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "../../lib/rrfs/index.js";
 import CustomButton from "../common/CustomButton";
 import Icon from "../common/Icon";
 import { useLayout } from "../../context/LayoutContext";

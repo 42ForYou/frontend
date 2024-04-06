@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "../../lib/rrfs/index.js";
 import { useAuth } from "../../context/AuthContext";
 
 import Avatar from "../common/Avatar";

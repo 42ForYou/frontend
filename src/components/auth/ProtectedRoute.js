@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet } from "../../lib/rrfs/index.js";
 import { useAuth } from "../../context/AuthContext";
 import LoadingPage from "../../pages/LoadingPage";
 

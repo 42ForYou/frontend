@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useRef } from "react";
 import io from "socket.io-client";
-import { Outlet } from "react-router-dom";
+import { Outlet } from "../lib/rrfs/index.js";
 
 const SocketContext = createContext();
 

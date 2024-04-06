@@ -1,6 +1,6 @@
 import React from "react";
 import CustomButton from "../components/common/CustomButton";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "../lib/rrfs/index.js";
 
 const NotFoundPage = () => {
   const navigate = useNavigate();

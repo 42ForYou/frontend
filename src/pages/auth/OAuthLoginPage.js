@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import BootstrapButton from "../../components/common/BootstrapButton";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "../../lib/rrfs/index.js";
 import { useAuth } from "../../context/AuthContext";
 import { getWithoutCredentials } from "../../utils/apiBase";
 import { API_ENDPOINTS } from "../../utils/apiEndpoints";

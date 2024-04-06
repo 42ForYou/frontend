@@ -2,9 +2,13 @@
   box-sizing: border-box;
 }
 
-html, body, input, button, textarea {
-	color: aliceblue;
-	font-family: 'Roboto', sans-serif;
+html,
+body,
+input,
+button,
+textarea {
+  color: aliceblue;
+  font-family: "Roboto", sans-serif;
 }
 
 img {
@@ -18,31 +22,31 @@ img {
 }
 
 body {
-  background-image: url('../../public/assets/images/background-home.png'); 
+  background-image: url("../../public/assets/images/background-home.png");
   background-size: cover; /* 배경 이미지가 전체 화면을 커버하도록 설정 */
   background-position: center; /* 초기 배경 위치를 중앙으로 설정 */
 }
 
 .icon {
-	width: max(36px, 5vh);
-	height: max(36px, 5vh);
+  width: max(36px, 5vh);
+  height: max(36px, 5vh);
 }
 
 .btn {
-	font-family: 'Noto Sans KR', sans-serif;
+  font-family: "Noto Sans KR", sans-serif;
 }
 
 .CustomButton {
-	font-family: 'Noto Sans KR', sans-serif;
+  font-family: "Noto Sans KR", sans-serif;
 }
 
 .SearchBar input {
-	font-family: 'Noto Sans KR', sans-serif;
+  font-family: "Noto Sans KR", sans-serif;
   border: 1px solid #ccc;
   padding: 6px;
-	padding-left: 12px;
-	width: 100%;
-	color: black;
+  padding-left: 12px;
+  width: 100%;
+  color: black;
 }
 
 .search-input-container {
@@ -60,5 +64,5 @@ body {
   height: 20px;
   color: #000000;
   /* cursor: pointer; */
-	z-index: 10;
+  z-index: 10;
 }
